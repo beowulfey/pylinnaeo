@@ -4,9 +4,10 @@
 # This is my shitty code for managing all the parts I'm going to somehow
 # hack together into a piece of software, maybe.
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMdiArea, QAction, QMdiSubWindow
+from PyQt5.QtWidgets import QMainWindow
 from ui import bioglot_ui
 import biotite.sequence
+
 
 class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
     # Intitalize UI
@@ -15,11 +16,7 @@ class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
         self.setupUi(self)
 
     # UI interaction code goes here
-
-
-
-
-
+    
 
 #    def translate_sequence(self):
 #        user_sequence = self.dnaSequence.toPlainText()
