@@ -1,0 +1,34 @@
+#!/usr/bin/python3
+
+# This is the main class for a "workspace"
+# Sets up an empty tree and populates it.
+
+from PyQt5.QtCore import QStandardItem
+
+
+# Each node of the tree comprises a sequence name and its raw sequence info.
+class workNode(QStandardItem):
+    def __init__(self, seq=None, parent=None):
+        self.parentItem = parent
+        self.itemSeq = seq
+        self.childItems = []
+
+    def appendChild(self, item):
+        self.childItems.append(item)
+
+    def getChild(self, row):
+        return self.childItems[row]
+
+    def getChildCount(self):
+        return len(self.childItems)
+
+    def getSeq(self):
+        return self.itemSeq
+
+    def getParent(self):
+        return self.parentItem
+
+    def row(self):
+        if self.parentItem:
+            return self.parentItem.childItems.index(self)
+        return 0

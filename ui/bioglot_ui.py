@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'bioglot.ui'
+# Form implementation generated from reading ui file 'ui/bioglot.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
-
-
-#######
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -21,23 +18,27 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
-        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.splitter = QtWidgets.QSplitter(self.centralwidget)
+        self.splitter.setOrientation(QtCore.Qt.Horizontal)
+        self.splitter.setObjectName("splitter")
+        self.widget = QtWidgets.QWidget(self.splitter)
         self.widget.setObjectName("widget")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.widget)
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_3.setObjectName("gridLayout_3")
-        self.treeView = QtWidgets.QTreeView(self.widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
+        self.workspaceTree = QtWidgets.QTreeView(self.widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.treeView.sizePolicy().hasHeightForWidth())
-        self.treeView.setSizePolicy(sizePolicy)
-        self.treeView.setBaseSize(QtCore.QSize(0, 0))
-        self.treeView.setObjectName("treeView")
-        self.gridLayout_3.addWidget(self.treeView, 1, 1, 1, 1)
-        self.gridLayout.addWidget(self.widget, 0, 0, 1, 1)
-        self.widget_2 = QtWidgets.QWidget(self.centralwidget)
+        sizePolicy.setHeightForWidth(self.workspaceTree.sizePolicy().hasHeightForWidth())
+        self.workspaceTree.setSizePolicy(sizePolicy)
+        self.workspaceTree.setBaseSize(QtCore.QSize(0, 0))
+        self.workspaceTree.setObjectName("workspaceTree")
+        self.gridLayout_3.addWidget(self.workspaceTree, 1, 1, 1, 1)
+        self.widget_2 = QtWidgets.QWidget(self.splitter)
         self.widget_2.setObjectName("widget_2")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.widget_2)
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.mdiArea = QtWidgets.QMdiArea(self.widget_2)
         self.mdiArea.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -46,7 +47,7 @@ class Ui_MainWindow(object):
         self.mdiArea.setTabShape(QtWidgets.QTabWidget.Rounded)
         self.mdiArea.setObjectName("mdiArea")
         self.gridLayout_2.addWidget(self.mdiArea, 0, 0, 1, 1)
-        self.gridLayout.addWidget(self.widget_2, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.splitter, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 807, 24))
@@ -62,7 +63,6 @@ class Ui_MainWindow(object):
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
-        MainWindow.insertToolBarBreak(self.toolBar)
         self.actiondoubleCick = QtWidgets.QAction(MainWindow)
         self.actiondoubleCick.setObjectName("actiondoubleCick")
         self.menubar.addAction(self.menuFile.menuAction())
