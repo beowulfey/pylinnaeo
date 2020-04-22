@@ -7,6 +7,8 @@
 # Bioscience components
 import Bio.Seq as Bseq
 from Bio.Alphabet import generic_protein
+from clustalo import clustalo
+
 # PyQt components
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
@@ -53,9 +55,11 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         items = {}
         for index in indexes:
             items[self.bioModel.itemFromIndex(index).text()] = \
-                self.bioModel.itemFromIndex(index).getSeq()
+                str(self.bioModel.itemFromIndex(index).getSeq())
+        aligned = clustalo(items)
+        print(aligned)
         sub = QMdiSubWindow()
-        sub.setWidget(views.AlignSubWindow(items))
+        sub.setWidget(views.AlignSubWindow(aligned))
         self.mdiArea.addSubWindow(sub)
         sub.show()
 

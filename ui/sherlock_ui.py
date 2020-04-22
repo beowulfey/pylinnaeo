@@ -37,6 +37,7 @@ class Ui_MainWindow(object):
         self.gridLayout_4.setSpacing(0)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.bioTree = QtWidgets.QTreeView(self.widget_3)
+        self.bioTree.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.bioTree.setObjectName("bioTree")
         self.gridLayout_4.addWidget(self.bioTree, 0, 0, 1, 1)
         self.widget_4 = QtWidgets.QWidget(self.splitter_2)

@@ -69,7 +69,11 @@
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QTreeView" name="bioTree"/>
+             <widget class="QTreeView" name="bioTree">
+              <property name="selectionMode">
+               <enum>QAbstractItemView::ExtendedSelection</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
