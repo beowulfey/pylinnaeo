@@ -33,3 +33,10 @@ class SeqNode(QStandardItem):
         if self.parentItem:
             return self.parentItem.childItems.index(self)
         return 0
+
+class AlignNode(SeqNode):
+    def __init__(self, item=None, seq=None, parent=None):
+        super(SeqNode, self).__init__(item)
+        self.parentItem = parent
+        self.itemSeq = seq
+        self.childItems = []

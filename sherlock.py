@@ -10,11 +10,11 @@ from Bio.Alphabet import generic_protein
 from clustalo import clustalo
 
 # PyQt components
-from PyQt5.QtGui import QStandardItemModel
+from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 
 # Bioglot components
-import workspace
+import models
 from ui import sherlock_ui
 from ui import views
 
@@ -50,18 +50,23 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
     # Additional UI components
     def newSubWindow(self):
+        """This will create a new alignment window from whatever the selected sequences were.
+        """
         # get associated sequence for click
-        indexes = self.bioTree.selectedIndexes()
-        items = {}
-        for index in indexes:
-            items[self.bioModel.itemFromIndex(index).text()] = \
-                str(self.bioModel.itemFromIndex(index).getSeq())
-        aligned = clustalo(items)
-        print(aligned)
-        sub = QMdiSubWindow()
-        sub.setWidget(views.AlignSubWindow(aligned))
-        self.mdiArea.addSubWindow(sub)
-        sub.show()
+        try:
+            indexes = self.bioTree.selectedIndexes()
+            items = {}
+            for index in indexes:
+                items[self.bioModel.itemFromIndex(index).text()] = \
+                    str(self.bioModel.itemFromIndex(index).getSeq())
+            aligned = clustalo(items)
+            print(aligned)
+            sub = QMdiSubWindow()
+            sub.setWidget(views.AlignSubWindow(aligned))
+            self.mdiArea.addSubWindow(sub)
+            sub.show()
+        except AttributeError:
+            print("DON'T DO THAT!")
 
     # INITIAL TESTING DATA
     # Builds a basic tree model for testing.
@@ -92,9 +97,11 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         seq_GPI1B = Bseq.MutableSeq(test2[1],generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
-        root = self.bioModel.invisibleRootItem()
+        #root = self.bioModel.invisibleRootItem()
+        root = QStandardItem("Project")
+        self.bioModel.appendRow(root)
         for i in list(range(0, len(test))):
-            node = workspace.SeqNode(test[i][0], test[i][1])
+            node = models.SeqNode(test[i][0], test[i][1])
             root.appendRow(node)
 
         """
