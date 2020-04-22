@@ -7,7 +7,8 @@
 # Bioglot components
 import workspace
 from ui import bioglot_ui
-from ui import alignment_ui
+from ui import views
+
 
 # PyQt components
 from PyQt5.QtCore import QFile, QIODevice
@@ -34,12 +35,12 @@ class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
         self.DEBUG()
 
     def setGui(self):
-        self.projectModel = QStandardItemModel()
-        self.projectTree.setModel(self.projectModel)
+        self.bioModel = QStandardItemModel()
+        self.bioTree.setModel(self.bioModel)
 
     # GUI CONTROL: slot setup
     def connectSlots(self):
-        self.projectTree.doubleClicked.connect(self.onNodeDbClick)
+        self.bioTree.doubleClicked.connect(self.onNodeDbClick)
 
     # Actual slot actions go here.
     def onNodeDbClick(self, item):
@@ -47,11 +48,14 @@ class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
 
     # Additional UI components
     def newSubwindow(self):
-        sub = QMdiSubWindow()
         # get associated sequence for click
-        index = self.projectTree.selectedIndexes()[0] # can use this to select multiple!
-        item = self.projectModel.itemFromIndex(index).getSeq()
-        sub.setWidget(QTextEdit(str(item)))
+        indexes = self.bioTree.selectedIndexes()
+        items = {}
+        for index in indexes:
+            items[self.bioModel.itemFromIndex(index).text()] = \
+                self.bioModel.itemFromIndex(index).getSeq()
+        sub = QMdiSubWindow()
+        sub.setWidget(views.AlignSubWindow(items))
         self.mdiArea.addSubWindow(sub)
         sub.show()
 
@@ -84,7 +88,7 @@ class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
         seq_GPI1B = Bseq.MutableSeq(test2[1],generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
-        root = self.projectModel.invisibleRootItem()
+        root = self.bioModel.invisibleRootItem()
         for i in list(range(0, len(test))):
             node = workspace.SeqNode(test[i][0], test[i][1])
             root.appendRow(node)
