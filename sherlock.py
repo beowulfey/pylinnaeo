@@ -4,50 +4,49 @@
 # This is my shitty code for managing all the parts I'm going to somehow
 # hack together into a piece of software, maybe.
 
-# Bioglot components
-import workspace
-from ui import bioglot_ui
-from ui import views
-
-
-# PyQt components
-from PyQt5.QtCore import QFile, QIODevice
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow, QTextEdit
-
 # Bioscience components
 import Bio.Seq as Bseq
 from Bio.Alphabet import generic_protein
-import Bio.SeqUtils
+# PyQt components
+from PyQt5.QtGui import QStandardItemModel
+from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
+
+# Bioglot components
+import workspace
+from ui import sherlock_ui
+from ui import views
 
 # Additional libraries
 import configparser
 from pathlib import Path
 
-
-class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
-    """ Main Window for Bioglot App"""
+class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
+    """ Main Window for Sherlock App"""
     def __init__(self):
         super(self.__class__, self).__init__()
+        # Instantiation
+        self.bioModel = QStandardItemModel()
+        self.projectModel = QStandardItemModel()
+        # Startup functions
         self.setupUi(self)
-        self.setGui()
-        self.connectSlots()
+        self.guiInit()
         self.DEBUG()
 
-    def setGui(self):
-        self.bioModel = QStandardItemModel()
+    # Initialize GUI with default parameters.
+    def guiInit(self):
+        # setting up trees etc.
         self.bioTree.setModel(self.bioModel)
+        self.projectTree.setModel(self.projectModel)
 
-    # GUI CONTROL: slot setup
-    def connectSlots(self):
-        self.bioTree.doubleClicked.connect(self.onNodeDbClick)
+        # slot connections go here.
+        self.bioTree.doubleClicked.connect(self.onBioNodeDbClick)
 
-    # Actual slot actions go here.
-    def onNodeDbClick(self, item):
-        self.newSubwindow()
+    # Slot actions go here.
+    def onBioNodeDbClick(self, item):
+        self.newSubWindow()
 
     # Additional UI components
-    def newSubwindow(self):
+    def newSubWindow(self):
         # get associated sequence for click
         indexes = self.bioTree.selectedIndexes()
         items = {}
@@ -63,28 +62,28 @@ class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
     # Builds a basic tree model for testing.
     def DEBUG(self):
         test1 = ['GPI1A', 'MSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDF'+
-                         'SKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRP'+
-                         'ILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPL'+
-                         'MVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITN'+
-                         'AETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSL'+
-                         'WSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIY'+
-                         'GAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTN'+
-                         'GQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKT'+
-                         'AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH'+
-                         'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
+                 'SKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRP'+
+                 'ILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPL'+
+                 'MVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITN'+
+                 'AETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSL'+
+                 'WSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIY'+
+                 'GAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTN'+
+                 'GQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKT'+
+                 'AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH'+
+                 'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1A = Bseq.MutableSeq(test1[1],generic_protein)
         test1alt = [test1[0], seq_GPI1A]
         test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE'+
-                         'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG'+
-                         'VEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKE'+
-                         'FCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNV'+
-                         'DGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKH'+
-                         'FVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLL'+
-                         'DGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYF'+
-                         'QQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFI'+
-                         'APVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKI'+
-                         'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL'+
-                         'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
+                 'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG'+
+                 'VEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKE'+
+                 'FCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNV'+
+                 'DGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKH'+
+                 'FVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLL'+
+                 'DGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYF'+
+                 'QQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFI'+
+                 'APVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKI'+
+                 'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL'+
+                 'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = Bseq.MutableSeq(test2[1],generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]

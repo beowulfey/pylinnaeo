@@ -10,7 +10,7 @@ import sherlock
 
 def main():
     app = QApplication(sys.argv)
-    window = sherlock.BioGlot()
+    window = sherlock.Sherlock()
     window.show()
     sys.exit(app.exec_())
 
