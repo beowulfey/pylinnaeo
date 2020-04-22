@@ -33,8 +33,3 @@ class SeqNode(QStandardItem):
         if self.parentItem:
             return self.parentItem.childItems.index(self)
         return 0
-
-
-#class WorkspaceModel(QStandardItemModel):
-#    def __init__(self, data, parent=None):
-#        super(WorkspaceModel, self).__init__(parent)

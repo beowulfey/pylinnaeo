@@ -3,14 +3,14 @@
 from PyQt5.QtWidgets import QApplication
 import sys
 
-import bioglot
+import sherlock
 
 # Main function for running ProAlign/Bioglot/Whatever this is called.
 
 
 def main():
     app = QApplication(sys.argv)
-    window = bioglot.BioGlot()
+    window = sherlock.BioGlot()
     window.show()
     sys.exit(app.exec_())
 
