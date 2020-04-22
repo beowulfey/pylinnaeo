@@ -98,7 +98,7 @@ class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
         # Read in config (linux)
         config = configparser.ConfigParser()
         try:
-            config.read(str(Path.home())+"/.bioglot/config.ini")
+            config.read(str(Path.home())+"/.sherlock/config.ini")
             # Open last used workspace automatically.
             if config['RECENTS']['LAST'] != "":
                 last = config['RECENTS']['LAST']

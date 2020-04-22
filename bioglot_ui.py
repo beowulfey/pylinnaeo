@@ -1,7 +1,7 @@
-Error: No such file or directory: "bioglot.ui"
+Error: No such file or directory: "sherlock.ui"
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'bioglot.ui'
+# Form implementation generated from reading ui file 'sherlock.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.3
 #
