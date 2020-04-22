@@ -7,9 +7,9 @@ from PyQt5.QtGui import QStandardItem
 
 
 # Each node of the tree comprises a sequence name and its raw sequence info.
-class WorkNode(QStandardItem):
+class SeqNode(QStandardItem):
     def __init__(self, item=None, seq=None, parent=None):
-        super(WorkNode, self).__init__(item)
+        super(SeqNode, self).__init__(item)
         self.parentItem = parent
         self.itemSeq = seq
         self.childItems = []

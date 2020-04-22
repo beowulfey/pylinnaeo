@@ -4,51 +4,56 @@
 # This is my shitty code for managing all the parts I'm going to somehow
 # hack together into a piece of software, maybe.
 
+# Bioglot components
+import workspace
+from ui import bioglot_ui
+from ui import alignment_ui
+
+# PyQt components
 from PyQt5.QtCore import QFile, QIODevice
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow, QTextEdit
 
-from ui import bioglot_ui
-from ui import alignment_ui
-
+# Bioscience components
 import Bio.Seq as Bseq
 from Bio.Alphabet import generic_protein
 import Bio.SeqUtils
-import workspace
+
+# Additional libraries
 import configparser
 from pathlib import Path
 
 
 class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
-    # Intitalize UI
+    """ Main Window for Bioglot App"""
     def __init__(self):
         super(self.__class__, self).__init__()
         self.setupUi(self)
-        self.set_gui()
-        self.connect_slots()
+        self.setGui()
+        self.connectSlots()
         self.DEBUG()
 
-    def set_gui(self):
-        self.workspaceModel = QStandardItemModel()
-        self.workspaceTree.setModel(self.workspaceModel)
+    def setGui(self):
+        self.projectModel = QStandardItemModel()
+        self.projectTree.setModel(self.projectModel)
 
     # GUI CONTROL: slot setup
-    def connect_slots(self):
-        self.workspaceTree.doubleClicked.connect(self.on_node_dclick)
+    def connectSlots(self):
+        self.projectTree.doubleClicked.connect(self.onNodeDbClick)
 
     # Actual slot actions go here.
-    def on_node_dclick(self, item):
+    def onNodeDbClick(self, item):
+        self.newSubwindow()
+
+    # Additional UI components
+    def newSubwindow(self):
         sub = QMdiSubWindow()
         # get associated sequence for click
-        index = self.workspaceTree.selectedIndexes()[0] # can use this to select multiple!
-        item = self.workspaceModel.itemFromIndex(index).getSeq()
-        print(item)
+        index = self.projectTree.selectedIndexes()[0] # can use this to select multiple!
+        item = self.projectModel.itemFromIndex(index).getSeq()
         sub.setWidget(QTextEdit(str(item)))
         self.mdiArea.addSubWindow(sub)
         sub.show()
-        
-        #three_letter = Bio.SeqUtils.seq3(str(item))
-        #print(three_letter)
 
     # INITIAL TESTING DATA
     # Builds a basic tree model for testing.
@@ -79,9 +84,9 @@ class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
         seq_GPI1B = Bseq.MutableSeq(test2[1],generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
-        root = self.workspaceModel.invisibleRootItem()
+        root = self.projectModel.invisibleRootItem()
         for i in list(range(0, len(test))):
-            node = workspace.WorkNode(test[i][0], test[i][1])
+            node = workspace.SeqNode(test[i][0], test[i][1])
             root.appendRow(node)
 
         """
@@ -101,10 +106,3 @@ class BioGlot(QMainWindow, bioglot_ui.Ui_MainWindow):
         except:
             print("No config file found!")
             """
-
-
-class AlignmentSubWindow(QMdiSubWindow, alignment_ui.Ui_Form):
-    def __init__(self):
-        super(self.__class__, self).__init__()
-        self.setupUi(self)
-
