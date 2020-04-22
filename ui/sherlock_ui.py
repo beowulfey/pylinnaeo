@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
@@ -77,11 +77,11 @@ class Ui_MainWindow(object):
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
-        self.actiondoubleCick = QtWidgets.QAction(MainWindow)
-        self.actiondoubleCick.setObjectName("actiondoubleCick")
+        self.actionAddFolder = QtWidgets.QAction(MainWindow)
+        self.actionAddFolder.setObjectName("actionAddFolder")
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
-        self.toolBar.addAction(self.actiondoubleCick)
+        self.toolBar.addAction(self.actionAddFolder)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -92,4 +92,5 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
-        self.actiondoubleCick.setText(_translate("MainWindow", "doubleCick"))
+        self.actionAddFolder.setText(_translate("MainWindow", "addFolder"))
+        self.actionAddFolder.setToolTip(_translate("MainWindow", "Add a folder above the current tree node. "))

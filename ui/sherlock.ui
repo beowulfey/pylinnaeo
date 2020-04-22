@@ -168,11 +168,14 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actiondoubleCick"/>
+   <addaction name="actionAddFolder"/>
   </widget>
-  <action name="actiondoubleCick">
+  <action name="actionAddFolder">
    <property name="text">
-    <string>doubleCick</string>
+    <string>addFolder</string>
+   </property>
+   <property name="toolTip">
+    <string>Add a folder above the current tree node. </string>
    </property>
   </action>
  </widget>

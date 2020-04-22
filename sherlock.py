@@ -39,11 +39,12 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.projectTree.setModel(self.projectModel)
 
         # slot connections go here.
-        self.bioTree.doubleClicked.connect(self.onBioNodeDbClick)
+        self.bioTree.doubleClicked.connect(self.newSubWindow)
+        self.actionAddFolder.triggered.connect(self.newSubWindow)
 
     # Slot actions go here.
-    def onBioNodeDbClick(self, item):
-        self.newSubWindow()
+    def addFolder(self):
+        pass
 
     # Additional UI components
     def newSubWindow(self):
