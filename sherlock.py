@@ -28,19 +28,23 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def __init__(self):
         super(self.__class__, self).__init__()
         # Instantiation
+        self.mainLogger = logging.getLogger("Main")
         self.bioModel = QStandardItemModel()
+        self.bioRoot = QStandardItem("Sequences")
         self.projectModel = QStandardItemModel()
+        self.projectRoot = QStandardItem("Project")
         # Startup functions
         self.setupUi(self)
         self.guiInit()
         self.DEBUG()
-        self.mainlogger = logging.getLogger("Main")
 
     # Initialize GUI with default parameters.
     def guiInit(self):
         # setting up trees etc.
         self.bioTree.setModel(self.bioModel)
+        self.bioModel.appendRow(self.bioRoot)
         self.projectTree.setModel(self.projectModel)
+        self.projectModel.appendRow(self.projectRoot)
 
         # slot connections go here.
         self.bioTree.doubleClicked.connect(self.newSubWindow)
@@ -52,14 +56,15 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
     # Additional UI components
     def newSubWindow(self):
-        """This will create a new alignment window from whatever the selected sequences were.
+        """
+        This will create a new alignment window from whatever the selected sequences were.
         Ignores any folders that were included in the selection.
-
         """
         # get associated sequence for click
         indexes = self.bioTree.selectedIndexes()
         items = {}
         for index in indexes:
+            # Quick and dirty way to ignore folders that are selected too.
             try:
                 items[self.bioModel.itemFromIndex(index).text()] = \
                     str(self.bioModel.itemFromIndex(index).getSeq())
@@ -67,14 +72,15 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 self.mainStatus.showMessage("Not including selected folder \"" +
                                             self.bioModel.itemFromIndex(index).text() + "\"",
                                             msecs=5000)
-                self.mainlogger.debug("Detected folder ("+self.bioModel.itemFromIndex(index).text()
+                self.mainLogger.debug("Detected folder ("+self.bioModel.itemFromIndex(index).text()
                                       + ") in selection --> ignoring!")
                 continue
         aligned = clustalo(items)
-        print(aligned)
         sub = QMdiSubWindow()
         sub.setWidget(views.AlignSubWindow(aligned))
         self.mdiArea.addSubWindow(sub)
+        node = models.WorkspaceNode("New Window",sub)
+        self.projectRoot.appendRow(node)
         sub.show()
 
     # INITIAL TESTING DATA
@@ -106,12 +112,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         seq_GPI1B = Bseq.MutableSeq(test2[1],generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
-        #root = self.bioModel.invisibleRootItem()
-        root = QStandardItem("Project")
-        self.bioModel.appendRow(root)
         for i in list(range(0, len(test))):
             node = models.SeqNode(test[i][0], test[i][1])
-            root.appendRow(node)
+            self.bioRoot.appendRow(node)
 
         """
         # SAVED THIS FOR LATER!
