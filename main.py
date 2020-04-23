@@ -2,13 +2,14 @@
 
 from PyQt5.QtWidgets import QApplication
 import sys
-
+import logging
 import sherlock
 
 # Main function for running ProAlign/Bioglot/Whatever this is called.
 
 
 def main():
+    logging.basicConfig(level=logging.DEBUG)#, format="%(asctime)s:%(levelname)s:%(message)s")
     app = QApplication(sys.argv)
     window = sherlock.Sherlock()
     window.show()

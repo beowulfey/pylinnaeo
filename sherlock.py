@@ -19,6 +19,7 @@ from ui import sherlock_ui
 from ui import views
 
 # Additional libraries
+import logging
 import configparser
 from pathlib import Path
 
@@ -33,6 +34,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.setupUi(self)
         self.guiInit()
         self.DEBUG()
+        self.mainlogger = logging.getLogger("Main")
 
     # Initialize GUI with default parameters.
     def guiInit(self):
@@ -51,22 +53,29 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     # Additional UI components
     def newSubWindow(self):
         """This will create a new alignment window from whatever the selected sequences were.
+        Ignores any folders that were included in the selection.
+
         """
         # get associated sequence for click
-        try:
-            indexes = self.bioTree.selectedIndexes()
-            items = {}
-            for index in indexes:
+        indexes = self.bioTree.selectedIndexes()
+        items = {}
+        for index in indexes:
+            try:
                 items[self.bioModel.itemFromIndex(index).text()] = \
                     str(self.bioModel.itemFromIndex(index).getSeq())
-            aligned = clustalo(items)
-            print(aligned)
-            sub = QMdiSubWindow()
-            sub.setWidget(views.AlignSubWindow(aligned))
-            self.mdiArea.addSubWindow(sub)
-            sub.show()
-        except AttributeError:
-            print("DON'T DO THAT!")
+            except AttributeError:
+                self.mainStatus.showMessage("Not including selected folder \"" +
+                                            self.bioModel.itemFromIndex(index).text() + "\"",
+                                            msecs=5000)
+                self.mainlogger.debug("Detected folder ("+self.bioModel.itemFromIndex(index).text()
+                                      + ") in selection --> ignoring!")
+                continue
+        aligned = clustalo(items)
+        print(aligned)
+        sub = QMdiSubWindow()
+        sub.setWidget(views.AlignSubWindow(aligned))
+        self.mdiArea.addSubWindow(sub)
+        sub.show()
 
     # INITIAL TESTING DATA
     # Builds a basic tree model for testing.
