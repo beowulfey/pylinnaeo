@@ -89,15 +89,15 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         """
-        index = self.projectTree.selectedIndexes()  # only allows single selection in this tree.
-        item = self.projectModel.itemFromIndex(index[0])
+        item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
         try:
             sub = item.getWindow()
-            #self.mdiArea.addSubWindow(sub)
-            sub.show()
+            sub.setWindowTitle(item.text())
+            self.mdiArea.setActiveSubWindow(sub)
+            if not self.mdiArea.isVisible(sub):
+                sub.show()
         except:
             pass
-        print("Doubleclicked")
 
 
     # INITIAL TESTING DATA

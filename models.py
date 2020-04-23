@@ -4,7 +4,6 @@
 # Sets up an empty tree and populates it.
 
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QMdiSubWindow
 
 
 # Each node of the tree comprises a sequence name and its raw sequence info.
@@ -15,7 +14,10 @@ class SeqNode(QStandardItem):
         self.itemSeq = seq
         self.childItems = []
 
-    def appendChild(self, item):
+    def getSeq(self):
+        return self.itemSeq
+
+    """def appendChild(self, item):
         self.childItems.append(item)
 
     def getChild(self, row):
@@ -24,17 +26,17 @@ class SeqNode(QStandardItem):
     def getChildCount(self):
         return len(self.childItems)
 
-    def getSeq(self):
-        return self.itemSeq
-
     def getParent(self):
         return self.parentItem
 
     def row(self):
         if self.parentItem:
             return self.parentItem.childItems.index(self)
-        return 0
+        return 0"""
 
+# Not sure if it's necessary to have a separate class for the workspace.
+# They functionally work the same; this one just stores a window instead of a sequence.
+# May be good for detecting different types later?...
 
 class WorkspaceNode(SeqNode):
     def __init__(self, item=None, window=None, parent=None):

@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow
-from PyQt5.Qt import Qt
 from ui import alignment_ui
 
 
