@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow
+from PyQt5.Qt import Qt
 from ui import alignment_ui
 
 
@@ -15,3 +16,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_Form):
 
     def getSeqs(self):
         return self.seqs
+
+
+class MDISubWindow(QMdiSubWindow):
+    def __init__(self):
+        super(MDISubWindow, self).__init__()
+
+    def show(self):
+        self.widget().show()
+        super(MDISubWindow, self).show()

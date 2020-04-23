@@ -10,6 +10,7 @@ from Bio.Alphabet import generic_protein
 from clustalo import clustalo
 
 # PyQt components
+from PyQt5.Qt import Qt
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 
@@ -48,13 +49,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         # slot connections go here.
         self.bioTree.doubleClicked.connect(self.newSubWindow)
+        self.projectTree.doubleClicked.connect(self.reopenWindow)
         self.actionAddFolder.triggered.connect(self.newSubWindow)
 
-    # Slot actions go here.
-    def addFolder(self):
-        pass
-
-    # Additional UI components
+    # Slot actions go here
     def newSubWindow(self):
         """
         This will create a new alignment window from whatever the selected sequences were.
@@ -75,13 +73,32 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 self.mainLogger.debug("Detected folder ("+self.bioModel.itemFromIndex(index).text()
                                       + ") in selection --> ignoring!")
                 continue
+        # Align with ClustalO and create a new window from the alignment.
         aligned = clustalo(items)
-        sub = QMdiSubWindow()
+        sub = views.MDISubWindow()
+        sub.setAttribute(Qt.WA_DeleteOnClose, False)
+
         sub.setWidget(views.AlignSubWindow(aligned))
         self.mdiArea.addSubWindow(sub)
-        node = models.WorkspaceNode("New Window",sub)
+        node = models.WorkspaceNode("New Window", sub)
         self.projectRoot.appendRow(node)
         sub.show()
+
+    def reopenWindow(self):
+        """
+        Checks to see if a window is open already.
+        If it is not, reopens the window. If it is, gives focus.
+        """
+        index = self.projectTree.selectedIndexes()  # only allows single selection in this tree.
+        item = self.projectModel.itemFromIndex(index[0])
+        try:
+            sub = item.getWindow()
+            #self.mdiArea.addSubWindow(sub)
+            sub.show()
+        except:
+            pass
+        print("Doubleclicked")
+
 
     # INITIAL TESTING DATA
     # Builds a basic tree model for testing.

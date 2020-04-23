@@ -4,6 +4,7 @@
 # Sets up an empty tree and populates it.
 
 from PyQt5.QtGui import QStandardItem
+from PyQt5.QtWidgets import QMdiSubWindow
 
 
 # Each node of the tree comprises a sequence name and its raw sequence info.
@@ -41,3 +42,6 @@ class WorkspaceNode(SeqNode):
         self.parentItem = parent
         self.window = window
         self.childItems = []
+
+    def getWindow(self):
+        return self.window
