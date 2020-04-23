@@ -44,8 +44,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # setting up trees etc.
         self.bioTree.setModel(self.bioModel)
         self.bioModel.appendRow(self.bioRoot)
+        self.bioTree.setExpanded(self.bioRoot.index(), True)
         self.projectTree.setModel(self.projectModel)
         self.projectModel.appendRow(self.projectRoot)
+        self.projectTree.setExpanded(self.projectRoot.index(), True)
 
         # slot connections go here.
         self.bioTree.doubleClicked.connect(self.newSubWindow)
@@ -80,7 +82,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         sub.setWidget(views.AlignSubWindow(aligned))
         self.mdiArea.addSubWindow(sub)
-        node = models.WorkspaceNode("New Window", sub)
+        node = models.WorkspaceNode(sub.windowTitle(), sub)
         self.projectRoot.appendRow(node)
         sub.show()
 
@@ -93,10 +95,11 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         try:
             sub = item.getWindow()
             sub.setWindowTitle(item.text())
-            self.mdiArea.setActiveSubWindow(sub)
-            if not self.mdiArea.isVisible(sub):
+            if not sub.isVisible():
                 sub.show()
+            self.mdiArea.setActiveSubWindow(sub)
         except:
+            self.mainLogger.debug("Lost the window!")
             pass
 
 
