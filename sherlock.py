@@ -39,7 +39,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.bioRoot = models.SeqNode("Sequences")
         self.projectModel = QStandardItemModel()
         self.projectModel.setItemPrototype(models.SeqNode())
-        self.projectRoot = QStandardItem("Project")
+        self.projectRoot = models.SeqNode("Project")
         # Startup functions
         self.setupUi(self)
         self.guiInit()
@@ -70,6 +70,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         items = {}
         for index in self.bioTree.selectedIndexes():
             # Quick and dirty way to ignore folders that are selected too.
+            print("NEW ATTEMPT!")
             if self.bioModel.itemFromIndex(index).sequence():
                 items[self.bioModel.itemFromIndex(index).text()] = \
                     str(self.bioModel.itemFromIndex(index).sequence())
@@ -83,10 +84,13 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         # Check if the two sequences have been aligned before.
         # If not, align with ClustalO and create a new window from the alignment.
-        if items and list(items.values()) not in self.alignments:
+        seqs = list(items.values())
+        if len(seqs) > 1:
+            seqs.sort()
+        if items and seqs not in self.alignments:
             aligned = clustalo(items)
             self.makeNewWindow(aligned)
-            self.alignments.append(list(items.values()))
+            self.alignments.append(seqs)
         else:
             self.mainStatus.showMessage("Alignment already opened", msecs=5000)
 
@@ -148,7 +152,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                  'APVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKI'+
                  'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL'+
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
-        seq_GPI1B = Bseq.MutableSeq(test2[1],generic_protein)
+        seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
         for i in list(range(0, len(test))):
