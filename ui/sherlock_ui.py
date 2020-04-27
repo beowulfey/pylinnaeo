@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'sherlock.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.3
+# Created by: PyQt5 UI code generator 5.14.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
         self.bioTree.setDragEnabled(True)
         self.bioTree.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
         self.bioTree.setDefaultDropAction(QtCore.Qt.CopyAction)
-        self.bioTree.setAlternatingRowColors(True)
+        self.bioTree.setAlternatingRowColors(False)
         self.bioTree.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.bioTree.setAutoExpandDelay(0)
         self.bioTree.setWordWrap(False)
@@ -56,9 +56,9 @@ class Ui_MainWindow(object):
         self.projectTree = QtWidgets.QTreeView(self.widget_4)
         self.projectTree.setEditTriggers(QtWidgets.QAbstractItemView.EditKeyPressed|QtWidgets.QAbstractItemView.SelectedClicked)
         self.projectTree.setDragEnabled(True)
-        self.projectTree.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
+        self.projectTree.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
         self.projectTree.setDefaultDropAction(QtCore.Qt.CopyAction)
-        self.projectTree.setAlternatingRowColors(True)
+        self.projectTree.setAlternatingRowColors(False)
         self.projectTree.setAutoExpandDelay(0)
         self.projectTree.setObjectName("projectTree")
         self.gridLayout_5.addWidget(self.projectTree, 0, 0, 1, 1)

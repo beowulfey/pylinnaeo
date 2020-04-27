@@ -4,6 +4,19 @@ from PyQt5.QtWidgets import QWidget, QMdiSubWindow
 from ui import alignment_ui
 
 
+class MDISubWindow(QMdiSubWindow):
+    """
+    Have to subclass QMdiSubWindow because it doesn't automatically
+    show the widget if I close the window, which is strange and annoying.
+    """
+    def __init__(self):
+        super(MDISubWindow, self).__init__()
+
+    def show(self):
+        self.widget().show()
+        super(MDISubWindow, self).show()
+
+
 class AlignSubWindow(QWidget, alignment_ui.Ui_Form):
     def __init__(self, sequences):
         super(self.__class__, self).__init__()
@@ -15,16 +28,3 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_Form):
 
     def getSeqs(self):
         return self._seqs
-
-
-class MDISubWindow(QMdiSubWindow):
-    """
-    Have to subclass QMdiSubWindow because it doesn't automatically
-    show the widget if I close the window, which is annoying. 
-    """
-    def __init__(self):
-        super(MDISubWindow, self).__init__()
-
-    def show(self):
-        self.widget().show()
-        super(MDISubWindow, self).show()
