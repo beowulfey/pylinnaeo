@@ -19,7 +19,7 @@ import logging
 
 # TODO: Add functionality for removing sequences and alignments (from the dicts too)
 # TODO: Add functionality for saving workspace.
-# TODO: Add
+# TODO: Add functionality for combining sequences into new alignments!
 
 
 def _iterTreeView(root):
@@ -80,9 +80,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
     def tryCreateAlignment(self):
         """
-        This will create a new alignment from the currently selected sequences.
+        This will create a new alignment from the currently selected sequences in top Tree.
         Ignores any folders that were included in the selection.
-        Will not duplicate alignments. Creates a window if not made.
+        Will not duplicate alignments. Creates a new window if alignment is new.
         """
         items = {}
         for index in self.bioTree.selectedIndexes():
@@ -95,8 +95,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 self.mainStatus.showMessage("Not including selected folder \"" +
                                             self.bioModel.itemFromIndex(index).text() + "\"",
                                             msecs=5000)
-                self.mainLogger.debug("Detected folder ("+self.bioModel.itemFromIndex(index).text()
-                                      + ") in selection --> ignoring!")
                 continue
 
         # Check if the two sequences have been aligned before.
@@ -106,18 +104,22 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         if len(seqs) > 1:
             seqs.sort()
         if items and seqs not in self.alignments.values():
-            # create new unique identifier
+            # create new unique identifier for tracking alignment!
             self.windex += 1
             wid = str(self.windex)
-            self.mainLogger.debug("Storing new alignment with ID " + wid)
+            self.mainLogger.debug("Alignment stored with ID " + wid + " and sequence(s) "
+                                  + str([x[:10]+'..'+x[-10:] for x in seqs]))
             self.alignments[wid] = seqs
+
+            # TODO: have this form a new thread (probably necessary for long alignments)
             aligned = clustalo(items)
+            self.mainLogger.debug("Sending alignment to clustal omega using default options (1 core, protein seq)")
+            self.mainStatus.showMessage("Aligning selection...", msecs=1000)
             self.makeNewWindow(aligned, wid)
         else:
-            self.mainStatus.showMessage("Alignment already opened", msecs=5000)
+            self.mainStatus.showMessage("Alignment already opened!", msecs=1000)
             for key, value in self.alignments.items():
                 if seqs == value:
-                    print(key)
                     self.reopenWindow(windowID=key)
 
     def makeNewWindow(self, ali, windowID):
@@ -142,17 +144,19 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         """
         # TODO: consider returning a try:catch here...
         if isinstance(windowID, str):
+            # if WindowID is a string, that means it was sent by a deliberate search.
             for node in _iterTreeView(self.projectRoot):
                 if node.data(role=self.WindowRole) == windowID:
                     item = node
         else:
+            # if not string it should be a QModelIndex (from selection? Not sure how that works...)
             item = self.projectModel.itemFromIndex(windowID)
         sub = self.windows[item.data(role=self.WindowRole)]
         sub.setWindowTitle(item.text())
+        sub.widget().seqArrange()
         if not sub.isVisible():
             sub.show()
         self.mdiArea.setActiveSubWindow(sub)
-        #self.mainLogger.debug("Something went wrong!")
 
 
     # INITIAL TESTING DATA
