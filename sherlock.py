@@ -30,7 +30,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         # Instantiation
-        self.setupUi(self)
+        self.alignments = []
+        self.windows = {}
         self.mainLogger = logging.getLogger("Main")
         self.bioModel = QStandardItemModel()
         self.bioModel.setItemPrototype(models.SeqNode())
@@ -38,8 +39,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.projectModel = QStandardItemModel()
         self.projectRoot = QStandardItem("Project")
         # Startup functions
-        self.alignments = []
-        self.windows = {}
+        self.setupUi(self)
         self.guiInit()
 
         self.DEBUG()
@@ -63,13 +63,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         """
         This will create a new alignment from whatever the selected sequences were.
         Ignores any folders that were included in the selection.
-        Will not duplicate alignments
+        Will not duplicate alignments.
         """
-        # get associated sequences selected
-        indexes = self.bioTree.selectedIndexes()
         items = {}
-
-        for index in indexes:
+        for index in self.bioTree.selectedIndexes():
             # Quick and dirty way to ignore folders that are selected too.
             if self.bioModel.itemFromIndex(index).sequence():
                 items[self.bioModel.itemFromIndex(index).text()] = \
@@ -82,7 +79,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                                       + ") in selection --> ignoring!")
                 continue
 
-        # Align with ClustalO and create a new window from the alignment.
+        # Check if the two sequences have been aligned before.
+        # If not, align with ClustalO and create a new window from the alignment.
         if items and list(items.values()) not in self.alignments:
             aligned = clustalo(items)
             self.makeNewWindow(aligned)
