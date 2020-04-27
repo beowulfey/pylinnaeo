@@ -17,6 +17,10 @@ from ui import views
 # Additional libraries
 import logging
 
+# TODO: Add functionality for removing sequences and alignments (from the dicts too)
+# TODO: Add functionality for saving workspace.
+# TODO: Add
+
 
 def _iterTreeView(root):
     """Internal function for iterating a TreeModel"""
@@ -34,18 +38,19 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     """ Main Window for Sherlock App """
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-
-        # Instantiation
-        self.SequenceRole = Qt.UserRole + 1
-        self.WindowRole = Qt.UserRole + 2
+        # Instantiation.
+        # Dict:alignments --> {window ID : [all sequences]}
+        # Dict:windows --> {window ID :
+        self.windex = -1
         self.alignments = {}
         self.windows = {}
+        self.SequenceRole = Qt.UserRole + 1
+        self.WindowRole = Qt.UserRole + 2
         self.mainLogger = logging.getLogger("Main")
         self.bioModel = QStandardItemModel()
         self.bioRoot = QStandardItem("Sequences")
         self.projectModel = QStandardItemModel()
         self.projectRoot = QStandardItem("Project")
-
         # Startup functions
         self.setupUi(self)
         self.guiInit()
@@ -96,11 +101,14 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         # Check if the two sequences have been aligned before.
         # If not, align with ClustalO and create a new window from the alignment.
+        # If so, provide focus to that window.
         seqs = list(items.values())
         if len(seqs) > 1:
             seqs.sort()
         if items and seqs not in self.alignments.values():
-            wid = str(len(list(self.alignments.values())))
+            # create new unique identifier
+            self.windex += 1
+            wid = str(self.windex)
             self.mainLogger.debug("Storing new alignment with ID " + wid)
             self.alignments[wid] = seqs
             aligned = clustalo(items)
@@ -110,43 +118,41 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             for key, value in self.alignments.items():
                 if seqs == value:
                     print(key)
-                    self.reopenWindow(wid=key)
+                    self.reopenWindow(windowID=key)
 
-    def makeNewWindow(self, ali, wid):
+    def makeNewWindow(self, ali, windowID):
         sub = views.MDISubWindow()
         sub.setAttribute(Qt.WA_DeleteOnClose, False)
         widget = views.AlignSubWindow(ali)
-        self.windows[wid] = sub
+        self.windows[windowID] = sub
         sub.setWidget(widget)
 
         # Show window in the view panel
         self.mdiArea.addSubWindow(sub)
         node = QStandardItem(sub.windowTitle())
-        node.setData(wid, self.WindowRole)
+        node.setData(windowID, self.WindowRole)
         self.projectRoot.appendRow(node)
         sub.show()
 
-    def reopenWindow(self, wid=None):
+    def reopenWindow(self, windowID=None):
         """
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         Also refreshes the title.
         """
-        print("Reopening window!--" + wid)
-        if not wid:
-            item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
-        else:
+        # TODO: consider returning a try:catch here...
+        if isinstance(windowID, str):
             for node in _iterTreeView(self.projectRoot):
-                if node.data(role=self.WindowRole) == wid:
+                if node.data(role=self.WindowRole) == windowID:
                     item = node
-        try:
-            sub = self.windows[item.data(role=self.WindowRole)]
-            sub.setWindowTitle(item.text())
-            if not sub.isVisible():
-                sub.show()
-            self.mdiArea.setActiveSubWindow(sub)
-        except:
-            pass
+        else:
+            item = self.projectModel.itemFromIndex(windowID)
+        sub = self.windows[item.data(role=self.WindowRole)]
+        sub.setWindowTitle(item.text())
+        if not sub.isVisible():
+            sub.show()
+        self.mdiArea.setActiveSubWindow(sub)
+        #self.mainLogger.debug("Something went wrong!")
 
 
     # INITIAL TESTING DATA
