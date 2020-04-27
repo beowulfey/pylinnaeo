@@ -1,29 +1,31 @@
-# README #
+# CODENAME SHERLOCK #
 
-Welcome to **BIOGLOT**  -- the shitty app that I made!
+Sherlock is a python program I made for learning how to code GUI programs, but also to solve a 
+basic problem I had: nothing out there is very good for storing and making protein alignments.
 
-UPDATE 2017: OH SHIT I'M DOING THINGS AGAIN!
 
-### What is this repository for? ###
+### Protein alignments? ###
 
-It stores my stuff. Namely this app.
-The app is for viewing bio-related stuff. I hate paying for software, so obviously the next best thing would be to make one myself. Right now it: 
+Yes, out there in the world are countless amino acid sequences, and their sequences are connected to
+protein functions... but it's often hard to see that. This program is intended to help with this 
+by meeting a few basic criteria:
 
-* Translates DNA sequences to Protein Sequences
-* That's it?
+1) It should be fast.
+2) It should store any sequence you want.
+3) It should be easy to create and store alignments. 
 
-Yay!
+That's a basic idea. Most likely those criteria will change. 
 
 ### How do I get set up? ###
 
-Fuck if I know. Figure it out. How did you even get here? 
+I am going to try and make this into a package that installs automagically, but for now 
+here is a list of the packages I installed into a fresh python environment:
 
-Stuff I used to make it that you'll probably need:
-
-* Python v3
+* Python v3.8
 * PyQt5
-* ??? 
-* Etc
+* biopython
+* A port of Clustal Omega (in this repository)
+* PyQt5-stubs==5.14.2.0 (for code hints)
 
 ### Contribution guidelines ###
 
