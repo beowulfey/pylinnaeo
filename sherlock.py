@@ -12,17 +12,14 @@ from clustalo import clustalo
 # PyQt components
 from PyQt5.Qt import Qt
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
+from PyQt5.QtWidgets import QMainWindow
 
 # Bioglot components
-import models
 from ui import sherlock_ui
 from ui import views
 
 # Additional libraries
 import logging
-import configparser
-from pathlib import Path
 
 
 class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
@@ -30,16 +27,20 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         # Instantiation
+        self.SequenceRole = Qt.UserRole + 1
+        self.WindowRole = Qt.UserRole + 2
         self.alignments = []
         self.windows = {}
 
         self.mainLogger = logging.getLogger("Main")
         self.bioModel = QStandardItemModel()
-        self.bioModel.setItemPrototype(models.SeqNode())
-        self.bioRoot = models.SeqNode("Sequences")
+        #self.bioModel.setItemPrototype(models.SeqNode())
+        #self.bioRoot = models.SeqNode("Sequences")
+        self.bioRoot = QStandardItem("Sequences")
         self.projectModel = QStandardItemModel()
-        self.projectModel.setItemPrototype(models.SeqNode())
-        self.projectRoot = models.SeqNode("Project")
+        #self.projectModel.setItemPrototype(models.SeqNode())
+        #self.projectRoot = models.SeqNode("Project")
+        self.projectRoot = QStandardItem("Project")
         # Startup functions
         self.setupUi(self)
         self.guiInit()
@@ -71,9 +72,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         for index in self.bioTree.selectedIndexes():
             # Quick and dirty way to ignore folders that are selected too.
             print("NEW ATTEMPT!")
-            if self.bioModel.itemFromIndex(index).sequence():
+            if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
                 items[self.bioModel.itemFromIndex(index).text()] = \
-                    str(self.bioModel.itemFromIndex(index).sequence())
+                    str(self.bioModel.itemFromIndex(index).data(role=self.SequenceRole))
             else:
                 self.mainStatus.showMessage("Not including selected folder \"" +
                                             self.bioModel.itemFromIndex(index).text() + "\"",
@@ -105,7 +106,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         # Show window in the view panel
         self.mdiArea.addSubWindow(sub)
-        node = models.SeqNode(sub.windowTitle(), window=str(wid))
+        #node = models.SeqNode(sub.windowTitle(), window=str(wid))
+        node = QStandardItem(sub.windowTitle())
+        node.setData(str(wid), self.WindowRole)
+        node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         self.projectRoot.appendRow(node)
         sub.show()
 
@@ -115,15 +119,15 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         If it is not, reopens the window. If it is, gives focus.
         Also refreshes the title. May want to set up a separate listener for that.
         """
-        item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
-        sub = self.windows[item.window()]
-        sub.setWindowTitle(item.text())
-        if not sub.isVisible():
-            sub.show()
-        self.mdiArea.setActiveSubWindow(sub)
-        #except:
-        #    self.mainLogger.debug("Lost the window!")
-        #    pass
+        try:
+            item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
+            sub = self.windows[item.data(role=self.WindowRole)]
+            sub.setWindowTitle(item.text())
+            if not sub.isVisible():
+                sub.show()
+            self.mdiArea.setActiveSubWindow(sub)
+        except KeyError:
+            pass
 
 
     # INITIAL TESTING DATA
@@ -156,7 +160,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
         for i in list(range(0, len(test))):
-            node = models.SeqNode(test[i][0], sequence=test[i][1])
+            #node = models.SeqNode(test[i][0], sequence=test[i][1])
+            node = QStandardItem(test[i][0])
+            node.setData(test[i][1], self.SequenceRole)
+            node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
             self.bioRoot.appendRow(node)
 
         """

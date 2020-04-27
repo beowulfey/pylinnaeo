@@ -18,6 +18,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_Form):
 
 
 class MDISubWindow(QMdiSubWindow):
+    """
+    Have to subclass QMdiSubWindow because it doesn't automatically
+    show the widget if I close the window, which is annoying. 
+    """
     def __init__(self):
         super(MDISubWindow, self).__init__()
 
