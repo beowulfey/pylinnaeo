@@ -23,13 +23,13 @@ class SeqNode(QStandardItem):
         # Set Default Flags
         self.setFlags(Qt.ItemIsEnabled | Qt.ItemIsEditable | Qt.ItemIsSelectable |
                       Qt.ItemIsUserCheckable | Qt.ItemIsDragEnabled)
-        self._name = name
-        self._parent = parent
-        self._childItems = []
+        #self._name = name
+        #self._parent = parent
+        #self._childItems = []
         if sequence:
             super(SeqNode, self).setData(sequence, self.SequenceRole)
         if window:
-            self.setFlags(self.flags() or self.setFlags(Qt.ItemIsDropEnabled))
+            #self.setFlags(self.flags() or self.setFlags(Qt.ItemIsDropEnabled))
             super(SeqNode, self).setData(window, self.WindowRole)
 
     def clone(self):

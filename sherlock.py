@@ -32,11 +32,13 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Instantiation
         self.alignments = []
         self.windows = {}
+
         self.mainLogger = logging.getLogger("Main")
         self.bioModel = QStandardItemModel()
         self.bioModel.setItemPrototype(models.SeqNode())
         self.bioRoot = models.SeqNode("Sequences")
         self.projectModel = QStandardItemModel()
+        self.projectModel.setItemPrototype(models.SeqNode())
         self.projectRoot = QStandardItem("Project")
         # Startup functions
         self.setupUi(self)
@@ -56,14 +58,14 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         # slot connections
         self.bioTree.doubleClicked.connect(self.tryCreateAlignment)
-        self.projectTree.doubleClicked.connect(self.reopenWindow)
         self.actionAddFolder.triggered.connect(self.tryCreateAlignment)
+        self.projectTree.doubleClicked.connect(self.reopenWindow)
 
     def tryCreateAlignment(self):
         """
         This will create a new alignment from whatever the selected sequences were.
         Ignores any folders that were included in the selection.
-        Will not duplicate alignments.
+        Will not duplicate alignments. Creates a window if not made.
         """
         items = {}
         for index in self.bioTree.selectedIndexes():
@@ -89,43 +91,19 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.mainStatus.showMessage("Alignment already opened", msecs=5000)
 
     def makeNewWindow(self, ali):
+        wid = len(self.alignments)
+        self.mainLogger.debug("Creating new window with ID " + str(wid))
         sub = views.MDISubWindow()
         sub.setAttribute(Qt.WA_DeleteOnClose, False)
-        sub.setWidget(views.AlignSubWindow(ali))
-        print(sub.widget())
-
-        # Save the window in the dictionary
-        print("Checking if title present")
-        query = self.windows.get(str(sub.windowTitle()))
-        print(query)
-        print("Checking if window present")
-        query2 = self.windows.get(sub)
-        print(query2)
-        if not query:
-            print("adding new window to dictionary")
-            self.windows[str(sub.windowTitle())] = sub.widget()
-            print(self.windows)
-        else:
-            count = self.queryWindows(sub.windowTitle())
-            sub.setWindowTitle(sub.windowTitle() + " " + count)
-            self.windows[sub.windowTitle()] = sub.widget()
+        widget = views.AlignSubWindow(ali)
+        self.windows[str(wid)] = sub
+        sub.setWidget(widget)
 
         # Show window in the view panel
         self.mdiArea.addSubWindow(sub)
-        node = models.SeqNode(sub.windowTitle(), window=sub)
+        node = models.SeqNode(sub.windowTitle(), window=str(wid))
         self.projectRoot.appendRow(node)
         sub.show()
-        print("~~~~~~~~~~~DONE~")
-
-    def queryWindows(self, query):
-        """ Quick counter to prevent duplicate naming of windows"""
-        count = []
-        print("Current keys: ", self.windows.keys())
-        for key in self.windows.keys():
-            print(key)
-            if query in key:
-                count.append(key)
-        return str(len(count))
 
     def reopenWindow(self):
         """
@@ -134,15 +112,14 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         Also refreshes the title. May want to set up a separate listener for that.
         """
         item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
-        try:
-            sub = item.text()
-            sub.setWindowTitle(item.text())
-            if not sub.isVisible():
-                sub.show()
-            self.mdiArea.setActiveSubWindow(sub)
-        except:
-            self.mainLogger.debug("Lost the window!")
-            pass
+        sub = self.windows[item.window()]
+        sub.setWindowTitle(item.text())
+        if not sub.isVisible():
+            sub.show()
+        self.mdiArea.setActiveSubWindow(sub)
+        #except:
+        #    self.mainLogger.debug("Lost the window!")
+        #    pass
 
 
     # INITIAL TESTING DATA
