@@ -14,10 +14,15 @@ class MDISubWindow(QMdiSubWindow):
     """
     def __init__(self):
         super(MDISubWindow, self).__init__()
+        self.setAttribute(Qt.WA_DeleteOnClose, False)
 
     def show(self):
         self.widget().show()
         super(MDISubWindow, self).show()
+
+    #def closeEvent(self, event):
+    #    self.mdiArea().removeSubWindow(self)
+    #    super(MDISubWindow, self).close()
 
 
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):

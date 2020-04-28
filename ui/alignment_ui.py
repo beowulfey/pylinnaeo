@@ -22,7 +22,7 @@ class Ui_aliWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.namePane.sizePolicy().hasHeightForWidth())
         self.namePane.setSizePolicy(sizePolicy)
-        self.namePane.setMinimumSize(QtCore.QSize(75, 100))
+        self.namePane.setMinimumSize(QtCore.QSize(30, 100))
         self.namePane.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.namePane.setBaseSize(QtCore.QSize(75, 0))
         palette = QtGui.QPalette()
@@ -80,4 +80,4 @@ class Ui_aliWindow(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Liberation Mono\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p dir=\'rtl\' style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test Sequence</p></body></html>"))
+"<p dir=\'rtl\' style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))

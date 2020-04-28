@@ -87,10 +87,11 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.processTimer.start()
 
         # Slot connections
+        self.mdiArea.tileSubWindows()
         self.processTimer.timeout.connect(self.updateUsage)
         self.bioTree.doubleClicked.connect(self.tryCreateAlignment)
         self.actionAlign.triggered.connect(self.tryCreateAlignment)
-        self.projectTree.doubleClicked.connect(self.reopenWindow)
+        self.projectTree.doubleClicked.connect(self.treeDbClick)
         #self.projectTree.dropEvent.connect(self.seqDropEvent)
 
     def seqDropEvent(self):
@@ -141,28 +142,31 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.mainStatus.showMessage("Reopening alignment!", msecs=1000)
             for key, value in self.alignments.items():
                 if seqs == value:
-                    self.reopenWindow(windowID=key)
+                    self.openWindow(windowID=key)
 
     def makeNewWindow(self, ali, windowID):
-        # TODO: don't add single sequences to the project pane!
         sub = views.MDISubWindow()
-        sub.setAttribute(Qt.WA_DeleteOnClose, False)
         widget = views.AlignSubWindow(ali)
-
         sub.setWidget(widget)
 
         # Show window in the view panel
-        self.mdiArea.addSubWindow(sub)
-        self.windows[windowID] = sub
         if len(ali.keys()) > 1:
             node = QStandardItem(sub.windowTitle())
             node.setData(windowID, self.WindowRole)
             self.projectRoot.appendRow(node)
         else:
             sub.setWindowTitle(list(ali.keys())[0])
-        sub.show()
+        self.windows[windowID] = sub
+        self.openWindow(windowID=windowID)
 
-    def reopenWindow(self, windowID=None):
+    def treeDbClick(self):
+        print(self.projectTree.selectedIndexes()[0])
+        item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
+        title = item.text()
+        wid = item.data(role=self.WindowRole)
+        self.openWindow(windowID=wid, title=title)
+
+    def openWindow(self, windowID=None, title=None):
         """
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
@@ -172,14 +176,16 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         if isinstance(windowID, str):
             # if WindowID is a string, that means it was sent by a deliberate search.
             sub = self.windows[windowID]
+            if title:
+                sub.setWindowTitle(title)
         else:
             # if not string it should be a QModelIndex (from selection? Not sure how that works...)
             item = self.projectModel.itemFromIndex(windowID)
             sub = self.windows[item.data(role=self.WindowRole)]
             sub.setWindowTitle(item.text())
-        #sub.widget().seqArrange()
-        if not sub.isVisible():
-            sub.show()
+        # TODO: Make this only do if not in already!
+        self.mdiArea.addSubWindow(sub)
+        sub.show()
         self.mdiArea.setActiveSubWindow(sub)
 
 
