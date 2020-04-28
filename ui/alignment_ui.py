@@ -40,15 +40,16 @@ class Ui_aliWindow(object):
         font.setFamily("Liberation Mono")
         font.setPointSize(10)
         self.namePane.setFont(font)
+        self.namePane.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.namePane.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.namePane.setFrameShadow(QtWidgets.QFrame.Raised)
         self.namePane.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.namePane.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.namePane.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.namePane.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.namePane.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.namePane.setReadOnly(True)
         self.namePane.setObjectName("namePane")
-        self.horizontalLayout.addWidget(self.namePane)
+        self.horizontalLayout.addWidget(self.namePane, 0, QtCore.Qt.AlignRight)
         self.alignPane = QtWidgets.QTextEdit(aliWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -79,4 +80,4 @@ class Ui_aliWindow(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Liberation Mono\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test Sequence</p></body></html>"))
+"<p dir=\'rtl\' style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test Sequence</p></body></html>"))

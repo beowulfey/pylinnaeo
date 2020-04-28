@@ -32,7 +32,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self._seqs = sequences
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
-        #self.alignWidget.resizeEvent.connect(self.seqArrange)
 
     def resizeEvent(self, event):
         self.resized.emit()
@@ -42,6 +41,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         splitseqs = []
         prettynames = []
         prettyseqs = []
+        maxname = 0
         nseqs = len(self._seqs.keys())
         width = (self.alignPane.size().width())
         charpx = self.alignPane.fontMetrics().averageCharWidth()
@@ -52,6 +52,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             splitseqs.append([name, lines])
             if len(lines) > nlines:
                 nlines = len(lines)
+            if len(name) > maxname:
+                maxname = len(name)
+        # Set name window width to account for max name
+        self.namePane.setMinimumWidth((maxname*charpx)+5)
 
         # Adjust the number of lines so that it accounts for the number of sequences
         # as well as a blank line (minus one for the last blank line)
@@ -59,7 +63,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         subline = 0
         seqid = 0
         for line in range(nlines):
-            #print(line, subline, seqid)
             if seqid != nseqs:
                 try:
                     prettynames.append(splitseqs[seqid][0])
@@ -76,26 +79,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 subline += 1
         self.alignPane.setText("\n".join(prettyseqs))
         self.namePane.setAlignment(Qt.AlignRight)
-        self.namePane.setText("\n".join(prettynames))
-
-
-
-
-
-
-
-
-
-
-        #self.namePane.setText(name)
-        #self.namePane.setAlignment(Qt.AlignRight)
-        #self.alignPane.setText(firstline)
-
-
-
-
-
-
+        self.namePane.setText(prettynames[0])
+        for line in prettynames[1:]:
+            self.namePane.setAlignment(Qt.AlignRight)
+            self.namePane.append(line)
+        self.namePane.verticalScrollBar().setValue(self.alignPane.verticalScrollBar().value())
 
     def seqs(self):
         return self._seqs
