@@ -123,6 +123,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                     self.reopenWindow(windowID=key)
 
     def makeNewWindow(self, ali, windowID):
+        # TODO: don't add single sequences to the project pane!
         sub = views.MDISubWindow()
         sub.setAttribute(Qt.WA_DeleteOnClose, False)
         widget = views.AlignSubWindow(ali)
