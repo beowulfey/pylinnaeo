@@ -62,6 +62,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         nlines = nlines*(nseqs+1)-1
         subline = 0
         seqid = 0
+        # This loop creates a single alignment array by threading each of the individual lines
+        # into each other.
+        # TODO: Add TEXT FORMATTING to this section!! May need store as alternative text storage besides array.
+        # TODO: For example, consider adding to the text window directly rather than as an array!
         for line in range(nlines):
             if seqid != nseqs:
                 try:

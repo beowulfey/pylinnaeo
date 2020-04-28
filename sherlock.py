@@ -7,15 +7,18 @@ from clustalo import clustalo
 
 # PyQt components
 from PyQt5.Qt import Qt
+from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QLineEdit, QLabel
 
 # Internal components
 from ui import sherlock_ui
 from ui import views
 
 # Additional libraries
+import os
 import logging
+import psutil
 
 # TODO: Add functionality for removing sequences and alignments (from the dicts too)
 # TODO: Add functionality for saving workspace.
@@ -41,34 +44,52 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Instantiation.
         # Dict:alignments --> {window ID : [all sequences]}
         # Dict:windows --> {window ID :
+        self.mainProcess = psutil.Process(os.getpid())
+        self.processTimer = QTimer()
         self.windex = -1
         self.alignments = {}
         self.windows = {}
         self.SequenceRole = Qt.UserRole + 1
         self.WindowRole = Qt.UserRole + 2
         self.mainLogger = logging.getLogger("Main")
+        self.memLabel = QLabel("Memory Use: ")
         self.bioModel = QStandardItemModel()
-        self.bioRoot = QStandardItem("Sequences")
+        self.bioRoot = QStandardItem("Folder")
         self.projectModel = QStandardItemModel()
-        self.projectRoot = QStandardItem("Project")
+        self.projectRoot = QStandardItem("Folder")
         # Startup functions
         self.setupUi(self)
         self.guiInit()
 
         self.DEBUG()
 
+    def updateUsage(self):
+        mem = self.mainProcess.memory_info().rss/1000000
+        cpu = self.mainProcess.cpu_percent()
+        self.memLabel.setText("CPU: "+str(cpu)+" % | RAM: "+str(round(mem, 2))+" MB")
+
     def guiInit(self):
         """ Initialize GUI with default parameters. """
+        # Tree setup
         self.bioTree.setModel(self.bioModel)
         self.bioModel.appendRow(self.bioRoot)
         self.bioTree.setExpanded(self.bioRoot.index(), True)
+        self.bioModel.setHorizontalHeaderLabels(["Sequences"])
         self.projectTree.setModel(self.projectModel)
         self.projectModel.appendRow(self.projectRoot)
         self.projectTree.setExpanded(self.projectRoot.index(), True)
+        self.projectModel.setHorizontalHeaderLabels(["Alignments"])
+
+        # Status bar setup
+        self.updateUsage()
+        self.statusBar().addPermanentWidget(self.memLabel)
+        self.processTimer.setInterval(2000)
+        self.processTimer.start()
 
         # Slot connections
+        self.processTimer.timeout.connect(self.updateUsage)
         self.bioTree.doubleClicked.connect(self.tryCreateAlignment)
-        self.actionAddFolder.triggered.connect(self.tryCreateAlignment)
+        self.actionAlign.triggered.connect(self.tryCreateAlignment)
         self.projectTree.doubleClicked.connect(self.reopenWindow)
         #self.projectTree.dropEvent.connect(self.seqDropEvent)
 
@@ -117,7 +138,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.mainStatus.showMessage("Aligning selection...", msecs=1000)
             self.makeNewWindow(aligned, wid)
         else:
-            self.mainStatus.showMessage("Alignment already opened!", msecs=1000)
+            self.mainStatus.showMessage("Reopening alignment!", msecs=1000)
             for key, value in self.alignments.items():
                 if seqs == value:
                     self.reopenWindow(windowID=key)
@@ -127,14 +148,18 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         sub = views.MDISubWindow()
         sub.setAttribute(Qt.WA_DeleteOnClose, False)
         widget = views.AlignSubWindow(ali)
-        self.windows[windowID] = sub
+
         sub.setWidget(widget)
 
         # Show window in the view panel
         self.mdiArea.addSubWindow(sub)
-        node = QStandardItem(sub.windowTitle())
-        node.setData(windowID, self.WindowRole)
-        self.projectRoot.appendRow(node)
+        self.windows[windowID] = sub
+        if len(ali.keys()) > 1:
+            node = QStandardItem(sub.windowTitle())
+            node.setData(windowID, self.WindowRole)
+            self.projectRoot.appendRow(node)
+        else:
+            sub.setWindowTitle(list(ali.keys())[0])
         sub.show()
 
     def reopenWindow(self, windowID=None):
@@ -146,15 +171,13 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # TODO: consider returning a try:catch here...
         if isinstance(windowID, str):
             # if WindowID is a string, that means it was sent by a deliberate search.
-            for node in _iterTreeView(self.projectRoot):
-                if node.data(role=self.WindowRole) == windowID:
-                    item = node
+            sub = self.windows[windowID]
         else:
             # if not string it should be a QModelIndex (from selection? Not sure how that works...)
             item = self.projectModel.itemFromIndex(windowID)
-        sub = self.windows[item.data(role=self.WindowRole)]
-        sub.setWindowTitle(item.text())
-        sub.widget().seqArrange()
+            sub = self.windows[item.data(role=self.WindowRole)]
+            sub.setWindowTitle(item.text())
+        #sub.widget().seqArrange()
         if not sub.isVisible():
             sub.show()
         self.mdiArea.setActiveSubWindow(sub)
@@ -163,7 +186,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     # INITIAL TESTING DATA
     # Builds a basic tree model for testing.
     def DEBUG(self):
-        test1 = ['GPI1AAAAAAAAAAA', 'MSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDF'+
+        test1 = ['GPI1A', 'MSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDF'+
                  'SKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRP'+
                  'ILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPL'+
                  'MVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITN'+
