@@ -10,6 +10,7 @@
     <height>636</height>
    </rect>
   </property>
+<<<<<<< HEAD
   <property name="font">
    <font>
     <family>Cantarell</family>
@@ -25,6 +26,11 @@
   <property name="styleSheet">
    <string notr="true">font: 11pt &quot;Cantarell&quot;;</string>
   </property>
+=======
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
@@ -155,7 +161,11 @@
         </item>
        </layout>
       </widget>
+<<<<<<< HEAD
       <widget class="QWidget" name="mdiWidget" native="true">
+=======
+      <widget class="QWidget" name="widget_2" native="true">
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
        <layout class="QGridLayout" name="gridLayout_2">
         <property name="leftMargin">
          <number>2</number>
@@ -169,6 +179,37 @@
         <property name="bottomMargin">
          <number>2</number>
         </property>
+<<<<<<< HEAD
+=======
+        <item row="0" column="0">
+         <widget class="QMdiArea" name="mdiArea">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="viewMode">
+           <enum>QMdiArea::SubWindowView</enum>
+          </property>
+          <property name="documentMode">
+           <bool>false</bool>
+          </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <property name="tabsMovable">
+           <bool>true</bool>
+          </property>
+          <property name="tabShape">
+           <enum>QTabWidget::Rounded</enum>
+          </property>
+         </widget>
+        </item>
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
        </layout>
       </widget>
      </widget>

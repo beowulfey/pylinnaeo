@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
+<<<<<<< HEAD
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar
+=======
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTabWidget
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
 from PyQt5.QtCore import Qt, pyqtSignal
 from ui import alignment_ui
 import textwrap as tw
