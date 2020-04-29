@@ -38,45 +38,40 @@ def _iterTreeView(root):
 
 
 class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
-    """ Main Window for Sherlock App """
+    """
+    Constructor for the Main Window of the Sherlock App
+    Contains all the user interface functions, as well as underlying code for major features.
+    The bulk of the program is located here.
+    """
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-        # Instantiation.
-        # Dict:alignments --> {window ID : [all sequences]}
-        # Dict:windows --> {window ID :
-        self.mainProcess = psutil.Process(os.getpid())
-        self.processTimer = QTimer()
-        self.windex = -1
-        self.alignments = {}
-        self.windows = {}
-        self.SequenceRole = Qt.UserRole + 1
-        self.WindowRole = Qt.UserRole + 2
-        self.mainLogger = logging.getLogger("Main")
-        self.memLabel = QLabel("Memory Use: ")
-        self.bioModel = QStandardItemModel()
-        self.bioRoot = QStandardItem("Folder")
-        self.projectModel = QStandardItemModel()
-        self.projectRoot = QStandardItem("Folder")
-        # Startup functions
-        self.setupUi(self)
-        self.mdiArea = views.MDIArea()
+        # System instants
+        self.memLabel = QLabel()                        # initiate a label for adding to status bar
+        self.mainProcess = psutil.Process(os.getpid())  # process and timer are used for getting Mem/CPU usage
+        self.processTimer = QTimer()                    # See above. All this goes in the memLabel.
+        self.mainLogger = logging.getLogger("Main")     # Logger for main window
 
-        self.gridLayout_2.addWidget(self.mdiArea)
-        self.guiInit()
+        # Project instants
+        self.windex = -1                                # Acts as identifier for tracking alignments (max 2.1 billion)
+        self.alignments = {}                            # Alignments (stored as { windex : [name, seqs] } )
+        self.windows = {}                               # Windows (stored as { windex : MDISubWindow } )
+        self.SequenceRole = Qt.UserRole + 1             # Used for storing sequence data in TreeView
+        self.WindowRole = Qt.UserRole + 2               # Stores window ID in TreeView
+        self.bioModel = QStandardItemModel()            # BioModel is shown in the top (sequence) TreeView
+        self.bioRoot = QStandardItem("Folder")          # Default root node for top TreeView
+        self.projectModel = QStandardItemModel()        # ProjectModel is shown in the bottom (alignment) TreeView
+        self.projectRoot = QStandardItem("Folder")      # Default root node for bottom TreeView
+        self.mdiArea = views.MDIArea()                  # Create a custom MDIArea
+
+        # Startup functions
+        self.setupUi(self)                              # Built by PyUic5 from my main window UI file
+        self.gridLayout_2.addWidget(self.mdiArea)       # Add custom MDI area to the empty space intended to hold it
+        self.guiInit()                                  # Additional gui setup goes here.
 
         self.DEBUG()
 
-    def updateUsage(self):
-        mem = self.mainProcess.memory_info().rss/1000000
-        cpu = self.mainProcess.cpu_percent()
-        self.memLabel.setText("CPU: "+str(cpu)+" % | RAM: "+str(round(mem, 2))+" MB")
-
     def guiInit(self):
         """ Initialize GUI with default parameters. """
-        # MDI setup
-        self.tbTest = QTabBar()
-        #self.tbTest.tabMoved.conn
-
         # Tree setup
         self.bioTree.setModel(self.bioModel)
         self.bioModel.appendRow(self.bioRoot)
@@ -90,7 +85,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Status bar setup
         self.updateUsage()
         self.statusBar().addPermanentWidget(self.memLabel)
-        self.processTimer.setInterval(2000)
+        self.processTimer.setInterval(1000)
         self.processTimer.start()
 
         # Slot connections
@@ -106,24 +101,26 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         sequence or another alignment window, it creates a new window using all unique components
         """
 
-    def tryCreateAlignment(self):
+    def tryCreateAlignment(self, indexes=None, items=None):
         """
         This will create a new alignment from the currently selected sequences in top Tree.
         Ignores any folders that were included in the selection.
         Will not duplicate alignments. Creates a new window if alignment is new.
+        "Items" input is an dictionary of {SeqName : Sequence}
         """
-        items = {}
-        for index in self.bioTree.selectedIndexes():
-            # Quick and dirty way to ignore folders that are selected:
-            # Only does the thing if there is a sequence present in the node.
-            if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
-                items[self.bioModel.itemFromIndex(index).text()] = \
-                    str(self.bioModel.itemFromIndex(index).data(role=self.SequenceRole))
-            else:
-                self.mainStatus.showMessage("Not including selected folder \"" +
-                                            self.bioModel.itemFromIndex(index).text() + "\"",
-                                            msecs=5000)
-                continue
+        if not items:
+            items = {}
+            for index in self.bioTree.selectedIndexes():
+                # Quick and dirty way to ignore folders that are selected:
+                # Only does the thing if there is a sequence present in the node.
+                if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
+                    items[self.bioModel.itemFromIndex(index).text()] = \
+                        str(self.bioModel.itemFromIndex(index).data(role=self.SequenceRole))
+                else:
+                    self.mainStatus.showMessage("Not including selected folder \"" +
+                                                self.bioModel.itemFromIndex(index).text() + "\"",
+                                                msecs=5000)
+                    continue
 
         # Check if the two sequences have been aligned before.
         # If not, align with ClustalO and create a new window from the alignment.
@@ -185,7 +182,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             sub = self.windows[windowID]
             if title:
                 sub.setWindowTitle(title)
-        # TODO: Make this only do if not in already!
         else:
             self.mainLogger.debug("Something went wrong with opening window!")
         if sub.mdiArea() != self.mdiArea:
@@ -196,9 +192,12 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
 
+    def updateUsage(self):
+        """ Simple method that updates the status bar process usage statistics on timer countdown"""
+        mem = self.mainProcess.memory_info().rss/1000000
+        cpu = self.mainProcess.cpu_percent()
+        self.memLabel.setText("CPU: "+str(cpu)+" % | RAM: "+str(round(mem, 2))+" MB")
 
-    # INITIAL TESTING DATA
-    # Builds a basic tree model for testing.
     def DEBUG(self):
         test1 = ['GPI1A', 'MSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDF'+
                  'SKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRP'+

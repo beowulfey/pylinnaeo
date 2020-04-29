@@ -5,6 +5,9 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from ui import alignment_ui
 import textwrap as tw
 
+# TODO have to figure out how to reshow tabs upon doubleclick
+# TODO may have to hide Tabbar and create a custom TabBar instead
+
 class MDIArea(QMdiArea):
     def __init__(self):
         super(MDIArea, self).__init__()
@@ -19,26 +22,16 @@ class MDIArea(QMdiArea):
         super(MDIArea, self).resizeEvent(event)
 
     def setupTabBar(self):
-        #self.tabBar.setAutoHide(True)
+        self.tabBar.setAutoHide(True)
         self.setTabsMovable(True)
         self.setTabsClosable(True)
         self.tabBar.tabCloseRequested.connect(self.closeTab)
         #self.tabBar.tabMoved.connect(self.moveTab)
 
     def closeTab(self, index):
-        self.lastClosedTab = index
-        window = self.childWindows[index]
-        self.childWindows.remove(window)
-        #self.removeSubWindow(window)
-        #self.tabBar.removeTab(index)
         self.activeSubWindow().showMaximized()
 
-    #def moveTab(self, orig, new):
-    #    print("Tab moved")
-
-
     def addSubWindow(self, window, flags=Qt.WindowFlags()):
-        #self.childWindows.append(window)
         super(MDIArea, self).addSubWindow(window, flags)
         for sub in self.subWindowList():
             sub.showMinimized()
@@ -50,11 +43,7 @@ class MDIArea(QMdiArea):
         titles = []
         for index in range(len(self.tabBar.children())):
             titles.append(self.tabBar.tabText(index))
-        print(titles)
-        print(self.subWindowList())
-        #print(self.childWindows)
         if window.windowTitle() not in titles:
-            print("adding tab")
             self.addSubWindow(window)
             self.tabBar.addTab(window.windowIcon(), window.windowTitle())
             self.activeSubWindow().showMaximized()
