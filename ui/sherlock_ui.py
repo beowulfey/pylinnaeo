@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'sherlock.ui'
+# Form implementation generated from reading ui file 'sherlock2.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.2
 #
@@ -63,22 +63,11 @@ class Ui_MainWindow(object):
         self.projectTree.setObjectName("projectTree")
         self.gridLayout_5.addWidget(self.projectTree, 0, 0, 1, 1)
         self.gridLayout_3.addWidget(self.splitter_2, 0, 0, 1, 1)
-        self.widget_2 = QtWidgets.QWidget(self.splitter)
-        self.widget_2.setObjectName("widget_2")
-        self.gridLayout_2 = QtWidgets.QGridLayout(self.widget_2)
+        self.mdiWidget = QtWidgets.QWidget(self.splitter)
+        self.mdiWidget.setObjectName("mdiWidget")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.mdiWidget)
         self.gridLayout_2.setContentsMargins(2, 2, 2, 2)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.mdiArea = QtWidgets.QMdiArea(self.widget_2)
-        self.mdiArea.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.mdiArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.mdiArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.mdiArea.setViewMode(QtWidgets.QMdiArea.SubWindowView)
-        self.mdiArea.setDocumentMode(False)
-        self.mdiArea.setTabsClosable(True)
-        self.mdiArea.setTabsMovable(True)
-        self.mdiArea.setTabShape(QtWidgets.QTabWidget.Rounded)
-        self.mdiArea.setObjectName("mdiArea")
-        self.gridLayout_2.addWidget(self.mdiArea, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.splitter, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.mainMenu = QtWidgets.QMenuBar(MainWindow)

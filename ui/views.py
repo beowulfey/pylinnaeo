@@ -1,10 +1,66 @@
 #!/usr/bin/python3
 
-from PyQt5.QtWidgets import QWidget, QMdiSubWindow
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTabWidget
 from PyQt5.QtCore import Qt, pyqtSignal
 from ui import alignment_ui
-from PIL import ImageFont
 import textwrap as tw
+
+class MDIArea(QMdiArea):
+    def __init__(self):
+        super(MDIArea, self).__init__()
+        self.setViewMode(1)  # tabbed
+        self.tabBar = self.findChild(QTabBar)
+        self.setupTabBar()
+        self.lastClosedTab = 0
+
+    def resizeEvent(self, event):
+        for sub in self.subWindowList():
+            sub.resizeEvent(event)
+        super(MDIArea, self).resizeEvent(event)
+
+    def setupTabBar(self):
+        #self.tabBar.setAutoHide(True)
+        self.setTabsMovable(True)
+        self.setTabsClosable(True)
+        self.tabBar.tabCloseRequested.connect(self.closeTab)
+        #self.tabBar.tabMoved.connect(self.moveTab)
+
+    def closeTab(self, index):
+        self.lastClosedTab = index
+        window = self.childWindows[index]
+        self.childWindows.remove(window)
+        #self.removeSubWindow(window)
+        #self.tabBar.removeTab(index)
+        self.activeSubWindow().showMaximized()
+
+    #def moveTab(self, orig, new):
+    #    print("Tab moved")
+
+
+    def addSubWindow(self, window, flags=Qt.WindowFlags()):
+        #self.childWindows.append(window)
+        super(MDIArea, self).addSubWindow(window, flags)
+        for sub in self.subWindowList():
+            sub.showMinimized()
+        window.show()
+        self.setActiveSubWindow(window)
+        self.activeSubWindow().showMaximized()
+
+    def setActiveSubWindow(self, window):
+        titles = []
+        for index in range(len(self.tabBar.children())):
+            titles.append(self.tabBar.tabText(index))
+        print(titles)
+        print(self.subWindowList())
+        #print(self.childWindows)
+        if window.windowTitle() not in titles:
+            print("adding tab")
+            self.addSubWindow(window)
+            self.tabBar.addTab(window.windowIcon(), window.windowTitle())
+            self.activeSubWindow().showMaximized()
+        else:
+            super(MDIArea, self).setActiveSubWindow(window)
+            self.activeSubWindow().showMaximized()
 
 
 class MDISubWindow(QMdiSubWindow):
@@ -20,9 +76,16 @@ class MDISubWindow(QMdiSubWindow):
         self.widget().show()
         super(MDISubWindow, self).show()
 
-    #def closeEvent(self, event):
-    #    self.mdiArea().removeSubWindow(self)
-    #    super(MDISubWindow, self).close()
+    def close(self):
+        print("Closing subwindow")
+        super(MDISubWindow, self).close()
+        #super(MDISubWindow, self).hide()
+
+    def closeEvent(self, event):
+        print("Close event on subwindow!")
+        self.mdiArea().removeSubWindow(self)
+        self.close()
+
 
 
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
@@ -96,3 +159,4 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def seqs(self):
         return self._seqs
+

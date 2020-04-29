@@ -9,7 +9,7 @@ from clustalo import clustalo
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QMainWindow, QLineEdit, QLabel
+from PyQt5.QtWidgets import QMainWindow, QLineEdit, QLabel, QTabBar
 
 # Internal components
 from ui import sherlock_ui
@@ -59,6 +59,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.projectRoot = QStandardItem("Folder")
         # Startup functions
         self.setupUi(self)
+        self.mdiArea = views.MDIArea()
+
+        self.gridLayout_2.addWidget(self.mdiArea)
         self.guiInit()
 
         self.DEBUG()
@@ -70,6 +73,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
     def guiInit(self):
         """ Initialize GUI with default parameters. """
+        # MDI setup
+        self.tbTest = QTabBar()
+        #self.tbTest.tabMoved.conn
+
         # Tree setup
         self.bioTree.setModel(self.bioModel)
         self.bioModel.appendRow(self.bioRoot)
@@ -87,7 +94,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.processTimer.start()
 
         # Slot connections
-        self.mdiArea.tileSubWindows()
         self.processTimer.timeout.connect(self.updateUsage)
         self.bioTree.doubleClicked.connect(self.tryCreateAlignment)
         self.actionAlign.triggered.connect(self.tryCreateAlignment)
@@ -134,6 +140,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.alignments[wid] = seqs
 
             # TODO: have this form a new thread (probably necessary for long alignments)
+            # TODO: Also consider storing this as a BioPy alignment
             aligned = clustalo(items)
             self.mainLogger.debug("Sending alignment to clustal omega using default options (1 core, protein seq)")
             self.mainStatus.showMessage("Aligning selection...", msecs=1000)
@@ -178,15 +185,16 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             sub = self.windows[windowID]
             if title:
                 sub.setWindowTitle(title)
-        else:
-            # if not string it should be a QModelIndex (from selection? Not sure how that works...)
-            item = self.projectModel.itemFromIndex(windowID)
-            sub = self.windows[item.data(role=self.WindowRole)]
-            sub.setWindowTitle(item.text())
         # TODO: Make this only do if not in already!
-        self.mdiArea.addSubWindow(sub)
-        sub.show()
-        self.mdiArea.setActiveSubWindow(sub)
+        else:
+            self.mainLogger.debug("Something went wrong with opening window!")
+        if sub.mdiArea() != self.mdiArea:
+            print("Adding to Window")
+            self.mdiArea.addSubWindow(sub)
+        else:
+            print("Already in window!")
+            sub.show()
+            self.mdiArea.setActiveSubWindow(sub)
 
 
     # INITIAL TESTING DATA
