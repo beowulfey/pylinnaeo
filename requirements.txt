@@ -1,6 +1,5 @@
 altgraph==0.17
 biopython==1.76
-clustalo==0.2.0
 numpy==1.18.3
 psutil==5.7.0
 pyinstaller @ https://github.com/pyinstaller/pyinstaller/tarball/develop

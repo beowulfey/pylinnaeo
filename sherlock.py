@@ -58,6 +58,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.mainLogger = logging.getLogger("Main")  # Logger for main window
 
         # Project instants
+        self.titles = []  # maintains a list of sequence titles to confirm uniqueness
         self.windex = -1  # Acts as identifier for tracking alignments (max 2.1 billion)
         self.alignments = {}  # Alignments (stored as { windex : [name, seqs] } )
         self.windows = {}  # Windows (stored as { windex : MDISubWindow } )
@@ -147,31 +148,39 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             # TODO: Also consider storing this as a BioPy alignment
             aligned = clustalo(items)
             self.mainLogger.debug("Sending alignment to clustal omega using default options (1 core, protein seq)")
-            self.mainStatus.showMessage("Aligning selection...", msecs=1000)
+            self.mainStatus.showMessage("Aligning selection...", msecs=1000) if len(seqs) > 1 else \
+                self.mainStatus.showMessage("Sequence loaded", msecs=1000)
             self.makeNewWindow(aligned, wid)
         else:
-            self.mainStatus.showMessage("Reopening alignment!", msecs=1000)
+            if len(seqs) > 1:
+                self.mainStatus.showMessage("Reopening alignment!", msecs=1000)
+            else:
+                self.mainStatus.showMessage("Sequence loaded", msecs=1000)
+                title = self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0]).text()
             for key, value in self.alignments.items():
                 if seqs == value:
-                    self.openWindow(windowID=key)
+                    if len(seqs) == 1:
+                        if title in self.titles:
+                            title = title+"_"+str(self.titles.count(title))
+                        self.openWindow(windowID=key, title=title)
+                    else:
+                        self.openWindow(windowID=key)
 
     def makeNewWindow(self, ali, windowID):
         sub = views.MDISubWindow()
         widget = views.AlignSubWindow(ali)
         sub.setWidget(widget)
-
-        # Show window in the view panel
         if len(ali.keys()) > 1:
             node = QStandardItem(sub.windowTitle())
             node.setData(windowID, self.WindowRole)
             self.projectRoot.appendRow(node)
         else:
             sub.setWindowTitle(list(ali.keys())[0])
+            self.titles.append(list(ali.keys())[0])
         self.windows[windowID] = sub
         self.openWindow(windowID=windowID)
 
     def treeDbClick(self):
-        print(self.projectTree.selectedIndexes()[0])
         item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
         title = item.text()
         wid = item.data(role=self.WindowRole)
@@ -188,6 +197,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             # if WindowID is a string, that means it was sent by a deliberate search.
             sub = self.windows[windowID]
             if title:
+                print("Setting new Title")
                 sub.setWindowTitle(title)
         if sub:
             if sub.mdiArea() != self.mdiArea:
