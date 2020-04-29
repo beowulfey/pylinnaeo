@@ -93,13 +93,14 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.bioTree.doubleClicked.connect(self.tryCreateAlignment)
         self.actionAlign.triggered.connect(self.tryCreateAlignment)
         self.projectTree.doubleClicked.connect(self.treeDbClick)
-        #self.projectTree.dropEvent.connect(self.seqDropEvent)
+        self.projectTree.dropEvent.connect(self.seqDropEvent)
 
-    def seqDropEvent(self):
+    def seqDropEvent(self, event):
         """
         When dropping either a separate window or sequence onto either another
         sequence or another alignment window, it creates a new window using all unique components
         """
+        print(event.source())
 
     def tryCreateAlignment(self, indexes=None, items=None):
         """
