@@ -5,31 +5,45 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from ui import alignment_ui
 import textwrap as tw
 
-# TODO have to figure out how to reshow tabs upon doubleclick
-# TODO may have to hide Tabbar and create a custom TabBar instead
 
 class MDIArea(QMdiArea):
-    def __init__(self):
+    """
+    Custom QMdiArea class -- the native class had some strange bugs with closing tabs, where it would keep the tab
+    due to how the closing was happening. I've subclassed it to make things easy in finding bugs.
+    This works well and should be more customizable if needed.
+    """
+    def __init__(self, tabs=True):
         super(MDIArea, self).__init__()
-        self.setViewMode(1)  # tabbed
-        self.tabBar = self.findChild(QTabBar)
-        self.setupTabBar()
-        self.lastClosedTab = 0
+        self.tabbed = tabs  # tabbed by default
+        self.setTabs(True) if self.tabbed else self.setTabs(False)
 
-    def resizeEvent(self, event):
-        for sub in self.subWindowList():
-            sub.resizeEvent(event)
-        super(MDIArea, self).resizeEvent(event)
+    def setTabs(self, on):
+        if on:
+            self.setViewMode(1)
+            self.tabbed = True
+            self.tabBar = self.findChild(QTabBar)
+            self.setupTabBar()
+        else:
+            self.tabbed = False
+            self.setViewMode(0)
 
     def setupTabBar(self):
-        self.tabBar.setAutoHide(True)
+        # self.tabBar.setAutoHide(True)
         self.setTabsMovable(True)
         self.setTabsClosable(True)
         self.tabBar.tabCloseRequested.connect(self.closeTab)
-        #self.tabBar.tabMoved.connect(self.moveTab)
 
-    def closeTab(self, index):
-        self.activeSubWindow().showMaximized()
+    def closeTab(self):
+        try:
+            self.activeSubWindow().showMaximized()
+        except AttributeError:
+            None
+
+    def resizeEvent(self, event):
+        # passes a resize event to all subwindows to make sure the sequence is updated
+        for sub in self.subWindowList():
+            sub.resizeEvent(event)
+        super(MDIArea, self).resizeEvent(event)
 
     def addSubWindow(self, window, flags=Qt.WindowFlags()):
         super(MDIArea, self).addSubWindow(window, flags)
@@ -40,13 +54,17 @@ class MDIArea(QMdiArea):
         self.activeSubWindow().showMaximized()
 
     def setActiveSubWindow(self, window):
-        titles = []
-        for index in range(len(self.tabBar.children())):
-            titles.append(self.tabBar.tabText(index))
-        if window.windowTitle() not in titles:
-            self.addSubWindow(window)
-            self.tabBar.addTab(window.windowIcon(), window.windowTitle())
-            self.activeSubWindow().showMaximized()
+        if self.tabbed:
+            titles = []
+            for index in range(len(self.tabBar.children())):
+                titles.append(self.tabBar.tabText(index))
+            if window.windowTitle() not in titles:
+                self.addSubWindow(window)
+                self.tabBar.addTab(window.windowIcon(), window.windowTitle())
+                self.activeSubWindow().showMaximized()
+            else:
+                super(MDIArea, self).setActiveSubWindow(window)
+                self.activeSubWindow().showMaximized()
         else:
             super(MDIArea, self).setActiveSubWindow(window)
             self.activeSubWindow().showMaximized()
@@ -65,21 +83,17 @@ class MDISubWindow(QMdiSubWindow):
         self.widget().show()
         super(MDISubWindow, self).show()
 
-    def close(self):
-        print("Closing subwindow")
-        super(MDISubWindow, self).close()
-        #super(MDISubWindow, self).hide()
-
     def closeEvent(self, event):
-        print("Close event on subwindow!")
         self.mdiArea().removeSubWindow(self)
         self.close()
 
+    def close(self):
+        super(MDISubWindow, self).close()
 
 
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
-    Alignment subwindow UI. Takes in a dictionary of sequences that have been aligned and arranges them.
+    Alignment SubWindow UI. Takes in a dictionary of sequences that have been aligned and arranges them.
     """
     resized = pyqtSignal()
 
@@ -92,7 +106,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def resizeEvent(self, event):
         self.resized.emit()
-        return super(AlignSubWindow, self).resizeEvent(event)
+        super(AlignSubWindow, self).resizeEvent(event)
 
     def seqArrange(self):
         splitseqs = []
@@ -123,6 +137,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # into each other.
         # TODO: Add TEXT FORMATTING to this section!! May need store as alternative text storage besides array.
         # TODO: For example, consider adding to the text window directly rather than as an array!
+        # TODO: Add a line for sequence number! Make it toggleable!
         for line in range(nlines):
             if seqid != nseqs:
                 try:

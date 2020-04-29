@@ -61,7 +61,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.bioRoot = QStandardItem("Folder")          # Default root node for top TreeView
         self.projectModel = QStandardItemModel()        # ProjectModel is shown in the bottom (alignment) TreeView
         self.projectRoot = QStandardItem("Folder")      # Default root node for bottom TreeView
-        self.mdiArea = views.MDIArea()                  # Create a custom MDIArea
+        self.mdiArea = views.MDIArea(tabs=True)         # Create a custom MDIArea
 
         # Startup functions
         self.setupUi(self)                              # Built by PyUic5 from my main window UI file
@@ -176,21 +176,18 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         If it is not, reopens the window. If it is, gives focus.
         Also refreshes the title.
         """
-        # TODO: consider returning a try:catch here...
+        sub = None
         if isinstance(windowID, str):
             # if WindowID is a string, that means it was sent by a deliberate search.
             sub = self.windows[windowID]
             if title:
                 sub.setWindowTitle(title)
-        else:
-            self.mainLogger.debug("Something went wrong with opening window!")
-        if sub.mdiArea() != self.mdiArea:
-            print("Adding to Window")
-            self.mdiArea.addSubWindow(sub)
-        else:
-            print("Already in window!")
-            sub.show()
-            self.mdiArea.setActiveSubWindow(sub)
+        if sub:
+            if sub.mdiArea() != self.mdiArea:
+                self.mdiArea.addSubWindow(sub)
+            else:
+                sub.show()
+                self.mdiArea.setActiveSubWindow(sub)
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown"""
