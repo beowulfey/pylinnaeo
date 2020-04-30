@@ -16,13 +16,14 @@ class MDIArea(QMdiArea):
     def __init__(self, tabs=True):
         super(MDIArea, self).__init__()
         self.tabbed = tabs  # tabbed by default
+        self.tabBar = None
         self.setTabs(True) if self.tabbed else self.setTabs(False)
 
     def setTabs(self, on):
         if on:
             self.setViewMode(1)
             self.tabbed = True
-            self.tabBar = self.findChild(QTabBar)
+            self.tabBar = QTabBar(self.findChild(QTabBar))
             self.setupTabBar()
         else:
             self.tabbed = False

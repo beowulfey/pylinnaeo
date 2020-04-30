@@ -1,78 +1,43 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # Bioscience components
-<<<<<<< HEAD
-
-=======
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
 import Bio.Seq as Bseq
 from Bio.Alphabet import generic_protein
 from clustalo import clustalo
 
 # PyQt components
-<<<<<<< HEAD
-import PyQt5.Qt
-from PyQt5.QtCore import QThreadPool
-from PyQt5.QtWidgets import QApplication
-=======
+from PyQt5.QtCore import QThreadPool, QTimer
+
 from PyQt5.Qt import Qt
-from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QMainWindow, QLabel
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 
 # Internal components
 from sherlock.classes import views, sherlock_ui
 
-# Additional libraries
-<<<<<<< HEAD
 import sys
-=======
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
 import os
 import logging
 import psutil
 
-<<<<<<< HEAD
 
-<<<<<<< HEAD:sherlock/sherlock.py
 # TODO: #1 Fix issues with renaming sequences: trying to make it so they cannot be duplicated
-=======
-=======
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
->>>>>>> 71dfc697c15cd87a8b8c91d1b4e23f097e8ba03a:sherlock.py
 # TODO: Add functionality for removing sequences and alignments (from the dicts too)
 # TODO: Add functionality for saving workspace.
 # TODO: Add functionality for combining sequences into new alignments!
 
 
-<<<<<<< HEAD:sherlock/sherlock.py
 def iterTreeView(root):
     """
     Internal function for iterating a TreeModel.
     Usage: for node in _iterTreeView(root): etc.
     """
-=======
-def _iterTreeView(root):
-    """Internal function for iterating a TreeModel"""
-<<<<<<< HEAD
->>>>>>> 71dfc697c15cd87a8b8c91d1b4e23f097e8ba03a:sherlock.py
-
     def recurse(parent):
         for row in range(parent.rowCount()):
             child = parent.child(row)
             yield child
             if child.hasChildren():
                 yield from recurse(child)
-
-=======
-    def recurse(parent):
-        for row in range(parent.rowCount()):
-            child=parent.child(row)
-            yield child
-            if child.hasChildren():
-                yield from recurse(child)
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
     if root is not None:
         yield from recurse(root)
 
@@ -83,8 +48,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     Contains all the user interface functions, as well as underlying code for major features.
     The bulk of the program is located here.
     """
-<<<<<<< HEAD
-
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         # System instants
@@ -101,8 +64,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.windex = -1  # Acts as identifier for tracking alignments (max 2.1 billion)
         self.alignments = {}  # Alignments (stored as { windex : [name, seqs] } )
         self.windows = {}  # Windows (stored as { windex : MDISubWindow } )
-        self.SequenceRole = PyQt5.Qt.Qt.UserRole + 1  # Used for storing sequence data in TreeView
-        self.WindowRole = PyQt5.Qt.Qt.UserRole + 2  # Stores window ID in TreeView
+        self.SequenceRole = Qt.UserRole + 1  # Used for storing sequence data in TreeView
+        self.WindowRole = Qt.UserRole + 2  # Stores window ID in TreeView
         self.bioRoot = QStandardItem("Folder")  # Default root node for top TreeView
         self.bioModel = views.ItemModel(self.bioRoot,  # BioModel is shown in the top (sequence) TreeView
                                         self.windows, seqs=self.alignments, names=self.titles)
@@ -115,34 +78,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.mainLogger.debug("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
         self.guiInit()  # Additional gui setup goes here.
-=======
-    def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
-        # System instants
-        self.memLabel = QLabel()                        # initiate a label for adding to status bar
-        self.mainProcess = psutil.Process(os.getpid())  # process and timer are used for getting Mem/CPU usage
-        self.processTimer = QTimer()                    # See above. All this goes in the memLabel.
-        self.mainLogger = logging.getLogger("Main")     # Logger for main window
-
-        # Project instants
-        self.windex = -1                                # Acts as identifier for tracking alignments (max 2.1 billion)
-        self.alignments = {}                            # Alignments (stored as { windex : [name, seqs] } )
-        self.windows = {}                               # Windows (stored as { windex : MDISubWindow } )
-        self.SequenceRole = Qt.UserRole + 1             # Used for storing sequence data in TreeView
-        self.WindowRole = Qt.UserRole + 2               # Stores window ID in TreeView
-        self.bioModel = QStandardItemModel()            # BioModel is shown in the top (sequence) TreeView
-        self.bioRoot = QStandardItem("Folder")          # Default root node for top TreeView
-        self.projectModel = QStandardItemModel()        # ProjectModel is shown in the bottom (alignment) TreeView
-        self.projectRoot = QStandardItem("Folder")      # Default root node for bottom TreeView
-        self.mdiArea = views.MDIArea(tabs=True)         # Create a custom MDIArea
-
-        # Startup functions
-        self.setupUi(self)                              # Built by PyUic5 from my main window UI file
-        self.gridLayout_2.addWidget(self.mdiArea)       # Add custom MDI area to the empty space intended to hold it
-        self.guiInit()                                  # Additional gui setup goes here.
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
-
-        self.DEBUG()
 
     def guiInit(self):
         """ Initialize GUI with default parameters. """
@@ -164,27 +99,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         # Slot connections
         self.processTimer.timeout.connect(self.updateUsage)
-<<<<<<< HEAD:sherlock/sherlock.py
-        self.projectTree.doubleClicked.connect(self.alignmentDbClick)
         self.bioTree.doubleClicked.connect(self.seqDbClick)
         self.actionAlign.triggered.connect(self.seqDbClick)
-=======
-        self.bioTree.doubleClicked.connect(self.tryCreateAlignment)
-        self.actionAlign.triggered.connect(self.tryCreateAlignment)
-        self.projectTree.doubleClicked.connect(self.treeDbClick)
-<<<<<<< HEAD
-        # self.projectTree.dropEvent.connect(self.seqDropEvent)
-=======
-        self.projectTree.dropEvent.connect(self.seqDropEvent)
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
-
-    def seqDropEvent(self, event):
-        """
-        When dropping either a separate window or sequence onto either another
-        sequence or another alignment window, it creates a new window using all unique components
-        """
-        print(event.source())
->>>>>>> 71dfc697c15cd87a8b8c91d1b4e23f097e8ba03a:sherlock.py
+        self.projectTree.doubleClicked.connect(self.alignmentDbClick)
 
     def seqDbClick(self):
         """
@@ -219,11 +136,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.windex += 1
             wid = str(self.windex)
             self.mainLogger.debug("Alignment stored with ID " + wid + " and sequence(s) "
-<<<<<<< HEAD
                                   + str([x[:10] + '..' + x[-10:] for x in seqs]))
-=======
-                                  + str([x[:10]+'..'+x[-10:] for x in seqs]))
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
+
             self.alignments[wid] = seqs
 
             # TODO: have this form a new thread (probably necessary for long alignments)
@@ -332,7 +246,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown"""
-<<<<<<< HEAD
         mem = self.mainProcess.memory_info().rss / 1000000
         cpu = self.mainProcess.cpu_percent()
         self.memLabel.setText("CPU: " + str(cpu) + " % | RAM: " + str(round(mem, 2)) + " MB")
@@ -360,53 +273,16 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                  'QQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFI' +
                  'APVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKI' +
                  'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL' +
-=======
-        mem = self.mainProcess.memory_info().rss/1000000
-        cpu = self.mainProcess.cpu_percent()
-        self.memLabel.setText("CPU: "+str(cpu)+" % | RAM: "+str(round(mem, 2))+" MB")
-
-    def DEBUG(self):
-        test1 = ['GPI1A', 'MSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDF'+
-                 'SKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRP'+
-                 'ILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPL'+
-                 'MVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITN'+
-                 'AETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSL'+
-                 'WSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIY'+
-                 'GAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTN'+
-                 'GQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKT'+
-                 'AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH'+
-                 'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
-        seq_GPI1A = Bseq.MutableSeq(test1[1], generic_protein)
-        test1alt = [test1[0], seq_GPI1A]
-        test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE'+
-                 'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG'+
-                 'VEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKE'+
-                 'FCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNV'+
-                 'DGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKH'+
-                 'FVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLL'+
-                 'DGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYF'+
-                 'QQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFI'+
-                 'APVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKI'+
-                 'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL'+
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
         for i in list(range(0, len(test))):
-<<<<<<< HEAD
-            # node = models.SeqNode(test[i][0], sequence=test[i][1])
             node = QStandardItem(test[i][0])
             node.setData(test[i][1], self.SequenceRole)
             node.setData(str(self.windex), self.WindowRole)
             self.windex += 1
-            node.setFlags(node.flags() ^ PyQt5.Qt.Qt.ItemIsDropEnabled)
-=======
-            #node = models.SeqNode(test[i][0], sequence=test[i][1])
-            node = QStandardItem(test[i][0])
-            node.setData(test[i][1], self.SequenceRole)
             node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
             self.bioRoot.appendRow(node)
 
         """
@@ -426,8 +302,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         except:
             print("No config file found!")
             """
-<<<<<<< HEAD
-
 
 def main():
     logging.basicConfig(level=logging.DEBUG)  # , format="%(asctime)s:%(levelname)s:%(message)s")
@@ -449,5 +323,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-=======
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
+
