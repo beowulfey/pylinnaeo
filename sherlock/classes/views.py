@@ -3,7 +3,7 @@
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar
 from PyQt5.QtCore import Qt, pyqtSignal
-from sherlock.classes import alignment_ui
+from sherlock.ui import alignment_ui
 import textwrap as tw
 
 
@@ -13,17 +13,27 @@ class MDIArea(QMdiArea):
     due to how the closing was happening. I've subclassed it to make things easy in finding bugs.
     This works well and should be more customizable if needed.
     """
-    def __init__(self, tabs=True):
+    def __init__(self):
         super(MDIArea, self).__init__()
-        self.tabbed = tabs  # tabbed by default
+        self.tabbed = False  # tabbed by default
         self.tabBar = None
         self.setTabs(True) if self.tabbed else self.setTabs(False)
+
+    def toggleTabs(self):
+        self.tabbed = not self.tabbed
+        if self.tabbed:
+            self.setTabs(True)
+        else:
+            self.setTabs(False)
+            for sub in self.subWindowList():
+                sub.showNormal()
+            self.tileSubWindows()
 
     def setTabs(self, on):
         if on:
             self.setViewMode(1)
             self.tabbed = True
-            self.tabBar = QTabBar(self.findChild(QTabBar))
+            self.tabBar = self.findChild(QTabBar)
             self.setupTabBar()
         else:
             self.tabbed = False
@@ -38,22 +48,24 @@ class MDIArea(QMdiArea):
     def closeTab(self):
         try:
             self.activeSubWindow().showMaximized()
-        except AttributeError:
-            None
+        except:
+            # So I can close all tabs
+            pass
 
     def resizeEvent(self, event):
         # passes a resize event to all subwindows to make sure the sequence is updated
         for sub in self.subWindowList():
             sub.resizeEvent(event)
-        super(MDIArea, self).resizeEvent(event)
+        return super(MDIArea, self).resizeEvent(event)
 
     def addSubWindow(self, window, flags=Qt.WindowFlags()):
         super(MDIArea, self).addSubWindow(window, flags)
-        for sub in self.subWindowList():
-            sub.showMinimized()
+        if self.tabbed:
+            print(self.tabbed)
+            for sub in self.subWindowList():
+                sub.showMinimized()
+            self.activeSubWindow().showMaximized()
         window.show()
-        self.setActiveSubWindow(window)
-        self.activeSubWindow().showMaximized()
 
     def setActiveSubWindow(self, window):
         if self.tabbed:
@@ -69,7 +81,7 @@ class MDIArea(QMdiArea):
                 self.activeSubWindow().showMaximized()
         else:
             super(MDIArea, self).setActiveSubWindow(window)
-            self.activeSubWindow().showMaximized()
+            #self.activeSubWindow().showMaximized()
 
 
 class MDISubWindow(QMdiSubWindow):
@@ -105,6 +117,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self._seqs = sequences
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
+
+        #options
+        # TODO: Implement these
+        self.showRuler = False
+        self.showColors = False
+
+    def toggleRulers(self):
+        self.showRuler = not self.showRuler
 
     def resizeEvent(self, event):
         self.resized.emit()
@@ -169,25 +189,39 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
 
 class ItemModel(QStandardItemModel):
-    def __init__(self, root, windows, seqs=None, names=None):
+    nameCheck = pyqtSignal()
+    dupeName = pyqtSignal()
+    nameChanged = pyqtSignal()
+
+    def __init__(self, root, windows, seqTree=False):
         super(ItemModel, self).__init__()
         self._root = root
         self._windows = windows
-        if seqs:
-            self._seqs = seqs
-        if names:
-            self._names = names
+        self._titles = []
+        if seqTree:
+            self.isSeqs = True
+
+    def updateNames(self, titles):
+        self._titles = titles
 
     def setData(self, index, value, role=Qt.EditRole):
+        if self.isSeqs:
+            print("Checking prior names")
+            #self.nameCheck.emit()
+            print(value)
+            print(self._titles)
+            # Only do this check if this is coming from the top Tree
+            if value in self._titles:
+                print("Duplicate name")
+                self.dupeName.emit()
+                value = value + "_" + str(self._titles.count(value))
+                print(value)
         self.itemFromIndex(index).setText(value)
-        sub = None
-        print(self._windows)
+        self.nameChanged.emit()
         try:
             sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+2)]
+            sub.setWindowTitle(value)
+            sub.mdiArea().setActiveSubWindow(sub)
         except KeyError:
-            for wid, seq in self._windows.items():
-                print(wid, seq)
-                if str(self.itemFromIndex(index).data(role=Qt.UserRole+1)) == seq:
-                    sub = wid
-        sub.setWindowTitle(value)
+            print("Something went wrong!")
         return super(ItemModel, self).setData(index, value, role)
