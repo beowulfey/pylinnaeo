@@ -1,6 +1,14 @@
 #!/usr/bin/python3
+<<<<<<< HEAD:sherlock/ui/views.py
 from PyQt5.QtGui import QStandardItemModel
+=======
+
+<<<<<<< HEAD
+>>>>>>> 71dfc697c15cd87a8b8c91d1b4e23f097e8ba03a:ui/views.py
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar
+=======
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTabWidget
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
 from PyQt5.QtCore import Qt, pyqtSignal
 from sherlock.ui import alignment_ui
 import textwrap as tw

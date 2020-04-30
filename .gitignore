@@ -1,4 +1,11 @@
 __pycache__
+<<<<<<< HEAD
 virt
+=======
+venv
+<<<<<<< HEAD
+>>>>>>> 71dfc697c15cd87a8b8c91d1b4e23f097e8ba03a
 build
 dist
+=======
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e

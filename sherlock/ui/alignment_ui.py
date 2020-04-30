@@ -2,7 +2,11 @@
 
 # Form implementation generated from reading ui file 'alignment.ui'
 #
+<<<<<<< HEAD
 # Created by: PyQt5 UI code generator 5.12.3
+=======
+# Created by: PyQt5 UI code generator 5.14.2
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -14,6 +18,7 @@ class Ui_aliWindow(object):
     def setupUi(self, aliWindow):
         aliWindow.setObjectName("aliWindow")
         aliWindow.resize(500, 300)
+<<<<<<< HEAD
         aliWindow.setAcceptDrops(True)
         aliWindow.setStyleSheet("")
         self.gridLayout = QtWidgets.QGridLayout(aliWindow)
@@ -31,6 +36,10 @@ class Ui_aliWindow(object):
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setObjectName("line")
         self.gridLayout.addWidget(self.line, 0, 0, 1, 2)
+=======
+        self.horizontalLayout = QtWidgets.QHBoxLayout(aliWindow)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
         self.namePane = QtWidgets.QTextEdit(aliWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -54,12 +63,17 @@ class Ui_aliWindow(object):
         font = QtGui.QFont()
         font.setFamily("Liberation Mono")
         font.setPointSize(10)
+<<<<<<< HEAD
         font.setBold(False)
         font.setItalic(False)
         font.setWeight(50)
         self.namePane.setFont(font)
         self.namePane.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.namePane.setStyleSheet("font: 10pt \"Liberation Mono\";")
+=======
+        self.namePane.setFont(font)
+        self.namePane.setLayoutDirection(QtCore.Qt.LeftToRight)
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
         self.namePane.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.namePane.setFrameShadow(QtWidgets.QFrame.Raised)
         self.namePane.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -68,7 +82,11 @@ class Ui_aliWindow(object):
         self.namePane.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.namePane.setReadOnly(True)
         self.namePane.setObjectName("namePane")
+<<<<<<< HEAD
         self.gridLayout.addWidget(self.namePane, 1, 0, 1, 1)
+=======
+        self.horizontalLayout.addWidget(self.namePane, 0, QtCore.Qt.AlignRight)
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
         self.alignPane = QtWidgets.QTextEdit(aliWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -79,6 +97,7 @@ class Ui_aliWindow(object):
         font = QtGui.QFont()
         font.setFamily("Liberation Mono")
         font.setPointSize(10)
+<<<<<<< HEAD
         font.setBold(False)
         font.setItalic(False)
         font.setWeight(50)
@@ -88,6 +107,9 @@ class Ui_aliWindow(object):
         self.alignPane.setFrameShadow(QtWidgets.QFrame.Raised)
         self.alignPane.setLineWidth(2)
         self.alignPane.setMidLineWidth(2)
+=======
+        self.alignPane.setFont(font)
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
         self.alignPane.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.alignPane.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.alignPane.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
@@ -95,7 +117,11 @@ class Ui_aliWindow(object):
         self.alignPane.setReadOnly(True)
         self.alignPane.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.alignPane.setObjectName("alignPane")
+<<<<<<< HEAD
         self.gridLayout.addWidget(self.alignPane, 1, 1, 1, 1)
+=======
+        self.horizontalLayout.addWidget(self.alignPane)
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
 
         self.retranslateUi(aliWindow)
         QtCore.QMetaObject.connectSlotsByName(aliWindow)

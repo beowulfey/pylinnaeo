@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 
+<<<<<<< HEAD
 # Form implementation generated from reading ui file 'sherlock.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.3
+=======
+# Form implementation generated from reading ui file 'sherlock2.ui'
+#
+# Created by: PyQt5 UI code generator 5.14.2
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -14,6 +20,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(807, 636)
+<<<<<<< HEAD
         font = QtGui.QFont()
         font.setFamily("Cantarell")
         font.setPointSize(11)
@@ -22,6 +29,8 @@ class Ui_MainWindow(object):
         font.setWeight(50)
         MainWindow.setFont(font)
         MainWindow.setStyleSheet("font: 11pt \"Cantarell\";")
+=======
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)

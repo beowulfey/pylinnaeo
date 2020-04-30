@@ -10,6 +10,7 @@
     <height>300</height>
    </rect>
   </property>
+<<<<<<< HEAD
   <property name="acceptDrops">
    <bool>true</bool>
   </property>
@@ -55,6 +56,13 @@
     </widget>
    </item>
    <item row="1" column="0">
+=======
+  <property name="windowTitle">
+   <string>New Alignment</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item alignment="Qt::AlignRight">
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
     <widget class="QTextEdit" name="namePane">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -121,17 +129,23 @@
       <font>
        <family>Liberation Mono</family>
        <pointsize>10</pointsize>
+<<<<<<< HEAD
        <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
+=======
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
       </font>
      </property>
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
      </property>
+<<<<<<< HEAD
      <property name="styleSheet">
       <string notr="true">font: 10pt &quot;Liberation Mono&quot;;</string>
      </property>
+=======
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -162,7 +176,11 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
+<<<<<<< HEAD
    <item row="1" column="1">
+=======
+   <item>
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
     <widget class="QTextEdit" name="alignPane">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -180,6 +198,7 @@ p, li { white-space: pre-wrap; }
       <font>
        <family>Liberation Mono</family>
        <pointsize>10</pointsize>
+<<<<<<< HEAD
        <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
@@ -200,6 +219,10 @@ p, li { white-space: pre-wrap; }
      <property name="midLineWidth">
       <number>2</number>
      </property>
+=======
+      </font>
+     </property>
+>>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
