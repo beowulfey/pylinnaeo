@@ -118,7 +118,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
 
-        #options
+        # options to do
         # TODO: Implement these
         self.showRuler = False
         self.showColors = False
