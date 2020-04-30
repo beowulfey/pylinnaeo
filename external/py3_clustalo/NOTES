@@ -1,0 +1,1 @@
+I have already built clustalo for linux x64 and include those libraries in the "clustalo" folder. No idea if this will work for portability... I suspect not.
