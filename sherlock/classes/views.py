@@ -140,6 +140,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # TODO: Add TEXT FORMATTING to this section!! May need store as alternative text storage besides array.
         # TODO: For example, consider adding to the text window directly rather than as an array!
         # TODO: Add a line for sequence number! Make it toggleable!
+        # TODO: Set this centered and reduce a bit so it looks cleaner!
         for line in range(nlines):
             if seqid != nseqs:
                 try:
