@@ -12,19 +12,17 @@ from clustalo import clustalo
 # PyQt components
 <<<<<<< HEAD
 import PyQt5.Qt
-from PyQt5.QtCore import QTimer, QThreadPool
-from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QMainWindow, QLabel, QApplication
+from PyQt5.QtCore import QThreadPool
+from PyQt5.QtWidgets import QApplication
 =======
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QMainWindow, QLineEdit, QLabel, QTabBar
+from PyQt5.QtWidgets import QMainWindow, QLabel
 >>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
 
 # Internal components
-from sherlock.ui import views
-from sherlock.ui import sherlock_ui
+from sherlock.classes import views, sherlock_ui
 
 # Additional libraries
 <<<<<<< HEAD
