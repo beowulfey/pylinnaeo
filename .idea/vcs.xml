@@ -2,9 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-<<<<<<< HEAD
-=======
-    <mapping directory="$PROJECT_DIR$/external/clustalo_python3" vcs="Git" />
->>>>>>> 6fac9edf2b8218a8f2e964f9bddba90ff0ba479e
   </component>
 </project>

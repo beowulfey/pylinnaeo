@@ -303,24 +303,3 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             print("No config file found!")
             """
 
-def main():
-    logging.basicConfig(level=logging.DEBUG)  # , format="%(asctime)s:%(levelname)s:%(message)s")
-    app = QApplication(sys.argv)
-    try:
-        with open('ui/sherlock.sty') as f:
-            print("Read in stylesheet")
-            style = f.read()
-    except IOError:
-        print('Could not read stylesheet.')
-        style = ""
-
-    # if style:
-    #    app.setStyleSheet(style)
-    window = Sherlock()
-    window.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
-
