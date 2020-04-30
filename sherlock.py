@@ -23,13 +23,17 @@ import logging
 import psutil
 
 
+# TODO: #1 Fix issues with renaming sequences: trying to make it so they cannot be duplicated
 # TODO: Add functionality for removing sequences and alignments (from the dicts too)
 # TODO: Add functionality for saving workspace.
 # TODO: Add functionality for combining sequences into new alignments!
 
 
-def _iterTreeView(root):
-    """Internal function for iterating a TreeModel"""
+def iterTreeView(root):
+    """
+    Internal function for iterating a TreeModel.
+    Usage: for node in _iterTreeView(root): etc.
+    """
 
     def recurse(parent):
         for row in range(parent.rowCount()):
@@ -57,6 +61,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.processTimer = QTimer()  # See above. All this goes in the memLabel.
         self.mainLogger = logging.getLogger("Main")  # Logger for main window
 
+        # Startup functions
+        self.setupUi(self)  # Built by PyUic5 from my main window UI file
+
+
         # Project instants
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
         self.windex = -1  # Acts as identifier for tracking alignments (max 2.1 billion)
@@ -64,18 +72,17 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.windows = {}  # Windows (stored as { windex : MDISubWindow } )
         self.SequenceRole = PyQt5.Qt.Qt.UserRole + 1  # Used for storing sequence data in TreeView
         self.WindowRole = PyQt5.Qt.Qt.UserRole + 2  # Stores window ID in TreeView
-        self.bioModel = QStandardItemModel()  # BioModel is shown in the top (sequence) TreeView
         self.bioRoot = QStandardItem("Folder")  # Default root node for top TreeView
-        self.projectModel = QStandardItemModel()  # ProjectModel is shown in the bottom (alignment) TreeView
+        self.bioModel = views.ItemModel(self.bioRoot, self.windows)  # BioModel is shown in the top (sequence) TreeView
         self.projectRoot = QStandardItem("Folder")  # Default root node for bottom TreeView
+        self.projectModel = views.ItemModel(self.projectRoot, self.windows)  # ProjectModel is shown in the bottom (alignment) TreeView
         self.mdiArea = views.MDIArea(tabs=True)  # Create a custom MDIArea
-
-        # Startup functions
-        self.setupUi(self)  # Built by PyUic5 from my main window UI file
         self.gridLayout_2.addWidget(self.mdiArea)  # Add custom MDI area to the empty space intended to hold it
+
         self.guiInit()  # Additional gui setup goes here.
 
         self.DEBUG()
+
 
     def guiInit(self):
         """ Initialize GUI with default parameters. """
@@ -98,9 +105,25 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Slot connections
         self.processTimer.timeout.connect(self.updateUsage)
         self.bioTree.doubleClicked.connect(self.tryCreateAlignment)
+       # self.bioTree.dataChanged.connect(self.pruneNames)
         self.actionAlign.triggered.connect(self.tryCreateAlignment)
         self.projectTree.doubleClicked.connect(self.treeDbClick)
         # self.projectTree.dropEvent.connect(self.seqDropEvent)
+
+    def pruneNames(self):
+        # This checks which names are in there and deletes if they were not.
+        names = []
+        pruned = []
+        for node in iterTreeView(self.bioRoot):
+            names.append(node.text())
+        for title in self.titles:
+            if title not in names:
+                pruned.append(title)
+        print("Detected names: ", names)
+        print("Stored titles: ", self.titles)
+        self.titles = [x for x in self.titles and names if x not in pruned]
+        print("Removed the following names: ", pruned)
+        print("Now storing ",  self.titles)
 
     def seqDropEvent(self, event):
         """
@@ -116,11 +139,13 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         Will not duplicate alignments. Creates a new window if alignment is new.
         "Items" input is an dictionary of {SeqName : Sequence}
         """
+        title = None
         if not items:
             items = {}
             for index in self.bioTree.selectedIndexes():
                 # Quick and dirty way to ignore folders that are selected:
                 # Only does the thing if there is a sequence present in the node.
+
                 if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
                     items[self.bioModel.itemFromIndex(index).text()] = \
                         str(self.bioModel.itemFromIndex(index).data(role=self.SequenceRole))
@@ -157,14 +182,25 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             else:
                 self.mainStatus.showMessage("Sequence loaded", msecs=1000)
                 title = self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0]).text()
+                print(title)
             for key, value in self.alignments.items():
                 if seqs == value:
                     if len(seqs) == 1:
-                        if title in self.titles:
+                        # TODO #1: THIS CURRENTLY RENAMES BECAUSE IT'S NOT DETECTING IF A NAME WAS UNCHANGED!
+                        # REDO THIS WHOLE BLOCK
+                        if title and title in self.titles:
+                            print("duplicate title")
                             title = title+"_"+str(self.titles.count(title))
+                            self.titles.append(title)
                         self.openWindow(windowID=key, title=title)
+                        for node in _iterTreeView(self.bioRoot):
+                            if node.data(role=self.WindowRole) == key:
+                                node.setText(title)
+                        self.pruneNames()
+                        # TO HERE! 
                     else:
                         self.openWindow(windowID=key)
+                        self.pruneNames()
 
     def makeNewWindow(self, ali, windowID):
         sub = views.MDISubWindow()
@@ -196,7 +232,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         if isinstance(windowID, str):
             # if WindowID is a string, that means it was sent by a deliberate search.
             sub = self.windows[windowID]
-            if title:
+            if title and title != sub.windowTitle():
                 print("Setting new Title")
                 sub.setWindowTitle(title)
         if sub:

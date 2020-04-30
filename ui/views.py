@@ -1,9 +1,10 @@
 #!/usr/bin/python3
-
-from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar
+from PyQt5.QtGui import QStandardItemModel
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView
 from PyQt5.QtCore import Qt, pyqtSignal
 from ui import alignment_ui
 import textwrap as tw
+import sherlock
 
 
 class MDIArea(QMdiArea):
@@ -164,3 +165,18 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def seqs(self):
         return self._seqs
 
+
+class ItemModel(QStandardItemModel):
+    def __init__(self, root, windows):
+        super(ItemModel, self).__init__()
+        self._root = root
+        self._windows = windows
+
+
+    def setData(self, index, value, role=Qt.EditRole):
+        print(index)
+        print(value)
+        self.itemFromIndex(index).setText(value)
+        sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+2)]
+        sub.setWindowTitle(value)
+        return super(ItemModel, self).setData(index, value, role)
