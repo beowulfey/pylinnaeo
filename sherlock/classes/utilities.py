@@ -3,9 +3,25 @@ import traceback
 from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, pyqtSlot
 
 """
-Additional classes that are used within Sherlock, but are not responsible for viewing data.
+Additional classes and functions that are used within Sherlock, but are not responsible for viewing data.
 """
 
+
+def iterTreeView(root):
+    """
+    Internal function for iterating a TreeModel.
+    Usage: for node in _iterTreeView(root): etc.
+    """
+
+    def recurse(parent):
+        for row in range(parent.rowCount()):
+            child = parent.child(row)
+            yield child
+            if child.hasChildren():
+                yield from recurse(child)
+
+    if root is not None:
+        yield from recurse(root)
 
 class WorkerSignals(QObject):
     """

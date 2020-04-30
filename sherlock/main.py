@@ -13,7 +13,7 @@ from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 
 # Internal components
-from sherlock.classes import sherlock_ui, views
+from sherlock.classes import sherlock_ui, views, utilities
 
 import sys
 import os
@@ -27,27 +27,13 @@ import psutil
 # TODO: Add functionality for combining sequences into new alignments!
 
 
-def iterTreeView(root):
-    """
-    Internal function for iterating a TreeModel.
-    Usage: for node in _iterTreeView(root): etc.
-    """
-    def recurse(parent):
-        for row in range(parent.rowCount()):
-            child = parent.child(row)
-            yield child
-            if child.hasChildren():
-                yield from recurse(child)
-    if root is not None:
-        yield from recurse(root)
-
-
 class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     """
     Constructor for the Main Window of the Sherlock App
     Contains all the user interface functions, as well as underlying code for major features.
     The bulk of the program is located here.
     """
+
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         # System instants
@@ -70,7 +56,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.bioModel = views.ItemModel(self.bioRoot,  # BioModel is shown in the top (sequence) TreeView
                                         self.windows, seqs=self.alignments, names=self.titles)
         self.projectRoot = QStandardItem("Folder")  # Default root node for bottom TreeView
-        self.projectModel = views.ItemModel(self.projectRoot, self.windows)  # ProjectModel is shown in the bottom (alignment) TreeView
+        self.projectModel = views.ItemModel(self.projectRoot,
+                                            self.windows)  # ProjectModel is shown in the bottom (alignment) TreeView
         self.mdiArea = views.MDIArea(tabs=True)  # Create a custom MDIArea
         self.gridLayout_2.addWidget(self.mdiArea)  # Add custom MDI area to the empty space intended to hold it
 
@@ -117,13 +104,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             # Quick and dirty way to ignore folders that are selected.
             # Only does the thing if there is a sequence present in the node.
             if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
-               items[self.bioModel.itemFromIndex(index).text()] = \
+                items[self.bioModel.itemFromIndex(index).text()] = \
                     str(self.bioModel.itemFromIndex(index).data(role=self.SequenceRole))
-            else:
-                pass
-                #self.mainStatus.showMessage("Not including selected folder \"" +
-                #                            self.bioModel.itemFromIndex(index).text() + "\"",
-                #                            msecs=1000)
         # Check if the sequence(s) have been aligned before.
         # If not, align with ClustalO and create a new window from the alignment.
         # If so, provide focus to that window.
@@ -164,10 +146,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                         # REDO THIS WHOLE BLOCK
                         if title and title in self.titles:
                             print("duplicate title")
-                            title = title+"_"+str(self.titles.count(title))
+                            title = title + "_" + str(self.titles.count(title))
                             self.titles.append(title)
                         self.openWindow(windowID=key, title=title)
-                        for node in iterTreeView(self.bioRoot):
+                        for node in utilities.iterTreeView(self.bioRoot):
                             if node.data(role=self.WindowRole) == key:
                                 node.setText(title)
                         self.pruneNames()
@@ -182,7 +164,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         try:
             item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
             self.openWindow(windowID=item.data(role=self.WindowRole), title=item.text())
-        except:     # TODO: Make specific
+        except:  # TODO: Make specific
             print("Not an alignment")
 
     def pruneNames(self):
@@ -190,7 +172,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # This checks which names are in there and deletes if they were not.
         names = []
         pruned = []
-        for node in iterTreeView(self.bioRoot):
+        for node in utilities.iterTreeView(self.bioRoot):
             names.append(node.text())
         for title in self.titles:
             if title not in names:
@@ -199,19 +181,18 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         print("Stored titles: ", self.titles)
         self.titles = [x for x in self.titles and names if x not in pruned]
         print("Removed the following names: ", pruned)
-        print("Now storing ",  self.titles)
+        print("Now storing ", self.titles)
 
     def checkDropType(self):
         pass
 
     def alignCreate(self):
         pass
-# Input is array of sequence arrays, each sub array is [name : seq]
 
+    # Input is array of sequence arrays, each sub array is [name : seq]
 
     def seqCreate(self, sequence):
         pass
-
 
     def makeNewWindow(self, ali, windowID):
         sub = views.MDISubWindow()
