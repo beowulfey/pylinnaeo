@@ -8,13 +8,13 @@ from clustalo import clustalo
 
 # PyQt components
 import PyQt5.Qt
-from PyQt5.QtCore import QTimer
-from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtCore import QTimer, QThreadPool
+from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QMainWindow, QLabel, QApplication
 
 # Internal components
-from ui import sherlock_ui
-from ui import views
+from sherlock.ui import views
+from sherlock.ui import sherlock_ui
 
 # Additional libraries
 import sys
@@ -64,7 +64,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Startup functions
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
 
-
         # Project instants
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
         self.windex = -1  # Acts as identifier for tracking alignments (max 2.1 billion)
@@ -73,16 +72,19 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.SequenceRole = PyQt5.Qt.Qt.UserRole + 1  # Used for storing sequence data in TreeView
         self.WindowRole = PyQt5.Qt.Qt.UserRole + 2  # Stores window ID in TreeView
         self.bioRoot = QStandardItem("Folder")  # Default root node for top TreeView
-        self.bioModel = views.ItemModel(self.bioRoot, self.windows)  # BioModel is shown in the top (sequence) TreeView
+        self.bioModel = views.ItemModel(self.bioRoot,  # BioModel is shown in the top (sequence) TreeView
+                                        self.windows, seqs=self.alignments, names=self.titles)
         self.projectRoot = QStandardItem("Folder")  # Default root node for bottom TreeView
         self.projectModel = views.ItemModel(self.projectRoot, self.windows)  # ProjectModel is shown in the bottom (alignment) TreeView
         self.mdiArea = views.MDIArea(tabs=True)  # Create a custom MDIArea
         self.gridLayout_2.addWidget(self.mdiArea)  # Add custom MDI area to the empty space intended to hold it
 
+        self.threadpool = QThreadPool()
+        self.mainLogger.debug("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
         self.guiInit()  # Additional gui setup goes here.
 
         self.DEBUG()
-
 
     def guiInit(self):
         """ Initialize GUI with default parameters. """
@@ -104,65 +106,40 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         # Slot connections
         self.processTimer.timeout.connect(self.updateUsage)
-        self.bioTree.doubleClicked.connect(self.tryCreateAlignment)
-       # self.bioTree.dataChanged.connect(self.pruneNames)
-        self.actionAlign.triggered.connect(self.tryCreateAlignment)
-        self.projectTree.doubleClicked.connect(self.treeDbClick)
-        # self.projectTree.dropEvent.connect(self.seqDropEvent)
+        self.projectTree.doubleClicked.connect(self.alignmentDbClick)
+        self.bioTree.doubleClicked.connect(self.seqDbClick)
+        self.actionAlign.triggered.connect(self.seqDbClick)
 
-    def pruneNames(self):
-        # This checks which names are in there and deletes if they were not.
-        names = []
-        pruned = []
-        for node in iterTreeView(self.bioRoot):
-            names.append(node.text())
-        for title in self.titles:
-            if title not in names:
-                pruned.append(title)
-        print("Detected names: ", names)
-        print("Stored titles: ", self.titles)
-        self.titles = [x for x in self.titles and names if x not in pruned]
-        print("Removed the following names: ", pruned)
-        print("Now storing ",  self.titles)
-
-    def seqDropEvent(self, event):
+    def seqDbClick(self):
         """
-        When dropping either a separate window or sequence onto either another
-        sequence or another alignment window, it creates a new window using all unique components
-        """
-        print(event.source())
-
-    def tryCreateAlignment(self, indexes=None, items=None):
-        """
-        This will create a new alignment from the currently selected sequences in top Tree.
+        This assesses what has been selected, adds that to the parent list of sequences,
+        and depending on whether it is a single sequence or multiple,
+        either creates, stores and (re)displays the window or first makes an alignment then does all that.
         Ignores any folders that were included in the selection.
-        Will not duplicate alignments. Creates a new window if alignment is new.
-        "Items" input is an dictionary of {SeqName : Sequence}
+        Will not duplicate alignments. Creates a new window only if alignment is new.
         """
         title = None
-        if not items:
-            items = {}
-            for index in self.bioTree.selectedIndexes():
-                # Quick and dirty way to ignore folders that are selected:
-                # Only does the thing if there is a sequence present in the node.
-
-                if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
-                    items[self.bioModel.itemFromIndex(index).text()] = \
-                        str(self.bioModel.itemFromIndex(index).data(role=self.SequenceRole))
-                else:
-                    self.mainStatus.showMessage("Not including selected folder \"" +
-                                                self.bioModel.itemFromIndex(index).text() + "\"",
-                                                msecs=5000)
-                    continue
-
-        # Check if the two sequences have been aligned before.
+        items = {}
+        for index in self.bioTree.selectedIndexes():
+            # Quick and dirty way to ignore folders that are selected.
+            # Only does the thing if there is a sequence present in the node.
+            if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
+               items[self.bioModel.itemFromIndex(index).text()] = \
+                    str(self.bioModel.itemFromIndex(index).data(role=self.SequenceRole))
+            else:
+                self.mainStatus.showMessage("Not including selected folder \"" +
+                                            self.bioModel.itemFromIndex(index).text() + "\"",
+                                            msecs=1000)
+        # Check if the sequence(s) have been aligned before.
         # If not, align with ClustalO and create a new window from the alignment.
         # If so, provide focus to that window.
         seqs = list(items.values())
         if len(seqs) > 1:
             seqs.sort()
-        if items and seqs not in self.alignments.values():
-            # create new unique identifier for tracking alignment!
+
+            aligned = clustalo(items)
+        if items and (seqs not in self.alignments.values()):
+            # create new unique identifier for tracking alignment or sequence!
             self.windex += 1
             wid = str(self.windex)
             self.mainLogger.debug("Alignment stored with ID " + wid + " and sequence(s) "
@@ -171,7 +148,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
             # TODO: have this form a new thread (probably necessary for long alignments)
             # TODO: Also consider storing this as a BioPy alignment
-            aligned = clustalo(items)
+
             self.mainLogger.debug("Sending alignment to clustal omega using default options (1 core, protein seq)")
             self.mainStatus.showMessage("Aligning selection...", msecs=1000) if len(seqs) > 1 else \
                 self.mainStatus.showMessage("Sequence loaded", msecs=1000)
@@ -193,14 +170,51 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                             title = title+"_"+str(self.titles.count(title))
                             self.titles.append(title)
                         self.openWindow(windowID=key, title=title)
-                        for node in _iterTreeView(self.bioRoot):
+                        for node in iterTreeView(self.bioRoot):
                             if node.data(role=self.WindowRole) == key:
                                 node.setText(title)
                         self.pruneNames()
-                        # TO HERE! 
+                        # TO HERE!
                     else:
                         self.openWindow(windowID=key)
                         self.pruneNames()
+
+    def alignmentDbClick(self):
+        # Checks if not a folder first, then:
+        # Gets the selected item (only single selection allowed), and opens the window
+        try:
+            item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
+            self.openWindow(windowID=item.data(role=self.WindowRole), title=item.text())
+        except:     # TODO: Make specific
+            print("Not an alignment")
+
+    def pruneNames(self):
+        # TODO: Change to updateTrees and generalize
+        # This checks which names are in there and deletes if they were not.
+        names = []
+        pruned = []
+        for node in iterTreeView(self.bioRoot):
+            names.append(node.text())
+        for title in self.titles:
+            if title not in names:
+                pruned.append(title)
+        print("Detected names: ", names)
+        print("Stored titles: ", self.titles)
+        self.titles = [x for x in self.titles and names if x not in pruned]
+        print("Removed the following names: ", pruned)
+        print("Now storing ",  self.titles)
+
+    def checkDropType(self):
+        pass
+
+    def alignCreate(self):
+        pass
+# Input is array of sequence arrays, each sub array is [name : seq]
+
+
+    def seqCreate(self, sequence):
+        pass
+
 
     def makeNewWindow(self, ali, windowID):
         sub = views.MDISubWindow()
@@ -215,12 +229,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.titles.append(list(ali.keys())[0])
         self.windows[windowID] = sub
         self.openWindow(windowID=windowID)
-
-    def treeDbClick(self):
-        item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
-        title = item.text()
-        wid = item.data(role=self.WindowRole)
-        self.openWindow(windowID=wid, title=title)
 
     def openWindow(self, windowID=None, title=None):
         """
@@ -279,6 +287,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             # node = models.SeqNode(test[i][0], sequence=test[i][1])
             node = QStandardItem(test[i][0])
             node.setData(test[i][1], self.SequenceRole)
+            node.setData(str(self.windex), self.WindowRole)
+            self.windex += 1
             node.setFlags(node.flags() ^ PyQt5.Qt.Qt.ItemIsDropEnabled)
             self.bioRoot.appendRow(node)
 
@@ -305,7 +315,7 @@ def main():
     logging.basicConfig(level=logging.DEBUG)  # , format="%(asctime)s:%(levelname)s:%(message)s")
     app = QApplication(sys.argv)
     try:
-        with open('./ui/sherlock.sty') as f:
+        with open('ui/sherlock.sty') as f:
             print("Read in stylesheet")
             style = f.read()
     except IOError:
