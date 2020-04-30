@@ -1,2 +1,0 @@
-pyuic5 bioglot.ui &> bioglot_ui.py
-pyuic5 alignment.ui &> alignment_ui.py
