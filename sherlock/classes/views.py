@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from PyQt5.QtGui import QStandardItemModel
-from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView
 from PyQt5.QtCore import Qt, pyqtSignal
 
 from sherlock.ui import alignment_ui
@@ -16,6 +16,9 @@ class TreeView(QTreeView):
         self.sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setSizePolicy(self.sizePolicy)
         self.setMinimumWidth(150)
+        self.setEditTriggers(QAbstractItemView.SelectedClicked)
+        self.setDragEnabled(True)
+        self.setDragDropMode(QAbstractItemView.InternalMove)
 
     def mousePressEvent(self, event):
         self.generalClick.emit()
@@ -83,6 +86,11 @@ class MDIArea(QMdiArea):
         window.show()
 
     def setActiveSubWindow(self, window):
+        try:
+            window.widget().resized.emit()
+            print("Attempting to resize")
+        except:
+            pass
         if self.tabbed:
             titles = []
             for index in range(len(self.tabBar.children())):
@@ -151,6 +159,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         super(AlignSubWindow, self).resizeEvent(event)
 
     def seqArrange(self):
+        print("Resizing")
         splitseqs = []
         prettynames = []
         prettyseqs = []

@@ -9,7 +9,7 @@ from clustalo import clustalo
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QThreadPool, QTimer
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
 
 # Internal components
 from sherlock.classes import views, utilities
@@ -73,6 +73,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Tree setup
         self.splitter_2.addWidget(self.bioTree)
         self.bioTree.setModel(self.bioModel)
+        self.bioTree.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.bioModel.appendRow(self.bioRoot)
         self.bioTree.setExpanded(self.bioRoot.index(), True)
         self.bioModel.setHorizontalHeaderLabels(["Sequences"])
@@ -98,20 +99,42 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.projectTree.doubleClicked.connect(self.alignmentDbClick)
         self.projectTree.generalClick.connect(self.deselectSeqs)
 
-        # Toolbar
+        # Toolbar and MenuBar
         self.actionAlign.triggered.connect(self.seqDbClick)
         self.actionNewFolder.triggered.connect(self.addFolder)
+        self.actionTile.triggered.connect(self.tileWindows)
+        self.actionCascade.triggered.connect(self.cascadeWindows)
+        self.actionToggle_Tabs.triggered.connect(self.mdiArea.toggleTabs)
+        self.actionClose_all.triggered.connect(self.closeTabs)
+        self.actionDelete.triggered.connect(self.deleteNode)
 
     # SINGLE-USE SLOTS
+    def deleteNode(self):
+        for index in self.lastClickedTree.selectedIndexes():
+            node = self.lastClickedTree.model().itemFromIndex(index)
+            wid = node.data(role=self.WindowRole)
+            try:
+                sub = self.windows[wid]
+                sub.close()
+                self.windows.pop(wid)
+                self.alignments.pop(wid)
+            except KeyError:
+                pass
+            self.lastClickedTree.model().removeRow(index.row(), index.parent())
+            if self.mdiArea.tabbed:
+                self.mdiArea.activeSubWindow().showMaximized()
+
+    def closeTabs(self):
+        self.mdiArea.closeAllSubWindows()
+
     def deselectProject(self):
         self.projectTree.clearSelection()
         self.lastClickedTree = self.bioTree
-        print("Last Clicked: ", self.lastClickedTree)
+        print(self.lastClickedTree.selectedIndexes())
 
     def deselectSeqs(self):
         self.bioTree.clearSelection()
         self.lastClickedTree = self.projectTree
-        print("Last Clicked: ", self.lastClickedTree)
 
     def addFolder(self):
         try:
@@ -133,6 +156,12 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                     self.lastClickedTree.model().appendRow(QStandardItem("New Folder"))
                 else:
                     self.mainStatus.showMessage("Select a location first!", msecs=1000)
+
+    def tileWindows(self):
+        self.mdiArea.tileSubWindows()
+
+    def cascadeWindows(self):
+        self.mdiArea.cascadeSubWindows()
 
     def seqDbClick(self):
         """
