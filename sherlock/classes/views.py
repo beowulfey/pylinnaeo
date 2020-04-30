@@ -1,10 +1,25 @@
 #!/usr/bin/python3
 
 from PyQt5.QtGui import QStandardItemModel
-from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy
 from PyQt5.QtCore import Qt, pyqtSignal
+
 from sherlock.ui import alignment_ui
 import textwrap as tw
+
+
+class TreeView(QTreeView):
+    generalClick = pyqtSignal()
+
+    def __init__(self):
+        super(TreeView, self).__init__()
+        self.sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.setSizePolicy(self.sizePolicy)
+        self.setMinimumWidth(150)
+
+    def mousePressEvent(self, event):
+        self.generalClick.emit()
+        return super(TreeView, self).mousePressEvent(event)
 
 
 class MDIArea(QMdiArea):
@@ -203,6 +218,7 @@ class ItemModel(QStandardItemModel):
         self._root = root
         self._windows = windows
         self._titles = []
+        self.isSeqs = False
         if seqTree:
             self.isSeqs = True
 

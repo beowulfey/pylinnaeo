@@ -46,6 +46,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.threadpool = QThreadPool()
         self.mainLogger.info("Threading with a maximum of %d threads" % self.threadpool.maxThreadCount())
         # Project instants
+        self.lastClickedTree = None
         self.lastAlignment = {}
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
         self.windex = -1  # Acts as identifier for tracking alignments (max 2.1 billion)
@@ -56,6 +57,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.bioRoot = QStandardItem("Folder")  # Default root node for top TreeView
         self.bioModel = views.ItemModel(self.bioRoot,  # BioModel is shown in the top (sequence) TreeView
                                         self.windows, seqTree=True)
+        self.bioTree = views.TreeView()
+        self.projectTree = views.TreeView()
         self.projectRoot = QStandardItem("Folder")  # Default root node for bottom TreeView
         self.projectModel = views.ItemModel(self.projectRoot,
                                             self.windows)  # ProjectModel is shown in the bottom (alignment) TreeView
@@ -68,10 +71,12 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def guiInit(self):
         """ Initialize GUI with default parameters. """
         # Tree setup
+        self.splitter_2.addWidget(self.bioTree)
         self.bioTree.setModel(self.bioModel)
         self.bioModel.appendRow(self.bioRoot)
         self.bioTree.setExpanded(self.bioRoot.index(), True)
         self.bioModel.setHorizontalHeaderLabels(["Sequences"])
+        self.splitter_2.addWidget(self.projectTree)
         self.projectTree.setModel(self.projectModel)
         self.projectModel.appendRow(self.projectRoot)
         self.projectTree.setExpanded(self.projectRoot.index(), True)
@@ -86,17 +91,48 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Slot connections
         self.processTimer.timeout.connect(self.updateUsage)
         self.bioTree.doubleClicked.connect(self.seqDbClick)
+        self.bioTree.generalClick.connect(self.deselectProject)
         self.bioModel.nameCheck.connect(self.pruneNames)
         self.bioModel.nameChanged.connect(self.pruneNames)
         self.bioModel.dupeName.connect(self.dupeNameMsg)
-        #self.actionAlign.triggered.connect(self.seqDbClick)
         self.projectTree.doubleClicked.connect(self.alignmentDbClick)
+        self.projectTree.generalClick.connect(self.deselectSeqs)
 
-        # TESTING BUTTON
-        self.actionAlign.triggered.connect(self.mdiArea.toggleTabs)
+        # Toolbar
+        self.actionAlign.triggered.connect(self.seqDbClick)
+        self.actionNewFolder.triggered.connect(self.addFolder)
 
-    def dupeNameMsg(self):
-        self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
+    # SINGLE-USE SLOTS
+    def deselectProject(self):
+        self.projectTree.clearSelection()
+        self.lastClickedTree = self.bioTree
+        print("Last Clicked: ", self.lastClickedTree)
+
+    def deselectSeqs(self):
+        self.bioTree.clearSelection()
+        self.lastClickedTree = self.projectTree
+        print("Last Clicked: ", self.lastClickedTree)
+
+    def addFolder(self):
+        try:
+            node = self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0])
+            if not node.data(role=self.WindowRole):
+                node.appendRow(QStandardItem("New Folder"))
+            else:
+                self.bioModel.appendRow(QStandardItem("New Folder"))
+        except IndexError:
+            try:
+                node = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
+                if not node.data(role=self.WindowRole):
+                    node.appendRow(QStandardItem("New Folder"))
+                else:
+                    self.projectModel.appendRow(QStandardItem("New Folder"))
+            except IndexError:
+                print("Nothing Selected, using last click")
+                if self.lastClickedTree:
+                    self.lastClickedTree.model().appendRow(QStandardItem("New Folder"))
+                else:
+                    self.mainStatus.showMessage("Select a location first!", msecs=1000)
 
     def seqDbClick(self):
         """
@@ -166,6 +202,19 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                     else:
                         self.openWindow(windowID=key)
 
+    def alignmentDbClick(self):
+        # Checks if not a folder first, then:
+        # Gets the selected item (only single selection allowed), and opens the window
+        try:
+            item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
+            self.openWindow(windowID=item.data(role=self.WindowRole), title=item.text())
+        except:  # TODO: Make specific
+            print("Not an alignment")
+
+    def dupeNameMsg(self):
+        self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
+
+    # MAIN METHODS
     def makeNewWindow(self, ali, windowID):
         sub = views.MDISubWindow()
         widget = views.AlignSubWindow(ali)
@@ -198,17 +247,22 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 sub.show()
                 self.mdiArea.setActiveSubWindow(sub)
 
-    def alignmentDbClick(self):
-        # Checks if not a folder first, then:
-        # Gets the selected item (only single selection allowed), and opens the window
-        try:
-            item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
-            self.openWindow(windowID=item.data(role=self.WindowRole), title=item.text())
-        except:  # TODO: Make specific
-            print("Not an alignment")
+    def checkDropType(self):
+        pass
 
+    def seqCreate(self, seqs):
+        # Input is array of sequence arrays, each sub array is [name : seq]
+        for i in list(range(0, len(seqs))):
+            node = QStandardItem(seqs[i][0])
+            node.setData(seqs[i][1], self.SequenceRole)
+            node.setData(str(self.windex), self.WindowRole)
+            self.windex += 1
+            # TODO: This option allows dropping on a sequence. May consider turning off.
+            node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
+            self.bioModel.appendRow(node)
+
+    # UTILITY METHODS
     def pruneNames(self):
-        # TODO: Change to updateTrees and generalize
         # This checks which names are in there and deletes if they were not.
         names = []
         pruned = []
@@ -217,25 +271,12 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         for title in self.titles:
             if title not in names:
                 pruned.append(title)
-        print("Detected names: ", names)
-        print("Stored titles: ", self.titles)
+        # print("Detected names: ", names)
+        # print("Stored titles: ", self.titles)
         self.titles = [x for x in self.titles and names if x not in pruned]
-        print("Removed the following names: ", pruned)
-        print("Now storing ", self.titles)
+        # print("Removed the following names: ", pruned)
+        # print("Now storing ", self.titles)
         self.bioModel.updateNames(self.titles)
-
-    def checkDropType(self):
-        pass
-
-    def alignCreate(self):
-        pass
-
-    # Input is array of sequence arrays, each sub array is [name : seq]
-
-    def seqCreate(self, sequence):
-        pass
-
-
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown"""
@@ -270,13 +311,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
-        for i in list(range(0, len(test))):
-            node = QStandardItem(test[i][0])
-            node.setData(test[i][1], self.SequenceRole)
-            node.setData(str(self.windex), self.WindowRole)
-            self.windex += 1
-            node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
-            self.bioRoot.appendRow(node)
+        self.seqCreate(test)
 
         """
         # SAVED THIS FOR LATER!
