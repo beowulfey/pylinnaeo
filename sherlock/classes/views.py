@@ -84,6 +84,8 @@ class MDIArea(QMdiArea):
                 sub.showMinimized()
             self.activeSubWindow().showMaximized()
         window.show()
+        self.setActiveSubWindow(window)
+
 
     def setActiveSubWindow(self, window):
         if self.tabbed:
@@ -99,11 +101,8 @@ class MDIArea(QMdiArea):
                 self.activeSubWindow().showMaximized()
         else:
             super(MDIArea, self).setActiveSubWindow(window)
-            try:
-                window.widget().resized.emit()
-                print("Attempting to resize")
-            except:
-                print("Unable to resize")
+            window.widget().resized.emit()
+            #print("Unable to resize")
             #self.activeSubWindow().showMaximized()
 
 
@@ -115,9 +114,17 @@ class MDISubWindow(QMdiSubWindow):
     def __init__(self):
         super(MDISubWindow, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose, False)
+        self._widget = None
+
+    def setWidget(self, widget):
+        self._widget = widget
+        super(MDISubWindow, self).setWidget(widget)
+
+    def widget(self):
+        return self._widget
 
     def show(self):
-        self.widget().show()
+        self._widget.show()
         super(MDISubWindow, self).show()
 
     def closeEvent(self, event):
@@ -144,14 +151,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
 
-
         # options to do
         # TODO: Implement these
         self.showRuler = False
         self.showColors = False
-
-        #options
-        self.showRuler = False
 
     def toggleRulers(self):
         self.showRuler = not self.showRuler
