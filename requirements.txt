@@ -1,4 +1,4 @@
 psutil>=5.7.0
 PyQt5>=5.14.2
 biopython
-./wheels/clustalo-0.2.0-cp37-cp37m-linux_x86_64.whl
+./install/clustalo-0.2.0-cp37-cp37m-linux_x86_64.whl
