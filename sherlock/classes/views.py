@@ -61,7 +61,7 @@ class MDIArea(QMdiArea):
         # self.tabBar.setAutoHide(True)
         self.setTabsMovable(True)
         self.setTabsClosable(True)
-        self.tabBar.tabCloseRequested.connect(self.closeTab)
+        #self.tabBar.tabCloseRequested.connect(self.closeTab)
 
     def closeTab(self):
         try:
@@ -86,11 +86,6 @@ class MDIArea(QMdiArea):
         window.show()
 
     def setActiveSubWindow(self, window):
-        try:
-            window.widget().resized.emit()
-            print("Attempting to resize")
-        except:
-            pass
         if self.tabbed:
             titles = []
             for index in range(len(self.tabBar.children())):
@@ -104,6 +99,11 @@ class MDIArea(QMdiArea):
                 self.activeSubWindow().showMaximized()
         else:
             super(MDIArea, self).setActiveSubWindow(window)
+            try:
+                window.widget().resized.emit()
+                print("Attempting to resize")
+            except:
+                print("Unable to resize")
             #self.activeSubWindow().showMaximized()
 
 
@@ -122,9 +122,12 @@ class MDISubWindow(QMdiSubWindow):
 
     def closeEvent(self, event):
         self.mdiArea().removeSubWindow(self)
+        print("Tab Removed")
         self.close()
+        return super(MDISubWindow, self).closeEvent(event)
 
     def close(self):
+        print("Closed tab")
         super(MDISubWindow, self).close()
 
 
@@ -150,16 +153,16 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         #options
         self.showRuler = False
 
-
     def toggleRulers(self):
         self.showRuler = not self.showRuler
 
     def resizeEvent(self, event):
         self.resized.emit()
         super(AlignSubWindow, self).resizeEvent(event)
+        print("Finished resizing")
 
     def seqArrange(self):
-        print("Resizing")
+        print("Fitting sequence to window")
         splitseqs = []
         prettynames = []
         prettyseqs = []
@@ -224,12 +227,17 @@ class ItemModel(QStandardItemModel):
 
     def __init__(self, root, windows, seqTree=False):
         super(ItemModel, self).__init__()
+        self.lastClickedNode = None
         self._root = root
         self._windows = windows
         self._titles = []
         self.isSeqs = False
         if seqTree:
             self.isSeqs = True
+
+    def updateLastClicked(self, node):
+        print("detected click")
+        self.lastClickedNode = node
 
     def updateNames(self, titles):
         self._titles = titles
@@ -238,14 +246,11 @@ class ItemModel(QStandardItemModel):
         if self.isSeqs:
             print("Checking prior names")
             #self.nameCheck.emit()
-            print(value)
-            print(self._titles)
             # Only do this check if this is coming from the top Tree
-            if value in self._titles:
+            if value in self._titles and value != self.lastClickedNode.text():
                 print("Duplicate name")
                 self.dupeName.emit()
                 value = value + "_" + str(self._titles.count(value))
-                print(value)
         self.itemFromIndex(index).setText(value)
         self.nameChanged.emit()
         try:

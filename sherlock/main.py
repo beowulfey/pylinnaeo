@@ -93,6 +93,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.processTimer.timeout.connect(self.updateUsage)
         self.bioTree.doubleClicked.connect(self.seqDbClick)
         self.bioTree.generalClick.connect(self.deselectProject)
+        self.bioTree.clicked.connect(self.lastClickedSeq)
         self.bioModel.nameCheck.connect(self.pruneNames)
         self.bioModel.nameChanged.connect(self.pruneNames)
         self.bioModel.dupeName.connect(self.dupeNameMsg)
@@ -110,6 +111,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.actionDelete.triggered.connect(self.deleteNode)
 
     # SINGLE-USE SLOTS
+    def lastClickedSeq(self):
+        self.bioModel.updateNames(self.titles)
+        self.bioModel.updateLastClicked(self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0]))
+
     def deleteNode(self):
         for index in self.lastClickedTree.selectedIndexes():
             node = self.lastClickedTree.model().itemFromIndex(index)
@@ -131,7 +136,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def deselectProject(self):
         self.projectTree.clearSelection()
         self.lastClickedTree = self.bioTree
-        print(self.lastClickedTree.selectedIndexes())
 
     def deselectSeqs(self):
         self.bioTree.clearSelection()
@@ -269,9 +273,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         sub = self.windows[windowID]
         if title and title != sub.windowTitle():
             print("Setting new Title")
-            sub.setWindowTitle(title)
+            #sub.setWindowTitle(title)
         if sub:
             if sub.mdiArea() != self.mdiArea:
+                print("Not in mdiArea... adding")
                 self.mdiArea.addSubWindow(sub)
             else:
                 sub.show()
@@ -296,16 +301,16 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # This checks which names are in there and deletes if they were not.
         names = []
         pruned = []
-        for node in utilities.iterTreeView(self.bioRoot):
+        for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
             names.append(node.text())
         for title in self.titles:
             if title not in names:
                 pruned.append(title)
-        # print("Detected names: ", names)
-        # print("Stored titles: ", self.titles)
+        print("Detected names: ", names)
+        print("Stored titles: ", self.titles)
         self.titles = [x for x in self.titles and names if x not in pruned]
-        # print("Removed the following names: ", pruned)
-        # print("Now storing ", self.titles)
+        print("Removed the following names: ", pruned)
+        print("Now storing ", self.titles)
         self.bioModel.updateNames(self.titles)
 
     def updateUsage(self):
