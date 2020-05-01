@@ -104,6 +104,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.actionNewFolder.triggered.connect(self.addFolder)
         self.actionTile.triggered.connect(self.tileWindows)
         self.actionCascade.triggered.connect(self.cascadeWindows)
+        # TODO: Set this is an editable preference
         self.actionToggle_Tabs.triggered.connect(self.mdiArea.toggleTabs)
         self.actionClose_all.triggered.connect(self.closeTabs)
         self.actionDelete.triggered.connect(self.deleteNode)
