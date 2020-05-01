@@ -36,6 +36,7 @@ class MDIArea(QMdiArea):
         self.tabbed = False  # tabbed by default
         self.tabBar = None
         self.setTabs(True) if self.tabbed else self.setTabs(False)
+        self.WindowOrder(2)
 
     def toggleTabs(self):
         self.tabbed = not self.tabbed

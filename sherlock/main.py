@@ -2,6 +2,7 @@
 
 # Bioscience components
 import Bio.Seq as Bseq
+import Bio.SeqIO as Bseqio
 from Bio.Alphabet import generic_protein
 from clustalo import clustalo
 
@@ -105,6 +106,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.actionNewFolder.triggered.connect(self.addFolder)
         self.actionTile.triggered.connect(self.tileWindows)
         self.actionCascade.triggered.connect(self.cascadeWindows)
+        self.actionPaste.triggered.connect(self.pasteInto)
         # TODO: Set this is an editable preference
         self.actionToggle_Tabs.triggered.connect(self.mdiArea.toggleTabs)
         self.actionClose_all.triggered.connect(self.closeTabs)
@@ -162,10 +164,40 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 else:
                     self.mainStatus.showMessage("Select a location first!", msecs=1000)
 
+    def pasteInto(self):
+        clip = str(QApplication.clipboard().text()).splitlines()
+        # FASTA DETECTION
+        name = None
+        seq = []
+        seqs = []
+        for line in clip:
+            if line[0] == ">" and not name:
+                print("name: ", line[:10])
+                name = line[:10]
+            elif line[0] == ">" and name:
+                print("new seq: ", line)
+                seqs.append([name, "".join(seq)])
+                self.titles.append(name)
+                name = line[:10]
+            else:
+                print("line: ", line)
+                seq.append(line.strip())
+        seqs.append([name, "".join(seq)])
+        for newseq in seqs:
+            self.seqCreate(newseq)
+
+
+    def checkDropType(self):
+        pass
+
+
+
     def tileWindows(self):
+        self.mdiArea.toggleTabs()
         self.mdiArea.tileSubWindows()
 
     def cascadeWindows(self):
+        self.mdiArea.toggleTabs()
         self.mdiArea.cascadeSubWindows()
 
     def seqDbClick(self):
@@ -273,7 +305,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         sub = self.windows[windowID]
         if title and title != sub.windowTitle():
             print("Setting new Title")
-            #sub.setWindowTitle(title)
+            sub.setWindowTitle(title)
         if sub:
             if sub.mdiArea() != self.mdiArea:
                 print("Not in mdiArea... adding")
@@ -282,19 +314,37 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 sub.show()
                 self.mdiArea.setActiveSubWindow(sub)
 
-    def checkDropType(self):
-        pass
+    def checkNames(self, name):
+        if name not in self.titles:
+            # SAFE! You can add and return
+            finalname = name
+            self.titles.append(finalname)
+            return finalname
+        elif name[-2] == "_" and int(name[-1]):
+            # if there's already a name with an _1, add a number
+            # TODO: CHeck if sequence already exists!!
+            finalname = str(name[:-1]+str(int(name[-1])+1))
+            self.titles.append(finalname)
+        else:
+            # It's a duplicate! Better
+            # TODO: CHECK SEQUENCES HERE.
+            finalname = str(name + "_" + str(self.titles.count(name)))
+            finalname = self.checkNames(finalname)
+            self.titles.append(finalname)
+        return finalname
 
-    def seqCreate(self, seqs):
-        # Input is array of sequence arrays, each sub array is [name : seq]
-        for i in list(range(0, len(seqs))):
-            node = QStandardItem(seqs[i][0])
-            node.setData(seqs[i][1], self.SequenceRole)
-            node.setData(str(self.windex), self.WindowRole)
-            self.windex += 1
-            # TODO: This option allows dropping on a sequence. May consider turning off.
-            node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
-            self.bioModel.appendRow(node)
+    def seqCreate(self, seq):
+        # Input is array [name : seq]
+        print(seq)
+        name = seq[0]
+        name = self.checkNames(name)
+        node = QStandardItem(name)
+        node.setData(seq[1], self.SequenceRole)
+        node.setData(str(self.windex), self.WindowRole)
+        self.windex += 1
+        # TODO: This option allows dropping on a sequence. May consider turning off.
+        node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
+        self.bioModel.appendRow(node)
 
     # UTILITY METHODS
     def pruneNames(self):
@@ -346,7 +396,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
         test2alt = [test2[0], seq_GPI1B]
         test = [test1alt, test2alt]
-        self.seqCreate(test)
+        for i in test:
+            self.seqCreate(i)
 
         """
         # SAVED THIS FOR LATER!
@@ -383,6 +434,7 @@ def main():
     #    app.setStyleSheet(style)
     window = Sherlock()
     window.show()
+
     sys.exit(app.exec_())
 
 
