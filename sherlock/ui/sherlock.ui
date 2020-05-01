@@ -128,6 +128,7 @@
     <addaction name="separator"/>
     <addaction name="actionToggle_Tabs"/>
     <addaction name="separator"/>
+    <addaction name="actionClose_2"/>
     <addaction name="actionClose_all"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -143,6 +144,8 @@
     <property name="title">
      <string>Actions</string>
     </property>
+    <addaction name="actionAlign"/>
+    <addaction name="actionNewFolder"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -180,10 +183,16 @@
    <property name="text">
     <string>Open Workspace</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSave">
    <property name="text">
     <string>Save Workspace</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionFasta">
@@ -228,6 +237,9 @@
    <property name="text">
     <string>Add Folder</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionDelete">
    <property name="text">
@@ -237,7 +249,7 @@
     <string>Remove from Tree</string>
    </property>
    <property name="shortcut">
-    <string>Shift+Backspace, Del</string>
+    <string>Del</string>
    </property>
   </action>
   <action name="actionCopy">
@@ -260,10 +272,16 @@
    <property name="text">
     <string>Preferences</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
   </action>
   <action name="actionToggle_Tabs">
    <property name="text">
     <string>Toggle Tab Mode</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="actionClose_all">
@@ -284,6 +302,14 @@
   <action name="actionSorry_no_help_available">
    <property name="text">
     <string>Sorry, no help available!</string>
+   </property>
+  </action>
+  <action name="actionClose_2">
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>
