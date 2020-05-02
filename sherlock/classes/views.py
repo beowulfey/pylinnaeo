@@ -171,13 +171,16 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         prettynames = []
         prettyseqs = []
         maxname = 0
+        wrapper = tw.TextWrapper()
+        wrapper.break_on_hyphens=False
         nseqs = len(self._seqs.keys())
         width = (self.alignPane.size().width())
         charpx = self.alignPane.fontMetrics().averageCharWidth()
         nlines = 0
+        wrapper.width = round(width / charpx) - 3  # for the scroll bar
         for name, seq in self._seqs.items():
-            maxchars = round(width / charpx) - 2 # for the scroll bar
-            lines = tw.wrap(seq, maxchars)
+            # TODO: CHECK THIS FOR WRAPPING ERRORS
+            lines = wrapper.wrap(seq)
             splitseqs.append([name, lines])
             if len(lines) > nlines:
                 nlines = len(lines)
@@ -212,13 +215,26 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 prettynames.append("")
                 seqid = 0
                 subline += 1
-        self.alignPane.setText("\n".join(prettyseqs))
+        #self.alignPane.setText("\n".join(prettyseqs))
         self.namePane.setAlignment(Qt.AlignRight)
+        self.alignPane.setAlignment(Qt.AlignCenter)
         self.namePane.setText(prettynames[0])
+        self.alignPane.setText(prettyseqs[0])
         for line in prettynames[1:]:
             self.namePane.setAlignment(Qt.AlignRight)
             self.namePane.append(line)
         self.namePane.verticalScrollBar().setValue(self.alignPane.verticalScrollBar().value())
+        # TODO: Try and fix centering
+        # This works to center it for now but its kind of hacky. Sometimes the left edge width varies so
+        # My hardcoded spacer doesn't match
+        for line in prettyseqs[1:]:
+            if line == prettyseqs[-1]:
+                self.alignPane.setAlignment(Qt.AlignLeft)
+                line = "  "+line
+            else:
+                self.alignPane.setAlignment(Qt.AlignCenter)
+            self.alignPane.append(line)
+        self.alignPane.setAlignment(Qt.AlignCenter)
 
     def seqs(self):
         return self._seqs
@@ -250,7 +266,7 @@ class ItemModel(QStandardItemModel):
         if self.isSeqs:
             print("Checking prior names")
             #self.nameCheck.emit()
-            # Only do this check if this is coming from the top Tree
+            # Only do this check if this is coming from the top Tree and is not a folder
             if value in self._titles and value != self.lastClickedNode.text():
                 print("Duplicate name")
                 self.dupeName.emit()
@@ -261,6 +277,6 @@ class ItemModel(QStandardItemModel):
             sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+2)]
             sub.setWindowTitle(value)
             sub.mdiArea().setActiveSubWindow(sub)
-        except KeyError:
+        except KeyError or AttributeError:
             print("Something went wrong!")
         return super(ItemModel, self).setData(index, value, role)

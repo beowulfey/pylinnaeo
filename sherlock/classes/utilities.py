@@ -45,5 +45,6 @@ class AlignThread(QThread):
             self.error.emit((exctype, value, traceback.format_exc()))
         else:
             self.aligned = result
+            print(self.aligned)
 
 

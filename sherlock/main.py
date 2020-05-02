@@ -193,11 +193,13 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
 
     def tileWindows(self):
-        self.mdiArea.toggleTabs()
+        if self.mdiArea.tabbed:
+            self.mdiArea.toggleTabs()
         self.mdiArea.tileSubWindows()
 
     def cascadeWindows(self):
-        self.mdiArea.toggleTabs()
+        if self.mdiArea.tabbed:
+            self.mdiArea.toggleTabs()
         self.mdiArea.cascadeSubWindows()
 
     def seqDbClick(self):
@@ -352,7 +354,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         names = []
         pruned = []
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-            names.append(node.text())
+            if node.data(self.WindowRole):
+                names.append(node.text())
         for title in self.titles:
             if title not in names:
                 pruned.append(title)
