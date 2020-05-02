@@ -13,8 +13,8 @@ from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
 
 # Internal components
-from sherlock.classes import views, utilities
-from sherlock.ui import sherlock_ui
+from classes import views, utilities
+from ui import sherlock_ui
 
 import sys
 import os
