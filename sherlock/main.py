@@ -273,11 +273,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def alignmentDbClick(self):
         # Checks if not a folder first, then:
         # Gets the selected item (only single selection allowed), and opens the window
-        try:
-            item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
+        item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
+        if item.data(role=self.WindowRole):
             self.openWindow(windowID=item.data(role=self.WindowRole), title=item.text())
-        except:  # TODO: Make specific
-            print("Not an alignment")
 
     def dupeNameMsg(self):
         self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
@@ -426,15 +424,15 @@ def main():
     app = QApplication(sys.argv)
 
     try:
-        with open('sherlock.sty') as f:
+        with open('ui/sherlock.sty') as f:
             print("Read in stylesheet")
             style = f.read()
     except IOError:
         print('Could not read stylesheet.')
         style = ""
 
-    # if style:
-    #    app.setStyleSheet(style)
+    if style:
+        app.setStyleSheet(style)
     window = Sherlock()
     window.show()
 

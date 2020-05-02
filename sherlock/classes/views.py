@@ -151,6 +151,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self._seqs = sequences
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
+        self.oldwidth=0
 
         # options to do
         # TODO: Implement these
@@ -163,6 +164,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def resizeEvent(self, event):
         self.resized.emit()
         super(AlignSubWindow, self).resizeEvent(event)
+        self.oldwidth = event.oldSize().width()
         print("Finished resizing")
 
     def seqArrange(self):
@@ -174,10 +176,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         wrapper = tw.TextWrapper()
         wrapper.break_on_hyphens=False
         nseqs = len(self._seqs.keys())
-        width = (self.alignPane.size().width())
+        width = (self.alignPane.size().width())-2
+        print(self.oldwidth-width)
         charpx = self.alignPane.fontMetrics().averageCharWidth()
         nlines = 0
-        wrapper.width = round(width / charpx) - 3  # for the scroll bar
+        wrapper.width = round(width / charpx) - 4  # for the scroll bar
+        print("Width is: ",width," and char is ",charpx," so", str(round(width/charpx)))
         for name, seq in self._seqs.items():
             # TODO: CHECK THIS FOR WRAPPING ERRORS
             lines = wrapper.wrap(seq)
