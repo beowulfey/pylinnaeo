@@ -182,8 +182,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         nlines = 0
         wrapper.width = round(width / charpx) - 4  # for the scroll bar
         print("Width is: ",width," and char is ",charpx," so", str(round(width/charpx)))
+        # TODO: Make this so it does not change on EVERY resize!
         for name, seq in self._seqs.items():
-            # TODO: CHECK THIS FOR WRAPPING ERRORS
             lines = wrapper.wrap(seq)
             splitseqs.append([name, lines])
             if len(lines) > nlines:
@@ -242,6 +242,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def seqs(self):
         return self._seqs
+
+    def setSeqs(self, seqs):
+        self._seqs = seqs
 
 
 class ItemModel(QStandardItemModel):
