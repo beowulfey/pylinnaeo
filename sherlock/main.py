@@ -2,6 +2,7 @@
 
 # Bioscience components
 import Bio.Seq as Bseq
+from Bio.SeqRecord import SeqRecord
 import Bio.SeqIO as Bseqio
 from Bio.Alphabet import generic_protein
 from clustalo import clustalo
@@ -10,7 +11,7 @@ from clustalo import clustalo
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QThreadPool, QTimer
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QShortcut
 
 # Internal components
 from classes import views, utilities
@@ -67,6 +68,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.gridLayout_2.addWidget(self.mdiArea)  # Add custom MDI area to the empty space intended to hold it
 
         self.guiInit()  # Additional gui setup goes here.
+        self.connectSlots()
         self.DEBUG()
 
     def guiInit(self):
@@ -90,58 +92,82 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.processTimer.setInterval(1000)
         self.processTimer.start()
 
-        # Slot connections
-        self.processTimer.timeout.connect(self.updateUsage)
-        self.bioTree.doubleClicked.connect(self.seqDbClick)
-        self.bioTree.generalClick.connect(self.deselectProject)
-        self.bioTree.clicked.connect(self.lastClickedSeq)
-        self.bioModel.nameCheck.connect(self.pruneNames)
-        self.bioModel.nameChanged.connect(self.pruneNames)
-        self.bioModel.dupeName.connect(self.dupeNameMsg)
-        self.projectTree.doubleClicked.connect(self.alignmentDbClick)
-        self.projectTree.generalClick.connect(self.deselectSeqs)
-
+    def connectSlots(self):
         # Toolbar and MenuBar
+        # FILE
+
+        # EDIT
+        self.actionCopy.triggered.connect(self.copyOut)
+        self.actionPaste.triggered.connect(self.pasteInto)
+        # TOOLS
         self.actionAlign.triggered.connect(self.seqDbClick)
         self.actionNewFolder.triggered.connect(self.addFolder)
+        self.actionDelete.triggered.connect(self.deleteNode)
+        # WINDOW
         self.actionTile.triggered.connect(self.tileWindows)
         self.actionCascade.triggered.connect(self.cascadeWindows)
-        self.actionPaste.triggered.connect(self.pasteInto)
-        # TODO: Set this is an editable preference
-        self.actionToggle_Tabs.triggered.connect(self.mdiArea.toggleTabs)
-        self.actionClose_all.triggered.connect(self.closeTabs)
-        self.actionDelete.triggered.connect(self.deleteNode)
+        self.actionToggle_Tabs.triggered.connect(self.mdiArea.toggleTabs)  # TODO: Set as preference
+        self.actionClose.triggered.connect(self.closeTab)
+        self.actionClose_all.triggered.connect(self.closeAllTabs)
+
+        # Data awareness connections
+        self.bioTree.doubleClicked.connect(self.seqDbClick)
+        self.bioModel.dupeName.connect(self.dupeNameMsg)
+        self.projectTree.doubleClicked.connect(self.alignmentDbClick)
+
+        # Utility slots
+        self.bioTree.generalClick.connect(self.deselectProject)
+        self.bioTree.clicked.connect(self.lastClickedSeq)
+        self.projectTree.generalClick.connect(self.deselectSeqs)
+        self.bioModel.nameCheck.connect(self.pruneNames)
+        self.bioModel.nameChanged.connect(self.pruneNames)
+        self.processTimer.timeout.connect(self.updateUsage)
 
     # SINGLE-USE SLOTS
-    def lastClickedSeq(self):
-        self.bioModel.updateNames(self.titles)
-        self.bioModel.updateLastClicked(self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0]))
+    def copyOut(self):
+        if self.lastClickedTree == self.bioTree:
+            seqs = []
+            indices = self.lastClickedTree.selectedIndexes()
+            for index in indices:
+                node = self.bioModel.itemFromIndex(index)
+                seqs.append(SeqRecord(node.data(role=self.SequenceRole), id=node.text()).format("fasta"))
+            QApplication.clipboard().setText("".join(seqs))
+            if len(seqs) > 1:
+                self.mainStatus.showMessage("Copied sequences to clipobard!", msecs=1000)
+            elif len(seqs) == 1:
+                self.mainStatus.showMessage("Copied sequence to clipobard!", msecs=1000)
 
-    def deleteNode(self):
-        for index in self.lastClickedTree.selectedIndexes():
-            node = self.lastClickedTree.model().itemFromIndex(index)
-            wid = node.data(role=self.WindowRole)
+        elif self.lastClickedTree == self.projectTree:
+            self.mainStatus.showMessage("Please use File>Export to save alignments!", msecs=1000)
+
+
+    def pasteInto(self):
+        # FASTA DETECTION
+        if self.lastClickedTree == self.bioTree:
+            name = None
+            seq = []
+            seqs = []
             try:
-                sub = self.windows[wid]
-                sub.close()
-                self.windows.pop(wid)
-                self.alignments.pop(wid)
-            except KeyError:
-                pass
-            self.lastClickedTree.model().removeRow(index.row(), index.parent())
-            if self.mdiArea.tabbed:
-                self.mdiArea.activeSubWindow().showMaximized()
-
-    def closeTabs(self):
-        self.mdiArea.closeAllSubWindows()
-
-    def deselectProject(self):
-        self.projectTree.clearSelection()
-        self.lastClickedTree = self.bioTree
-
-    def deselectSeqs(self):
-        self.bioTree.clearSelection()
-        self.lastClickedTree = self.projectTree
+                clip = str(QApplication.clipboard().text()).splitlines()
+                for line in clip:
+                    if line[0] == ">" and not name:
+                        print("name: ", line[:10])
+                        name = line[:10]
+                    elif line[0] == ">" and name:
+                        print("new seq: ", line)
+                        seqs.append([name, "".join(seq)])
+                        self.titles.append(name)
+                        name = line[:10]
+                    else:
+                        print("line: ", line)
+                        seq.append(line.strip())
+                seqs.append([name, "".join(seq)])
+                for newseq in seqs:
+                    self.seqCreate(newseq)
+            except:
+                self.mainStatus.showMessage("Please only paste in FASTA format!", msecs=1000)
+            else:
+                self.mainStatus.showMessage("Please choose paste destination", msecs=1000)
 
     def addFolder(self):
         try:
@@ -164,33 +190,20 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 else:
                     self.mainStatus.showMessage("Select a location first!", msecs=1000)
 
-    def pasteInto(self):
-        clip = str(QApplication.clipboard().text()).splitlines()
-        # FASTA DETECTION
-        name = None
-        seq = []
-        seqs = []
-        for line in clip:
-            if line[0] == ">" and not name:
-                print("name: ", line[:10])
-                name = line[:10]
-            elif line[0] == ">" and name:
-                print("new seq: ", line)
-                seqs.append([name, "".join(seq)])
-                self.titles.append(name)
-                name = line[:10]
-            else:
-                print("line: ", line)
-                seq.append(line.strip())
-        seqs.append([name, "".join(seq)])
-        for newseq in seqs:
-            self.seqCreate(newseq)
-
-
-    def checkDropType(self):
-        pass
-
-
+    def deleteNode(self):
+        for index in self.lastClickedTree.selectedIndexes():
+            node = self.lastClickedTree.model().itemFromIndex(index)
+            wid = node.data(role=self.WindowRole)
+            try:
+                sub = self.windows[wid]
+                sub.close()
+                self.windows.pop(wid)
+                self.alignments.pop(wid)
+            except KeyError:
+                pass
+            self.lastClickedTree.model().removeRow(index.row(), index.parent())
+            if self.mdiArea.tabbed:
+                self.mdiArea.activeSubWindow().showMaximized()
 
     def tileWindows(self):
         if self.mdiArea.tabbed:
@@ -202,6 +215,16 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.mdiArea.toggleTabs()
         self.mdiArea.cascadeSubWindows()
 
+    def closeTab(self):
+        try:
+            self.mdiArea.activeSubWindow().close()
+        except AttributeError:
+            pass
+
+    def closeAllTabs(self):
+        self.mdiArea.closeAllSubWindows()
+
+    # DATA AWARENESS SLOTS
     def seqDbClick(self):
         """
         This assesses what has been selected, adds that to the parent list of sequences,
@@ -281,6 +304,41 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
 
     # MAIN METHODS
+    def seqCreate(self, seq):
+        # Input is array [name : seq]
+        print(seq)
+        name = seq[0]
+        name = self.checkNames(name)
+        node = QStandardItem(name)
+        node.setData(seq[1], self.SequenceRole)
+        node.setData(str(self.windex), self.WindowRole)
+        self.windex += 1
+        # TODO: This option allows dropping on a sequence. May consider turning off.
+        node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
+        self.bioModel.appendRow(node)
+
+    def checkNames(self, name):
+        # Called upon sequence creation.
+        # TODO: I NEEDED TO ADD THIS SOMEWHERE???
+        # Look for ifs in TITLES!
+        if name not in self.titles:
+            # SAFE! You can add and return
+            finalname = name
+            self.titles.append(finalname)
+            return finalname
+        elif name[-2] == "_" and int(name[-1]):
+            # if there's already a name with an _1, add a number
+            # TODO: CHeck if sequence already exists!!
+            finalname = str(name[:-1] + str(int(name[-1]) + 1))
+            self.titles.append(finalname)
+        else:
+            # It's a duplicate! Better
+            # TODO: CHECK SEQUENCES HERE.
+            finalname = str(name + "_" + str(self.titles.count(name)))
+            finalname = self.checkNames(finalname)
+            self.titles.append(finalname)
+        return finalname
+
     def makeNewWindow(self, ali, windowID):
         sub = views.MDISubWindow()
         widget = views.AlignSubWindow(ali)
@@ -314,41 +372,24 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 sub.show()
                 self.mdiArea.setActiveSubWindow(sub)
 
-    def checkNames(self, name):
-        if name not in self.titles:
-            # SAFE! You can add and return
-            finalname = name
-            self.titles.append(finalname)
-            return finalname
-        elif name[-2] == "_" and int(name[-1]):
-            # if there's already a name with an _1, add a number
-            # TODO: CHeck if sequence already exists!!
-            finalname = str(name[:-1]+str(int(name[-1])+1))
-            self.titles.append(finalname)
-        else:
-            # It's a duplicate! Better
-            # TODO: CHECK SEQUENCES HERE.
-            finalname = str(name + "_" + str(self.titles.count(name)))
-            finalname = self.checkNames(finalname)
-            self.titles.append(finalname)
-        return finalname
-
-    def seqCreate(self, seq):
-        # Input is array [name : seq]
-        print(seq)
-        name = seq[0]
-        name = self.checkNames(name)
-        node = QStandardItem(name)
-        node.setData(seq[1], self.SequenceRole)
-        node.setData(str(self.windex), self.WindowRole)
-        self.windex += 1
-        # TODO: This option allows dropping on a sequence. May consider turning off.
-        node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
-        self.bioModel.appendRow(node)
-
     # UTILITY METHODS
+    def deselectProject(self):
+        self.projectTree.clearSelection()
+        self.lastClickedTree = self.bioTree
+
+    def lastClickedSeq(self):
+        self.bioModel.updateNames(self.titles)
+        self.bioModel.updateLastClicked(self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0]))
+
+    def deselectSeqs(self):
+        self.bioTree.clearSelection()
+        self.lastClickedTree = self.projectTree
+
     def pruneNames(self):
-        # This checks which names are in there and deletes if they were not.
+        """
+        CONNECTS TO SIGNAL
+        This checks which names are in "TITLES" and deletes if they were not.
+        """
         names = []
         pruned = []
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
@@ -371,6 +412,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.memLabel.setText("CPU: " + str(cpu) + " % | RAM: " + str(round(mem, 2)) + " MB")
 
     def DEBUG(self):
+        # STRICTLY FOR TESTING -- FAKE DATA.
         test1 = ['GPI1A', 'MSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDF' +
                  'SKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRP' +
                  'ILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPL' +

@@ -116,6 +116,14 @@ class MDISubWindow(QMdiSubWindow):
         super(MDISubWindow, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self._widget = None
+        # TODO: TAKE OUT EXTRA CLOSE COMMAND IN MDISUBWINDOW
+        # remove extra close command
+        # menu = self.systemMenu()
+        # for action in menu.actions():
+        #    if action.text()=="&Close":
+        #        print("Found")
+        #        menu.actions().remove(action)
+        # self.setSystemMenu(menu)
 
     def setWidget(self, widget):
         self._widget = widget
@@ -284,6 +292,6 @@ class ItemModel(QStandardItemModel):
             sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+2)]
             sub.setWindowTitle(value)
             sub.mdiArea().setActiveSubWindow(sub)
-        except KeyError or AttributeError:
+        except:
             print("Something went wrong!")
         return super(ItemModel, self).setData(index, value, role)

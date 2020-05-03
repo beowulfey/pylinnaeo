@@ -111,7 +111,7 @@
     <addaction name="actionSave"/>
     <addaction name="menuExport"/>
     <addaction name="separator"/>
-    <addaction name="actionClose"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -128,7 +128,7 @@
     <addaction name="separator"/>
     <addaction name="actionToggle_Tabs"/>
     <addaction name="separator"/>
-    <addaction name="actionClose_2"/>
+    <addaction name="actionClose"/>
     <addaction name="actionClose_all"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -142,10 +142,12 @@
    </widget>
    <widget class="QMenu" name="menuActions">
     <property name="title">
-     <string>Actions</string>
+     <string>Tools</string>
     </property>
     <addaction name="actionAlign"/>
     <addaction name="actionNewFolder"/>
+    <addaction name="separator"/>
+    <addaction name="actionDelete"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -225,7 +227,7 @@
     <string>Alignment</string>
    </property>
   </action>
-  <action name="actionClose">
+  <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
    </property>
@@ -288,6 +290,9 @@
    <property name="text">
     <string>Close all</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
+   </property>
   </action>
   <action name="actionCascade">
    <property name="text">
@@ -304,12 +309,9 @@
     <string>Sorry, no help available!</string>
    </property>
   </action>
-  <action name="actionClose_2">
+  <action name="actionClose">
    <property name="text">
     <string>Close</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>
