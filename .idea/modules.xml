@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../sherlock/.idea/sherlock.iml" filepath="$PROJECT_DIR$/../sherlock/.idea/sherlock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/sherlock.iml" filepath="$PROJECT_DIR$/.idea/sherlock.iml" />
     </modules>
   </component>
 </project>

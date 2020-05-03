@@ -260,10 +260,10 @@ class ItemModel(QStandardItemModel):
     dupeName = pyqtSignal()
     nameChanged = pyqtSignal()
 
-    def __init__(self, root, windows, seqTree=False):
+    def __init__(self, windows, seqTree=False):
         super(ItemModel, self).__init__()
         self.lastClickedNode = None
-        self._root = root
+        #self._root = root
         self._windows = windows
         self._titles = []
         self.isSeqs = False
@@ -289,7 +289,7 @@ class ItemModel(QStandardItemModel):
         self.itemFromIndex(index).setText(value)
         self.nameChanged.emit()
         try:
-            sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+2)]
+            sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
             sub.setWindowTitle(value)
             sub.mdiArea().setActiveSubWindow(sub)
         except:

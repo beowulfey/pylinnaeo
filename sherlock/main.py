@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 # Bioscience components
+import copy
+
 import Bio.Seq as Bseq
 from Bio.SeqRecord import SeqRecord
 import Bio.SeqIO as Bseqio
@@ -9,9 +11,9 @@ from clustalo import clustalo
 
 # PyQt components
 from PyQt5.Qt import Qt
-from PyQt5.QtCore import QThreadPool, QTimer
+from PyQt5.QtCore import QThreadPool, QTimer, QDir, QFile, QIODevice, QDataStream
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QShortcut
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QShortcut, QFileDialog
 
 # Internal components
 from classes import views, utilities
@@ -29,6 +31,8 @@ import psutil
 # TODO: Add functionality for combining sequences into new alignments!
 
 
+
+
 class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     """
     Constructor for the Main Window of the Sherlock App
@@ -36,9 +40,14 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     The bulk of the program is located here.
     """
 
-    def __init__(self, *args, **kwargs):
+    _instance = None
+    def __init__(self, opened=None, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         # Initialize UI
+        if self._instance:
+            print("Closing old")
+            print(self.__class___instance)
+            self.__class___instance.close()
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
         # System instants
         self.memLabel = QLabel()  # initiate a label for adding to status bar
@@ -54,22 +63,26 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.windex = -1  # Acts as identifier for tracking alignments (max 2.1 billion)
         self.alignments = {}  # Alignments (stored as { windex : [name, seqs] } )
         self.windows = {}  # Windows (stored as { windex : MDISubWindow } )
-        self.SequenceRole = Qt.UserRole + 1  # Used for storing sequence data in TreeView
-        self.WindowRole = Qt.UserRole + 2  # Stores window ID in TreeView
-        self.bioRoot = QStandardItem("Folder")  # Default root node for top TreeView
-        self.bioModel = views.ItemModel(self.bioRoot,  # BioModel is shown in the top (sequence) TreeView
+        self.nameRole = Qt.UserRole + 1
+        self.SequenceRole = Qt.UserRole + 2  # Used for storing sequence data in TreeView
+        self.WindowRole = Qt.UserRole + 3  # Stores window ID in TreeView
+        self.bioRoot = QStandardItem("FOLDER")
+        self.bioRoot.setData("FOLDER")  # Default root node for top TreeView
+        self.bioModel = views.ItemModel(  # BioModel is shown in the top (sequence) TreeView
                                         self.windows, seqTree=True)
         self.bioTree = views.TreeView()
         self.projectTree = views.TreeView()
-        self.projectRoot = QStandardItem("Folder")  # Default root node for bottom TreeView
-        self.projectModel = views.ItemModel(self.projectRoot,
-                                            self.windows)  # ProjectModel is shown in the bottom (alignment) TreeView
+        self.projectRoot = QStandardItem("Folder").setData("FOLDER")  # Default root node for bottom TreeView
+        self.projectModel = views.ItemModel(self.windows)  # ProjectModel is shown in the bottom (alignment) TreeView
         self.mdiArea = views.MDIArea()  # Create a custom MDIArea
         self.gridLayout_2.addWidget(self.mdiArea)  # Add custom MDI area to the empty space intended to hold it
 
         self.guiInit()  # Additional gui setup goes here.
         self.connectSlots()
         self.DEBUG()
+
+        if opened:
+            self.bioModel = opened
 
     def guiInit(self):
         """ Initialize GUI with default parameters. """
@@ -78,12 +91,12 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.bioTree.setModel(self.bioModel)
         self.bioTree.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.bioModel.appendRow(self.bioRoot)
-        self.bioTree.setExpanded(self.bioRoot.index(), True)
+        self.bioTree.setExpanded(self.bioModel.invisibleRootItem().index(), True)
         self.bioModel.setHorizontalHeaderLabels(["Sequences"])
         self.splitter_2.addWidget(self.projectTree)
         self.projectTree.setModel(self.projectModel)
         self.projectModel.appendRow(self.projectRoot)
-        self.projectTree.setExpanded(self.projectRoot.index(), True)
+        self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
         self.projectModel.setHorizontalHeaderLabels(["Alignments"])
 
         # Status bar setup
@@ -95,6 +108,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def connectSlots(self):
         # Toolbar and MenuBar
         # FILE
+        self.actionNew.triggered.connect(self.newWorkspace)
+        self.actionOpen.triggered.connect(self.openWorkspace)
+        self.actionSave.triggered.connect(self.saveWorkspace)
 
         # EDIT
         self.actionCopy.triggered.connect(self.copyOut)
@@ -123,7 +139,83 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.bioModel.nameChanged.connect(self.pruneNames)
         self.processTimer.timeout.connect(self.updateUsage)
 
+    def instance(self, window):
+        self._instance = window
     # SINGLE-USE SLOTS
+    def newWorkspace(self):
+        # TODO: This does not close the old window, creating a sure-fire memory leak.
+        # TODO: Request save
+        #self.setAttribute(Qt.WA_DeleteOnClose)
+        new = Sherlock(self)
+        new.instance(self)
+        new.show()
+        #self.hide()
+
+    def openWorkspace(self):
+        sel = QFileDialog.getOpenFileName(parent=self, caption="Open Workspace", directory=QDir.homePath(),
+                                          filter="Linnaeo Workspace (*.lno);;Any (*)")
+        filename = sel[0]
+        print(filename)
+        infile = QFile(filename)
+        infile.open(QIODevice.ReadOnly)
+        inF = QDataStream(infile)
+        windows = {}
+        newModel = views.ItemModel(windows, seqTree=True)
+        self.restore_item(newModel.invisibleRootItem(),inF.readUInt32(),inF)
+        #new = Sherlock(self, opened=newModel)
+        infile.close()
+        #new.show()
+
+    def restore_item(self, parent, num_childs, datastream):
+        try:
+            print("Name: ", parent.text())
+            print("DATA1: ", type(parent.data()))
+            print("DATA2: ", type(parent.data(role=self.SequenceRole)))
+            print("DATA3, ", type(parent.data(role=self.WindowRole)))
+            print("Children: ", parent.rowCount())
+        except:
+            print("data not present")
+        for i in range(0, num_childs):
+            child = QStandardItem()
+            child.read(datastream)
+            num_childs = datastream.readUInt32()
+            self.restore_item(child, num_childs, datastream)
+
+    def saveWorkspace(self):
+        sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(), filter="Linnaeo Workspace (*.lno);;Any (*)")
+        filename = sel[0]
+        if filename[-4:] != ".lno":
+            filename=str(filename+".lno")
+        file = QFile(filename)
+        file.open(QIODevice.WriteOnly)
+        out = QDataStream(file)
+        self.save_item(self.bioModel.invisibleRootItem(), out)
+        file.close()
+
+    def save_item(self, parent, datastream):
+        num_childs = parent.rowCount()
+        datastream.writeUInt32(num_childs)
+        try:
+            print("Name: ",parent.text())
+            print("DATA1: ", type(parent.data()))
+            print("DATA2: ", type(parent.data(role=self.SequenceRole)))
+            print("DATA3, ", type(parent.data(role=self.WindowRole)))
+            print("Children: ",parent.rowCount())
+        except:
+            print("data not present")
+        for i in range(0, num_childs):
+            child = parent.child(i)
+            child.write(datastream)
+            num_childs = child.rowCount()
+            datastream.writeUInt32(num_childs)
+            self.save_item(child, datastream)
+
+
+
+
+
+
+
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:
             seqs = []
@@ -139,7 +231,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         elif self.lastClickedTree == self.projectTree:
             self.mainStatus.showMessage("Please use File>Export to save alignments!", msecs=1000)
-
 
     def pasteInto(self):
         # FASTA DETECTION
@@ -172,21 +263,23 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def addFolder(self):
         try:
             node = self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0])
+            new = QStandardItem("New Folder")
+            new.setData("New Folder", role=self.nameRole)
             if not node.data(role=self.WindowRole):
-                node.appendRow(QStandardItem("New Folder"))
+                node.appendRow(new)
             else:
-                self.bioModel.appendRow(QStandardItem("New Folder"))
+                self.bioModel.appendRow(new)
         except IndexError:
             try:
                 node = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
                 if not node.data(role=self.WindowRole):
-                    node.appendRow(QStandardItem("New Folder"))
+                    node.appendRow(new)
                 else:
-                    self.projectModel.appendRow(QStandardItem("New Folder"))
+                    self.projectModel.appendRow(new)
             except IndexError:
                 print("Nothing Selected, using last click")
                 if self.lastClickedTree:
-                    self.lastClickedTree.model().appendRow(QStandardItem("New Folder"))
+                    self.lastClickedTree.model().appendRow(new)
                 else:
                     self.mainStatus.showMessage("Select a location first!", msecs=1000)
 
@@ -478,7 +571,7 @@ def main():
     window = Sherlock()
     window.show()
 
-    sys.exit(app.exec_())
+    app.exec_()
 
 
 if __name__ == '__main__':
