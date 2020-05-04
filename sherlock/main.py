@@ -41,7 +41,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     """
 
     _instance = None
-    def __init__(self, opened=None, *args, **kwargs):
+
+    def __init__(self, *args, opened=None, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         # Initialize UI
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
@@ -65,8 +66,17 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.WindowRole = Qt.UserRole + 3
 
         # Tree stuff
-        self.bioRoot = QStandardItem("Folder")
-        self.bioModel = views.ItemModel(self.windows, seqTree=True)
+        if opened:
+            # For loading a window on File>Open
+            print("Using saved workspace")
+            print(opened)
+            self.bioModel = opened
+        else:
+            self.bioRoot = QStandardItem("Folder")
+            self.bioModel = views.ItemModel(self.windows, seqTree=True)
+            self.bioRoot.setData("Folder")
+            self.bioModel.appendRow(self.bioRoot)
+            self.DEBUG()
         self.bioTree = views.TreeView()
         self.projectTree = views.TreeView()
         self.projectRoot = QStandardItem("Folder")
@@ -79,26 +89,20 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Other functions
         self.guiInit()
         self.connectSlots()
-        self.DEBUG()
-        if opened:
-            # For loading a window on File>Open
-            self.bioModel = opened
 
     def guiInit(self):
         """ Initialize GUI with default parameters. """
         # Tree setup
-        self.bioRoot.setData("Folder")
         self.splitter_2.addWidget(self.bioTree)
         self.bioTree.setModel(self.bioModel)
         self.bioTree.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.bioModel.appendRow(self.bioRoot)
         self.bioTree.setExpanded(self.bioModel.invisibleRootItem().index(), True)
         self.bioModel.setHorizontalHeaderLabels(["Sequences"])
         self.splitter_2.addWidget(self.projectTree)
         self.projectRoot.setData("Folder")
         self.projectTree.setModel(self.projectModel)
         self.projectModel.appendRow(self.projectRoot)
-        self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
+        self.projectTree.setExpanded(self.projectModel.row(0).index(), True)
         self.projectModel.setHorizontalHeaderLabels(["Alignments"])
 
         # Status bar setup
@@ -164,41 +168,42 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         fstream = QDataStream(file)
         windows = {}
         newModel = views.ItemModel(windows, seqTree=True)
-        self.restore_item(newModel.invisibleRootItem(), inF.readUInt32(), inF)
-        #new = Sherlock(self, opened=newModel)
-        infile.close()
-        #new.show()
+        self.restore_item(newModel.invisibleRootItem(), fstream)
+        print("Opening New")
+        new = Sherlock(self, opened=newModel)
+        file.close()
+        new.show()
 
-    def restore_item(self, parent, num_childs, datastream):
-        try:
-            print("Name: ", parent.text())
-            print("DATA1: ", type(parent.data()))
-            print("DATA2: ", type(parent.data(role=self.SequenceRole)))
-            print("DATA3, ", type(parent.data(role=self.WindowRole)))
-            print("Children: ", parent.rowCount())
-        except:
-            print("data not present")
+    def restore_item(self, parent, datastream, num_childs=None):
+        print("Starting restore")
+        if not num_childs:
+            print("First line: reading UInt32")
+            num_childs = datastream.readUInt32()
+            print(num_childs)
         for i in range(0, num_childs):
+            print("Reading node")
             child = QStandardItem()
             child.read(datastream)
-
             parent.appendRow(child)
-            print(child.text())
-            print(child.data())
-
+            #print(child.data(role=Qt.UserRole+1))
+            #print(child.data(role=Qt.UserRole+2))
+            #print(child.data(role=Qt.UserRole+3))
             num_childs = datastream.readUInt32()
-            self.restore_item(child, num_childs, datastream)
+            if num_childs > 0:
+                print("reading children")
+                self.restore_item(child, datastream, num_childs)
 
     def saveWorkspace(self):
         sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(),
                                           filter="Linnaeo Workspace (*.lno);;Any (*)")
         filename = sel[0]
         if filename[-4:] != ".lno":
-            filename=str(filename+".lno")
+            filename = str(filename+".lno")
         file = QFile(filename)
         file.open(QIODevice.WriteOnly)
         out = QDataStream(file)
         print("Root has", self.bioModel.invisibleRootItem().rowCount())
+        out.writeUInt32(self.bioModel.invisibleRootItem().rowCount())
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
             print("NEW NODE!!!")
             print("Text: ", node.text())
@@ -209,6 +214,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             node.write(out)
             out.writeUInt32(node.rowCount())
         print("FINISHED WRITING")
+        file.flush()
         file.close()
 
     def copyOut(self):
@@ -235,25 +241,28 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             seqs = []
             try:
                 clip = str(QApplication.clipboard().text()).splitlines()
-                for line in clip:
-                    if line[0] == ">" and not name:
-                        #self.mainLogger.debug(str(line[:10]))
-                        self.pruneNames()
-                        name = line[:10]
+                if clip[0][0] == ">":
+                    for line in clip:
+                        if line[0] == ">" and not name:
+                            #self.mainLogger.debug(str(line[:10]))
+                            self.pruneNames()
+                            name = line[:10]
 
-                    elif line[0] == ">" and name:
+                        elif line[0] == ">" and name:
 
-                        #self.mainLogger.debug(str(line))
-                        seqs.append([name, "".join(seq)])
-                        self.pruneNames()
-                        name = line[:10]
-                    else:
-                        #self.mainLogger.debug(str(line))
-                        seq.append(line.strip())
-                # TODO: Convert this into SequenceRecord!!
-                seqs.append([name, Bseq.MutableSeq("".join(seq))])
-                for newseq in seqs:
-                    self.seqInit(newseq)
+                            #self.mainLogger.debug(str(line))
+                            seqs.append([name, "".join(seq)])
+                            self.pruneNames()
+                            name = line[:10]
+                        else:
+                            #self.mainLogger.debug(str(line))
+                            seq.append(line.strip())
+                    # TODO: Convert this into SequenceRecord!!
+                    seqs.append([name, Bseq.MutableSeq("".join(seq))])
+                    for newseq in seqs:
+                        self.seqInit(newseq)
+                else:
+                    self.mainStatus.showMessage("Please only paste in FASTA format!", msecs=1000)
             except:
                 self.mainStatus.showMessage("Please only paste in FASTA format!", msecs=1000)
         else:
@@ -288,8 +297,12 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             wid = node.data(role=self.WindowRole)
             try:
                 sub = self.windows[wid]
+                title = sub.windowTitle()
                 self.mainLogger.debug("Deleting node from tree: "+str(sub.windowTitle()))
                 sub.close()
+                print(self.titles)
+                self.titles.remove(title)
+                print(self.titles)
                 self.windows.pop(wid)
                 self.alignments.pop(wid)
                 self.pruneNames()
