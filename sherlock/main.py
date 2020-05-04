@@ -242,7 +242,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                     elif line[0] == ">" and name:
                         print("new seq: ", line)
                         seqs.append([name, "".join(seq)])
-                        self.checkName(name)
+                        name, self.titles = utilities.checkName(name, self.titles)
+                        self.pruneNames()
                         name = line[:10]
                     else:
                         print("line: ", line)
@@ -378,8 +379,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 # compare to previously made sequences and alignments
                 if seqs == value:
                     if len(seqs) == 1:
+                        title, self.titles = utilities.checkName(title, self.titles)
+                        self.pruneNames()
                         self.openWindow(windowID=key, title=title)
-                        self.checkName(title)
                         self.bioModel.updateNames(self.titles)
                     else:
                         self.openWindow(windowID=key)
@@ -399,7 +401,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Input is array [name : seq]
         print(seq)
         name = seq[0]
-        name = self.checkName(name)
+        name, self.titles = utilities.checkName(name, self.titles)
+        self.pruneNames()
         node = QStandardItem(name)
         node.setData(name)
         print(node.data(role=Qt.DisplayRole))
@@ -413,28 +416,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         self.bioModel.appendRow(node)
 
-    def checkName(self, name):
-        # Called upon sequence creation.
-        # TODO: I NEEDED TO ADD THIS SOMEWHERE???
-        # Look for ifs in TITLES!
-        if name not in self.titles:
-            # SAFE! You can add and return
-            finalname = name
-            self.titles.append(finalname)
-            return finalname
-        elif name[-2] == "_" and int(name[-1]):
-            # if there's already a name with an _1, add a number
-            # TODO: CHeck if sequence already exists!!
-            finalname = str(name[:-1] + str(int(name[-1]) + 1))
-            self.titles.append(finalname)
-        else:
-            # It's a duplicate! Better
-            # TODO: CHECK SEQUENCES HERE.
-            finalname = str(name + "_" + str(self.titles.count(name)))
-            finalname = self.checkName(finalname)
-            self.titles.append(finalname)
-        return finalname
-
     def makeNewWindow(self, ali, windowID):
         sub = views.MDISubWindow()
         widget = views.AlignSubWindow(ali)
@@ -447,7 +428,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.projectModel.updateWindows(self.windows)
         else:
             sub.setWindowTitle(list(ali.keys())[0])
-            self.checkName(list(ali.keys())[0])
+            # self.name, self.titles = self.checkName(list(ali.keys())[0], self.titles)
             self.windows[windowID] = sub
             self.bioModel.updateNames(self.titles)
             self.bioModel.updateWindows(self.windows)

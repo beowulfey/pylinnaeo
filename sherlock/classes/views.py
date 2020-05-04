@@ -9,6 +9,8 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from ui import alignment_ui
 import textwrap as tw
 
+from sherlock.classes import utilities
+
 
 class TreeView(QTreeView):
     generalClick = pyqtSignal()
@@ -283,13 +285,15 @@ class ItemModel(QStandardItemModel):
         self.modelLogger.debug("Updating data for node")
         if self.isSeqs:
             self.modelLogger.debug("Sequence node; checking name!")
-            self.nameChanging.emit()
+            #self.nameChanging.emit()
             # Only do this check if this is coming from the top Tree and is not a folder
-            if value in self._titles and value != self.lastClickedNode.text():
-                self.modelLogger.debug("Item duplicates a different node! "+str(value)+" in "+str(self._titles))
-                self.dupeName.emit()
-                value = value + "_" + str(self._titles.count(value))
-                self.modelLogger.debug("Name changed to "+str(value))
+            if value != self.lastClickedNode.text():
+                newvalue, self._titles = utilities.checkName(value, self._titles)
+                if newvalue != value:
+                    self.modelLogger.debug("Item duplicates a different node! "+str(value)+" in "+str(self._titles))
+                    value = newvalue
+                    self.dupeName.emit()
+                    self.modelLogger.debug("Name changed to "+str(value))
         self.modelLogger.debug("Setting node text to "+str(value))
         self.itemFromIndex(index).setData(value)
         self.itemFromIndex(index).setText(value)

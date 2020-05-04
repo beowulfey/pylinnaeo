@@ -9,6 +9,31 @@ Additional classes and functions that are used within Sherlock, but are not resp
 """
 
 
+def checkName(name, titles, layer=0):
+    """ Tool for checking a title list. Used for generating new titles if duplicate"""
+    print(name)
+    print(titles)
+    if name not in titles:
+        print("SAFE!")
+        # SAFE! You can add and return
+        finalname = name
+        titles.append(finalname)
+    elif name[-2] == "_" and int(name[-1]):
+        print("ADDING NUMBER")
+        # if there's already a name with an _1, add a number
+        finalname = str(name[:-1] + str(int(name[-1]) + 1))
+        titles.append(finalname)
+    else:
+        print("IS DUPLICATE! Check new name")
+        # It's a duplicate! Better
+        finalname = str(name + "_" + str(titles.count(name)))
+        newlayer = layer + 1
+        # Run the check again with the new name
+        finalname, titles = checkName(finalname, titles, layer=newlayer)
+        titles.append(finalname)
+    return finalname, titles
+
+
 def iterTreeView(root):
     """
     Internal function for iterating a TreeModel.
