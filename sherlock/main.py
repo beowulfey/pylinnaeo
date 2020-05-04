@@ -237,24 +237,25 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 clip = str(QApplication.clipboard().text()).splitlines()
                 for line in clip:
                     if line[0] == ">" and not name:
-                        print("name: ", line[:10])
+                        #self.mainLogger.debug(str(line[:10]))
                         name = line[:10]
                     elif line[0] == ">" and name:
-                        print("new seq: ", line)
+                        #self.mainLogger.debug(str(line))
                         seqs.append([name, "".join(seq)])
                         name, self.titles = utilities.checkName(name, self.titles)
-                        self.pruneNames()
+                        #self.pruneNames()
                         name = line[:10]
                     else:
-                        print("line: ", line)
+                        #self.mainLogger.debug(str(line))
                         seq.append(line.strip())
-                seqs.append([name, "".join(seq)])
+                # TODO: Convert this into SequenceRecord!!
+                seqs.append([name, Bseq.MutableSeq("".join(seq))])
                 for newseq in seqs:
                     self.seqInit(newseq)
             except:
                 self.mainStatus.showMessage("Please only paste in FASTA format!", msecs=1000)
-            else:
-                self.mainStatus.showMessage("Please choose paste destination", msecs=1000)
+        else:
+            self.mainStatus.showMessage("Please choose paste destination", msecs=1000)
 
     def addFolder(self):
         new = QStandardItem("New Folder")
@@ -285,7 +286,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             wid = node.data(role=self.WindowRole)
             try:
                 sub = self.windows[wid]
-                self.mainLogger.debug("Deleting node from tree: "+str(sub.text()))
+                self.mainLogger.debug("Deleting node from tree: "+str(sub.windowTitle()))
                 sub.close()
                 self.windows.pop(wid)
                 self.alignments.pop(wid)
@@ -311,6 +312,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.mdiArea.cascadeSubWindows()
 
     def closeTab(self):
+        """ This duplicates inherent functionality of QMDISubWindow, so I can't add shortcut to menu"""
         try:
             self.mdiArea.activeSubWindow().close()
         except AttributeError:

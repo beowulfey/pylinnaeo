@@ -11,21 +11,34 @@ Additional classes and functions that are used within Sherlock, but are not resp
 
 def checkName(name, titles, layer=0):
     """ Tool for checking a title list. Used for generating new titles if duplicate"""
+    print("\nBEGIN CHECK-- Layer ", layer)
+    print("Searching in", titles)
     if name not in titles:
         # SAFE! You can add and return
+        print("Final:",name)
         finalname = name
-        titles.append(finalname)
     elif name[-2] == "_" and int(name[-1]):
         # if there's already a name with an _1, add a number
-        finalname = str(name[:-1] + str(int(name[-1]) + 1))
-        titles.append(finalname)
+        newlayer = layer+1
+        newname = str(name[:-1] + str(newlayer))
+        print("Trying: ",newname)
+        finalname, titles = checkName(newname, titles, layer=newlayer)
+        if layer > 0:
+            print("returning")
+            return finalname, titles
     else:
         # It's a duplicate! Better
-        finalname = str(name + "_" + str(titles.count(name)))
+        print("Dupe found: [", name, "] Descending")
         newlayer = layer + 1
+        newname = str(name + "_" + str(newlayer))
+        print("Trying ", newname)
         # Run the check again with the new name
-        finalname, titles = checkName(finalname, titles, layer=newlayer)
+        finalname, titles = checkName(newname, titles, layer=newlayer)
+        if layer > 0:
+            return finalname, titles
+    if layer == 0:
         titles.append(finalname)
+        print("Appended: ",titles, "\n")
     return finalname, titles
 
 
