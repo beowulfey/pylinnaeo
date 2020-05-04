@@ -238,12 +238,14 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 for line in clip:
                     if line[0] == ">" and not name:
                         #self.mainLogger.debug(str(line[:10]))
+                        self.pruneNames()
                         name = line[:10]
+
                     elif line[0] == ">" and name:
+
                         #self.mainLogger.debug(str(line))
                         seqs.append([name, "".join(seq)])
-                        name, self.titles = utilities.checkName(name, self.titles)
-                        #self.pruneNames()
+                        self.pruneNames()
                         name = line[:10]
                     else:
                         #self.mainLogger.debug(str(line))
