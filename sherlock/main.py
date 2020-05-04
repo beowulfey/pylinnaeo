@@ -402,17 +402,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         print(seq)
         name = seq[0]
         name, self.titles = utilities.checkName(name, self.titles)
-        self.pruneNames()
         node = QStandardItem(name)
         node.setData(name)
-        print(node.data(role=Qt.DisplayRole))
-        print(node.data(role=Qt.UserRole + 1))
         node.setData(seq[1], self.SequenceRole)
-        #node.setData(str(self.windex), self.WindowRole)
-        print(node.data(role=Qt.UserRole + 2))
-        print(node.data(role=Qt.UserRole + 3))
-        #self.windex += 1
-        # TODO: This option allows dropping on a sequence. May consider turning off.
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         self.bioModel.appendRow(node)
 
@@ -493,11 +485,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         for title in self.titles:
             if title not in names:
                 pruned.append(title)
-        self.mainLogger.debug("Detected names: " + str(names))
-        self.mainLogger.debug("Stored titles: " + str(self.titles))
+        self.mainLogger.debug("Tree names: "+str(names)+" vs. Stored names: "+str(self.titles))
         self.titles = [x for x in self.titles and names if x not in pruned]
-        self.mainLogger.debug("Removed the following names: " + str(pruned))
-        self.mainLogger.debug("Now storing " + str(self.titles))
+        self.mainLogger.debug("Removed "+str(pruned)+", leaving "+str(self.titles))
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown"""
