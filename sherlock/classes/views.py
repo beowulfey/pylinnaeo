@@ -6,7 +6,7 @@ from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView
 from PyQt5.QtCore import Qt, pyqtSignal
 
-from ui import alignment_ui
+from sherlock.ui import alignment_ui
 import textwrap as tw
 
 from sherlock.classes import utilities
