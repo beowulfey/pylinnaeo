@@ -1,3 +1,4 @@
+import logging
 import sys
 import traceback
 from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, pyqtSlot, QThread
@@ -30,11 +31,12 @@ class AlignThread(QThread):
     error = pyqtSignal(tuple)
 
     def __init__(self, *args, **kwargs):
+        self.clustalLogger = logging.getLogger("ClustalO")
         QThread.__init__(self)
         self.args = args
         self.kwargs = kwargs
         self.aligned = {}
-        print("Thread created")
+        #self.clustalLogger.debug("Thread for ClustalO created")
 
     def run(self):
         try:
@@ -45,6 +47,6 @@ class AlignThread(QThread):
             self.error.emit((exctype, value, traceback.format_exc()))
         else:
             self.aligned = result
-            print(self.aligned)
+            self.clustalLogger.debug("ClustalO thread returned alignment successfully")
 
 

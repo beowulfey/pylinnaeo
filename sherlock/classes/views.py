@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import logging
+import sys
 
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView
@@ -87,7 +89,6 @@ class MDIArea(QMdiArea):
         window.show()
         self.setActiveSubWindow(window)
 
-
     def setActiveSubWindow(self, window):
         if self.tabbed:
             titles = []
@@ -138,12 +139,10 @@ class MDISubWindow(QMdiSubWindow):
 
     def closeEvent(self, event):
         self.mdiArea().removeSubWindow(self)
-        print("Tab Removed")
         self.close()
         return super(MDISubWindow, self).closeEvent(event)
 
     def close(self):
-        print("Closed tab")
         super(MDISubWindow, self).close()
 
 
@@ -256,12 +255,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
 
 class ItemModel(QStandardItemModel):
-    nameCheck = pyqtSignal()
+    nameChanging = pyqtSignal()
     dupeName = pyqtSignal()
     nameChanged = pyqtSignal()
 
     def __init__(self, windows, seqTree=False):
         super(ItemModel, self).__init__()
+        self.modelLogger = logging.getLogger("ItemModel")
         self.lastClickedNode = None
         #self._root = root
         self._windows = windows
@@ -271,21 +271,27 @@ class ItemModel(QStandardItemModel):
             self.isSeqs = True
 
     def updateLastClicked(self, node):
-        print("detected click")
         self.lastClickedNode = node
 
     def updateNames(self, titles):
         self._titles = titles
 
-    def setData(self, index, value, role=Qt.EditRole):
+    def updateWindows(self, windows):
+        self._windows = windows
+
+    def setData(self, index, value, role=Qt.UserRole+1):
+        self.modelLogger.debug("Updating data for node")
         if self.isSeqs:
-            print("Checking prior names")
-            #self.nameCheck.emit()
+            self.modelLogger.debug("Sequence node; checking name!")
+            self.nameChanging.emit()
             # Only do this check if this is coming from the top Tree and is not a folder
             if value in self._titles and value != self.lastClickedNode.text():
-                print("Duplicate name")
+                self.modelLogger.debug("Item duplicates a different node! "+str(value)+" in "+str(self._titles))
                 self.dupeName.emit()
                 value = value + "_" + str(self._titles.count(value))
+                self.modelLogger.debug("Name changed to "+str(value))
+        self.modelLogger.debug("Setting node text to "+str(value))
+        self.itemFromIndex(index).setData(value)
         self.itemFromIndex(index).setText(value)
         self.nameChanged.emit()
         try:
@@ -293,5 +299,7 @@ class ItemModel(QStandardItemModel):
             sub.setWindowTitle(value)
             sub.mdiArea().setActiveSubWindow(sub)
         except:
-            print("Something went wrong!")
-        return super(ItemModel, self).setData(index, value, role)
+            exctype, val = sys.exc_info()[:2]
+            self.modelLogger.debug("Detected exception, but probably fine: "+str(exctype))
+        finally:
+            return super(ItemModel, self).setData(index, value, role)
