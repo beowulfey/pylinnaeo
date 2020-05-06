@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 # Bioscience components
-
 import logging
 import os
 import sys
