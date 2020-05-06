@@ -8,7 +8,7 @@ import Bio.Seq as Bseq
 from Bio.SeqRecord import SeqRecord
 import Bio.SeqIO as Bseqio
 from Bio.Alphabet import generic_protein
-from clustalo import clustalo
+#from clustalo import clustalo
 
 # PyQt components
 from PyQt5.Qt import Qt
@@ -676,6 +676,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
 
 def main():
+    print(sherlock.__file__)
     logging.basicConfig(level=logging.DEBUG)  # , format="%(asctime)s:%(levelname)s:%(message)s")
     app = QApplication(sys.argv)
 
