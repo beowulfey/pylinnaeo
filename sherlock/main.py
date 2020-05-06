@@ -57,11 +57,15 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.threadpool = QThreadPool()
         self.mainLogger.info("Threading with a maximum of %d threads" % self.threadpool.maxThreadCount())
 
-        # Project instants; inherent variables for logic.
+        # Project instants and inherent variables for logic.
         self.lastClickedTree = None
         self.lastAlignment = {}
         self.SequenceRole = Qt.UserRole + 2
         self.WindowRole = Qt.UserRole + 3
+        self.windows = {}  # Windows stored as { windex : MDISubWindow }
+        self.windex = 0  # Acts as identifier for tracking alignments (max 2.1 billion)
+        self.sequences = {}  # Stored as {WindowID:[SeqRecord(s)] }
+        self.titles = []  # maintains a list of sequence titles to confirm uniqueness
 
         # MDI Window
         self.mdiArea = views.MDIArea()
@@ -70,28 +74,24 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Tree stuff
         self.bioTree = views.TreeView()
         self.projectTree = views.TreeView()
-        self.windows = {}  # Windows stored as { windex : MDISubWindow }
-        self.windex = 0  # Acts as identifier for tracking alignments (max 2.1 billion)
 
         if trees:
             # For loading a window on File>Open
             print("Using saved workspace")
             self.bioModel, self.projectModel = trees
-            self.sequences, self.windex, self.alignments = data
-            self.bioRoot = self.bioModel.invisibleRootItem().child(0)
+            self.sequences, self.titles, self.windex = data
+            self.windex = int(self.windex)
+            self.bioRoot = self.bioModel.invisibleRootItem().child(0)  # TODO: ELIMINATE USE OF ROOT. Use InvsRoot
             self.projectRoot = self.projectModel.invisibleRootItem().child(0)
+            self.bioTree.setModel(self.bioModel)
+            self.projectTree.setModel(self.projectModel)
             self.windows = {}
-            self.sequences = {}
-            self.titles = self.sequences.keys()
             self.rebuildTrees()
-            print("TITLES: ", str(self.titles))
-            print("ALIGNS: ", str(self.alignments))
-            print("WINDEX: ", str(self.windex))
+            print("SEQS: ", self.sequences)
+            print("TITLES: ", self.titles)
+            print("WINDEX: ", self.windex)
 
         else:
-            self.sequences = {}  # Stored as {WindowID:SeqRecord (or [SeqRecords]) }
-            self.alignments = {}  # Alignments (stored as { windex : [name, seqs] } )
-            self.titles = []  # maintains a list of sequence titles to confirm uniqueness
             self.bioRoot = QStandardItem("Folder")
             self.bioModel = views.ItemModel(self.windows, seqTree=True)
             self.bioRoot.setData("Folder")
@@ -105,32 +105,40 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.guiInit()
         self.connectSlots()
 
-    # TODO: I need to make it so SEQUENCES ARE SAVED
-    # TODO: I need to then make it so I REBUILD THE ALIGNMENT using that data
-    # That way, I can save exactly which alignment has which baseline s equences.
-    # May require some SIGNIFICANT RESTRUCTURING.
-
     def rebuildTrees(self):
-        seqs = []
-        for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
-            ali = node.data(role=self.SequenceRole)
-            #self.windex = self.windex + 1
-            #wid = self.windex
-            #node.setData(wid, role=self.WindowRole)
-            for key, value in self.alignments.items():
-                if value == ali:
-                    node.setData(key, role=self.WindowRole)
-                    self.windex = int(node.data(role=self.WindowRole))+1
-                    print("NEW WINDEX: ", self.windex)
+        """
+        At this point, the sequences and the alignments both have Window IDs applied -- but the windows
+        no longer exist. Need to make sure when regenerating the windows, the old windowIDs are not lost.
+        """
+        for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+            if node.data(role=self.SequenceRole):
+                print(node.data())
+                ali = {}  # empty dict needed to send to open window
+                wid = node.data(role=self.WindowRole)
+                seqr = node.data(role=self.SequenceRole)[0]
+                ali[seqr.sName()] = str(seqr.seq)
+                self.makeNewWindow(wid, ali, nonode=True)
+                self.bioTree.setExpanded(self.bioModel.indexFromItem(node), True)
+                #self.windows[wid] = sub
+                #self.openWindow(sub)
 
-                worker = utilities.AlignThread(seqs, num_threads=self.threadpool.maxThreadCount())
-                worker.start()
-                worker.wait()
-                ali = worker.aligned
-                self.makeNewWindow(ali, node.data(role=self.WindowRole), node)
-                self.mdiArea.closeAllSubWindows()
-        #for node in nodes:
-        #    self.projectModel.removeRow(node.index().row(), node.index().parent())
+        for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+            if node.data(role=self.SequenceRole):
+                print(node.data())
+                seqs = {}
+                wid = node.data(role=self.WindowRole)
+                seqr = node.data(role=self.SequenceRole)
+                for seq in seqr:
+                    seqs[seq.sName()] = str(seq.seq)
+                    worker = utilities.AlignThread(seqs, num_threads=self.threadpool.maxThreadCount())
+                    worker.start()
+                    worker.wait()
+                    ali = worker.aligned
+                    self.makeNewWindow(wid, ali, nonode=True)
+                    #self.windows[wid] = sub
+                    #self.openWindow(sub)
+                self.projectTree.setExpanded(self.projectModel.indexFromItem(node), True)
+        print(self.windows)
 
     def queryTrees(self):
         print("BIOROOT")
@@ -212,29 +220,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         new.show()
         self.hide()
 
-    def openWorkspace(self):
-        sel = QFileDialog.getOpenFileName(parent=self, caption="Open Workspace", directory=QDir.homePath(),
-                                          filter="Linnaeo Workspace (*.lno);;Any (*)")
-        filename = sel[0]
-        self.mainLogger.debug("Opening file: "+str(filename))
-        file = QFile(filename)
-        file.open(QIODevice.ReadOnly)
-        fstream = QDataStream(file)
-        titles = fstream.readQVariantList()
-        windex = fstream.readUInt32()
-        windows = {}
-        aligns = fstream.readQVariantHash()
-        newModel = views.ItemModel(windows, seqTree=True)
-        newProjectModel = views.ItemModel(windows)
-        self.restore_item(newModel.invisibleRootItem(), fstream)
-        self.restore_item(newProjectModel.invisibleRootItem(), fstream)
-        new = Sherlock(self, trees=[newModel, newProjectModel], data=[titles, windex, aligns])
-        file.close()
-        new.show()
-        self.hide()
-
-    def restore_item(self, parent, datastream, num_childs=None):
-        print("Starting restore")
+    def restore_tree(self, parent, datastream, num_childs=None):
         if not num_childs:
             print("First line: reading UInt32")
             num_childs = datastream.readUInt32()
@@ -250,7 +236,32 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             num_childs = datastream.readUInt32()
             if num_childs > 0:
                 print("reading children")
-                self.restore_item(child, datastream, num_childs)
+                self.restore_tree(child, datastream, num_childs)
+
+    def openWorkspace(self):
+        sel = QFileDialog.getOpenFileName(parent=self, caption="Open Workspace", directory=QDir.homePath(),
+                                          filter="Linnaeo Workspace (*.lno);;Any (*)")
+        filename = sel[0]
+        self.mainLogger.debug("Opening file: "+str(filename))
+        file = QFile(filename)
+        file.open(QIODevice.ReadOnly)
+        fstream = QDataStream(file)
+        print("Starting restore")
+        sequences = fstream.readQVariantHash()
+        print("Sequences: ",sequences)
+        titles = fstream.readQVariantList()
+        print("Titles: ", titles)
+        windex = fstream.readUInt32()
+        print("Windex: ", windex)
+        windows = {}
+        newBModel = views.ItemModel(windows, seqTree=True)
+        newPModel = views.ItemModel(windows)
+        self.restore_tree(newBModel.invisibleRootItem(), fstream)
+        self.restore_tree(newPModel.invisibleRootItem(), fstream)
+        new = Sherlock(self, trees=[newBModel, newPModel], data=[sequences, titles, windex])
+        file.close()
+        new.show()
+        self.hide()
 
     def saveWorkspace(self):
         sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(),
@@ -261,18 +272,36 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         file = QFile(filename)
         file.open(QIODevice.WriteOnly)
         out = QDataStream(file)
-
         self.mainLogger.debug("Beginning file save")
+        print("TREE DATA")
+        self.queryTrees()
+        print("Writing Sequences, Titles, Windex")
+        print(self.sequences)
+        print(self.titles)
+        print(type(self.windex), self.windex)
+        out.writeQVariantHash(self.sequences)
         out.writeQVariantList(self.titles)
         out.writeUInt32(self.windex)
-        out.writeQVariantHash(self.alignments)
         #####################################
         # Sequence View
         ###
+        print("SEQUENCE TREE")
+        print("Invs.Root Children: ",self.bioModel.invisibleRootItem().rowCount())
         out.writeUInt32(self.bioModel.invisibleRootItem().rowCount())
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+            print("Text: ", str(node.text()))
+            print("Data1: ", str(node.data()))
+            print("Data2: ", str(node.data(role=self.SequenceRole)))
+            print("Data3: ", str(node.data(role=self.WindowRole)))
             node.write(out)
             out.writeUInt32(node.rowCount())
+        #####################################
+        # Alignment View
+        # Does not save any metadata! Only the two sequences
+        # So I can't save window options at the moment.
+        # TODO: Consider adding "window modes" to the node.
+        print("ALIGNMENT TREE")
+        print("Invs.Root Children: ", self.bioModel.invisibleRootItem().rowCount())
         out.writeUInt32(self.projectModel.invisibleRootItem().rowCount())
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             print("Text: ", str(node.text()))
@@ -282,9 +311,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             node.write(out)
             out.writeUInt32(node.rowCount())
         self.mainLogger.debug("Save complete")
-        #####################################
-        # Alignment View
-        # Does not save any metadata! Only the two sequences
         file.flush()
         file.close()
 
@@ -297,9 +323,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 seqs.append(SeqRecord(node.data(role=self.SequenceRole), id=node.text()).format("fasta"))
             QApplication.clipboard().setText("".join(seqs))
             if len(seqs) > 1:
-                self.mainStatus.showMessage("Copied sequences to clipobard!", msecs=1000)
+                self.mainStatus.showMessage("Copied sequences to clipboard!", msecs=1000)
             elif len(seqs) == 1:
-                self.mainStatus.showMessage("Copied sequence to clipobard!", msecs=1000)
+                self.mainStatus.showMessage("Copied sequence to clipboard!", msecs=1000)
 
         elif self.lastClickedTree == self.projectTree:
             self.mainStatus.showMessage("Please use File>Export to save alignments!", msecs=1000)
@@ -311,7 +337,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             seq = []
             seqs = []
             try:
-                clip = str(QApplication.clipboard().text()).splitlines()
+                clip = QApplication.clipboard().text()
+                print(clip)
+
                 if clip[0][0] == ">":
                     for line in clip:
                         if line[0] == ">" and not name:
@@ -441,7 +469,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             # Only does the thing if there is a sequence present in the node.
             if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
                 seqr = self.bioModel.itemFromIndex(index).data(role=self.SequenceRole)[0]
-                items[seqr.id] = str(seqr.seq)
+                items[seqr.sName()] = str(seqr.seq)
                 combo.append(seqr)
         combo.sort()
         aligned = self.callAlign(items)
@@ -459,11 +487,15 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                             self.openWindow(sub)
                         except KeyError:
                             print("Opening new window")
-                            self.makeNewWindow(wid, aligned)
+                            sub = self.makeNewWindow(wid, aligned)
+                            self.openWindow(sub)
             else:
-                wid = self.windex + 1
+                wid = str(int(self.windex) + 1)
                 self.sequences[wid] = combo
-                self.makeNewWindow(wid, aligned)
+                sub = self.makeNewWindow(wid, aligned)
+                self.openWindow(sub)
+                self.windex = self.windex + 1
+
 
     def alignmentDbClick(self):
         # Checks if not a folder first, then:
@@ -478,48 +510,55 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
     # MAIN METHODS
     def seqInit(self, seqr):
-        # Input is SeqRecord. Give it a unique WID and add to list of all SEQs.
-        wid = self.windex + 1
-        sid = seqr.id
+        """
+        Input is SeqRecord.
+        Assigns a unique WID and adds to list of all Seqs.
+        Creates a node with the SeqName as the title and adds to the Sequence Tree
+        """
+        wid = str(int(self.windex) + 1)
+        sname = seqr.sName()
         # Check if title already exists, and if so, changes it.
-        sid, self.titles = utilities.checkName(sid, self.titles)
-        if sid != seqr.id:
-            seqr.id = sid
-        print("SEQ INIT: ", sid)
+        sname, self.titles = utilities.checkName(sname, self.titles)
+        if sname != seqr.sName():
+            seqr.setSeqName(sname)
+        print("SEQ INIT: ", sname)
         print("Updated titles: ", self.titles)
         # Adds to the list of sequences, by its Window ID
         self.sequences[wid] = [seqr]
         print("Updated sequences: \n", self.sequences)
-        node = QStandardItem(sid)
-        node.setData(sid)
+        node = QStandardItem(sname)
         node.setData([seqr], self.SequenceRole)
+        node.setData(node.data(role=self.SequenceRole)[0].sName())
         node.setData(wid, self.WindowRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         self.bioModel.appendRow(node)
-        self.windex = wid
+        self.windex = int(wid)
 
-    def makeNewWindow(self, wid, ali):
-        print(ali)
+    def makeNewWindow(self, wid, ali, nonode=False):
+        print("MAKING NEW WINDOW")
+        print("ALIGNMENT: ", ali)
         sub = views.MDISubWindow()
         widget = views.AlignSubWindow(ali)
         sub.setWidget(widget)
-        print(sub)
         if len(ali.keys()) > 1:
-            node = QStandardItem(sub.windowTitle())
-            node.setData(sub.windowTitle())
-            node.setData(self.sequences[wid], self.SequenceRole)
-            node.setData(wid, self.WindowRole)
-            self.projectRoot.appendRow(node)
-            self.projectTree.setExpanded(node.parent().index(), True)
-            self.windows[wid] = sub
-            self.projectModel.updateWindows(self.windows)
+            if nonode:
+                self.windows[wid] = sub
+            else:
+                node = QStandardItem(sub.windowTitle())
+                node.setData(sub.windowTitle())
+                node.setData(self.sequences[wid], self.SequenceRole)
+                node.setData(wid, self.WindowRole)
+                self.projectRoot.appendRow(node)
+                self.projectTree.setExpanded(node.parent().index(), True)
+                self.windows[wid] = sub
+                self.projectModel.updateWindows(self.windows)
         else:
             seq = self.sequences[wid][0]
-            sub.setWindowTitle(seq.id)
+            sub.setWindowTitle(seq.sName())
             self.windows[wid] = sub
             self.bioModel.updateNames(self.titles)
             self.bioModel.updateWindows(self.windows)
-        self.openWindow(sub)
+        return sub
 
     def openWindow(self, sub):
         """
@@ -599,7 +638,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                  'AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH' +
                  'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1A = Bseq.MutableSeq(test1[1], generic_protein)
-        gpi1a = models.SeqR(seq_GPI1A, id=test1[0])
+        gpi1a = models.SeqR(seq_GPI1A, test1[0])
         test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE' +
                  'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG' +
                  'VEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKE' +
@@ -612,7 +651,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                  'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL' +
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
-        gpi1b = models.SeqR(seq_GPI1B, id=test2[0])
+        gpi1b = models.SeqR(seq_GPI1B, test2[0])
         test = [gpi1a, gpi1b]
         for i in test:
             self.seqInit(i)

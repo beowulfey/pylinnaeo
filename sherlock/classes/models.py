@@ -6,6 +6,7 @@ from Bio import SeqRecord
 class SeqR(SeqRecord.SeqRecord, ABC):
     def __init__(self,
                  seq,
+                 sname,
                  id="<unknown id>",
                  name="<unknown name>",
                  description="<unknown description>",
@@ -16,6 +17,13 @@ class SeqR(SeqRecord.SeqRecord, ABC):
                  ):
         super(SeqR, self).__init__(seq, id, name, description,
                                    dbxrefs, features, annotations, letter_annotations)
+        self._sname = sname
+
+    def sName(self):
+        return self._sname
+
+    def setSeqName(self, name):
+        self._sname = name
 
     def __lt__(self, other):
         """Define the less-than operand."""
