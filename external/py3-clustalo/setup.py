@@ -18,9 +18,13 @@ module = Extension('clustalo',
                    library_dirs=['./clustalo/lib'],
                    extra_compile_args=extra_compile_args)
 
-setup(name='clustalo',
+setup(name='py3-clustalo',
       version='0.2.0',
       description='Python3 wrapper around libclustalo',
       author='Aaron Wolfe',
+      email='wolfe.aarond@gmail.com',
       url='https://github.com/beowulfey/clustalo-python3',
-      ext_modules=[module])
+      packages=setuptools.find_packages(),
+      ext_modules=[module],
+      python_requires='>=3.8'
+      )

@@ -1,0 +1,8 @@
+MANIFEST.in
+README.rst
+clustalo.c
+setup.py
+py3_clustalo.egg-info/PKG-INFO
+py3_clustalo.egg-info/SOURCES.txt
+py3_clustalo.egg-info/dependency_links.txt
+py3_clustalo.egg-info/top_level.txt

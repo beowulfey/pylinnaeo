@@ -1,0 +1,23 @@
+package:
+  name: "linnaeo"
+  version: "v0.1.0"
+
+source:
+  git_url: "https://github.com/beowulfey/linnaeo.git"
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+    - pyqt5
+    - clustalo
+
+test:
+  imports:
+    -
+
+about:
+  home:
