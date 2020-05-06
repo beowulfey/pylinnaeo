@@ -26,14 +26,6 @@ import logging
 import psutil
 
 
-# TODO: #1 Fix issues with renaming sequences: trying to make it so they cannot be duplicated
-# TODO: Add functionality for removing sequences and alignments (from the dicts too)
-# TODO: Add functionality for saving workspace.
-# TODO: Add functionality for combining sequences into new alignments!
-
-
-
-
 class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     """
     Constructor for the Main Window of the Sherlock App
@@ -47,6 +39,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
 
         super(self.__class__, self).__init__(*args)
         # Initialize UI
+        self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
 
         # System instants; status bar and threads
@@ -87,6 +80,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.projectTree.setModel(self.projectModel)
             self.windows = {}
             self.rebuildTrees()
+            # TODO: Figure out why tree is not expanding!
             print("SEQS: ", self.sequences)
             print("TITLES: ", self.titles)
             print("WINDEX: ", self.windex)
@@ -104,6 +98,9 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         # Other functions
         self.guiInit()
         self.connectSlots()
+        if self._instance:
+            print("Deleting old")
+            self.cleanInstance()
 
     def rebuildTrees(self):
         """
@@ -119,8 +116,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                 ali[seqr.sName()] = str(seqr.seq)
                 self.makeNewWindow(wid, ali, nonode=True)
                 self.bioTree.setExpanded(self.bioModel.indexFromItem(node), True)
-                #self.windows[wid] = sub
-                #self.openWindow(sub)
 
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             if node.data(role=self.SequenceRole):
@@ -135,8 +130,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                     worker.wait()
                     ali = worker.aligned
                     self.makeNewWindow(wid, ali, nonode=True)
-                    #self.windows[wid] = sub
-                    #self.openWindow(sub)
                 self.projectTree.setExpanded(self.projectModel.indexFromItem(node), True)
         print(self.windows)
 
@@ -214,11 +207,10 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def newWorkspace(self):
         # TODO: This does not close the old window, creating a sure-fire memory leak.
         # TODO: Request save
-        self.setAttribute(Qt.WA_DeleteOnClose)
+        #self.setAttribute(Qt.WA_DeleteOnClose)
         new = Sherlock(self)
         new.instance(self)
         new.show()
-        self.hide()
 
     def restore_tree(self, parent, datastream, num_childs=None):
         if not num_childs:
@@ -575,10 +567,18 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             self.mdiArea.setActiveSubWindow(sub)
 
     # UTILITY METHODS
+    def closeEvent(self, event):
+        print("Closing this window")
+        self.deleteLater()
+
     def instance(self, window):
         """Saves instance upon loading a new window"""
         # TODO: DEBUG THIS PROCESS!
         self._instance = window
+
+    def cleanInstance(self):
+        self._instance.close()
+
 
     def lastClickedSeq(self):
         """Records the last clicked sequence, for copying/pasting etc"""
@@ -692,7 +692,7 @@ def main():
     window = Sherlock()
     window.show()
 
-    app.exec_()
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
