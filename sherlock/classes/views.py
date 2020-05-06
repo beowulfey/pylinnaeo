@@ -2,6 +2,7 @@
 import logging
 import sys
 
+import Bio
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView
 from PyQt5.QtCore import Qt, pyqtSignal
@@ -154,13 +155,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
     resized = pyqtSignal()
 
-    def __init__(self, sequences):
+    def __init__(self, seqs):
         super(self.__class__, self).__init__()
         self.setupUi(self)
-        self._seqs = sequences
+        print(type(seqs))
+        self._seqs=seqs
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
-        self.oldwidth=0
+        self.oldwidth = 0
 
         # options to do
         # TODO: Implement these

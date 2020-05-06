@@ -3,6 +3,7 @@
 # Bioscience components
 import copy
 
+import Bio
 import Bio.Seq as Bseq
 from Bio.SeqRecord import SeqRecord
 import Bio.SeqIO as Bseqio
@@ -16,7 +17,7 @@ from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QShortcut, QFileDialog
 
 # Internal components
-from sherlock.classes import views, utilities
+from sherlock.classes import models, views, utilities
 from sherlock.ui import sherlock_ui
 
 import sys
@@ -70,7 +71,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         self.bioTree = views.TreeView()
         self.projectTree = views.TreeView()
         self.windows = {}  # Windows stored as { windex : MDISubWindow }
-        self.windex = -1  # Acts as identifier for tracking alignments (max 2.1 billion)
+        self.windex = 0  # Acts as identifier for tracking alignments (max 2.1 billion)
 
         if trees:
             # For loading a window on File>Open
@@ -88,7 +89,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
             print("WINDEX: ", str(self.windex))
 
         else:
-            self.sequences = {}  # Stored as { name : sequence }
+            self.sequences = {}  # Stored as {WindowID:SeqRecord (or [SeqRecords]) }
             self.alignments = {}  # Alignments (stored as { windex : [name, seqs] } )
             self.titles = []  # maintains a list of sequence titles to confirm uniqueness
             self.bioRoot = QStandardItem("Folder")
@@ -121,9 +122,6 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                     node.setData(key, role=self.WindowRole)
                     self.windex = int(node.data(role=self.WindowRole))+1
                     print("NEW WINDEX: ", self.windex)
-            if ali:
-                for seq in ali:
-                    if
 
                 worker = utilities.AlignThread(seqs, num_threads=self.threadpool.maxThreadCount())
                 worker.start()
@@ -409,6 +407,21 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
     def closeAllTabs(self):
         self.mdiArea.closeAllSubWindows()
 
+    def callAlign(self, seqarray):
+        # Process the sequences, and generate an alignment if >2
+        # TODO: Do pairwise here if only 2!
+        seqs = list(seqarray.values())
+        if len(seqs) > 1:
+            # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
+            seqs.sort()
+            worker = utilities.AlignThread(seqarray, num_threads=self.threadpool.maxThreadCount())
+            worker.start()
+            worker.wait()
+            aligned = worker.aligned
+        else:
+            aligned = seqarray  # send single sequence
+        return aligned
+
     # DATA AWARENESS SLOTS
     def seqDbClick(self):
         """
@@ -418,132 +431,109 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
         Ignores any folders that were included in the selection.
         Will not duplicate alignments. Creates a new window only if alignment is new.
         """
-        title = None
+        # Items is an input dictionary for sending to clustalo
+        # combo is an array of SeqRecords, sorted, to prevent creating duplicate alignments.
         items = {}
+        combo = []
         # Collect the selected sequence(s)
         for index in self.bioTree.selectedIndexes():
-            # Quick and dirty way to ignore folders that are selected.
+            # Need to make a dictionary of { Name:Sequence } for sending to ClustalO.
             # Only does the thing if there is a sequence present in the node.
             if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
-                items[self.bioModel.itemFromIndex(index).text()] = \
-                    str(self.bioModel.itemFromIndex(index).data(role=self.SequenceRole))
-        seqs = list(items.values())
+                seqr = self.bioModel.itemFromIndex(index).data(role=self.SequenceRole)[0]
+                items[seqr.id] = str(seqr.seq)
+                combo.append(seqr)
+        combo.sort()
+        aligned = self.callAlign(items)
 
-        # Process the sequences, and generate an alignment if >2
-        # TODO: Do pairwise here if only 2!
-        if len(seqs) > 1:
-            # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
-            seqs.sort()
-            worker = utilities.AlignThread(items, num_threads=self.threadpool.maxThreadCount())
-            worker.start()
-            worker.wait()
-            aligned = worker.aligned
-        else:
-            aligned = items  # send single sequence
-
-        # If this is the first time this combination has ever been selected, assign it an ID,
-        # Add that window ID to the node and continue to making the window.
-        if items and seqs not in self.alignments.values():
-            self.windex += 1
-            wid = str(self.windex)
-            # TODO: Also consider storing this as a BioPy alignment
-            self.alignments[wid] = seqs
-            self.mainStatus.showMessage("Aligning selection...", msecs=1000) if len(seqs) > 1 else \
-                self.mainStatus.showMessage("Sequence loaded", msecs=1000)
-            if len(seqs) == 1:
-                # Add window ID to the node
-                self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0]).setData(wid, self.WindowRole)
-            self.makeNewWindow(aligned, wid, seqs)
-        else:
-            # IF IT DOES EXIST: Messaging, and then check sequence names
-            if len(seqs) > 1:
-                self.mainStatus.showMessage("Reopening alignment!", msecs=1000)
-            elif len(seqs) == 1:
-                self.mainStatus.showMessage("Sequence loaded", msecs=1000)
-                title = self.bioModel.itemFromIndex(self.bioTree.selectedIndexes()[0]).text()
+        if items:
+            if combo in self.sequences.values():
+                for key, value in self.sequences.items():
+                    print("COMBO: ",combo)
+                    print("VALUE: ", value)
+                    if combo == value:
+                        wid = key
+                        try:
+                            sub = self.windows[wid]
+                            print("Reopening saved window")
+                            self.openWindow(sub)
+                        except KeyError:
+                            print("Opening new window")
+                            self.makeNewWindow(wid, aligned)
             else:
-                # Empty else for when only a folder was selected.
-                pass
-
-            for key, value in self.alignments.items():
-                # compare to previously made sequences and alignments
-                if seqs == value:
-                    if len(seqs) == 1:
-                        title, self.titles = utilities.checkName(title, self.titles)
-                        self.pruneNames()
-                        self.openWindow(windowID=key, title=title)
-                        self.bioModel.updateNames(self.titles)
-                    else:
-                        self.openWindow(windowID=key)
+                wid = self.windex + 1
+                self.sequences[wid] = combo
+                self.makeNewWindow(wid, aligned)
 
     def alignmentDbClick(self):
         # Checks if not a folder first, then:
         # Gets the selected item (only single selection allowed), and opens the window
         item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
         if item.data(role=self.WindowRole):
-            self.openWindow(windowID=item.data(role=self.WindowRole), title=item.text())
+            sub = self.windows[item.data(role=self.WindowRole)]
+            self.openWindow(sub)
 
     def dupeNameMsg(self):
         self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
 
     # MAIN METHODS
-    def seqInit(self, seq):
-        # Input is array [name : seq]
-        print(seq)
-        name = seq[0]
-        name, self.titles = utilities.checkName(name, self.titles)
-        node = QStandardItem(name)
-        node.setData(name)
-        node.setData(seq[1], self.SequenceRole)
+    def seqInit(self, seqr):
+        # Input is SeqRecord. Give it a unique WID and add to list of all SEQs.
+        wid = self.windex + 1
+        sid = seqr.id
+        # Check if title already exists, and if so, changes it.
+        sid, self.titles = utilities.checkName(sid, self.titles)
+        if sid != seqr.id:
+            seqr.id = sid
+        print("SEQ INIT: ", sid)
+        print("Updated titles: ", self.titles)
+        # Adds to the list of sequences, by its Window ID
+        self.sequences[wid] = [seqr]
+        print("Updated sequences: \n", self.sequences)
+        node = QStandardItem(sid)
+        node.setData(sid)
+        node.setData([seqr], self.SequenceRole)
+        node.setData(wid, self.WindowRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         self.bioModel.appendRow(node)
+        self.windex = wid
 
-    def makeNewWindow(self, ali, windowID, seqs=None, nopen=None):
+    def makeNewWindow(self, wid, ali):
+        print(ali)
         sub = views.MDISubWindow()
         widget = views.AlignSubWindow(ali)
         sub.setWidget(widget)
+        print(sub)
         if len(ali.keys()) > 1:
-            if nopen:
-                print("Reopening old windows")
-                print(windowID)
-                nopen.setData(nopen.text())
-                self.windows[windowID] = sub
-                print(self.windows)
-            else:
-                node = QStandardItem(sub.windowTitle())
-                node.setData(seqs, self.SequenceRole)
-                node.setData(windowID, self.WindowRole)
-                self.projectRoot.appendRow(node)
-                self.projectTree.setExpanded(node.parent().index(), True)
-                self.windows[windowID] = sub
+            node = QStandardItem(sub.windowTitle())
+            node.setData(sub.windowTitle())
+            node.setData(self.sequences[wid], self.SequenceRole)
+            node.setData(wid, self.WindowRole)
+            self.projectRoot.appendRow(node)
+            self.projectTree.setExpanded(node.parent().index(), True)
+            self.windows[wid] = sub
             self.projectModel.updateWindows(self.windows)
         else:
-            sub.setWindowTitle(list(ali.keys())[0])
-            # self.name, self.titles = self.checkName(list(ali.keys())[0], self.titles)
-            self.windows[windowID] = sub
+            seq = self.sequences[wid][0]
+            sub.setWindowTitle(seq.id)
+            self.windows[wid] = sub
             self.bioModel.updateNames(self.titles)
             self.bioModel.updateWindows(self.windows)
-        self.openWindow(windowID=windowID)
-        self.queryTrees()
+        self.openWindow(sub)
 
-    def openWindow(self, windowID=None, title=None):
+    def openWindow(self, sub):
         """
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         Also refreshes the title.
         """
-        print(self.windows)
-        sub = self.windows[windowID]
-        if title and title != sub.windowTitle():
-            self.mainLogger.debug("Setting new title: "+str(title))
-            sub.setWindowTitle(title)
-        if sub:
-            if sub.mdiArea() != self.mdiArea:
-                self.mainLogger.debug("Adding window to MDI Area")
-                self.mdiArea.addSubWindow(sub)
-            else:
-                sub.show()
-                self.mdiArea.setActiveSubWindow(sub)
+        self.queryTrees()
+        if sub.mdiArea() != self.mdiArea:
+            self.mainLogger.debug("Adding window to MDI Area")
+            self.mdiArea.addSubWindow(sub)
+        else:
+            sub.show()
+            self.mdiArea.setActiveSubWindow(sub)
 
     # UTILITY METHODS
     def instance(self, window):
@@ -609,7 +599,7 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                  'AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH' +
                  'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1A = Bseq.MutableSeq(test1[1], generic_protein)
-        test1alt = [test1[0], seq_GPI1A]
+        gpi1a = models.SeqR(seq_GPI1A, id=test1[0])
         test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE' +
                  'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG' +
                  'VEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKE' +
@@ -622,8 +612,8 @@ class Sherlock(QMainWindow, sherlock_ui.Ui_MainWindow):
                  'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL' +
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
-        test2alt = [test2[0], seq_GPI1B]
-        test = [test1alt, test2alt]
+        gpi1b = models.SeqR(seq_GPI1B, id=test2[0])
+        test = [gpi1a, gpi1b]
         for i in test:
             self.seqInit(i)
 
