@@ -4,13 +4,30 @@ import sys
 
 import Bio
 from PyQt5.QtGui import QStandardItemModel
-from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
+    QDialog, QDialogButtonBox
 from PyQt5.QtCore import Qt, pyqtSignal
 
-from linnaeo.ui import alignment_ui
+from linnaeo.ui import alignment_ui, quit_ui
 import textwrap as tw
 
 from linnaeo.classes import utilities
+
+
+class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
+    def __init__(self, parent):
+        super(self.__class__, self).__init__(parent)
+        self.setupUi(self)
+        self.setWindowTitle("Leaving so soon?")
+        self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.ok)
+        self.buttonBox.button(QDialogButtonBox.Discard).clicked.connect(self.discard)
+
+    def ok(self):
+        self.done(1)
+
+    def discard(self):
+        self.done(2)
+
 
 
 class TreeView(QTreeView):
@@ -141,7 +158,8 @@ class MDISubWindow(QMdiSubWindow):
         super(MDISubWindow, self).show()
 
     def closeEvent(self, event):
-        self.mdiArea().removeSubWindow(self)
+        if self.mdiArea():
+            self.mdiArea().removeSubWindow(self)
         self.close()
         return super(MDISubWindow, self).closeEvent(event)
 

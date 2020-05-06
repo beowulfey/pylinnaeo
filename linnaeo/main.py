@@ -14,15 +14,12 @@ from Bio.SeqRecord import SeqRecord
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QThreadPool, QTimer, QDir, QFile, QIODevice, QDataStream
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog, QDialog
 
 # Internal components
 from linnaeo.classes import models, views, utilities
-from linnaeo.ui import linnaeo_ui
+from linnaeo.ui import linnaeo_ui, quit_ui
 from linnaeo.resources import linnaeo_rc
-
-
-# from clustalo import clustalo
 
 
 class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
@@ -32,11 +29,9 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
     The bulk of the program is located here.
     """
 
-    _instance = None
+    def __init__(self, *args, **kwargs):
 
-    def __init__(self, *args, trees=None, data=None):
-
-        super(self.__class__, self).__init__(*args)
+        super(self.__class__, self).__init__(*args, **kwargs)
         # Initialize UI
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
@@ -50,14 +45,18 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.mainLogger.info("Threading with a maximum of %d threads" % self.threadpool.maxThreadCount())
 
         # Project instants and inherent variables for logic.
-        self.lastClickedTree = None
-        self.lastAlignment = {}
         self.SequenceRole = Qt.UserRole + 2
         self.WindowRole = Qt.UserRole + 3
-        self.windows = {}  # Windows stored as { windex : MDISubWindow }
-        self.windex = 0  # Acts as identifier for tracking alignments (max 2.1 billion)
-        self.sequences = {}  # Stored as {WindowID:[SeqRecord(s)] }
-        self.titles = []  # maintains a list of sequence titles to confirm uniqueness
+        self.lastClickedTree = None
+        self.lastAlignment = None
+        self.windows = None  # Windows stored as { windex : MDISubWindow }
+        self.windex = None  # Acts as identifier for tracking alignments (max 2.1 billion)
+        self.sequences = None  # Stored as {WindowID:[SeqRecord(s)] }
+        self.titles = None  # maintains a list of sequence titles to confirm uniqueness
+        self.bioRoot = None
+        self.bioModel = None
+        self.projectRoot = None
+        self.projectModel = None
 
         # MDI Window
         self.mdiArea = views.MDIArea()
@@ -67,6 +66,20 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.bioTree = views.TreeView()
         self.projectTree = views.TreeView()
 
+        # Other functions
+        self.guiSet()
+        self.guiFinalize()
+        self.connectSlots()
+
+    def guiSet(self, trees=None, data=None):
+        """ Initialize GUI with default parameters. """
+        self.lastClickedTree = None
+        self.lastAlignment = {}
+        self.windows = {}  # Windows stored as { windex : MDISubWindow }
+        self.windex = 0  # Acts as identifier for tracking alignments (max 2.1 billion)
+        self.sequences = {}  # Stored as {WindowID:[SeqRecord(s)] }
+        self.titles = []  # maintains a list of sequence titles to confirm uniqueness
+
         if trees:
             # For loading a window on File>Open
             print("Using saved workspace")
@@ -75,31 +88,80 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
             self.windex = int(self.windex)
             self.bioRoot = self.bioModel.invisibleRootItem().child(0)  # TODO: ELIMINATE USE OF ROOT. Use InvsRoot
             self.projectRoot = self.projectModel.invisibleRootItem().child(0)
-            self.bioTree.setModel(self.bioModel)
-            self.projectTree.setModel(self.projectModel)
+
             self.windows = {}
             self.rebuildTrees()
             # TODO: Figure out why tree is not expanding!
             print("SEQS: ", self.sequences)
             print("TITLES: ", self.titles)
             print("WINDEX: ", self.windex)
-
         else:
             self.bioRoot = QStandardItem("Folder")
             self.bioModel = views.ItemModel(self.windows, seqTree=True)
             self.bioRoot.setData("Folder")
             self.bioModel.appendRow(self.bioRoot)
-            self.DEBUG()
             self.projectRoot = QStandardItem("Folder")
             self.projectModel = views.ItemModel(self.windows)
             self.projectModel.appendRow(self.projectRoot)
 
-        # Other functions
-        self.guiInit()
-        self.connectSlots()
-        if self._instance:
-            print("Deleting old")
-            self.cleanInstance()
+        self.bioTree.setModel(self.bioModel)
+        self.projectTree.setModel(self.projectModel)
+        self.bioTree.setExpanded(self.bioModel.invisibleRootItem().index(), True)
+        self.bioModel.setHorizontalHeaderLabels(["Sequences"])
+        self.projectModel.setHorizontalHeaderLabels(["Alignments"])
+        self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
+
+        # self.DEBUG()
+
+    def guiFinalize(self):
+        # Tree setup
+        self.splitter_2.addWidget(self.bioTree)
+        self.bioTree.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.splitter_2.addWidget(self.projectTree)
+
+        # Status bar setup
+        self.updateUsage()
+        self.statusBar().addPermanentWidget(self.memLabel)
+        self.processTimer.setInterval(1000)
+        self.processTimer.start()
+
+    def connectSlots(self):
+        # Toolbar and MenuBar
+        # FILE
+        self.actionNew.triggered.connect(self.newWorkspace)
+        self.actionOpen.triggered.connect(self.openWorkspace)
+        self.actionSave.triggered.connect(self.saveWorkspace)
+        self.actionQuit.triggered.connect(self.quit)
+
+        # EDIT
+        self.actionCopy.triggered.connect(self.copyOut)
+        self.actionPaste.triggered.connect(self.pasteInto)
+        # self.actionPreferences.triggered.connect(self.openPrefWindow)
+
+        # TOOLS
+        self.actionAlign.triggered.connect(self.seqDbClick)
+        self.actionNewFolder.triggered.connect(self.addFolder)
+        self.actionDelete.triggered.connect(self.deleteNode)
+
+        # WINDOW
+        self.actionTile.triggered.connect(self.tileWindows)
+        self.actionCascade.triggered.connect(self.cascadeWindows)
+        self.actionToggle_Tabs.triggered.connect(self.mdiArea.toggleTabs)  # TODO: Set as preference
+        self.actionClose.triggered.connect(self.closeTab)
+        self.actionClose_all.triggered.connect(self.closeAllTabs)
+
+        # Data awareness connections
+        self.bioTree.doubleClicked.connect(self.seqDbClick)
+        self.bioModel.dupeName.connect(self.dupeNameMsg)
+        self.projectTree.doubleClicked.connect(self.alignmentDbClick)
+
+        # Utility slots
+        self.bioTree.generalClick.connect(self.deselectProject)
+        self.bioTree.clicked.connect(self.lastClickedSeq)
+        self.projectTree.generalClick.connect(self.deselectSeqs)
+        # self.bioModel.nameChanging.connect(self.preNameChange)
+        self.bioModel.nameChanged.connect(self.postNameChange)
+        self.processTimer.timeout.connect(self.updateUsage)
 
     def rebuildTrees(self):
         """
@@ -146,70 +208,12 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
             print("Seq: ", child.data(role=Qt.UserRole + 2))
             print("Window Index: ", child.data(role=Qt.UserRole + 3))
 
-    def guiInit(self):
-        """ Initialize GUI with default parameters. """
-        # Tree setup
-        self.splitter_2.addWidget(self.bioTree)
-        self.bioTree.setModel(self.bioModel)
-        self.bioTree.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.bioTree.setExpanded(self.bioModel.invisibleRootItem().index(), True)
-        self.bioModel.setHorizontalHeaderLabels(["Sequences"])
-        self.splitter_2.addWidget(self.projectTree)
-        self.projectTree.setModel(self.projectModel)
-        self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
-        self.projectModel.setHorizontalHeaderLabels(["Alignments"])
-
-        # Status bar setup
-        self.updateUsage()
-        self.statusBar().addPermanentWidget(self.memLabel)
-        self.processTimer.setInterval(1000)
-        self.processTimer.start()
-
-    def connectSlots(self):
-        # Toolbar and MenuBar
-        # FILE
-        self.actionNew.triggered.connect(self.newWorkspace)
-        self.actionOpen.triggered.connect(self.openWorkspace)
-        self.actionSave.triggered.connect(self.saveWorkspace)
-
-        # EDIT
-        self.actionCopy.triggered.connect(self.copyOut)
-        self.actionPaste.triggered.connect(self.pasteInto)
-        #self.actionPreferences.triggered.connect(self.openPrefWindow)
-
-        # TOOLS
-        self.actionAlign.triggered.connect(self.seqDbClick)
-        self.actionNewFolder.triggered.connect(self.addFolder)
-        self.actionDelete.triggered.connect(self.deleteNode)
-
-        # WINDOW
-        self.actionTile.triggered.connect(self.tileWindows)
-        self.actionCascade.triggered.connect(self.cascadeWindows)
-        self.actionToggle_Tabs.triggered.connect(self.mdiArea.toggleTabs)  # TODO: Set as preference
-        self.actionClose.triggered.connect(self.closeTab)
-        self.actionClose_all.triggered.connect(self.closeAllTabs)
-
-        # Data awareness connections
-        self.bioTree.doubleClicked.connect(self.seqDbClick)
-        self.bioModel.dupeName.connect(self.dupeNameMsg)
-        self.projectTree.doubleClicked.connect(self.alignmentDbClick)
-
-        # Utility slots
-        self.bioTree.generalClick.connect(self.deselectProject)
-        self.bioTree.clicked.connect(self.lastClickedSeq)
-        self.projectTree.generalClick.connect(self.deselectSeqs)
-        # self.bioModel.nameChanging.connect(self.preNameChange)
-        self.bioModel.nameChanged.connect(self.postNameChange)
-        self.processTimer.timeout.connect(self.updateUsage)
-
     # SINGLE-USE SLOTS
     def newWorkspace(self):
-        # TODO: This does not close the old window, creating a sure-fire memory leak.
-        # TODO: Request save
-        #self.setAttribute(Qt.WA_DeleteOnClose)
-        new = Sherlock(self)
-        new.instance(self)
-        new.show()
+        result = self.maybeClose()
+        if result is not None:
+            print("RESETTING")
+            self.guiSet()
 
     def restore_tree(self, parent, datastream, num_childs=None):
         if not num_childs:
@@ -221,9 +225,9 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
             child = QStandardItem()
             child.read(datastream)
             parent.appendRow(child)
-            print(child.data(role=Qt.UserRole+1))
-            print(child.data(role=Qt.UserRole+2))
-            print(child.data(role=Qt.UserRole+3))
+            print(child.data(role=Qt.UserRole + 1))
+            print(child.data(role=Qt.UserRole + 2))
+            print(child.data(role=Qt.UserRole + 3))
             num_childs = datastream.readUInt32()
             if num_childs > 0:
                 print("reading children")
@@ -233,13 +237,13 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         sel = QFileDialog.getOpenFileName(parent=self, caption="Open Workspace", directory=QDir.homePath(),
                                           filter="Linnaeo Workspace (*.lno);;Any (*)")
         filename = sel[0]
-        self.mainLogger.debug("Opening file: "+str(filename))
+        self.mainLogger.debug("Opening file: " + str(filename))
         file = QFile(filename)
         file.open(QIODevice.ReadOnly)
         fstream = QDataStream(file)
         print("Starting restore")
         sequences = fstream.readQVariantHash()
-        print("Sequences: ",sequences)
+        print("Sequences: ", sequences)
         titles = fstream.readQVariantList()
         print("Titles: ", titles)
         windex = fstream.readUInt32()
@@ -249,61 +253,63 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         newPModel = views.ItemModel(windows)
         self.restore_tree(newBModel.invisibleRootItem(), fstream)
         self.restore_tree(newPModel.invisibleRootItem(), fstream)
-        new = Sherlock(self, trees=[newBModel, newPModel], data=[sequences, titles, windex])
-        file.close()
-        new.show()
-        self.hide()
+        self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
 
     def saveWorkspace(self):
         sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(),
                                           filter="Linnaeo Workspace (*.lno);;Any (*)")
         filename = sel[0]
-        if filename[-4:] != ".lno":
-            filename = str(filename+".lno")
-        file = QFile(filename)
-        file.open(QIODevice.WriteOnly)
-        out = QDataStream(file)
-        self.mainLogger.debug("Beginning file save")
-        print("TREE DATA")
-        self.queryTrees()
-        print("Writing Sequences, Titles, Windex")
-        print(self.sequences)
-        print(self.titles)
-        print(type(self.windex), self.windex)
-        out.writeQVariantHash(self.sequences)
-        out.writeQVariantList(self.titles)
-        out.writeUInt32(self.windex)
-        #####################################
-        # Sequence View
-        ###
-        print("SEQUENCE TREE")
-        print("Invs.Root Children: ",self.bioModel.invisibleRootItem().rowCount())
-        out.writeUInt32(self.bioModel.invisibleRootItem().rowCount())
-        for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-            print("Text: ", str(node.text()))
-            print("Data1: ", str(node.data()))
-            print("Data2: ", str(node.data(role=self.SequenceRole)))
-            print("Data3: ", str(node.data(role=self.WindowRole)))
-            node.write(out)
-            out.writeUInt32(node.rowCount())
-        #####################################
-        # Alignment View
-        # Does not save any metadata! Only the two sequences
-        # So I can't save window options at the moment.
-        # TODO: Consider adding "window modes" to the node.
-        print("ALIGNMENT TREE")
-        print("Invs.Root Children: ", self.bioModel.invisibleRootItem().rowCount())
-        out.writeUInt32(self.projectModel.invisibleRootItem().rowCount())
-        for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
-            print("Text: ", str(node.text()))
-            print("Data1: ", str(node.data()))
-            print("Data2: ", str(node.data(role=self.SequenceRole)))
-            print("Data3: ", str(node.data(role=self.WindowRole)))
-            node.write(out)
-            out.writeUInt32(node.rowCount())
-        self.mainLogger.debug("Save complete")
-        file.flush()
-        file.close()
+        if filename:
+            if filename[-4:] != ".lno":
+                filename = str(filename + ".lno")
+            file = QFile(filename)
+            file.open(QIODevice.WriteOnly)
+            out = QDataStream(file)
+            self.mainLogger.debug("Beginning file save")
+            print("TREE DATA")
+            self.queryTrees()
+            print("Writing Sequences, Titles, Windex")
+            print(self.sequences)
+            print(self.titles)
+            print(type(self.windex), self.windex)
+            out.writeQVariantHash(self.sequences)
+            out.writeQVariantList(self.titles)
+            out.writeUInt32(self.windex)
+            #####################################
+            # Sequence View
+            ###
+            print("SEQUENCE TREE")
+            print("Invs.Root Children: ", self.bioModel.invisibleRootItem().rowCount())
+            out.writeUInt32(self.bioModel.invisibleRootItem().rowCount())
+            for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+                print("Text: ", str(node.text()))
+                print("Data1: ", str(node.data()))
+                print("Data2: ", str(node.data(role=self.SequenceRole)))
+                print("Data3: ", str(node.data(role=self.WindowRole)))
+                node.write(out)
+                out.writeUInt32(node.rowCount())
+            #####################################
+            # Alignment View
+            # Does not save any metadata! Only the two sequences
+            # So I can't save window options at the moment.
+            # TODO: Consider adding "window modes" to the node.
+            print("ALIGNMENT TREE")
+            print("Invs.Root Children: ", self.bioModel.invisibleRootItem().rowCount())
+            out.writeUInt32(self.projectModel.invisibleRootItem().rowCount())
+            for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+                print("Text: ", str(node.text()))
+                print("Data1: ", str(node.data()))
+                print("Data2: ", str(node.data(role=self.SequenceRole)))
+                print("Data3: ", str(node.data(role=self.WindowRole)))
+                node.write(out)
+                out.writeUInt32(node.rowCount())
+            self.mainLogger.debug("Save complete")
+            file.flush()
+            file.close()
+            return True
+        else:
+            print("No filename chosen; canceling")
+            return False
 
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:
@@ -334,18 +340,18 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
                 if clip[0][0] == ">":
                     for line in clip:
                         if line[0] == ">" and not name:
-                            #self.mainLogger.debug(str(line[:10]))
+                            # self.mainLogger.debug(str(line[:10]))
                             self.pruneNames()
                             name = line[:10]
 
                         elif line[0] == ">" and name:
 
-                            #self.mainLogger.debug(str(line))
+                            # self.mainLogger.debug(str(line))
                             seqs.append([name, "".join(seq)])
                             self.pruneNames()
                             name = line[:10]
                         else:
-                            #self.mainLogger.debug(str(line))
+                            # self.mainLogger.debug(str(line))
                             seq.append(line.strip())
                     # TODO: Convert this into SequenceRecord!!
                     seqs.append([name, Bseq.MutableSeq("".join(seq))])
@@ -387,19 +393,21 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
             wid = node.data(role=self.WindowRole)
             try:
                 sub = self.windows[wid]
-                title = sub.windowTitle()
-                self.mainLogger.debug("Deleting node from tree: "+str(sub.windowTitle()))
-                sub.close()
-                print(self.titles)
-                self.titles.remove(title)
-                print(self.titles)
-                self.windows.pop(wid)
-                self.alignments.pop(wid)
-                self.pruneNames()
-                self.bioModel.updateNames(self.titles)
-                self.bioModel.updateWindows(self.windows)
-                self.projectModel.updateNames(self.titles)
-                self.projectModel.updateWindows(self.windows)
+                if sub:
+                    print(sub)
+                    title = sub.windowTitle()
+                    self.mainLogger.debug("Deleting node from tree: " + str(sub.windowTitle()))
+                    sub.close()
+                    print(self.titles)
+                    self.titles.remove(title)
+                    print(self.titles)
+                    self.windows.pop(wid)
+                    self.sequences.pop(wid)
+                    self.pruneNames()
+                    self.bioModel.updateNames(self.titles)
+                    self.bioModel.updateWindows(self.windows)
+                    self.projectModel.updateNames(self.titles)
+                    self.projectModel.updateWindows(self.windows)
             except KeyError:
                 pass
             self.lastClickedTree.model().removeRow(index.row(), index.parent())
@@ -429,14 +437,13 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
     def callAlign(self, seqarray):
         # Process the sequences, and generate an alignment if >2
         # TODO: Do pairwise here if only 2!
-        seqs = list(seqarray.values())
-        if len(seqs) > 1:
+        if len(list(seqarray.values())) > 1:
             # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
-            seqs.sort()
             worker = utilities.AlignThread(seqarray, num_threads=self.threadpool.maxThreadCount())
             worker.start()
             worker.wait()
             aligned = worker.aligned
+        #  elif len(list(seqarray.values())) == 2:
         else:
             aligned = seqarray  # send single sequence
         return aligned
@@ -468,7 +475,7 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         if items:
             if combo in self.sequences.values():
                 for key, value in self.sequences.items():
-                    print("COMBO: ",combo)
+                    print("COMBO: ", combo)
                     print("VALUE: ", value)
                     if combo == value:
                         wid = key
@@ -486,7 +493,6 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
                 sub = self.makeNewWindow(wid, aligned)
                 self.openWindow(sub)
                 self.windex = self.windex + 1
-
 
     def alignmentDbClick(self):
         # Checks if not a folder first, then:
@@ -566,18 +572,25 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
             self.mdiArea.setActiveSubWindow(sub)
 
     # UTILITY METHODS
-    def closeEvent(self, event):
-        print("Closing this window")
-        self.deleteLater()
+    def maybeClose(self):
+        # TODO: CHECK IF CHANGES
+        qDialog = views.QuitDialog(self)
+        confirm = qDialog.exec()
+        if confirm == 1:
+            result = self.saveWorkspace()
+            if result:
+                print("YES")
+                return True
+        elif confirm == 2:
+            print("NO")
+            return False
+        else:
+            return None
 
-    def instance(self, window):
-        """Saves instance upon loading a new window"""
-        # TODO: DEBUG THIS PROCESS!
-        self._instance = window
-
-    def cleanInstance(self):
-        self._instance.close()
-
+    def quit(self):
+        confirm = self.maybeClose()
+        if confirm is not None:
+            self.close()
 
     def lastClickedSeq(self):
         """Records the last clicked sequence, for copying/pasting etc"""
@@ -614,9 +627,9 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         for title in self.titles:
             if title not in names:
                 pruned.append(title)
-        self.mainLogger.debug("Tree names: "+str(names)+" vs. Stored names: "+str(self.titles))
+        self.mainLogger.debug("Tree names: " + str(names) + " vs. Stored names: " + str(self.titles))
         self.titles = [x for x in self.titles and names if x not in pruned]
-        self.mainLogger.debug("Removed "+str(pruned)+", leaving "+str(self.titles))
+        self.mainLogger.debug("Removed " + str(pruned) + ", leaving " + str(self.titles))
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown"""
@@ -675,7 +688,7 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
 
 def main():
-    #print(linnaeo.__file__)
+    # print(linnaeo.__file__)
     logging.basicConfig(level=logging.DEBUG)  # , format="%(asctime)s:%(levelname)s:%(message)s")
     app = QApplication(sys.argv)
 
