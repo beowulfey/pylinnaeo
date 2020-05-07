@@ -1,6 +1,6 @@
-# CODENAME SHERLOCK #
+# LINNAEO #
 
-Sherlock is a python program I made for learning how to code GUI programs, but also to solve a 
+Linnaeo is a python program I made mostly as an exercise in learning how to code GUI programs... but also to solve a 
 basic problem I had: nothing out there is very good for storing and making protein alignments.
 
 
@@ -27,14 +27,10 @@ here is a list of the packages I installed into a fresh python environment:
 * A port of Clustal Omega (in this repository)
 * PyQt5-stubs==5.14.2.0 (for code hints)
 
-### Contribution guidelines ###
+I'm trying to get this into a conda package that can be installed easily (akin to PyMOL -- they figured it out somehow!). Here's hoping I am successful. If I am, I'll be sure to update that here.
 
-* Writing tests
-* Code review
-* Other guidelines
-* What are guidelines? 
+Repositories I am eternal grateful for and need to cite: 
 
-### Who do I talk to? ###
-
-* Me. Etc.
-* Also me. There's no one else. It's just me.
+* [ARGTABLE2](https://github.com/jonathanmarvens/argtable2) -- for building Clustal Omega on Windows
+* [Clustal Omega, adapted to use CMake (SO, SO GRATEFUL) from GSL Biotech (You guys rock, seriously)](https://github.com/GSLBiotech/clustal-omega/tree/master/src)
+* 
