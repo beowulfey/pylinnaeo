@@ -104,6 +104,7 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
             self.projectModel = views.ItemModel(self.windows)
             self.projectModel.appendRow(self.projectRoot)
 
+
         self.bioTree.setModel(self.bioModel)
         self.projectTree.setModel(self.projectModel)
         self.bioTree.setExpanded(self.bioModel.invisibleRootItem().index(), True)
@@ -111,7 +112,6 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.projectModel.setHorizontalHeaderLabels(["Alignments"])
         self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
 
-        # self.DEBUG()
 
     def guiFinalize(self):
         # Tree setup
@@ -124,6 +124,8 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.statusBar().addPermanentWidget(self.memLabel)
         self.processTimer.setInterval(1000)
         self.processTimer.start()
+
+        self.DEBUG()
 
     def connectSlots(self):
         # Toolbar and MenuBar
@@ -439,7 +441,7 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         # TODO: Do pairwise here if only 2!
         if len(list(seqarray.values())) > 1:
             # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
-            worker = utilities.AlignThread(seqarray, num_threads=self.threadpool.maxThreadCount())
+            worker = utilities.AlignThread(seqarray, seqtype=3, num_threads=self.threadpool.maxThreadCount())
             worker.start()
             worker.wait()
             aligned = worker.aligned
