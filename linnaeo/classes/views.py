@@ -180,8 +180,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.oldwidth = 0
-        font = self.alignPane.font()
-        font.setStyleHint(QFont.TypeWriter)
+        #self.alignPane.setFont(QFont.Monospace)
+        self.alignPane.font().setStyleHint(QFont.Monospace)
 
         # options to do
         # TODO: Implement these
