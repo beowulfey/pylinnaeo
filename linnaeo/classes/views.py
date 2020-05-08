@@ -3,12 +3,13 @@ import logging
 import sys
 
 import Bio
-from PyQt5.QtGui import QStandardItemModel, QFont
+from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QDialog, QDialogButtonBox
 from PyQt5.QtCore import Qt, pyqtSignal
 
 from ui import alignment_ui, quit_ui
+from resources import linnaeo_rc
 import textwrap as tw
 
 from classes import utilities
@@ -180,11 +181,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.oldwidth = 0
-        print(sys.platform)
-        if sys.platform == 'win32':
-            font = QFont("")
-            self.alignPane.setFont(font)
-            self.alignPane.font().setStyleHint(QFont.Monospace)
+        #FANCY FONTWORK
+        fid = QFontDatabase.addApplicationFont(":/fonts/LiberationMono.ttf")
+        family = QFontDatabase.applicationFontFamilies(fid)[0]
+        font = QFont(family, 10)
+        self.alignPane.setFont(font)
+
 
         # options to do
         # TODO: Implement these

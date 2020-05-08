@@ -13,7 +13,7 @@ from Bio.SeqRecord import SeqRecord
 # PyQt components
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QThreadPool, QTimer, QDir, QFile, QIODevice, QDataStream
-from PyQt5.QtGui import QStandardItem
+from PyQt5.QtGui import QStandardItem, QFontDatabase
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog, QDialog
 
 # Internal components
