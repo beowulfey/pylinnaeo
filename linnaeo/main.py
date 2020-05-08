@@ -7,6 +7,7 @@ import sys
 
 import Bio.Seq as Bseq
 import psutil
+from Bio import SeqIO
 from Bio.Alphabet import generic_protein
 from Bio.SeqRecord import SeqRecord
 
@@ -22,7 +23,7 @@ from ui import linnaeo_ui
 from resources import linnaeo_rc
 
 
-class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
+class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
     """
     Constructor for the Main Window of the Sherlock App
     Contains all the user interface functions, as well as underlying code for major features.
@@ -132,6 +133,7 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         # FILE
         self.actionNew.triggered.connect(self.newWorkspace)
         self.actionOpen.triggered.connect(self.openWorkspace)
+        self.actionAdd.triggered.connect(self.newSequence)
         self.actionSave.triggered.connect(self.saveWorkspace)
         self.actionQuit.triggered.connect(self.quit)
 
@@ -257,6 +259,27 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.restore_tree(newPModel.invisibleRootItem(), fstream)
         self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
 
+    def newSequence(self):
+        sel = QFileDialog.getOpenFileName(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
+                                          filter="Fasta File (*.fa*);;Any (*)")
+        seqr = None
+        filename = sel[0]
+        badfile = True
+        if filename[-3:] == ".fa":
+            badfile = False
+        elif filename[-6:] == ".fasta":
+            badfile = False
+        if not badfile:
+            try:
+                seq = SeqIO.read(filename, "fasta")
+                if seq:
+                    seqr = models.SeqR(seq.seq, seq.name, id=seq.id, description=seq.description)
+                    self.seqInit(seqr)
+            except:
+                self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
+        else:
+            self.mainStatus.showMessage("Please only add fasta file!", msecs=1000)
+
     def saveWorkspace(self):
         sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(),
                                           filter="Linnaeo Workspace (*.lno);;Any (*)")
@@ -319,7 +342,10 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
             indices = self.lastClickedTree.selectedIndexes()
             for index in indices:
                 node = self.bioModel.itemFromIndex(index)
-                seqs.append(SeqRecord(node.data(role=self.SequenceRole), id=node.text()).format("fasta"))
+                seq = node.data(role=self.SequenceRole)[0]
+                seqr = SeqRecord(seq.seq, id=seq.sName())
+                print(seqr.format("fasta"))
+                seqs.append(seqr.format("fasta"))
             QApplication.clipboard().setText("".join(seqs))
             if len(seqs) > 1:
                 self.mainStatus.showMessage("Copied sequences to clipboard!", msecs=1000)
@@ -330,35 +356,52 @@ class Sherlock(QMainWindow, linnaeo_ui.Ui_MainWindow):
             self.mainStatus.showMessage("Please use File>Export to save alignments!", msecs=1000)
 
     def pasteInto(self):
+        """
+        Only accepts single FASTA paste right now
+        """
         # FASTA DETECTION
         if self.lastClickedTree == self.bioTree:
+            nline = None
+            sid = None
+            desc = None
             name = None
-            seq = []
-            seqs = []
+            bars = []
+            spaces = []
+            oss = []
             try:
                 clip = QApplication.clipboard().text()
-                print(clip)
+                if clip[0] == ">":
+                    for index in range(len(clip)):
+                        if not nline and clip[index] == "\n":
+                            nline = clip[:index]
+                            seq = clip[index+1:]
+                    seq = seq.replace('\n', '')
+                    seq = seq.replace('\r', '')
+                    bseq = Bseq.MutableSeq(seq)
 
-                if clip[0][0] == ">":
-                    for line in clip:
-                        if line[0] == ">" and not name:
-                            # self.mainLogger.debug(str(line[:10]))
-                            self.pruneNames()
-                            name = line[:10]
+                    for index in range(len(nline)):
+                        if nline[index] == " ":
+                            spaces.append(index)
+                        if nline[index] == "|":
+                            bars.append(index)
+                        if nline[index:index+2] == "OS":
+                            oss.append(index)
+                    if len(bars) > 0:
+                        sid = nline[:bars[1]-1]
+                    if len(oss) > 0:
+                        lastbar = bars[len(bars)-1]
+                        name = nline[lastbar+1:oss[0]]
+                        desc = nline[oss[0]:]
+                    elif not sid and not name:
+                        sid = nline[1:9]
+                        name = sid
 
-                        elif line[0] == ">" and name:
-
-                            # self.mainLogger.debug(str(line))
-                            seqs.append([name, "".join(seq)])
-                            self.pruneNames()
-                            name = line[:10]
-                        else:
-                            # self.mainLogger.debug(str(line))
-                            seq.append(line.strip())
-                    # TODO: Convert this into SequenceRecord!!
-                    seqs.append([name, Bseq.MutableSeq("".join(seq))])
-                    for newseq in seqs:
-                        self.seqInit(newseq)
+                    if sid and bseq:
+                        seqr = models.SeqR(bseq, sid, id=sid, name=name)
+                        if desc:
+                            seqr.description = desc
+                        print(seqr)
+                        self.seqInit(seqr)
                 else:
                     self.mainStatus.showMessage("Please only paste in FASTA format!", msecs=1000)
             except:
@@ -694,17 +737,12 @@ def main():
     logging.basicConfig(level=logging.DEBUG)  # , format="%(asctime)s:%(levelname)s:%(message)s")
     app = QApplication(sys.argv)
 
-    try:
-        with open('ui/sherlock.sty') as f:
-            print("Read in stylesheet")
-            style = f.read()
-    except IOError:
-        print('Could not read stylesheet.')
-        style = ""
-
-    if style:
-        app.setStyleSheet(style)
-    window = Sherlock()
+    file = QFile(":/qss/linnaeo.qss")
+    file.open(QFile.ReadOnly)
+    style = str(file.readAll())
+    print(style)
+    app.setStyleSheet(style)
+    window = Linnaeo()
     window.show()
 
     sys.exit(app.exec_())

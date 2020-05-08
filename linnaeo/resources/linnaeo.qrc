@@ -1,7 +1,6 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>images/focus.png</file>
+<RCC>
+  <qresource>
+    <file>qss/linnaeo.qss</file>
     <file>fonts/LiberationMono.ttf</file>
-    <file>fonts/LibMono2.ttf</file>
-</qresource>
+  </qresource>
 </RCC>

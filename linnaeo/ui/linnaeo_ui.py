@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'linnaeo.ui'
+# Form implementation generated from reading ui file 'ui/linnaeo.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.2
 #
@@ -44,8 +44,10 @@ class Ui_MainWindow(object):
         self.menuFile = QtWidgets.QMenu(self.mainMenu)
         self.menuFile.setObjectName("menuFile")
         self.menuImport = QtWidgets.QMenu(self.menuFile)
+        self.menuImport.setEnabled(False)
         self.menuImport.setObjectName("menuImport")
         self.menuExport = QtWidgets.QMenu(self.menuFile)
+        self.menuExport.setEnabled(False)
         self.menuExport.setObjectName("menuExport")
         self.menuHelp = QtWidgets.QMenu(self.mainMenu)
         self.menuHelp.setObjectName("menuHelp")
@@ -164,12 +166,12 @@ class Ui_MainWindow(object):
         self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionSave.setText(_translate("MainWindow", "Save Workspace"))
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
-        self.actionFasta.setText(_translate("MainWindow", "Fasta"))
+        self.actionFasta.setText(_translate("MainWindow", "Fasta Alignment"))
         self.actionNew.setText(_translate("MainWindow", "New Workspace"))
         self.actionNew.setShortcut(_translate("MainWindow", "Ctrl+N"))
         self.actionAdd.setText(_translate("MainWindow", "Add Sequence"))
         self.actionAdd.setShortcut(_translate("MainWindow", "Ctrl+D"))
-        self.actionClustal.setText(_translate("MainWindow", "Clustal"))
+        self.actionClustal.setText(_translate("MainWindow", "Clustal Alignment"))
         self.actionSequence.setText(_translate("MainWindow", "Sequence"))
         self.actionAlignment_2.setText(_translate("MainWindow", "Alignment"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
