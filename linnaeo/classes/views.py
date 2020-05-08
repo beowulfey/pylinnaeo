@@ -8,10 +8,10 @@ from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView
     QDialog, QDialogButtonBox
 from PyQt5.QtCore import Qt, pyqtSignal
 
-from linnaeo.ui import alignment_ui, quit_ui
+from ui import alignment_ui, quit_ui
 import textwrap as tw
 
-from linnaeo.classes import utilities
+from classes import utilities
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'alignment.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.2
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -58,7 +58,7 @@ class Ui_aliWindow(object):
         self.alignPane.setSizePolicy(sizePolicy)
         self.alignPane.setMinimumSize(QtCore.QSize(200, 100))
         font = QtGui.QFont()
-        font.setFamily("Liberation Mono")
+        font.setFamily("Monospace")
         font.setPointSize(10)
         self.alignPane.setFont(font)
         self.alignPane.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
