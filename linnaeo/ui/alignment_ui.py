@@ -58,7 +58,7 @@ class Ui_aliWindow(object):
         self.alignPane.setSizePolicy(sizePolicy)
         self.alignPane.setMinimumSize(QtCore.QSize(200, 100))
         font = QtGui.QFont()
-        font.setFamily("Monospace")
+        font.setFamily("Liberation Mono")
         font.setPointSize(10)
         self.alignPane.setFont(font)
         self.alignPane.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
