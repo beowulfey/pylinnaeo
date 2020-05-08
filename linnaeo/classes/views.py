@@ -3,7 +3,7 @@ import logging
 import sys
 
 import Bio
-from PyQt5.QtGui import QStandardItemModel
+from PyQt5.QtGui import QStandardItemModel, QFont
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QDialog, QDialogButtonBox
 from PyQt5.QtCore import Qt, pyqtSignal
@@ -27,7 +27,6 @@ class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
 
     def discard(self):
         self.done(2)
-
 
 
 class TreeView(QTreeView):
@@ -181,6 +180,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.oldwidth = 0
+        font = self.alignPane.font()
+        font.setStyleHint(QFont.TypeWriter)
 
         # options to do
         # TODO: Implement these
