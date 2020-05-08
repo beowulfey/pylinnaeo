@@ -184,7 +184,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         if sys.platform == 'win32':
             font = QFont("")
             self.alignPane.setFont(font)
-            self.alignPane.font().setStyleHint(QFont.TypeWriter)
+            self.alignPane.font().setStyleHint(QFont.Monospace)
 
         # options to do
         # TODO: Implement these
