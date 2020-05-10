@@ -167,6 +167,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.bioModel.nameChanged.connect(self.postNameChange)
         self.processTimer.timeout.connect(self.updateUsage)
 
+        self.actionTrees.triggered.connect(self.queryTrees)
+
     def rebuildTrees(self):
         """
         At this point, the sequences and the alignments both have Window IDs applied -- but the windows
@@ -199,11 +201,15 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         print(self.windows)
 
     def queryTrees(self):
-        print("BIOROOT")
+        print("\n\nBIOROOT")
         for child in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
             print("Text: ", child.text())
             print("Name: ", child.data(role=Qt.UserRole + 1))
+            seqr = child.data(role=Qt.UserRole + 2)
             print("Seq: ", child.data(role=Qt.UserRole + 2))
+            if seqr:
+                print(seqr[0].sName())
+            #print("Seqr name: ", child.data(role=Qt.UserRole+2).sName())
             print("Window Index: ", child.data(role=Qt.UserRole + 3))
         print("ALIGNMENT ROOT")
         for child in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
@@ -457,6 +463,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                     self.projectModel.updateWindows(self.windows)
             except KeyError:
                 pass
+            except ValueError:
+                pass
             self.lastClickedTree.model().removeRow(index.row(), index.parent())
             if self.mdiArea.tabbed:
                 self.mdiArea.activeSubWindow().showMaximized()
@@ -658,6 +666,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.pruneNames()
 
     def postNameChange(self):
+        print(self.titles)
+        print(self.sequences)
         self.pruneNames()
         self.bioModel.updateNames(self.titles)
 

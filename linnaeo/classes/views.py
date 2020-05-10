@@ -170,6 +170,7 @@ class MDISubWindow(QMdiSubWindow):
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
     Alignment SubWindow UI. Takes in a dictionary of sequences that have been aligned and arranges them.
+    # TODO: This does not maintain the alignment order. Shant be helped?...
     """
     resized = pyqtSignal()
 
@@ -181,6 +182,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.oldwidth = 0
+
         #FANCY FONTWORK
         fid = QFontDatabase.addApplicationFont(":/fonts/LiberationMono.ttf")
         family = QFontDatabase.applicationFontFamilies(fid)[0]
@@ -281,6 +283,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def setSeqs(self, seqs):
         self._seqs = seqs
 
+    def updateName(self, old, new):
+        seq = self._seqs[old]
+        self._seqs[new]=seq
+        self._seqs.pop(old)
+        self.seqArrange()
+
+
 
 class ItemModel(QStandardItemModel):
     nameChanging = pyqtSignal()
@@ -308,18 +317,26 @@ class ItemModel(QStandardItemModel):
         self._windows = windows
 
     def setData(self, index, value, role=Qt.UserRole+1):
+        oldvalue = None
         self.modelLogger.debug("Updating data for node")
         if self.isSeqs:
             self.modelLogger.debug("Sequence node; checking name!")
             #self.nameChanging.emit()
             # Only do this check if this is coming from the top Tree and is not a folder
             if value != self.lastClickedNode.text():
+                oldvalue = self.lastClickedNode.text()
                 newvalue, self._titles = utilities.checkName(value, self._titles)
                 if newvalue != value:
                     self.modelLogger.debug("Item duplicates a different node! "+str(value)+" in "+str(self._titles))
                     value = newvalue
                     self.dupeName.emit()
                     self.modelLogger.debug("Name changed to "+str(value))
+                try:
+                    sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
+                    sub.widget().updateName(oldvalue, newvalue)
+                except KeyError:
+                    pass
+                self.itemFromIndex(index).data(role=Qt.UserRole+2)[0].setSeqName(newvalue)
         self.modelLogger.debug("Setting node text to "+str(value))
         self.itemFromIndex(index).setData(value)
         self.itemFromIndex(index).setText(value)
@@ -327,6 +344,7 @@ class ItemModel(QStandardItemModel):
         try:
             sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
             sub.setWindowTitle(value)
+
             sub.mdiArea().setActiveSubWindow(sub)
         except:
             exctype, val = sys.exc_info()[:2]
