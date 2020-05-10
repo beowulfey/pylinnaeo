@@ -190,7 +190,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                 seqr = node.data(role=self.SequenceRole)
                 for seq in seqr:
                     seqs[seq.sName()] = str(seq.seq)
-                    worker = utilities.AlignThread(seqs, num_threads=self.threadpool.maxThreadCount())
+                    worker = utilities.AlignThread(seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
                     worker.start()
                     worker.wait()
                     ali = worker.aligned
