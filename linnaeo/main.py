@@ -217,6 +217,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         result = self.maybeClose()
         if result is not None:
             print("RESETTING")
+            self.mdiArea.closeAllSubWindows()
             self.guiSet()
 
     def restore_tree(self, parent, datastream, num_childs=None):
@@ -253,6 +254,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         windex = fstream.readUInt32()
         print("Windex: ", windex)
         windows = {}
+        self.mdiArea.closeAllSubWindows()
         newBModel = views.ItemModel(windows, seqTree=True)
         newPModel = views.ItemModel(windows)
         self.restore_tree(newBModel.invisibleRootItem(), fstream)
