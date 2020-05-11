@@ -463,7 +463,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                 combo.append(seqr)
         combo.sort()
         aligned = self.callAlign(items)
-
         if items:
             if combo in self.sequences.values():
                 # If an alignment with this combo has already been made...
@@ -471,6 +470,11 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                     if combo == value:
                         # Get the window ID for this combo
                         wid = key
+                        for x in range(len(combo)):
+                            # Check names and rebuild window if different
+                            # TODO: THIS CAN BE DELETED I THINK
+                            if combo[x].name != value[x].name:
+                                self.windows.pop(key)
                         try:
                             # Reopen the window, if it exists.
                             sub = self.windows[wid]
@@ -646,10 +650,24 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.pruneNames()
 
     def postNameChange(self):
-        print(self.titles)
-        print(self.sequences)
+        """
+        When a sequence name is changed, I have to clean up the title list,
+        update that list in the bioModel, and update all the titles in the alignment window.
+        """
         self.pruneNames()
         self.bioModel.updateNames(self.titles)
+        # TODO: This is the best way to potentially rename alignments.
+        #for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+        #    wid = node.data(role=self.WindowRole)
+        #    if wid:
+        #        sub = self.windows[wid]
+        #        subseqs = sub.seqs()
+        #        seqrs = node.data(role=self.SequenceRole)
+        #        for seqr in seqrs:
+        #            if seqr.name
+
+
+
 
     def pruneNames(self):
         """
@@ -659,14 +677,18 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         names = []
         pruned = []
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-            if node.data(self.SequenceRole):
+            if node.data(role=self.SequenceRole):
                 names.append(node.text())
+                for key,value in self.sequences.items():
+                    if node.data(role=self.SequenceRole) == value:
+                        value[0].name = node.data(role=self.SequenceRole)[0].name
         for title in self.titles:
             if title not in names:
                 pruned.append(title)
         self.mainLogger.debug("Tree names: " + str(names) + " vs. Stored names: " + str(self.titles))
         self.titles = [x for x in self.titles and names if x not in pruned]
         self.mainLogger.debug("Removed " + str(pruned) + ", leaving " + str(self.titles))
+        print("SEQUENCES: ", self.sequences)
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown"""

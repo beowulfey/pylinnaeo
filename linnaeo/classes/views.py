@@ -3,10 +3,10 @@ import logging
 import sys
 
 import Bio
-from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase
+from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QDialog, QDialogButtonBox
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSignal, QRegExp, QRegularExpression
 
 from ui import alignment_ui, quit_ui
 from resources import linnaeo_rc
@@ -174,14 +174,20 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
     resized = pyqtSignal()
 
+    # THEMES #
+    defTheme = {
+        # Charged; positive
+        "R": QColor(100, 140, 255), "H": QColor(100, 140, 255), "K": QColor(100, 140, 255)
+    }
+
     def __init__(self, seqs):
         super(self.__class__, self).__init__()
         self.setupUi(self)
-        print(type(seqs))
         self._seqs = seqs
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.oldwidth = 0
+        self.theme = None
 
         #FANCY FONTWORK
         fid = QFontDatabase.addApplicationFont(":/fonts/LiberationMono.ttf")
@@ -194,10 +200,21 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.setCursorWidth(0)
 
 
+
+
         # options to do
         # TODO: Implement these
         self.showRuler = False
-        self.showColors = False
+        self.showColors = True
+
+        if self.showColors:
+            self.theme = self.defTheme
+            print("Applying highlighter")
+            self.hilite = AlignTheme(self.alignPane.document())
+            self.hilite.setTheme()
+
+    def setTheme(self, theme):
+        self.theme = theme
 
     def toggleRulers(self):
         self.showRuler = not self.showRuler
@@ -206,10 +223,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.emit()
         super(AlignSubWindow, self).resizeEvent(event)
         self.oldwidth = event.oldSize().width()
-        print("Finished resizing")
 
     def seqArrange(self):
-        print("Fitting sequence to window")
         splitseqs = []
         prettynames = []
         prettyseqs = []
@@ -218,13 +233,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         wrapper.break_on_hyphens = False
         nseqs = len(self._seqs.keys())
         width = (self.alignPane.size().width())-2
-        print(self.oldwidth-width)
         charpx = self.alignPane.fontMetrics().averageCharWidth()
         nlines = 0
         wrapper.width = round(width / charpx) - 3
         if self.alignPane.verticalScrollBar().isVisible():
             wrapper.width = round(width / charpx) - 5  # for the scroll bar
-        print("Width is: ",width," and char is ",charpx," so", str(round(width/charpx)))
+        #print("Width is: ",width," and char is ",charpx," so", str(round(width/charpx)))
         # TODO: This is still buggy on the right margin. Grows as window grows.
         for name, seq in self._seqs.items():
             lines = wrapper.wrap(seq)
@@ -244,9 +258,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # This loop creates a single alignment array by threading each of the individual lines
         # into each other.
         # TODO: Add TEXT FORMATTING to this section!! May need store as alternative text storage besides array.
-        # TODO: For example, consider adding to the text window directly rather than as an array!
         # TODO: Add a line for sequence number! Make it toggleable!
-        # TODO: Set this centered and reduce a bit so it looks cleaner!
         for line in range(nlines):
             if seqid != nseqs:
                 try:
@@ -275,14 +287,17 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # My hardcoded spacer doesn't match
         for line in prettyseqs[1:]:
             self.alignPane.setAlignment(Qt.AlignLeft)
+            self.hilite.highlightBlock(line)
             self.alignPane.append(line)
         self.alignPane.setAlignment(Qt.AlignLeft)
+
 
     def seqs(self):
         return self._seqs
 
     def setSeqs(self, seqs):
         self._seqs = seqs
+        self.seqArrange()
 
     def updateName(self, old, new):
         seq = self._seqs[old]
@@ -290,6 +305,81 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self._seqs.pop(old)
         self.seqArrange()
 
+
+class AlignTheme(QSyntaxHighlighter):
+    theme = None
+
+    def setTheme(self, theme=1):
+        """
+        Should make a dictionary of formats per type.
+        """
+        fmtPos = QTextCharFormat()
+        fmtNeg = QTextCharFormat()
+        fmtAro = QTextCharFormat()
+        fmtHydro = QTextCharFormat()
+        fmtPolar = QTextCharFormat()
+        fmtCys = QTextCharFormat()
+        fmtGly = QTextCharFormat()
+        fmtPro = QTextCharFormat()
+
+        if theme == 0:
+            fmtPos.setBackground(QColor(50, 69, 97))
+            fmtPos.setForeground(Qt.white)
+            fmtNeg.setBackground(QColor(158, 31, 50))
+            fmtNeg.setForeground(Qt.white)
+            fmtAro.setBackground(QColor(85,133,142))
+            fmtAro.setForeground(Qt.black)
+            fmtHydro.setBackground(QColor(150,173,200))
+            fmtHydro.setForeground(Qt.black)
+            fmtPolar.setBackground(QColor(103,125,76))
+            fmtPolar.setForeground(Qt.white)
+            fmtCys.setBackground(QColor(241,154,74))
+            fmtCys.setForeground(Qt.black)
+            fmtGly.setBackground(QColor(245,200,185))
+            fmtGly.setForeground(Qt.black)
+            fmtPro.setBackground(QColor(243,65,63))
+            fmtPro.setForeground(Qt.black)
+
+        if theme == 1:
+            fmtPos.setBackground(QColor(70,70,70))
+            fmtPos.setForeground(Qt.white)
+            fmtNeg.setBackground(QColor(47,47,47))
+            fmtNeg.setForeground(Qt.white)
+            fmtAro.setBackground(QColor(24,24,24))
+            fmtAro.setForeground(Qt.white)
+            fmtHydro.setBackground(QColor(93,93,93))
+            fmtHydro.setForeground(Qt.white)
+            fmtPolar.setBackground(QColor(186,186,186))
+            fmtPolar.setForeground(Qt.black)
+            fmtCys.setBackground(QColor(140,140,140))
+            fmtCys.setForeground(Qt.white)
+            fmtGly.setBackground(QColor(163,163,163))
+            fmtGly.setForeground(Qt.black)
+            fmtPro.setBackground(QColor(116,116,116))
+            fmtPro.setForeground(Qt.white)
+
+        self.theme = {
+            "[R,K]": fmtPos,
+            "[D,E]": fmtNeg,
+            "[F,Y,W,H]": fmtAro,
+            "[A,V,I,L,M]": fmtHydro,
+            "[S,T,N,Q]": fmtPolar,
+            "[G]": fmtGly,
+            "[C]": fmtCys,
+            "[P]": fmtPro
+        }
+
+    def highlightBlock(self, text):
+        for pattern, fmt in self.theme.items():
+            print("FMT: ", fmt)
+            print("Pattern: ", pattern)
+            regex = QRegularExpression(pattern)
+            index = regex.globalMatch(text)
+            while index.hasNext():
+                match = index.next()
+                start = match.capturedStart()
+                length = match.capturedLength()
+                self.setFormat(start, length, fmt)
 
 
 class ItemModel(QStandardItemModel):
@@ -337,8 +427,9 @@ class ItemModel(QStandardItemModel):
                     sub.widget().updateName(oldvalue, newvalue)
                 except KeyError:
                     pass
-                seqr = self.itemFromIndex(index).data(role=Qt.UserRole+2)[0]
-                seqr.name = newvalue
+                if self.itemFromIndex(index).data(role=Qt.UserRole+2):
+                    seqr = self.itemFromIndex(index).data(role=Qt.UserRole+2)[0]
+                    seqr.name = newvalue
         self.modelLogger.debug("Setting node text to "+str(value))
         self.itemFromIndex(index).setData(value)
         self.itemFromIndex(index).setText(value)
