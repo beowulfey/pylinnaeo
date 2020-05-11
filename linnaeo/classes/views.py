@@ -188,6 +188,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         family = QFontDatabase.applicationFontFamilies(fid)[0]
         font = QFont(family, 10)
         self.alignPane.setFont(font)
+        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; background-color: \
+                                     rgb(255,255,255)}")
+
+        self.alignPane.setCursorWidth(0)
 
 
         # options to do
@@ -217,7 +221,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         print(self.oldwidth-width)
         charpx = self.alignPane.fontMetrics().averageCharWidth()
         nlines = 0
-        wrapper.width = round(width / charpx) - 4  # for the scroll bar
+        wrapper.width = round(width / charpx) - 3
+        if self.alignPane.verticalScrollBar().isVisible():
+            wrapper.width = round(width / charpx) - 5  # for the scroll bar
         print("Width is: ",width," and char is ",charpx," so", str(round(width/charpx)))
         # TODO: Make this so it does not change on EVERY resize!
         for name, seq in self._seqs.items():
@@ -258,7 +264,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 subline += 1
         #self.alignPane.setText("\n".join(prettyseqs))
         self.namePane.setAlignment(Qt.AlignRight)
-        self.alignPane.setAlignment(Qt.AlignCenter)
+        self.alignPane.setAlignment(Qt.AlignLeft)
         self.namePane.setText(prettynames[0])
         self.alignPane.setText(prettyseqs[0])
         for line in prettynames[1:]:
@@ -271,11 +277,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         for line in prettyseqs[1:]:
             if line == prettyseqs[-1]:
                 self.alignPane.setAlignment(Qt.AlignLeft)
-                line = "  "+line
+                #line = "  "+line
             else:
-                self.alignPane.setAlignment(Qt.AlignCenter)
+                self.alignPane.setAlignment(Qt.AlignLeft)
             self.alignPane.append(line)
-        self.alignPane.setAlignment(Qt.AlignCenter)
+        self.alignPane.setAlignment(Qt.AlignLeft)
 
     def seqs(self):
         return self._seqs
