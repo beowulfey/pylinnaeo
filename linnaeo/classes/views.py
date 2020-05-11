@@ -3,7 +3,8 @@ import logging
 import sys
 
 import Bio
-from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat
+from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
+    QTextCursor
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QDialog, QDialogButtonBox
 from PyQt5.QtCore import Qt, pyqtSignal, QRegExp, QRegularExpression
@@ -175,9 +176,23 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     resized = pyqtSignal()
 
     # THEMES #
+
+    pos = QColor(100, 140, 255)
+    neg = QColor(255, 70, 90)
+    cys = QColor(255, 255, 85)
+    aro = QColor(145, 255, 168)
+
     defTheme = {
         # Charged; positive
-        "R": QColor(100, 140, 255), "H": QColor(100, 140, 255), "K": QColor(100, 140, 255)
+        "R": pos, "H": aro, "K": pos,
+        # Charged, negative
+        "D": neg, "E": neg,
+        # Misc
+        "C": cys, #"G": gly, "A": ala,
+        # Aromatic
+        "W": aro, "F": aro, "Y": aro
+
+
     }
 
     def __init__(self, seqs):
@@ -199,6 +214,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
         self.alignPane.setCursorWidth(0)
 
+        self.refseq = None
+
 
 
 
@@ -206,12 +223,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # TODO: Implement these
         self.showRuler = False
         self.showColors = True
+        self.relColors = False
 
         if self.showColors:
             self.theme = self.defTheme
-            print("Applying highlighter")
-            self.hilite = AlignTheme(self.alignPane.document())
-            self.hilite.setTheme()
 
     def setTheme(self, theme):
         self.theme = theme
@@ -257,7 +272,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         seqid = 0
         # This loop creates a single alignment array by threading each of the individual lines
         # into each other.
-        # TODO: Add TEXT FORMATTING to this section!! May need store as alternative text storage besides array.
         # TODO: Add a line for sequence number! Make it toggleable!
         for line in range(nlines):
             if seqid != nseqs:
@@ -274,22 +288,106 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 prettynames.append("")
                 seqid = 0
                 subline += 1
-        #self.alignPane.setText("\n".join(prettyseqs))
+        # Initialize the text frames
         self.namePane.setAlignment(Qt.AlignRight)
         self.alignPane.setAlignment(Qt.AlignLeft)
         self.namePane.setText(prettynames[0])
-        self.alignPane.setText(prettyseqs[0])
         for line in prettynames[1:]:
             self.namePane.setAlignment(Qt.AlignRight)
             self.namePane.append(line)
         self.namePane.verticalScrollBar().setValue(self.alignPane.verticalScrollBar().value())
-        # This works to center it for now but its kind of hacky. Sometimes the left edge width varies so
-        # My hardcoded spacer doesn't match
-        for line in prettyseqs[1:]:
+
+        self.alignPane.clear()
+        if nseqs == 1:
+            for line in prettyseqs:
+                self.alignPane.setAlignment(Qt.AlignLeft)
+                self.alignPane.append(line)
+
+        if nseqs > 1:
+            # TODO: Figure out a way to set reference sequence (or rearrange)
+            prevline = ""
+            for index in range(len(prettyseqs)):
+                line = prettyseqs[index]
+                if len(line) == 0:
+                    # Blank line, just add to window ###############
+                    self.alignPane.append(line)
+                    prevline = line
+                elif len(prevline) == 0:
+                    # Reference sequence, always format ##############
+                    self.alignPane.moveCursor(QTextCursor.End)
+                    if index > 0:
+                        self.alignPane.insertPlainText("\n")
+                    for i in range(len(line)):
+                        if line[i] in self.theme.keys():
+                            color = self.theme[line[i]]
+                            self.alignPane.setTextBackgroundColor(color)
+                        self.alignPane.insertPlainText(line[i])
+                        self.alignPane.moveCursor(QTextCursor.End)
+                        self.alignPane.setTextBackgroundColor(Qt.white)
+                    prevline = line
+                else:
+                    # All others, conditional format ##################
+                    self.alignPane.moveCursor(QTextCursor.End)
+                    self.alignPane.insertPlainText("\n")
+                    for i in range(len(line)):
+                        if line[i] in self.theme.keys():
+                            color = self.theme[line[i]]
+                            self.alignPane.setTextBackgroundColor(color)
+                        if self.relColors and line[i] != prevline[i]:
+                            self.alignPane.setTextBackgroundColor(Qt.white)
+                        self.alignPane.insertPlainText(line[i])
+                        self.alignPane.moveCursor(QTextCursor.End)
+                        self.alignPane.setTextBackgroundColor(Qt.white)
+        self.alignPane.moveCursor(QTextCursor.Start)
+
+
+
+
+        """for index in range(len(prettyseqs)):
             self.alignPane.setAlignment(Qt.AlignLeft)
-            self.hilite.highlightBlock(line)
-            self.alignPane.append(line)
+            line = prettyseqs[index]
+            if nseqs >= 2:
+                prevline = prettyseqs[0]
+                
+                if index == 0 or len(prevline) == 0:
+                    # This is the reference sequence.
+                    for i in range(len(line)):
+                        try:
+                            color = self.theme[line[i]]
+                            self.alignPane.setTextBackgroundColor(color)
+                            self.alignPane.insertPlainText(line[i])
+                            self.alignPane.setTextBackgroundColor(Qt.white)
+                        except KeyError:
+                            self.alignPane.setTextBackgroundColor(Qt.white)
+                            self.alignPane.insertPlainText(line[i])
+                    self.alignPane.insertPlainText("\n")
+                elif len(prevline) != 0 and len(line) != 0:
+                    if index > 0:
+                        prevline = prettyseqs[index - 1]
+                    for i in range(len(line)-1):
+                        if i < len(line)-1 and line[i] == prevline[i]:
+                            print(line[i]+" matches "+prevline[i])
+                            try:
+                                color = self.theme[line[i]]
+                                self.alignPane.setTextBackgroundColor(color)
+                                self.alignPane.insertPlainText(line[i])
+                                self.alignPane.setTextBackgroundColor(Qt.white)
+                            except KeyError:
+                                self.alignPane.setTextBackgroundColor(Qt.white)
+                                self.alignPane.insertPlainText(line[i])
+                        elif i < len(line)-1 and line[i] != prevline[i]:
+                            print("no match")
+                        else:
+                            self.alignPane.append("\n")
+                else:
+                    self.alignPane.append(line)
+
+
+            else:
+                # no formatting
+                self.alignPane.append(line)
         self.alignPane.setAlignment(Qt.AlignLeft)
+        """
 
 
     def seqs(self):
