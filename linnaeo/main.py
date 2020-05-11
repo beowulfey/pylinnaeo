@@ -105,14 +105,12 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             self.projectModel = views.ItemModel(self.windows)
             self.projectModel.appendRow(self.projectRoot)
 
-
         self.bioTree.setModel(self.bioModel)
         self.projectTree.setModel(self.projectModel)
         self.bioTree.setExpanded(self.bioModel.invisibleRootItem().index(), True)
         self.bioModel.setHorizontalHeaderLabels(["Sequences"])
         self.projectModel.setHorizontalHeaderLabels(["Alignments"])
         self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
-
 
     def guiFinalize(self):
         # Tree setup
@@ -168,55 +166,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.processTimer.timeout.connect(self.updateUsage)
 
         self.actionTrees.triggered.connect(self.queryTrees)
-
-    def rebuildTrees(self):
-        """
-        At this point, the sequences and the alignments both have Window IDs applied -- but the windows
-        no longer exist. Need to make sure when regenerating the windows, the old windowIDs are not lost.
-        """
-        for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-            if node.data(role=self.SequenceRole):
-                print(node.data())
-                ali = {}  # empty dict needed to send to open window
-                wid = node.data(role=self.WindowRole)
-                seqr = node.data(role=self.SequenceRole)[0]
-                ali[seqr.sName()] = str(seqr.seq)
-                self.makeNewWindow(wid, ali, nonode=True)
-                self.bioTree.setExpanded(self.bioModel.indexFromItem(node), True)
-
-        for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
-            if node.data(role=self.SequenceRole):
-                print(node.data())
-                seqs = {}
-                wid = node.data(role=self.WindowRole)
-                seqr = node.data(role=self.SequenceRole)
-                for seq in seqr:
-                    seqs[seq.sName()] = str(seq.seq)
-                    worker = utilities.AlignThread(seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
-                    worker.start()
-                    worker.wait()
-                    ali = worker.aligned
-                    self.makeNewWindow(wid, ali, nonode=True)
-                self.projectTree.setExpanded(self.projectModel.indexFromItem(node), True)
-        print(self.windows)
-
-    def queryTrees(self):
-        print("\n\nBIOROOT")
-        for child in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-            print("Text: ", child.text())
-            print("Name: ", child.data(role=Qt.UserRole + 1))
-            seqr = child.data(role=Qt.UserRole + 2)
-            print("Seq: ", child.data(role=Qt.UserRole + 2))
-            if seqr:
-                print(seqr[0].sName())
-            #print("Seqr name: ", child.data(role=Qt.UserRole+2).sName())
-            print("Window Index: ", child.data(role=Qt.UserRole + 3))
-        print("ALIGNMENT ROOT")
-        for child in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
-            print("Text: ", child.text())
-            print("Name: ", child.data(role=Qt.UserRole + 1))
-            print("Seq: ", child.data(role=Qt.UserRole + 2))
-            print("Window Index: ", child.data(role=Qt.UserRole + 3))
 
     # SINGLE-USE SLOTS
     def newWorkspace(self):
@@ -350,8 +299,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             indices = self.lastClickedTree.selectedIndexes()
             for index in indices:
                 node = self.bioModel.itemFromIndex(index)
-                seq = node.data(role=self.SequenceRole)[0]
-                seqr = SeqRecord(seq.seq, id=seq.sName())
+                seqr = node.data(role=self.SequenceRole)[0]
+                #seqr = SeqRecord(seq.seq, id=seq.sName())
                 print(seqr.format("fasta"))
                 seqs.append(seqr.format("fasta"))
             QApplication.clipboard().setText("".join(seqs))
@@ -529,20 +478,21 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
         if items:
             if combo in self.sequences.values():
+                # If an alignment with this combo has already been made...
                 for key, value in self.sequences.items():
-                    print("COMBO: ", combo)
-                    print("VALUE: ", value)
                     if combo == value:
+                        # Get the window ID for this combo
                         wid = key
                         try:
+                            # Reopen the window, if it exists.
                             sub = self.windows[wid]
-                            print("Reopening saved window")
                             self.openWindow(sub)
                         except KeyError:
-                            print("Opening new window")
+                            # Or generate a new window, if it does not.
                             sub = self.makeNewWindow(wid, aligned)
                             self.openWindow(sub)
             else:
+                # If it hasn't been made yet, add the combo to the main list and make/open window.
                 wid = str(int(self.windex) + 1)
                 self.sequences[wid] = combo
                 sub = self.makeNewWindow(wid, aligned)
@@ -565,7 +515,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         """
         Input is SeqRecord.
         Assigns a unique WID and adds to list of all Seqs.
-        Creates a node with the SeqName as the title and adds to the Sequence Tree
+        Creates a node with the title linked to the sName and adds to the Sequence Tree
+        Updating this node name should modify the sName too.
         """
         wid = str(int(self.windex) + 1)
         sname = seqr.sName()
@@ -573,11 +524,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         sname, self.titles = utilities.checkName(sname, self.titles)
         if sname != seqr.sName():
             seqr.setSeqName(sname)
-        print("SEQ INIT: ", sname)
-        print("Updated titles: ", self.titles)
         # Adds to the list of sequences, by its Window ID
         self.sequences[wid] = [seqr]
-        print("Updated sequences: \n", self.sequences)
         node = QStandardItem(sname)
         node.setData([seqr], self.SequenceRole)
         node.setData(node.data(role=self.SequenceRole)[0].sName())
@@ -587,8 +535,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.windex = int(wid)
 
     def makeNewWindow(self, wid, ali, nonode=False):
-        print("MAKING NEW WINDOW")
-        print("ALIGNMENT: ", ali)
         sub = views.MDISubWindow()
         widget = views.AlignSubWindow(ali)
         sub.setWidget(widget)
@@ -627,6 +573,55 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             self.mdiArea.setActiveSubWindow(sub)
 
     # UTILITY METHODS
+    def rebuildTrees(self):
+        """
+        At this point, the sequences and the alignments both have Window IDs applied -- but the windows
+        no longer exist. Need to make sure when regenerating the windows, the old windowIDs are not lost.
+        """
+        for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+            if node.data(role=self.SequenceRole):
+                print(node.data())
+                ali = {}  # empty dict needed to send to open window
+                wid = node.data(role=self.WindowRole)
+                seqr = node.data(role=self.SequenceRole)[0]
+                ali[seqr.sName()] = str(seqr.seq)
+                self.makeNewWindow(wid, ali, nonode=True)
+                self.bioTree.setExpanded(self.bioModel.indexFromItem(node), True)
+
+        for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+            if node.data(role=self.SequenceRole):
+                print(node.data())
+                seqs = {}
+                wid = node.data(role=self.WindowRole)
+                seqr = node.data(role=self.SequenceRole)
+                for seq in seqr:
+                    seqs[seq.sName()] = str(seq.seq)
+                    worker = utilities.AlignThread(seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
+                    worker.start()
+                    worker.wait()
+                    ali = worker.aligned
+                    self.makeNewWindow(wid, ali, nonode=True)
+                self.projectTree.setExpanded(self.projectModel.indexFromItem(node), True)
+        print(self.windows)
+
+    def queryTrees(self):
+        print("\n\nBIOROOT")
+        for child in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+            print("Text: ", child.text())
+            print("Name: ", child.data(role=Qt.UserRole + 1))
+            seqr = child.data(role=Qt.UserRole + 2)
+            print("Seq: ", child.data(role=Qt.UserRole + 2))
+            if seqr:
+                print(seqr[0].sName())
+            #print("Seqr name: ", child.data(role=Qt.UserRole+2).sName())
+            print("Window Index: ", child.data(role=Qt.UserRole + 3))
+        print("ALIGNMENT ROOT")
+        for child in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+            print("Text: ", child.text())
+            print("Name: ", child.data(role=Qt.UserRole + 1))
+            print("Seq: ", child.data(role=Qt.UserRole + 2))
+            print("Window Index: ", child.data(role=Qt.UserRole + 3))
+
     def maybeClose(self):
         # TODO: CHECK IF CHANGES
         qDialog = views.QuitDialog(self)
@@ -708,6 +703,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                  'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1A = Bseq.MutableSeq(test1[1], generic_protein)
         gpi1a = models.SeqR(seq_GPI1A, test1[0])
+        gpi1a.id = test1[0]
         test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE' +
                  'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG' +
                  'VEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKE' +
@@ -721,6 +717,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
         gpi1b = models.SeqR(seq_GPI1B, test2[0])
+        gpi1b.id = test2[0]
         test = [gpi1a, gpi1b]
         for i in test:
             self.seqInit(i)

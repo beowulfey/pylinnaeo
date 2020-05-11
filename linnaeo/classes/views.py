@@ -178,7 +178,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         super(self.__class__, self).__init__()
         self.setupUi(self)
         print(type(seqs))
-        self._seqs=seqs
+        self._seqs = seqs
         self.resized.connect(self.seqArrange)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.oldwidth = 0
@@ -215,7 +215,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         prettyseqs = []
         maxname = 0
         wrapper = tw.TextWrapper()
-        wrapper.break_on_hyphens=False
+        wrapper.break_on_hyphens = False
         nseqs = len(self._seqs.keys())
         width = (self.alignPane.size().width())-2
         print(self.oldwidth-width)
@@ -225,7 +225,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         if self.alignPane.verticalScrollBar().isVisible():
             wrapper.width = round(width / charpx) - 5  # for the scroll bar
         print("Width is: ",width," and char is ",charpx," so", str(round(width/charpx)))
-        # TODO: Make this so it does not change on EVERY resize!
+        # TODO: This is still buggy on the right margin. Grows as window grows.
         for name, seq in self._seqs.items():
             lines = wrapper.wrap(seq)
             splitseqs.append([name, lines])
@@ -271,15 +271,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.namePane.setAlignment(Qt.AlignRight)
             self.namePane.append(line)
         self.namePane.verticalScrollBar().setValue(self.alignPane.verticalScrollBar().value())
-        # TODO: Try and fix centering
         # This works to center it for now but its kind of hacky. Sometimes the left edge width varies so
         # My hardcoded spacer doesn't match
         for line in prettyseqs[1:]:
-            if line == prettyseqs[-1]:
-                self.alignPane.setAlignment(Qt.AlignLeft)
-                #line = "  "+line
-            else:
-                self.alignPane.setAlignment(Qt.AlignLeft)
+            self.alignPane.setAlignment(Qt.AlignLeft)
             self.alignPane.append(line)
         self.alignPane.setAlignment(Qt.AlignLeft)
 
