@@ -337,7 +337,8 @@ class ItemModel(QStandardItemModel):
                     sub.widget().updateName(oldvalue, newvalue)
                 except KeyError:
                     pass
-                self.itemFromIndex(index).data(role=Qt.UserRole+2)[0].setSeqName(newvalue)
+                seqr = self.itemFromIndex(index).data(role=Qt.UserRole+2)[0]
+                seqr.name = newvalue
         self.modelLogger.debug("Setting node text to "+str(value))
         self.itemFromIndex(index).setData(value)
         self.itemFromIndex(index).setText(value)

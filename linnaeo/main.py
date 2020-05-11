@@ -300,7 +300,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             for index in indices:
                 node = self.bioModel.itemFromIndex(index)
                 seqr = node.data(role=self.SequenceRole)[0]
-                #seqr = SeqRecord(seq.seq, id=seq.sName())
                 print(seqr.format("fasta"))
                 seqs.append(seqr.format("fasta"))
             QApplication.clipboard().setText("".join(seqs))
@@ -324,7 +323,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             name = None
             bars = []
             spaces = []
-            oss = []
             try:
                 clip = QApplication.clipboard().text()
                 if clip[0] == ">":
@@ -341,23 +339,18 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                             spaces.append(index)
                         if nline[index] == "|":
                             bars.append(index)
-                        if nline[index:index+2] == "OS":
-                            oss.append(index)
                     if len(bars) > 0:
-                        sid = nline[:bars[1]-1]
-                    if len(oss) > 0:
-                        lastbar = bars[len(bars)-1]
-                        name = nline[lastbar+1:oss[0]]
-                        desc = nline[oss[0]:]
-                    elif not sid and not name:
+                        sid = nline[bars[0]+1:bars[1]]
+                        self.mainLogger.debug("Extracted ID for sequence: ", sid)
+                        desc = nline[bars[1]+1:]
+                    elif not sid:
                         sid = nline[1:9]
                         name = sid
 
                     if sid and bseq:
-                        seqr = models.SeqR(bseq, sid, id=sid, name=name)
+                        seqr = models.SeqR(bseq, id=sid, name=sid)
                         if desc:
                             seqr.description = desc
-                        print(seqr)
                         self.seqInit(seqr)
                 else:
                     self.mainStatus.showMessage("Please only paste in FASTA format!", msecs=1000)
@@ -396,13 +389,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             try:
                 sub = self.windows[wid]
                 if sub:
-                    print(sub)
-                    title = sub.windowTitle()
                     self.mainLogger.debug("Deleting node from tree: " + str(sub.windowTitle()))
                     sub.close()
-                    print(self.titles)
-                    self.titles.remove(title)
-                    print(self.titles)
                     self.windows.pop(wid)
                     self.sequences.pop(wid)
                     self.pruneNames()
@@ -471,7 +459,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             # Only does the thing if there is a sequence present in the node.
             if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
                 seqr = self.bioModel.itemFromIndex(index).data(role=self.SequenceRole)[0]
-                items[seqr.sName()] = str(seqr.seq)
+                items[seqr.name] = str(seqr.seq)
                 combo.append(seqr)
         combo.sort()
         aligned = self.callAlign(items)
@@ -519,16 +507,16 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         Updating this node name should modify the sName too.
         """
         wid = str(int(self.windex) + 1)
-        sname = seqr.sName()
+        sname = seqr.name
         # Check if title already exists, and if so, changes it.
         sname, self.titles = utilities.checkName(sname, self.titles)
-        if sname != seqr.sName():
-            seqr.setSeqName(sname)
+        if sname != seqr.name:
+            seqr.name = sname
         # Adds to the list of sequences, by its Window ID
         self.sequences[wid] = [seqr]
         node = QStandardItem(sname)
         node.setData([seqr], self.SequenceRole)
-        node.setData(node.data(role=self.SequenceRole)[0].sName())
+        node.setData(node.data(role=self.SequenceRole)[0].name)
         node.setData(wid, self.WindowRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         self.bioModel.appendRow(node)
@@ -552,7 +540,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                 self.projectModel.updateWindows(self.windows)
         else:
             seq = self.sequences[wid][0]
-            sub.setWindowTitle(seq.sName())
+            sub.setWindowTitle(seq.name)
             self.windows[wid] = sub
             self.bioModel.updateNames(self.titles)
             self.bioModel.updateWindows(self.windows)
@@ -584,7 +572,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                 ali = {}  # empty dict needed to send to open window
                 wid = node.data(role=self.WindowRole)
                 seqr = node.data(role=self.SequenceRole)[0]
-                ali[seqr.sName()] = str(seqr.seq)
+                ali[seqr.name] = str(seqr.seq)
                 self.makeNewWindow(wid, ali, nonode=True)
                 self.bioTree.setExpanded(self.bioModel.indexFromItem(node), True)
 
@@ -595,7 +583,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                 wid = node.data(role=self.WindowRole)
                 seqr = node.data(role=self.SequenceRole)
                 for seq in seqr:
-                    seqs[seq.sName()] = str(seq.seq)
+                    seqs[seq.name] = str(seq.seq)
                     worker = utilities.AlignThread(seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
                     worker.start()
                     worker.wait()
@@ -611,9 +599,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             print("Name: ", child.data(role=Qt.UserRole + 1))
             seqr = child.data(role=Qt.UserRole + 2)
             print("Seq: ", child.data(role=Qt.UserRole + 2))
-            if seqr:
-                print(seqr[0].sName())
-            #print("Seqr name: ", child.data(role=Qt.UserRole+2).sName())
             print("Window Index: ", child.data(role=Qt.UserRole + 3))
         print("ALIGNMENT ROOT")
         for child in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
@@ -702,7 +687,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                  'AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH' +
                  'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1A = Bseq.MutableSeq(test1[1], generic_protein)
-        gpi1a = models.SeqR(seq_GPI1A, test1[0])
+        gpi1a = models.SeqR(seq_GPI1A, id=test1[0], name=test1[0])
         gpi1a.id = test1[0]
         test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE' +
                  'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG' +
@@ -716,8 +701,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                  'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL' +
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
-        gpi1b = models.SeqR(seq_GPI1B, test2[0])
-        gpi1b.id = test2[0]
+        gpi1b = models.SeqR(seq_GPI1B, id = test2[0], name = test2[0])
         test = [gpi1a, gpi1b]
         for i in test:
             self.seqInit(i)
