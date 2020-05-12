@@ -12,6 +12,7 @@ linnaeo/classes/utilities.py
 linnaeo/classes/views.py
 linnaeo/resources/__init__.py
 linnaeo/resources/linnaeo_rc.py
+linnaeo/resources/fonts/__init__.py
 linnaeo/resources/icons/__init__.py
 linnaeo/resources/images/__init__.py
 linnaeo/resources/qss/__init__.py
