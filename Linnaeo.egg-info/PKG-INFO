@@ -1,5 +1,5 @@
 Metadata-Version: 2.1
-Name: Linnaeo
+Name: linnaeo
 Version: 0.2.0
 Summary: A tool for creating and categorizing protein alignments
 Home-page: https://github.com/beowulfey/linnaeo
@@ -46,6 +46,6 @@ Description: # LINNAEO #
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: GPL3
-Classifier: Operating System :: OS Independent
+Classifier: Operating System :: Windows
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown

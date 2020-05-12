@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="Linnaeo",
+    name="linnaeo",
     version="0.2.0",
     author="Aaron Wolfe",
     author_email="wolfe.aarond@gmail.com",
@@ -16,7 +16,7 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GPL3",
-        "Operating System :: OS Independent",
+        "Operating System :: Windows",
     ],
     python_requires='>=3.7',
 )

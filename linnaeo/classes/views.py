@@ -9,11 +9,11 @@ from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView
     QDialog, QDialogButtonBox
 from PyQt5.QtCore import Qt, pyqtSignal, QRegExp, QRegularExpression
 
-from ui import alignment_ui, quit_ui
-from resources import linnaeo_rc
+from linnaeo.ui import alignment_ui, quit_ui
+from linnaeo.resources import linnaeo_rc
 import textwrap as tw
 
-from classes import utilities
+from linnaeo.classes import utilities
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
@@ -348,7 +348,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             line = prettyseqs[index]
             if nseqs >= 2:
                 prevline = prettyseqs[0]
-                
+
                 if index == 0 or len(prevline) == 0:
                     # This is the reference sequence.
                     for i in range(len(line)):

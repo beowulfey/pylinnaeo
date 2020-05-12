@@ -18,9 +18,9 @@ from PyQt5.QtGui import QStandardItem, QFontDatabase
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog, QDialog
 
 # Internal components
-from classes import models, views, utilities
-from ui import linnaeo_ui
-from resources import linnaeo_rc
+from linnaeo.classes import models, views, utilities
+from linnaeo.ui import linnaeo_ui
+from linnaeo.resources import linnaeo_rc
 
 
 class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):

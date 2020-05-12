@@ -1,11 +1,11 @@
 README.md
 setup.py
-Linnaeo.egg-info/PKG-INFO
-Linnaeo.egg-info/SOURCES.txt
-Linnaeo.egg-info/dependency_links.txt
-Linnaeo.egg-info/top_level.txt
 linnaeo/__init__.py
 linnaeo/main.py
+linnaeo.egg-info/PKG-INFO
+linnaeo.egg-info/SOURCES.txt
+linnaeo.egg-info/dependency_links.txt
+linnaeo.egg-info/top_level.txt
 linnaeo/classes/__init__.py
 linnaeo/classes/models.py
 linnaeo/classes/utilities.py
@@ -14,8 +14,8 @@ linnaeo/resources/__init__.py
 linnaeo/resources/linnaeo_rc.py
 linnaeo/resources/icons/__init__.py
 linnaeo/resources/images/__init__.py
+linnaeo/resources/qss/__init__.py
 linnaeo/ui/__init__.py
 linnaeo/ui/alignment_ui.py
 linnaeo/ui/linnaeo_ui.py
 linnaeo/ui/quit_ui.py
-linnaeo/ui/sherlock_ui.py
