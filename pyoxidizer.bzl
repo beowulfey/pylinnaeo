@@ -6,7 +6,7 @@ def make_exe(dist):
     python_config = PythonInterpreterConfig(
     #     filesystem_importer=True,
     #     verbose=1,
-          run_eval="from linnaeo import main; main.main()",
+          run_eval="import linnaeo; linnaeo.main()",
     #      run_module="linnaeo",
           sys_paths=["$ORIGIN/lib"],
     #     run_noop=False,
@@ -24,7 +24,7 @@ def make_exe(dist):
 
     for resource in dist.pip_install([
       'C:\\Users\\wolfe\\devel\\linnaeo\\install\\clustalo-0.1.2-cp37-cp37m-win_amd64.whl',
-      'C:\\Users\\wolfe\\devel\\biopy-minimal\\dist\\biopython_minimal-1.77.dev0-py3-none-any.whl',
+      'C:\\Users\\wolfe\\devel\\linnaeo\\install\\biopython_minimal-1.77.dev0-py3-none-any.whl',
       'C:\\Users\\wolfe\\devel\\linnaeo\\dist\\linnaeo-0.2.0-py3-none-any.whl',
       ]):
     #  'C:\\Users\\wolfe\\devel\\linnaeo\\dist\\linnaeo-0.2.0-py3-none-any.whl']):
