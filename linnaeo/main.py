@@ -230,7 +230,10 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             try:
                 seq = SeqIO.read(filename, "fasta")
                 if seq:
-                    seqr = models.SeqR(seq.seq, seq.name, id=seq.id, description=seq.description)
+                    print("name: ",seq.name)
+                    print("id: ", seq.id)
+                    print("desc: ", seq.description)
+                    seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
                     self.seqInit(seqr)
             except:
                 self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
@@ -747,21 +750,4 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             """
 
 
-def main():
-    # print(linnaeo.__file__)
-    logging.basicConfig(level=logging.DEBUG)  # , format="%(asctime)s:%(levelname)s:%(message)s")
-    app = QApplication(sys.argv)
 
-    file = QFile(":/qss/linnaeo.qss")
-    file.open(QFile.ReadOnly)
-    style = str(file.readAll())
-    print(style)
-    app.setStyleSheet(style)
-    window = Linnaeo()
-    window.show()
-
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
