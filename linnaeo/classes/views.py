@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import logging
 import sys
+from math import trunc
 
 import Bio
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
@@ -209,8 +210,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         family = QFontDatabase.applicationFontFamilies(fid)[0]
         font = QFont(family, 10)
         self.alignPane.setFont(font)
-        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:10px; background-color: \
+        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; padding-top:0px; background-color: \
                                      rgb(255,255,255)}")
+        self.namePane.setStyleSheet("QTextEdit {padding-top:0px;}")
 
         self.alignPane.setCursorWidth(0)
 
@@ -247,13 +249,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         wrapper = tw.TextWrapper()
         wrapper.break_on_hyphens = False
         nseqs = len(self._seqs.keys())
-        width = (self.alignPane.size().width())-5
-        charpx = self.alignPane.fontMetrics().averageCharWidth()
+        charpx = round(self.alignPane.fontMetrics().averageCharWidth())
+        width = self.alignPane.size().width()-charpx*2
         nlines = 0
-        wrapper.width = round(width / charpx) - 3
+        wrapper.width = trunc(width / charpx) - 1
         if self.alignPane.verticalScrollBar().isVisible():
-            wrapper.width = round(width / charpx) - 5  # for the scroll bar
-        print("Width is:",width,"and char is",charpx,"so number of chars is", str(round(width/charpx)))
+            width = width-self.alignPane.verticalScrollBar().size().width()
+            wrapper.width = trunc(width / charpx)-3 # for the scroll bar
+        print("Width is:",width,"and char is",charpx,"so number of chars is", wrapper.width)
         # TODO: This is still buggy on the right margin. Grows as window grows.
         for name, seq in self._seqs.items():
             lines = wrapper.wrap(seq)
