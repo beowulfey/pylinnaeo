@@ -253,7 +253,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         wrapper.width = round(width / charpx) - 3
         if self.alignPane.verticalScrollBar().isVisible():
             wrapper.width = round(width / charpx) - 5  # for the scroll bar
-        #print("Width is: ",width," and char is ",charpx," so", str(round(width/charpx)))
+        print("Width is:",width,"and char is",charpx,"so number of chars is", str(round(width/charpx)))
         # TODO: This is still buggy on the right margin. Grows as window grows.
         for name, seq in self._seqs.items():
             lines = wrapper.wrap(seq)
