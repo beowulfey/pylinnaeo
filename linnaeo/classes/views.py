@@ -252,7 +252,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         charpx = round(self.alignPane.fontMetrics().averageCharWidth())
         width = self.alignPane.size().width()-charpx*2
         nlines = 0
-        wrapper.width = trunc(width / charpx) - 1
+        wrapper.width = trunc(width / charpx) - 5
         if self.alignPane.verticalScrollBar().isVisible():
             width = width-self.alignPane.verticalScrollBar().size().width()
             wrapper.width = trunc(width / charpx)-3 # for the scroll bar
