@@ -209,7 +209,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         family = QFontDatabase.applicationFontFamilies(fid)[0]
         font = QFont(family, 10)
         self.alignPane.setFont(font)
-        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; background-color: \
+        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:10px; background-color: \
                                      rgb(255,255,255)}")
 
         self.alignPane.setCursorWidth(0)
@@ -247,7 +247,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         wrapper = tw.TextWrapper()
         wrapper.break_on_hyphens = False
         nseqs = len(self._seqs.keys())
-        width = (self.alignPane.size().width())-2
+        width = (self.alignPane.size().width())-5
         charpx = self.alignPane.fontMetrics().averageCharWidth()
         nlines = 0
         wrapper.width = round(width / charpx) - 3
