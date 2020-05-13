@@ -211,7 +211,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         family = QFontDatabase.applicationFontFamilies(fid)[0]
         font = QFont(family, 10)
         self.alignPane.setFont(font)
-        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; padding-top:0px; background-color: \
+        self.alignPane.setStyleSheet("QTextEdit {padding-left:0px; padding-right:0px; padding-top:0px; background-color: \
                                      rgb(255,255,255)}")
         self.namePane.setStyleSheet("QTextEdit {padding-top:0px;}")
 
@@ -249,17 +249,23 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         maxname = 0
         wrapper = tw.TextWrapper()
         wrapper.break_on_hyphens = False
+        wrapper.initial_indent='   '
+        wrapper.subsequent_indent='   '
         nseqs = len(self._seqs.keys())
         charpx = round(self.alignPane.fontMetrics().averageCharWidth())
-        print(self.alignPane.size().width())
-        print(self.devicePixelRatio())
-        width = self.alignPane.size().width()-charpx*2
+        width = self.alignPane.size().width() - 10  # 5 pixel gap on both sides
+        gap = self.alignPane.size().width()-width
         nlines = 0
-        wrapper.width = trunc(width / charpx) - 5
+        wrapper.width = trunc(width / charpx)
+
         if self.alignPane.verticalScrollBar().isVisible():
-            width = width-self.alignPane.verticalScrollBar().size().width()
+            print("WITH SCROLL")
             wrapper.width = trunc(width / charpx)-3 # for the scroll bar
+        textpx = wrapper.width * charpx
+
+        print("\nExpected Text Px:",textpx)
         print("Width is:",width,"and char is",charpx,"so number of chars is", wrapper.width)
+        #print("Gap is:",gap)
         # TODO: This is still buggy on the right margin. Grows as window grows.
         for name, seq in self._seqs.items():
             lines = wrapper.wrap(seq)
