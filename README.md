@@ -26,7 +26,7 @@ Install Anaconda3 and create a new environment:
 conda create env --name linnaeo python=3.7
 pip install biopython, psutil, pyqt5=5.9
 # If on linux:
-pip install clustalo
+pip install --global-option=build_ext --global-option="-I/usr/local/sci/clustalo/current/include/clustalo/" --global-option="-L/usr/local/sci/clustalo/current/lib/" clustalo
 # Windows:
 pip install ./INSTALL/clustalo...etc.whl
 

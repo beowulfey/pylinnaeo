@@ -9,6 +9,7 @@ from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSynta
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QDialog, QDialogButtonBox
 from PyQt5.QtCore import Qt, pyqtSignal, QRegExp, QRegularExpression
+from PyQt5.uic.properties import QtGui
 
 from linnaeo.ui import alignment_ui, quit_ui
 from linnaeo.resources import linnaeo_rc
@@ -250,6 +251,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         wrapper.break_on_hyphens = False
         nseqs = len(self._seqs.keys())
         charpx = round(self.alignPane.fontMetrics().averageCharWidth())
+        print(self.alignPane.size().width())
+        print(self.devicePixelRatio())
         width = self.alignPane.size().width()-charpx*2
         nlines = 0
         wrapper.width = trunc(width / charpx) - 5

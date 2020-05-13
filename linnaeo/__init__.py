@@ -18,6 +18,7 @@ def main():
     window = Linnaeo()
     window.show()
 
+
     sys.exit(app.exec_())
 
 
