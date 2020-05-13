@@ -329,6 +329,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     self.alignPane.moveCursor(QTextCursor.End)
                     if index > 0:
                         self.alignPane.insertPlainText("\n")
+                        self.alignPane.setTextBackgroundColor(Qt.white)
                     for i in range(len(line)):
                         if line[i] in self.theme.keys():
                             color = self.theme[line[i]]
@@ -342,7 +343,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     self.alignPane.moveCursor(QTextCursor.End)
                     self.alignPane.insertPlainText("\n")
                     for i in range(len(line)):
-                        if line[i] in self.theme.keys():
+                        self.alignPane.setTextBackgroundColor(Qt.white)
+                        if line[i] in self.theme.keys() and line[i]:
                             color = self.theme[line[i]]
                             self.alignPane.setTextBackgroundColor(color)
                         if self.relColors and line[i] != prevline[i]:

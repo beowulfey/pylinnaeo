@@ -1,7 +1,7 @@
 import logging
 import sys
 import traceback
-from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, pyqtSlot, QThread
+from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, pyqtSlot, QThread, QTimer
 from clustalo import clustalo
 
 """
@@ -82,4 +82,15 @@ class AlignThread(QThread):
             self.aligned = result
             self.clustalLogger.debug("ClustalO thread returned alignment successfully")
 
+class TimerThread(QThread):
+    timeout = pyqtSignal()
 
+    def __init__(self):
+        QThread.__init__(self)
+        self.processTimer = QTimer()
+        self.processTimer.setInterval(1000)
+        self.processTimer.start()
+        self.processTimer.timeout.connect(self.timerDone)
+
+    def timerDone(self):
+        self.timeout.emit()
