@@ -5,7 +5,7 @@ from math import trunc
 
 import Bio
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
-    QTextCursor
+    QTextCursor, QFontMetricsF
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QDialog, QDialogButtonBox
 from PyQt5.QtCore import Qt, pyqtSignal, QRegExp, QRegularExpression
@@ -16,6 +16,8 @@ from linnaeo.resources import linnaeo_rc
 import textwrap as tw
 
 from linnaeo.classes import utilities
+
+from classes.utilities import SeqWrap
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
@@ -210,8 +212,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         fid = QFontDatabase.addApplicationFont(":/fonts/LiberationMono.ttf")
         family = QFontDatabase.applicationFontFamilies(fid)[0]
         font = QFont(family, 10)
+        self.fmF = QFontMetricsF(font)  # FontMetrics Float... because default FontMetrics gives Int
         self.alignPane.setFont(font)
-        self.alignPane.setStyleSheet("QTextEdit {padding-left:0px; padding-right:0px; padding-top:0px; background-color: \
+        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; padding-top:0px; background-color: \
                                      rgb(255,255,255)}")
         self.namePane.setStyleSheet("QTextEdit {padding-top:0px;}")
 
@@ -249,18 +252,16 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         maxname = 0
         wrapper = tw.TextWrapper()
         wrapper.break_on_hyphens = False
-        wrapper.initial_indent='   '
-        wrapper.subsequent_indent='   '
+        #wrapper.initial_indent='   '
+        #wrapper.subsequent_indent='   '
         nseqs = len(self._seqs.keys())
-        charpx = round(self.alignPane.fontMetrics().averageCharWidth())
-        width = self.alignPane.size().width() - 10  # 5 pixel gap on both sides
-        gap = self.alignPane.size().width()-width
+        charpx = self.fmF.averageCharWidth()
+        width = self.alignPane.size().width() - 30  # 5 pixel gap on both sides. plus 20 px on left edge
         nlines = 0
-        wrapper.width = trunc(width / charpx)
+        wrapper.width = round(width / charpx - 20/charpx)  # Left edge is 20 px, want to match
 
         if self.alignPane.verticalScrollBar().isVisible():
-            print("WITH SCROLL")
-            wrapper.width = trunc(width / charpx)-3 # for the scroll bar
+            wrapper.width = round(width / charpx -20/charpx - self.alignPane.verticalScrollBar().size().width()/charpx)
         textpx = wrapper.width * charpx
 
         print("\nExpected Text Px:",textpx)
@@ -312,6 +313,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.clear()
         if nseqs == 1:
             for line in prettyseqs:
+                if line == prettyseqs[0]:
+                    print("Chars in line1: ",len(line))
                 self.alignPane.setAlignment(Qt.AlignLeft)
                 self.alignPane.append(line)
 
