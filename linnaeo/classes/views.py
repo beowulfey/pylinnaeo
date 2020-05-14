@@ -7,8 +7,8 @@ import Bio
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
     QTextCursor, QFontMetricsF
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
-    QDialog, QDialogButtonBox
-from PyQt5.QtCore import Qt, pyqtSignal, QRegExp, QRegularExpression
+    QDialog, QDialogButtonBox, QMainWindow, QApplication
+from PyQt5.QtCore import Qt, pyqtSignal, QRegExp, QRegularExpression, QTimer, QEvent, QObject
 from PyQt5.uic.properties import QtGui
 
 from linnaeo.ui import alignment_ui, quit_ui
@@ -18,6 +18,32 @@ import textwrap as tw
 from linnaeo.classes import utilities
 
 from classes.utilities import SeqWrap
+
+
+class LinnaeoApp(QApplication):
+    barClick = pyqtSignal()
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.installEventFilter(self)
+        self.barClick.connect(self.setSizing)
+        self._window = None
+
+    def eventFilter(self, obj, event):
+        if event.type() == 214:
+            self.barClick.emit()
+        return super().eventFilter(obj, event)
+
+    def setSizing(self):
+        if self._window:
+            if not self._window.beingClicked:
+                print("CLICK")
+                self._window.beingClicked = True
+                print(self._window.beingClicked)
+            elif self._window.beingClicked:
+                print("UNCLICK")
+                self._window.beingClicked = False
+                print(self._window.beingClicked)
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
@@ -151,6 +177,27 @@ class MDISubWindow(QMdiSubWindow):
         #        menu.actions().remove(action)
         # self.setSystemMenu(menu)
 
+        self.userIsResizing = False
+        self.installEventFilter(self)
+
+    def event(self, event):
+        # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
+        # Is there a better way to do this???
+        if event.type() == 2:
+            linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
+            print("CLICK!")
+            linnaeo.beingClicked = True
+            self.userIsResizing = True
+            print(linnaeo.beingClicked)
+        elif event.type() == 3:
+            linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
+            print("UNCLICK!")
+            linnaeo.beingClicked = False
+            self.userIsResizing = False
+            print(linnaeo.beingClicked)
+            self._widget.seqArrange()
+        return super().event(event)
+
     def setWidget(self, widget):
         self._widget = widget
         super(MDISubWindow, self).setWidget(widget)
@@ -195,17 +242,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         "C": cys, #"G": gly, "A": ala,
         # Aromatic
         "W": aro, "F": aro, "Y": aro
-
-
     }
 
     def __init__(self, seqs):
         super(self.__class__, self).__init__()
         self.setupUi(self)
         self._seqs = seqs
-        self.resized.connect(self.seqArrange)
+        self.resized.connect(self.resizeDone)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
-        self.oldwidth = 0
         self.theme = None
 
         #FANCY FONTWORK
@@ -221,9 +265,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.setCursorWidth(0)
 
         self.refseq = None
-
-
-
 
         # options to do
         # TODO: Implement these
@@ -243,30 +284,33 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def resizeEvent(self, event):
         self.resized.emit()
         super(AlignSubWindow, self).resizeEvent(event)
-        self.oldwidth = event.oldSize().width()
+        # self.oldwidth = event.oldSize().width()
+
+    def resizeDone(self):
+        print("Resizing DONE")
+        if self.parentWidget().userIsResizing:
+            self.alignPane.clear()
+        elif not self.parentWidget().userIsResizing:
+            print("REDRAW")
+            self.seqArrange()
 
     def seqArrange(self):
         splitseqs = []
         prettynames = []
         prettyseqs = []
         maxname = 0
-        wrapper = tw.TextWrapper()
+        wrapper = SeqWrap()
         wrapper.break_on_hyphens = False
-        #wrapper.initial_indent='   '
-        #wrapper.subsequent_indent='   '
         nseqs = len(self._seqs.keys())
         charpx = self.fmF.averageCharWidth()
         width = self.alignPane.size().width() - 30  # 5 pixel gap on both sides. plus 20 px on left edge
         nlines = 0
-        wrapper.width = round(width / charpx - 20/charpx)  # Left edge is 20 px, want to match
-
+        wrapper.width = int(width / charpx - 20/charpx)  # Left edge is 20 px, want to match
         if self.alignPane.verticalScrollBar().isVisible():
-            wrapper.width = round(width / charpx -20/charpx - self.alignPane.verticalScrollBar().size().width()/charpx)
-        textpx = wrapper.width * charpx
+            wrapper.width = int(width / charpx -20/charpx - self.alignPane.verticalScrollBar().size().width()/charpx)
 
-        print("\nExpected Text Px:",textpx)
-        print("Width is:",width,"and char is",charpx,"so number of chars is", wrapper.width)
-        #print("Gap is:",gap)
+        #print("\nExpected Text Px:",textpx)
+        #print("Width is:",width,"and char is",charpx,"so number of chars is", wrapper.width)
         for name, seq in self._seqs.items():
             lines = wrapper.wrap(seq)
             splitseqs.append([name, lines])
@@ -312,8 +356,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.clear()
         if nseqs == 1:
             for line in prettyseqs:
-                if line == prettyseqs[0]:
-                    print("Chars in line1: ",len(line))
                 self.alignPane.setAlignment(Qt.AlignLeft)
                 self.alignPane.append(line)
 
@@ -355,56 +397,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                         self.alignPane.moveCursor(QTextCursor.End)
                         self.alignPane.setTextBackgroundColor(Qt.white)
         self.alignPane.moveCursor(QTextCursor.Start)
-
-
-
-
-        """for index in range(len(prettyseqs)):
-            self.alignPane.setAlignment(Qt.AlignLeft)
-            line = prettyseqs[index]
-            if nseqs >= 2:
-                prevline = prettyseqs[0]
-
-                if index == 0 or len(prevline) == 0:
-                    # This is the reference sequence.
-                    for i in range(len(line)):
-                        try:
-                            color = self.theme[line[i]]
-                            self.alignPane.setTextBackgroundColor(color)
-                            self.alignPane.insertPlainText(line[i])
-                            self.alignPane.setTextBackgroundColor(Qt.white)
-                        except KeyError:
-                            self.alignPane.setTextBackgroundColor(Qt.white)
-                            self.alignPane.insertPlainText(line[i])
-                    self.alignPane.insertPlainText("\n")
-                elif len(prevline) != 0 and len(line) != 0:
-                    if index > 0:
-                        prevline = prettyseqs[index - 1]
-                    for i in range(len(line)-1):
-                        if i < len(line)-1 and line[i] == prevline[i]:
-                            print(line[i]+" matches "+prevline[i])
-                            try:
-                                color = self.theme[line[i]]
-                                self.alignPane.setTextBackgroundColor(color)
-                                self.alignPane.insertPlainText(line[i])
-                                self.alignPane.setTextBackgroundColor(Qt.white)
-                            except KeyError:
-                                self.alignPane.setTextBackgroundColor(Qt.white)
-                                self.alignPane.insertPlainText(line[i])
-                        elif i < len(line)-1 and line[i] != prevline[i]:
-                            print("no match")
-                        else:
-                            self.alignPane.append("\n")
-                else:
-                    self.alignPane.append(line)
-
-
-            else:
-                # no formatting
-                self.alignPane.append(line)
-        self.alignPane.setAlignment(Qt.AlignLeft)
-        """
-
 
     def seqs(self):
         return self._seqs

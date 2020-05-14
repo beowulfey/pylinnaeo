@@ -13,8 +13,8 @@ from Bio.SeqRecord import SeqRecord
 
 # PyQt components
 from PyQt5.Qt import Qt
-from PyQt5.QtCore import QThreadPool, QTimer, QDir, QFile, QIODevice, QDataStream
-from PyQt5.QtGui import QStandardItem, QFontDatabase
+from PyQt5.QtCore import QThreadPool, QTimer, QDir, QFile, QIODevice, QDataStream, QEvent
+from PyQt5.QtGui import QStandardItem, QFontDatabase, QHoverEvent
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog, QDialog
 
 # Internal components
@@ -34,6 +34,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
         super(self.__class__, self).__init__(*args, **kwargs)
         # Initialize UI
+        self.beingClicked = True
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
 
@@ -112,6 +113,25 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.bioModel.setHorizontalHeaderLabels(["Sequences"])
         self.projectModel.setHorizontalHeaderLabels(["Alignments"])
         self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
+        #self.installEventFilter(self)
+
+    def event(self, event):
+        # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
+        if event.type() == 2:
+            print(event, event.type())
+        return super().event(event)
+
+    #def nativeEvent(self, event, message):
+    #    print("MESSAGE ",message)
+    #    return super().nativeEvent(event, message)
+
+    #def eventFilter(self, obj, event):
+    #    if event.type() == QEvent.MouseButtonRelease or \
+    #            event.type() == QEvent.NonClientAreaMouseButtonRelease:
+    #        print("FOUND")
+    ##    if event.type() == 2:
+    #        print(event)
+    #    return super().eventFilter(obj, event)
 
     def guiFinalize(self):
         # Tree setup

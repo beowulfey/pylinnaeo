@@ -2,8 +2,9 @@ import logging
 import sys
 import traceback
 from textwrap import TextWrapper
+import re
 
-from PyQt5.QtCore import pyqtSignal, QThread, QTimer
+from PyQt5.QtCore import pyqtSignal, QThread, QTimer, QObject
 
 from clustalo import clustalo
 
@@ -13,44 +14,46 @@ Additional classes and functions that are used within Sherlock, but are not resp
 
 
 class SeqWrap(TextWrapper):
+    _whitespace = '\t\n\x0b\x0c\r '
+    word_punct = r'[\w!"\'&.,?]'
+    letter = r'[^\d\W]'
+    whitespace = r'[%s]' % re.escape(_whitespace)
+    nowhitespace = '[^' + whitespace[1:]
+    wordsep_re = re.compile(r'''
+        ( # any whitespace
+          %(ws)s+
+        #| # em-dash between words
+        #  (?<=%(wp)s) -{2,} (?=\w)
+        | # word, possibly hyphenated
+          %(nws)s+? #(?:
+            # hyphenated word
+            #  -(?: (?<=%(lt)s{2}-) | (?<=%(lt)s-%(lt)s-))
+            #  (?= %(lt)s -? %(lt)s)
+            #| # end of word
+            #  (?=%(ws)s|\Z)
+            #| # em-dash
+            #  (?<=%(wp)s) (?=-{2,}\w)
+            #)
+        )''' % {'wp': word_punct, 'lt': letter,
+                'ws': whitespace, 'nws': nowhitespace},
+        re.VERBOSE)
+    del word_punct, letter, nowhitespace
+
     def __init__(self, **kwargs):
         super().__init__(kwargs)
 
     def _handle_long_word(self, reversed_chunks, cur_line, cur_len, width):
-        ### SUBCLASSED OVERRIDDEN
-        """_handle_long_word(chunks : [string],
-                             cur_line : [string],
-                             cur_len : int, width : int)
-
-        Handle a chunk of text (most likely a word, not whitespace) that
-        is too long to fit in any line.
-        """
-        # Figure out when indent is larger than the specified width, and make
-        # sure at least one character is stripped off on every pass
+        # OVERRIDDEN
         if width < 1:
             space_left = 1
         else:
             space_left = width - cur_len
-            print("SPACE LEFT: ",space_left)
-
-        # If we're allowed to break long words, then do so: put as much
-        # of the next chunk onto the current line as will fit.
         if self.break_long_words:
             cur_line.append(reversed_chunks[-1][:space_left])
-            print(cur_line)
             reversed_chunks[-1] = reversed_chunks[-1][space_left:]
 
-        # Otherwise, we have to preserve the long word intact.  Only add
-        # it to the current line if there's nothing already there --
-        # that minimizes how much we violate the width constraint.
         elif not cur_line:
             cur_line.append(reversed_chunks.pop())
-
-        # If we're not allowed to break long words, and there's already
-        # text on the current line, do nothing.  Next time through the
-        # main loop of _wrap_chunks(), we'll wind up here again, but
-        # cur_len will be zero, so the next line will be entirely
-        # devoted to the long word that we can't handle right now.
 
 
 def checkName(name, titles, layer=0):
