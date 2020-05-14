@@ -53,8 +53,6 @@ class SeqWrap(TextWrapper):
         # devoted to the long word that we can't handle right now.
 
 
-
-
 def checkName(name, titles, layer=0):
     """ Tool for checking a title list. Used for generating new titles if duplicate"""
     print("\nBEGIN CHECK-- Layer ", layer)

@@ -267,7 +267,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         print("\nExpected Text Px:",textpx)
         print("Width is:",width,"and char is",charpx,"so number of chars is", wrapper.width)
         #print("Gap is:",gap)
-        # TODO: This is still buggy on the right margin. Grows as window grows.
         for name, seq in self._seqs.items():
             lines = wrapper.wrap(seq)
             splitseqs.append([name, lines])
