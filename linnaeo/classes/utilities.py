@@ -2,9 +2,9 @@ import logging
 import sys
 import traceback
 from textwrap import TextWrapper
-from typing import re
 
-from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, pyqtSlot, QThread
+from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, pyqtSlot, QThread, QTimer
+
 from clustalo import clustalo
 
 """
@@ -51,8 +51,6 @@ class SeqWrap(TextWrapper):
         # main loop of _wrap_chunks(), we'll wind up here again, but
         # cur_len will be zero, so the next line will be entirely
         # devoted to the long word that we can't handle right now.
-
-
 
 
 def checkName(name, titles, layer=0):
@@ -128,4 +126,15 @@ class AlignThread(QThread):
             self.aligned = result
             self.clustalLogger.debug("ClustalO thread returned alignment successfully")
 
+class TimerThread(QThread):
+    timeout = pyqtSignal()
 
+    def __init__(self):
+        QThread.__init__(self)
+        self.processTimer = QTimer()
+        self.processTimer.setInterval(1000)
+        self.processTimer.start()
+        self.processTimer.timeout.connect(self.timerDone)
+
+    def timerDone(self):
+        self.timeout.emit()

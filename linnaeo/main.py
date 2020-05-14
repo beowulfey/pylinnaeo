@@ -40,7 +40,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         # System instants; status bar and threads
         self.memLabel = QLabel()
         self.mainProcess = psutil.Process(os.getpid())
-        self.processTimer = QTimer()
+        #self.processTimer = QTimer()
+        self.processTimer = utilities.TimerThread()
         self.mainLogger = logging.getLogger("Main")
         self.threadpool = QThreadPool()
         self.mainLogger.info("Threading with a maximum of %d threads" % self.threadpool.maxThreadCount())
@@ -121,8 +122,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         # Status bar setup
         self.updateUsage()
         self.statusBar().addPermanentWidget(self.memLabel)
-        self.processTimer.setInterval(1000)
-        self.processTimer.start()
+        #self.processTimer.setInterval(1000)
+        #self.processTimer.start()
 
         self.DEBUG()
 
@@ -748,6 +749,3 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         except:
             print("No config file found!")
             """
-
-
-
