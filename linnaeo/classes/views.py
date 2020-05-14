@@ -251,6 +251,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.connect(self.resizeDone)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.theme = None
+        self.splitNames = []
+        self.splitSeqs = []
+
 
         #FANCY FONTWORK
         fid = QFontDatabase.addApplicationFont(":/fonts/LiberationMono.ttf")
@@ -265,6 +268,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.setCursorWidth(0)
 
         self.refseq = None
+        self.maxlen = 0
+
 
         # options to do
         # TODO: Implement these
@@ -274,6 +279,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
         if self.showColors:
             self.theme = self.defTheme
+
+        self.seqInit()
 
     def setTheme(self, theme):
         self.theme = theme
@@ -289,11 +296,83 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def resizeDone(self):
         print("Resizing DONE")
         if self.parentWidget().userIsResizing:
-            self.alignPane.clear()
+            self.seqArrange()
         elif not self.parentWidget().userIsResizing:
             print("REDRAW")
             self.seqArrange()
 
+    def seqInit(self):
+        """
+        Sequences are stored as triple layer arrays:
+        First layer is SEQUENCE
+        Second layer is SEQUENCE POSITION
+        Third layer is RESIDUE and COLOR
+        """
+        for seq in self._seqs.values():
+            if len(seq) > self.maxlen:
+                self.maxlen = len(seq)
+        for name, seq in self._seqs.items():
+            self.splitNames.append(name)
+            local = []
+            for i in range(self.maxlen):
+                try:
+                    char = seq[i]
+                    color = self.theme[char]
+                    local.append([char, color])
+                except IndexError:
+                    local.append([" ", None])
+                except KeyError:
+                    char = seq[i]
+                    local.append([char, None])
+            self.splitSeqs.append(local)
+
+    def seqArrange(self):
+        print("Arranging SEQ")
+        nseqs = len(self._seqs.keys())  # Calculate number of sequences
+        charpx = self.fmF.averageCharWidth()
+        width = self.alignPane.size().width() - 30
+        char_count = int(width / charpx - 20 / charpx)
+        print(char_count)
+        if self.alignPane.verticalScrollBar().isVisible():
+            char_count = int(width / charpx - 20 / charpx - \
+                             self.alignPane.verticalScrollBar().size().width() / charpx)
+
+        lines = int(self.maxlen/char_count)
+        self.alignPane.clear()
+        if not self.parentWidget().userIsResizing:
+            nline = 0
+            for line in range(lines):
+                start = nline * char_count
+                end = nline * char_count + char_count
+                for n in range(nseqs):
+                    for i in range(start, end):
+                        self.alignPane.moveCursor(QTextCursor.End)
+                        self.alignPane.setTextBackgroundColor(Qt.white)
+                        if self.splitSeqs[n][i][1]:
+                            self.alignPane.setTextBackgroundColor(self.splitSeqs[n][i][1])
+                        self.alignPane.insertPlainText(self.splitSeqs[n][i][0])
+                        self.alignPane.setTextBackgroundColor(Qt.white)
+                    self.alignPane.insertPlainText("\n")
+                nline += 1
+                self.alignPane.insertPlainText("\n")
+            self.alignPane.moveCursor(QTextCursor.Start)
+        else:
+            nline = 0
+            for line in range(lines):
+                start = nline * char_count
+                end = nline * char_count + char_count
+                for n in range(nseqs):
+                    print("".join([x[0] for x in self.splitSeqs[n][start:end]]))
+                    self.alignPane.append("".join([x[0] for x in self.splitSeqs[n][start:end]]))
+                self.alignPane.append("")
+                self.alignPane.moveCursor(QTextCursor.Start)
+                nline += 1
+
+
+
+
+
+    """
     def seqArrange(self):
         splitseqs = []
         prettynames = []
@@ -397,6 +476,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                         self.alignPane.moveCursor(QTextCursor.End)
                         self.alignPane.setTextBackgroundColor(Qt.white)
         self.alignPane.moveCursor(QTextCursor.Start)
+    """
 
     def seqs(self):
         return self._seqs
