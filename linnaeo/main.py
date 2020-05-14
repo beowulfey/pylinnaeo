@@ -19,6 +19,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
 
 # Internal components
 from linnaeo.classes import models, views, utilities
+from linnaeo.classes.views import LinnaeoApp
 from linnaeo.ui import linnaeo_ui
 from linnaeo.resources import linnaeo_rc
 
@@ -60,6 +61,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.bioModel = None
         self.projectRoot = None
         self.projectModel = None
+        self._currentWindow = None
 
         # MDI Window
         self.mdiArea = views.MDIArea()
@@ -115,11 +117,11 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
         #self.installEventFilter(self)
 
-    def event(self, event):
-        # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
-        if event.type() == 2:
-            print(event, event.type())
-        return super().event(event)
+    #def event(self, event):
+    #    # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
+    #    if event.type() == 2:
+    #        print(event, event.type())
+    #    return super().event(event)
 
     #def nativeEvent(self, event, message):
     #    print("MESSAGE ",message)
@@ -187,6 +189,26 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.processTimer.timeout.connect(self.updateUsage)
 
         self.actionTrees.triggered.connect(self.queryTrees)
+        LinnaeoApp.instance().barClick.connect(self.setSizing)
+        self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
+
+    def setCurrentWindow(self):
+        self._currentWindow = self.mdiArea.activeSubWindow()
+
+    def setSizing(self):
+        if not self.beingClicked:
+            self.beingClicked = True
+            if self._currentWindow and self._currentWindow.isMaximized(): # and self.mdiArea.activeSubWindow().isMaximized():
+                print("REDRAWING FRAME FROM MAIN")
+                self._currentWindow.widget_.userIsResizing = True
+                self._currentWindow.widget_.seqArrangeNoColor()
+        elif self.beingClicked:
+            self.beingClicked = False
+            if self._currentWindow and self._currentWindow .isMaximized():
+                print("DONE REDRAWING FROM MAIN")
+                self._currentWindow.widget_.userIsResizing = False
+
+                self._currentWindow.widget_.seqArrangeColor()
 
     # SINGLE-USE SLOTS
     def newWorkspace(self):

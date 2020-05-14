@@ -26,7 +26,7 @@ class LinnaeoApp(QApplication):
     def __init__(self, *args):
         super().__init__(*args)
         self.installEventFilter(self)
-        self.barClick.connect(self.setSizing)
+        #self.barClick.connect(self.setSizing)
         self._window = None
 
     def eventFilter(self, obj, event):
@@ -34,16 +34,16 @@ class LinnaeoApp(QApplication):
             self.barClick.emit()
         return super().eventFilter(obj, event)
 
-    def setSizing(self):
-        if self._window:
-            if not self._window.beingClicked:
-                print("CLICK")
-                self._window.beingClicked = True
-                print(self._window.beingClicked)
-            elif self._window.beingClicked:
-                print("UNCLICK")
-                self._window.beingClicked = False
-                print(self._window.beingClicked)
+    #def setSizing(self):
+    #    if self._window:
+    #        if not self._window.beingClicked:
+    #            print("CLICK")
+    #            self._window.beingClicked = True
+    #            print(self._window.beingClicked)
+    #        elif self._window.beingClicked:
+    #            print("UNCLICK")
+    #            self._window.beingClicked = False
+    #            print(self._window.beingClicked)
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
@@ -125,6 +125,7 @@ class MDIArea(QMdiArea):
             pass
 
     def resizeEvent(self, event):
+        # TODO: CAN I DELETE THIS??
         # passes a resize event to all subwindows to make sure the sequence is updated
         for sub in self.subWindowList():
             sub.resizeEvent(event)
@@ -167,7 +168,7 @@ class MDISubWindow(QMdiSubWindow):
     def __init__(self):
         super(MDISubWindow, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose, False)
-        self._widget = None
+        self.widget_ = None
         # TODO: TAKE OUT EXTRA CLOSE COMMAND IN MDISUBWINDOW
         # remove extra close command
         # menu = self.systemMenu()
@@ -177,36 +178,30 @@ class MDISubWindow(QMdiSubWindow):
         #        menu.actions().remove(action)
         # self.setSystemMenu(menu)
 
-        self.userIsResizing = False
-        self.installEventFilter(self)
-
     def event(self, event):
         # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
         # Is there a better way to do this???
+        #print(event, event.type())
         if event.type() == 2:
-            linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
-            print("CLICK!")
-            linnaeo.beingClicked = True
-            self.userIsResizing = True
-            print(linnaeo.beingClicked)
+            #linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
+            print("REDRAWING FROM MDI")
+            self.widget_.userIsResizing = True
+            self.widget_.seqArrangeNoColor()
         elif event.type() == 3:
-            linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
-            print("UNCLICK!")
-            linnaeo.beingClicked = False
-            self.userIsResizing = False
-            print(linnaeo.beingClicked)
-            self._widget.seqArrange()
+            print("DONE REDRAWING FROM MDI")
+            self.widget_.userIsResizing = False
+            self.widget_.seqArrangeColor()
         return super().event(event)
 
     def setWidget(self, widget):
-        self._widget = widget
+        self.widget_ = widget
         super(MDISubWindow, self).setWidget(widget)
 
     def widget(self):
-        return self._widget
+        return self.widget_
 
     def show(self):
-        self._widget.show()
+        self.widget_.show()
         super(MDISubWindow, self).show()
 
     def closeEvent(self, event):
@@ -246,6 +241,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def __init__(self, seqs):
         super(self.__class__, self).__init__()
+        self.userIsResizing = False
         self.setupUi(self)
         self._seqs = seqs
         self.resized.connect(self.resizeDone)
@@ -294,12 +290,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # self.oldwidth = event.oldSize().width()
 
     def resizeDone(self):
-        print("Resizing DONE")
-        if self.parentWidget().userIsResizing:
-            self.seqArrange()
-        elif not self.parentWidget().userIsResizing:
-            print("REDRAW")
-            self.seqArrange()
+        if self.userIsResizing:
+            print("REDRAW FROM INSIDE")
+            self.seqArrangeNoColor()
+        elif not self.userIsResizing:
+            print("DONE FROM INSIDE")
+            self.seqArrangeColor()
+
 
     def seqInit(self):
         """
@@ -326,47 +323,57 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     local.append([char, None])
             self.splitSeqs.append(local)
 
-    def seqArrange(self):
-        print("Arranging SEQ")
+    def seqArrangeNoColor(self):
+        print("NO COLOR")
         nseqs = len(self._seqs.keys())  # Calculate number of sequences
         charpx = self.fmF.averageCharWidth()
         width = self.alignPane.size().width() - 30
         char_count = int(width / charpx - 20 / charpx)
-        print(char_count)
+        if self.alignPane.verticalScrollBar().isVisible():
+            char_count = int(width / charpx - 20 / charpx - \
+                             self.alignPane.verticalScrollBar().size().width() / charpx)
+
+        lines = int(self.maxlen / char_count)
+        self.alignPane.clear()
+        nline = 0
+        for line in range(lines):
+            start = nline * char_count
+            end = nline * char_count + char_count
+            for n in range(nseqs):
+                self.alignPane.append("".join([x[0] for x in self.splitSeqs[n][start:end]]))
+            self.alignPane.append("")
+            self.alignPane.moveCursor(QTextCursor.Start)
+            nline += 1
+
+    def seqArrangeColor(self):
+        print("COLOR")
+        nseqs = len(self._seqs.keys())  # Calculate number of sequences
+        charpx = self.fmF.averageCharWidth()
+        width = self.alignPane.size().width() - 30
+        char_count = int(width / charpx - 20 / charpx)
         if self.alignPane.verticalScrollBar().isVisible():
             char_count = int(width / charpx - 20 / charpx - \
                              self.alignPane.verticalScrollBar().size().width() / charpx)
 
         lines = int(self.maxlen/char_count)
         self.alignPane.clear()
-        if not self.parentWidget().userIsResizing:
-            nline = 0
-            for line in range(lines):
-                start = nline * char_count
-                end = nline * char_count + char_count
-                for n in range(nseqs):
-                    for i in range(start, end):
-                        self.alignPane.moveCursor(QTextCursor.End)
-                        self.alignPane.setTextBackgroundColor(Qt.white)
-                        if self.splitSeqs[n][i][1]:
-                            self.alignPane.setTextBackgroundColor(self.splitSeqs[n][i][1])
-                        self.alignPane.insertPlainText(self.splitSeqs[n][i][0])
-                        self.alignPane.setTextBackgroundColor(Qt.white)
-                    self.alignPane.insertPlainText("\n")
-                nline += 1
+        nline = 0
+        for line in range(lines):
+            start = nline * char_count
+            end = nline * char_count + char_count
+            for n in range(nseqs):
+                for i in range(start, end):
+                    self.alignPane.moveCursor(QTextCursor.End)
+                    self.alignPane.setTextBackgroundColor(Qt.white)
+                    if self.splitSeqs[n][i][1]:
+                        self.alignPane.setTextBackgroundColor(self.splitSeqs[n][i][1])
+                    self.alignPane.insertPlainText(self.splitSeqs[n][i][0])
+                    self.alignPane.setTextBackgroundColor(Qt.white)
                 self.alignPane.insertPlainText("\n")
-            self.alignPane.moveCursor(QTextCursor.Start)
-        else:
-            nline = 0
-            for line in range(lines):
-                start = nline * char_count
-                end = nline * char_count + char_count
-                for n in range(nseqs):
-                    print("".join([x[0] for x in self.splitSeqs[n][start:end]]))
-                    self.alignPane.append("".join([x[0] for x in self.splitSeqs[n][start:end]]))
-                self.alignPane.append("")
-                self.alignPane.moveCursor(QTextCursor.Start)
-                nline += 1
+            nline += 1
+            self.alignPane.insertPlainText("\n")
+        self.alignPane.moveCursor(QTextCursor.Start)
+
 
 
 
@@ -483,13 +490,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def setSeqs(self, seqs):
         self._seqs = seqs
-        self.seqArrange()
+        self.seqArrangeColor()
 
     def updateName(self, old, new):
         seq = self._seqs[old]
         self._seqs[new]=seq
         self._seqs.pop(old)
-        self.seqArrange()
+        self.seqArrangeColor()
 
 
 class AlignTheme(QSyntaxHighlighter):

@@ -20,7 +20,6 @@ def main():
     app._window = window
     window.show()
 
-
     sys.exit(app.exec_())
 
 
