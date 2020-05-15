@@ -96,6 +96,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.sequences = {}  # Stored as {WindowID:[SeqRecord(s)] }
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
         self.mainLogger.debug("guiSet took took %f seconds" % float(time.clock()-self.start))
+        self.localtime = 0
 
         if trees:
             # For loading a window on File>Open
@@ -167,7 +168,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         #self.processTimer.setInterval(1000)
         #self.processTimer.start()
 
-        #self.DEBUG()
+        self.DEBUG()
 
     def connectSlots(self):
         # Toolbar and MenuBar
@@ -517,6 +518,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         """
         # Items is an input dictionary for sending to clustalo
         # combo is an array of SeqRecords, sorted, to prevent creating duplicate alignments.
+        self.localtime = time.clock()
         items = {}
         combo = []
         # Collect the selected sequence(s)
@@ -624,8 +626,9 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         """
         self.queryTrees()
         if sub.mdiArea() != self.mdiArea:
-            self.mainLogger.debug("Adding window to MDI Area")
+            self.mainLogger.debug("Adding window to MDI Area, creation took %f seconds" % float(time.clock()-self.start))
             self.mdiArea.addSubWindow(sub)
+
         else:
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
