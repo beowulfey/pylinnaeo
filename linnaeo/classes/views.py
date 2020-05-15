@@ -17,21 +17,25 @@ import textwrap as tw
 
 from linnaeo.classes import utilities
 
-from classes.utilities import SeqWrap
 
 
 class LinnaeoApp(QApplication):
     barClick = pyqtSignal()
 
     def __init__(self, *args):
+        print("INITIALIZING APP")
         super().__init__(*args)
         self.installEventFilter(self)
         #self.barClick.connect(self.setSizing)
         self._window = None
 
     def eventFilter(self, obj, event):
+        #print(event, event.type())
         if event.type() == 214:
             self.barClick.emit()
+        elif event.type() == 174 or event.type() == 175:
+            self.barClick.emit()
+
         return super().eventFilter(obj, event)
 
     #def setSizing(self):

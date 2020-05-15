@@ -22,12 +22,11 @@ def make_exe(dist):
         #resources_policy="prefer-in-memory-fallback-filesystem-relative:lib"
     )
 
-    for resource in dist.pip_install([
+    for resource in dist.pip_install(['psutil',
       'C:\\Users\\wolfe\\devel\\linnaeo\\install\\clustalo-0.1.2-cp37-cp37m-win_amd64.whl',
       'C:\\Users\\wolfe\\devel\\linnaeo\\install\\biopython_minimal-1.77.dev0-py3-none-any.whl',
       'C:\\Users\\wolfe\\devel\\linnaeo\\dist\\linnaeo-0.2.0-py3-none-any.whl',
       ]):
-    #  'C:\\Users\\wolfe\\devel\\linnaeo\\dist\\linnaeo-0.2.0-py3-none-any.whl']):
         exe.add_in_memory_python_resource(resource)
     return exe
 
@@ -37,11 +36,11 @@ def make_embedded_resources(exe):
 def make_install(dist, exe):
     files = FileManifest()
     files.add_python_resource(".", exe)
-    files.add_python_resources("lib",dist.pip_install(['pyqt5==5.9', 'psutil',
+    files.add_python_resources("lib",dist.pip_install(['pyqt5==5.9',])) #'psutil',
     #'C:\\Users\\wolfe\\devel\\biopy-minimal\\dist\\biopython_minimal-1.77.dev0-py3-none-any.whl',
     #'C:\\Users\\wolfe\\devel\\linnaeo\\install\\clustalo-0.1.2-cp37-cp37m-win_amd64.whl',
     #'C:\\Users\\wolfe\\devel\\linnaeo\\dist\\linnaeo-0.2.0-py3-none-any.whl'
-    ]))
+    #]))
     return files
 
 register_target("dist", make_dist)

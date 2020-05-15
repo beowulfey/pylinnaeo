@@ -4,6 +4,7 @@
 import logging
 import os
 import sys
+import time
 
 import Bio.Seq as Bseq
 import psutil
@@ -18,6 +19,7 @@ from PyQt5.QtGui import QStandardItem, QFontDatabase, QHoverEvent
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog, QDialog
 
 # Internal components
+import linnaeo
 from linnaeo.classes import models, views, utilities
 from linnaeo.classes.views import LinnaeoApp
 from linnaeo.ui import linnaeo_ui
@@ -34,7 +36,10 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
     def __init__(self, *args, **kwargs):
 
         super(self.__class__, self).__init__(*args, **kwargs)
+        self.start = linnaeo.start_time
         # Initialize UI
+        #nonlocal start_time
+        print(self.start)
         self.beingClicked = True
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
@@ -63,6 +68,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.projectModel = None
         self._currentWindow = None
 
+
         # MDI Window
         self.mdiArea = views.MDIArea()
         self.gridLayout_2.addWidget(self.mdiArea)
@@ -70,11 +76,16 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         # Tree stuff
         self.bioTree = views.TreeView()
         self.projectTree = views.TreeView()
+        self.mainLogger.debug("Finished initializing, took %f seconds" % float(time.clock()-self.start))
 
         # Other functions
         self.guiSet()
+        self.mainLogger.debug("Gui initializing complete, took %f seconds" % float(time.clock()-self.start))
         self.guiFinalize()
+        self.mainLogger.debug("Finalized gui, took %f seconds" % float(time.clock()-self.start))
         self.connectSlots()
+        self.mainLogger.debug("Slots connected after %f seconds" % float(time.clock()-self.start))
+        self.mainLogger.debug("Setup took %f seconds" % float(time.clock()-self.start))
 
     def guiSet(self, trees=None, data=None):
         """ Initialize GUI with default parameters. """
@@ -84,6 +95,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.windex = 0  # Acts as identifier for tracking alignments (max 2.1 billion)
         self.sequences = {}  # Stored as {WindowID:[SeqRecord(s)] }
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
+        self.mainLogger.debug("guiSet took took %f seconds" % float(time.clock()-self.start))
 
         if trees:
             # For loading a window on File>Open
@@ -108,6 +120,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             self.projectRoot = QStandardItem("Folder")
             self.projectModel = views.ItemModel(self.windows)
             self.projectModel.appendRow(self.projectRoot)
+            self.mainLogger.debug("After Tree Setup")
 
         self.bioTree.setModel(self.bioModel)
         self.projectTree.setModel(self.projectModel)
@@ -137,17 +150,24 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
     def guiFinalize(self):
         # Tree setup
-        self.splitter_2.addWidget(self.bioTree)
+
+
+        self.mainLogger.debug("Up to selectionMode took %f seconds" % float(time.clock()-self.start))
         self.bioTree.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.mainLogger.debug("Up to projectTree took %f seconds" % float(time.clock()-self.start))
         self.splitter_2.addWidget(self.projectTree)
+        self.mainLogger.debug("Up to adding bioTree took %f seconds" % float(time.clock()-self.start))
+        self.splitter_2.addWidget(self.bioTree)
+        self.mainLogger.debug("Adding all GUI objects took %f seconds" % float(time.clock()-self.start))
 
         # Status bar setup
         self.updateUsage()
         self.statusBar().addPermanentWidget(self.memLabel)
+        self.mainLogger.debug("After StatusbarUpdate")
         #self.processTimer.setInterval(1000)
         #self.processTimer.start()
 
-        self.DEBUG()
+        #self.DEBUG()
 
     def connectSlots(self):
         # Toolbar and MenuBar
