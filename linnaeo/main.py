@@ -3,30 +3,27 @@
 # Bioscience components
 import logging
 import os
-import sys
 import time
 
 import Bio.Seq as Bseq
 import psutil
 from Bio import SeqIO
 from Bio.Alphabet import generic_protein
-from Bio.SeqRecord import SeqRecord
 
 # PyQt components
-from PyQt5.Qt import Qt
-from PyQt5.QtCore import QThreadPool, QTimer, QDir, QFile, QIODevice, QDataStream, QEvent
-from PyQt5.QtGui import QStandardItem, QFontDatabase, QHoverEvent
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog, QDialog
+from PyQt5.QtCore import Qt, QThreadPool, QDir, QFile, QIODevice, QDataStream, pyqtSignal
+from PyQt5.QtGui import QStandardItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog
 
 # Internal components
 import linnaeo
-from linnaeo.classes import models, views, utilities
-from linnaeo.classes.views import LinnaeoApp
+from linnaeo.classes import models, widgets, utilities
+from linnaeo.classes.displays import QuitDialog, AlignSubWindow
 from linnaeo.ui import linnaeo_ui
-from linnaeo.resources import linnaeo_rc
 
 
 class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
+    edgeClick = pyqtSignal()
     """
     Constructor for the Main Window of the Sherlock App
     Contains all the user interface functions, as well as underlying code for major features.
@@ -38,8 +35,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         super(self.__class__, self).__init__(*args, **kwargs)
         self.start = linnaeo.start_time
         # Initialize UI
-        #nonlocal start_time
-        print(self.start)
         self.beingClicked = True
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
@@ -47,13 +42,14 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         # System instants; status bar and threads
         self.memLabel = QLabel()
         self.mainProcess = psutil.Process(os.getpid())
-        #self.processTimer = QTimer()
+        # self.processTimer = QTimer()
         self.processTimer = utilities.TimerThread()
         self.mainLogger = logging.getLogger("Main")
         self.threadpool = QThreadPool()
         self.mainLogger.info("Threading with a maximum of %d threads" % self.threadpool.maxThreadCount())
 
         # Project instants and inherent variables for logic.
+        self.localtime = 0
         self.SequenceRole = Qt.UserRole + 2
         self.WindowRole = Qt.UserRole + 3
         self.lastClickedTree = None
@@ -68,24 +64,23 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.projectModel = None
         self._currentWindow = None
 
-
         # MDI Window
-        self.mdiArea = views.MDIArea()
+        self.mdiArea = widgets.MDIArea()
         self.gridLayout_2.addWidget(self.mdiArea)
 
         # Tree stuff
-        self.bioTree = views.TreeView()
-        self.projectTree = views.TreeView()
-        self.mainLogger.debug("Finished initializing, took %f seconds" % float(time.clock()-self.start))
+        self.bioTree = widgets.TreeView()
+        self.projectTree = widgets.TreeView()
+        self.mainLogger.debug("Finished initializing, took %f seconds" % float(time.perf_counter() - self.start))
 
         # Other functions
         self.guiSet()
-        self.mainLogger.debug("Gui initializing complete, took %f seconds" % float(time.clock()-self.start))
+        self.mainLogger.debug("Gui initializing complete, took %f seconds" % float(time.perf_counter() - self.start))
         self.guiFinalize()
-        self.mainLogger.debug("Finalized gui, took %f seconds" % float(time.clock()-self.start))
+        self.mainLogger.debug("Finalized gui, took %f seconds" % float(time.perf_counter() - self.start))
         self.connectSlots()
-        self.mainLogger.debug("Slots connected after %f seconds" % float(time.clock()-self.start))
-        self.mainLogger.debug("Setup took %f seconds" % float(time.clock()-self.start))
+        self.mainLogger.debug("Slots connected after %f seconds" % float(time.perf_counter() - self.start))
+        self.mainLogger.debug("Setup took %f seconds" % float(time.perf_counter() - self.start))
 
     def guiSet(self, trees=None, data=None):
         """ Initialize GUI with default parameters. """
@@ -95,8 +90,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.windex = 0  # Acts as identifier for tracking alignments (max 2.1 billion)
         self.sequences = {}  # Stored as {WindowID:[SeqRecord(s)] }
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
-        self.mainLogger.debug("guiSet took took %f seconds" % float(time.clock()-self.start))
-        self.localtime = 0
+        self.mainLogger.debug("guiSet took took %f seconds" % float(time.perf_counter() - self.start))
+
 
         if trees:
             # For loading a window on File>Open
@@ -115,11 +110,11 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             print("WINDEX: ", self.windex)
         else:
             self.bioRoot = QStandardItem("Folder")
-            self.bioModel = views.ItemModel(self.windows, seqTree=True)
+            self.bioModel = widgets.ItemModel(self.windows, seqTree=True)
             self.bioRoot.setData("Folder")
             self.bioModel.appendRow(self.bioRoot)
             self.projectRoot = QStandardItem("Folder")
-            self.projectModel = views.ItemModel(self.windows)
+            self.projectModel = widgets.ItemModel(self.windows)
             self.projectModel.appendRow(self.projectRoot)
             self.mainLogger.debug("After Tree Setup")
 
@@ -129,44 +124,30 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.bioModel.setHorizontalHeaderLabels(["Sequences"])
         self.projectModel.setHorizontalHeaderLabels(["Alignments"])
         self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
-        #self.installEventFilter(self)
+        self.installEventFilter(self)
 
-    #def event(self, event):
-    #    # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
-    #    if event.type() == 2:
-    #        print(event, event.type())
-    #    return super().event(event)
-
-    #def nativeEvent(self, event, message):
-    #    print("MESSAGE ",message)
-    #    return super().nativeEvent(event, message)
-
-    #def eventFilter(self, obj, event):
-    #    if event.type() == QEvent.MouseButtonRelease or \
-    #            event.type() == QEvent.NonClientAreaMouseButtonRelease:
-    #        print("FOUND")
-    ##    if event.type() == 2:
-    #        print(event)
-    #    return super().eventFilter(obj, event)
+    def eventFilter(self, obj, event):
+        """ Designed to capture the edge mouse click upon resizing """
+        if event.type() == 99:
+            self.edgeClick.emit()
+        return super().eventFilter(obj, event)
 
     def guiFinalize(self):
         # Tree setup
-
-
-        self.mainLogger.debug("Up to selectionMode took %f seconds" % float(time.clock()-self.start))
+        self.mainLogger.debug("Up to selectionMode took %f seconds" % float(time.perf_counter() - self.start))
         self.bioTree.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.mainLogger.debug("Up to projectTree took %f seconds" % float(time.clock()-self.start))
-        self.splitter_2.addWidget(self.projectTree)
-        self.mainLogger.debug("Up to adding bioTree took %f seconds" % float(time.clock()-self.start))
+        self.mainLogger.debug("Up to adding bioTree took %f seconds" % float(time.perf_counter() - self.start))
         self.splitter_2.addWidget(self.bioTree)
-        self.mainLogger.debug("Adding all GUI objects took %f seconds" % float(time.clock()-self.start))
+        self.mainLogger.debug("Up to projectTree took %f seconds" % float(time.perf_counter() - self.start))
+        self.splitter_2.addWidget(self.projectTree)
+        self.mainLogger.debug("Adding all GUI objects took %f seconds" % float(time.perf_counter() - self.start))
 
         # Status bar setup
         self.updateUsage()
         self.statusBar().addPermanentWidget(self.memLabel)
         self.mainLogger.debug("After StatusbarUpdate")
-        #self.processTimer.setInterval(1000)
-        #self.processTimer.start()
+        # self.processTimer.setInterval(1000)
+        # self.processTimer.start()
 
         self.DEBUG()
 
@@ -210,7 +191,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.processTimer.timeout.connect(self.updateUsage)
 
         self.actionTrees.triggered.connect(self.queryTrees)
-        LinnaeoApp.instance().barClick.connect(self.setSizing)
+        # LinnaeoApp.instance().barClick.connect(self.setSizing)
+        self.edgeClick.connect(self.setSizing)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
 
     def setCurrentWindow(self):
@@ -219,14 +201,14 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
     def setSizing(self):
         if not self.beingClicked:
             self.beingClicked = True
-            if self._currentWindow and self._currentWindow.isMaximized(): # and self.mdiArea.activeSubWindow().isMaximized():
-                print("REDRAWING FRAME FROM MAIN")
+            if self._currentWindow and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
+                # print("REDRAWING FRAME FROM MAIN")
                 self._currentWindow.widget_.userIsResizing = True
                 self._currentWindow.widget_.seqArrangeNoColor()
         elif self.beingClicked:
             self.beingClicked = False
-            if self._currentWindow and self._currentWindow .isMaximized():
-                print("DONE REDRAWING FROM MAIN")
+            if self._currentWindow and self._currentWindow.isMaximized():
+                # print("DONE REDRAWING FROM MAIN")
                 self._currentWindow.widget_.userIsResizing = False
 
                 self._currentWindow.widget_.seqArrangeColor()
@@ -235,26 +217,26 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
     def newWorkspace(self):
         result = self.maybeClose()
         if result is not None:
-            print("RESETTING")
+            self.mainLogger.info("CLEARING WORKSPACE")
             self.mdiArea.closeAllSubWindows()
             self.guiSet()
 
     def restore_tree(self, parent, datastream, num_childs=None):
         if not num_childs:
-            print("First line: reading UInt32")
+            #print("First line: reading UInt32")
             num_childs = datastream.readUInt32()
-            print(num_childs)
+            #print(num_childs)
         for i in range(0, num_childs):
-            print("Reading node")
+            #print("Reading node")
             child = QStandardItem()
             child.read(datastream)
             parent.appendRow(child)
-            print(child.data(role=Qt.UserRole + 1))
-            print(child.data(role=Qt.UserRole + 2))
-            print(child.data(role=Qt.UserRole + 3))
+            #print(child.data(role=Qt.UserRole + 1))
+            #print(child.data(role=Qt.UserRole + 2))
+            #print(child.data(role=Qt.UserRole + 3))
             num_childs = datastream.readUInt32()
             if num_childs > 0:
-                print("reading children")
+                #print("reading children")
                 self.restore_tree(child, datastream, num_childs)
 
     def openWorkspace(self):
@@ -265,7 +247,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         file = QFile(filename)
         file.open(QIODevice.ReadOnly)
         fstream = QDataStream(file)
-        print("Starting restore")
+        self.mainLogger.info("Starting restore")
         sequences = fstream.readQVariantHash()
         print("Sequences: ", sequences)
         titles = fstream.readQVariantList()
@@ -274,8 +256,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         print("Windex: ", windex)
         windows = {}
         self.mdiArea.closeAllSubWindows()
-        newBModel = views.ItemModel(windows, seqTree=True)
-        newPModel = views.ItemModel(windows)
+        newBModel = widgets.ItemModel(windows, seqTree=True)
+        newPModel = widgets.ItemModel(windows)
         self.restore_tree(newBModel.invisibleRootItem(), fstream)
         self.restore_tree(newPModel.invisibleRootItem(), fstream)
         self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
@@ -294,9 +276,9 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             try:
                 seq = SeqIO.read(filename, "fasta")
                 if seq:
-                    print("name: ",seq.name)
-                    print("id: ", seq.id)
-                    print("desc: ", seq.description)
+                    #print("name: ", seq.name)
+                    #print("id: ", seq.id)
+                    #print("desc: ", seq.description)
                     seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
                     self.seqInit(seqr)
             except:
@@ -315,12 +297,12 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             file.open(QIODevice.WriteOnly)
             out = QDataStream(file)
             self.mainLogger.debug("Beginning file save")
-            print("TREE DATA")
-            self.queryTrees()
-            print("Writing Sequences, Titles, Windex")
-            print(self.sequences)
-            print(self.titles)
-            print(type(self.windex), self.windex)
+            #print("TREE DATA")
+            #self.queryTrees()
+            #print("Writing Sequences, Titles, Windex")
+            #print(self.sequences)
+            #print(self.titles)
+            #print(type(self.windex), self.windex)
             out.writeQVariantHash(self.sequences)
             out.writeQVariantList(self.titles)
             out.writeUInt32(self.windex)
@@ -357,7 +339,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             file.close()
             return True
         else:
-            print("No filename chosen; canceling")
+            #print("No filename chosen; canceling")
             return False
 
     def copyOut(self):
@@ -396,7 +378,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                     for index in range(len(clip)):
                         if not nline and clip[index] == "\n":
                             nline = clip[:index]
-                            seq = clip[index+1:]
+                            seq = clip[index + 1:]
                     seq = seq.replace('\n', '')
                     seq = seq.replace('\r', '')
                     bseq = Bseq.MutableSeq(seq)
@@ -407,9 +389,9 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                         if nline[index] == "|":
                             bars.append(index)
                     if len(bars) > 0:
-                        sid = nline[bars[0]+1:bars[1]]
+                        sid = nline[bars[0] + 1:bars[1]]
                         self.mainLogger.debug("Extracted ID for sequence: ", sid)
-                        desc = nline[bars[1]+1:]
+                        desc = nline[bars[1] + 1:]
                     elif not sid:
                         sid = nline[1:9]
                         name = sid
@@ -518,7 +500,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         """
         # Items is an input dictionary for sending to clustalo
         # combo is an array of SeqRecords, sorted, to prevent creating duplicate alignments.
-        self.localtime = time.clock()
+        self.localtime = time.perf_counter()
+        self.mainLogger.debug("Beginning window creation at %s" % float(self.localtime))
         items = {}
         combo = []
         # Collect the selected sequence(s)
@@ -595,8 +578,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.windex = int(wid)
 
     def makeNewWindow(self, wid, ali, nonode=False):
-        sub = views.MDISubWindow()
-        widget = views.AlignSubWindow(ali)
+        sub = widgets.MDISubWindow()
+        widget = AlignSubWindow(ali)
         sub.setWidget(widget)
         if len(ali.keys()) > 1:
             if nonode:
@@ -624,9 +607,10 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         If it is not, reopens the window. If it is, gives focus.
         Also refreshes the title.
         """
-        self.queryTrees()
         if sub.mdiArea() != self.mdiArea:
-            self.mainLogger.debug("Adding window to MDI Area, creation took %f seconds" % float(time.clock()-self.start))
+            self.mainLogger.debug("Finished window at %f" % time.perf_counter())
+            self.mainLogger.debug("Adding window to MDI Area, creation took %f seconds" % float(time.perf_counter() - \
+                                                                                                self.localtime))
             self.mdiArea.addSubWindow(sub)
 
         else:
@@ -682,7 +666,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
     def maybeClose(self):
         # TODO: CHECK IF CHANGES
-        qDialog = views.QuitDialog(self)
+        qDialog = QuitDialog(self)
         confirm = qDialog.exec()
         if confirm == 1:
             result = self.saveWorkspace()
@@ -726,7 +710,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.pruneNames()
         self.bioModel.updateNames(self.titles)
         # TODO: This is the best way to potentially rename alignments.
-        #for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+        # for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
         #    wid = node.data(role=self.WindowRole)
         #    if wid:
         #        sub = self.windows[wid]
@@ -734,9 +718,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         #        seqrs = node.data(role=self.SequenceRole)
         #        for seqr in seqrs:
         #            if seqr.name
-
-
-
 
     def pruneNames(self):
         """
@@ -748,7 +729,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
             if node.data(role=self.SequenceRole):
                 names.append(node.text())
-                for key,value in self.sequences.items():
+                for key, value in self.sequences.items():
                     if node.data(role=self.SequenceRole) == value:
                         value[0].name = node.data(role=self.SequenceRole)[0].name
         for title in self.titles:
@@ -792,7 +773,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                  'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL' +
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = Bseq.MutableSeq(test2[1], generic_protein)
-        gpi1b = models.SeqR(seq_GPI1B, id = test2[0], name = test2[0])
+        gpi1b = models.SeqR(seq_GPI1B, id=test2[0], name=test2[0])
         test = [gpi1a, gpi1b]
         for i in test:
             self.seqInit(i)
@@ -814,3 +795,37 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         except:
             print("No config file found!")
             """
+
+
+class LinnaeoApp(QApplication):
+    # barClick = pyqtSignal()
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        # self.installEventFilter(self)
+        # self.barClick.connect(self.setSizing)
+
+    #   self._window = None
+
+    # def event(self, event):
+    #   print(event, event.type())
+    #  return super().event(event)
+
+    # def eventFilter(self, obj, event):
+    #    if event.type() == 214:
+    #        self.barClick.emit()
+    #
+    #        return super().eventFilter(obj, event)
+
+    """
+    def setSizing(self):
+        if self._window:
+            if not self._window.beingClicked:
+                print("CLICK")
+                self._window.beingClicked = True
+                print(self._window.beingClicked)
+            elif self._window.beingClicked:
+                print("UNCLICK")
+                self._window.beingClicked = False
+                print(self._window.beingClicked)
+    """

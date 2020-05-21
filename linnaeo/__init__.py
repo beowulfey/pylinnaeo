@@ -1,22 +1,18 @@
 import logging
 import sys
-
-from PyQt5.QtCore import QFile
-from PyQt5.QtWidgets import QApplication
-
-from linnaeo.main import Linnaeo
-from linnaeo.classes.views import LinnaeoApp
-
 import time
 
-start_time = time.clock()
+from PyQt5.QtWidgets import QApplication
+from linnaeo.main import Linnaeo
+
+start_time = time.perf_counter()
+
 
 def main():
-    #start_time = time.clock()
-    logging.basicConfig(level=logging.DEBUG)  # , format="%(asctime)s:%(levelname)s:%(message)s")
+    logging.basicConfig(level=logging.DEBUG)
     appLogger = logging.getLogger("INIT")
 
-    app = LinnaeoApp(sys.argv)
+    app = QApplication(sys.argv)
     appLogger.debug("Trying stylesheet")
     #file = QFile(":/qss/linnaeo.qss")
     #file.open(QFile.ReadOnly)
@@ -26,9 +22,8 @@ def main():
 
     window = Linnaeo()
     app._window = window
-    appLogger.debug("Window created; displaying")
     window.show()
-    appLogger.debug("Startup took %f seconds" % float(time.clock()-start_time))
+    appLogger.info("Startup took %f seconds" % float(time.perf_counter()-start_time))
 
 
     sys.exit(app.exec_())
@@ -36,3 +31,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

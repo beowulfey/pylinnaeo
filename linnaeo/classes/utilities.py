@@ -12,31 +12,30 @@ from clustalo import clustalo
 Additional classes and functions that are used within Sherlock, but are not responsible for viewing data.
 """
 
-
+"""
 class SeqWrap(TextWrapper):
     _whitespace = '\t\n\x0b\x0c\r '
     word_punct = r'[\w!"\'&.,?]'
     letter = r'[^\d\W]'
     whitespace = r'[%s]' % re.escape(_whitespace)
     nowhitespace = '[^' + whitespace[1:]
-    wordsep_re = re.compile(r'''
+    wordsep_re = re.compile(fr'''
         ( # any whitespace
-          %(ws)s+
+          {whitespace}+
         #| # em-dash between words
-        #  (?<=%(wp)s) -{2,} (?=\w)
+        #  (?<={word_punct}) -{{2,}} (?=\w)
         | # word, possibly hyphenated
-          %(nws)s+? #(?:
+          {nowhitespace}+? #(?:
             # hyphenated word
-            #  -(?: (?<=%(lt)s{2}-) | (?<=%(lt)s-%(lt)s-))
-            #  (?= %(lt)s -? %(lt)s)
+            #  -(?: (?<={letter}{{2}}-) | (?<={letter}-{letter}-))
+            #  (?= {letter} -? {letter})
             #| # end of word
-            #  (?=%(ws)s|\Z)
+            #  (?={whitespace}|\Z)
             #| # em-dash
-            #  (?<=%(wp)s) (?=-{2,}\w)
+            #  (?<={word_punct}) (?=-{{2,}}\w)
             #)
-        )''' % {'wp': word_punct, 'lt': letter,
-                'ws': whitespace, 'nws': nowhitespace},
-        re.VERBOSE)
+        )''',
+                            re.VERBOSE)
     del word_punct, letter, nowhitespace
 
     def __init__(self, **kwargs):
@@ -55,37 +54,39 @@ class SeqWrap(TextWrapper):
         elif not cur_line:
             cur_line.append(reversed_chunks.pop())
 
+"""
+
 
 def checkName(name, titles, layer=0):
     """ Tool for checking a title list. Used for generating new titles if duplicate"""
-    print("\nBEGIN CHECK-- Layer ", layer)
-    print("Searching in", titles)
+    #print("\nBEGIN CHECK-- Layer ", layer)
+    #print("Searching in", titles)
     if name not in titles:
         # SAFE! You can add and return
-        print("Final:",name)
+    #    print("Final:",name)
         finalname = name
     elif name[-2] == "_" and int(name[-1]):
         # if there's already a name with an _1, add a number
         newlayer = layer+1
         newname = str(name[:-1] + str(newlayer))
-        print("Trying: ",newname)
+    #    print("Trying: ",newname)
         finalname, titles = checkName(newname, titles, layer=newlayer)
         if layer > 0:
-            print("returning")
+    #        print("returning")
             return finalname, titles
     else:
         # It's a duplicate! Better
-        print("Dupe found: [", name, "] Descending")
+    #    print("Dupe found: [", name, "] Descending")
         newlayer = layer + 1
         newname = str(name + "_" + str(newlayer))
-        print("Trying ", newname)
+    #    print("Trying ", newname)
         # Run the check again with the new name
         finalname, titles = checkName(newname, titles, layer=newlayer)
         if layer > 0:
             return finalname, titles
     if layer == 0:
         titles.append(finalname)
-        print("Appended: ",titles, "\n")
+    #    print("Appended: ",titles, "\n")
     return finalname, titles
 
 
