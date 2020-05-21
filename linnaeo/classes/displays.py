@@ -50,14 +50,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         font = QFont(family, 10)
         self.fmF = QFontMetricsF(font)  # FontMetrics Float... because default FontMetrics gives Int
         self.alignPane.setFont(font)
-        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; padding-top:0px; background-color: \
+        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; background-color: \
                                      rgb(255,255,255)}")
-        self.namePane.setStyleSheet("QTextEdit {padding-top:0px;}")
+        self.namePane.setStyleSheet("QTextEdit {padding-top:1px;}")
         self.alignPane.setCursorWidth(0)
 
         self.refseq = None
         self.maxlen = 0
-
 
         # options to do
         # TODO: Implement these
@@ -98,8 +97,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         #print("Done Resizing")
         self.seqArrangeColor()
 
-
-
     def seqInit(self):
         """
         Sequences are stored as triple layer arrays:
@@ -136,16 +133,22 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                              self.alignPane.verticalScrollBar().size().width() / charpx)
 
         lines = int(self.maxlen / char_count)
+        print(lines)
         self.alignPane.clear()
+        self.namePane.clear()
         self.alignPane.setTextBackgroundColor(Qt.white)
         nline = 0
         for line in range(lines):
             start = nline * char_count
             end = nline * char_count + char_count
             for n in range(nseqs):
+                self.namePane.setAlignment(Qt.AlignRight)
+                self.namePane.append(self.splitNames[n])
                 self.alignPane.append("".join([x[0] for x in self.splitSeqs[n][start:end]]))
             self.alignPane.append("")
+            self.namePane.append("")
             self.alignPane.moveCursor(QTextCursor.Start)
+            self.namePane.moveCursor(QTextCursor.Start)
             nline += 1
 
     def seqArrangeColor(self):
@@ -160,11 +163,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
         lines = int(self.maxlen/char_count)
         self.alignPane.clear()
+        self.namePane.clear()
         nline = 0
         for line in range(lines):
             start = nline * char_count
             end = nline * char_count + char_count
             for n in range(nseqs):
+                self.namePane.setAlignment(Qt.AlignRight)
+                self.namePane.append(self.splitNames[n])
                 for i in range(start, end):
                     self.alignPane.moveCursor(QTextCursor.End)
                     self.alignPane.setTextBackgroundColor(Qt.white)
@@ -175,7 +181,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 self.alignPane.insertPlainText("\n")
             nline += 1
             self.alignPane.insertPlainText("\n")
+            self.namePane.insertPlainText("\n")
         self.alignPane.moveCursor(QTextCursor.Start)
+        self.namePane.moveCursor(QTextCursor.Start)
 
     def seqs(self):
         return self._seqs
