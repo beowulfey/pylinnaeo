@@ -126,9 +126,14 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
         self.installEventFilter(self)
 
+    def event(self, event):
+        #print(event, event.type())
+        return super().event(event)
+
     def eventFilter(self, obj, event):
         """ Designed to capture the edge mouse click upon resizing """
         if event.type() == 99:
+            print("Detected edge")
             self.edgeClick.emit()
         return super().eventFilter(obj, event)
 
@@ -191,7 +196,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.processTimer.timeout.connect(self.updateUsage)
 
         self.actionTrees.triggered.connect(self.queryTrees)
-        # LinnaeoApp.instance().barClick.connect(self.setSizing)
+        LinnaeoApp.instance().barClick.connect(self.setSizing)
         self.edgeClick.connect(self.setSizing)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
 
@@ -199,16 +204,17 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self._currentWindow = self.mdiArea.activeSubWindow()
 
     def setSizing(self):
+
         if not self.beingClicked:
             self.beingClicked = True
             if self._currentWindow and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
-                # print("REDRAWING FRAME FROM MAIN")
+                print("REDRAWING FRAME FROM MAIN")
                 self._currentWindow.widget_.userIsResizing = True
                 self._currentWindow.widget_.seqArrangeNoColor()
         elif self.beingClicked:
             self.beingClicked = False
             if self._currentWindow and self._currentWindow.isMaximized():
-                # print("DONE REDRAWING FROM MAIN")
+                print("DONE REDRAWING FROM MAIN")
                 self._currentWindow.widget_.userIsResizing = False
 
                 self._currentWindow.widget_.seqArrangeColor()
@@ -798,24 +804,27 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
 
 class LinnaeoApp(QApplication):
-    # barClick = pyqtSignal()
+    barClick = pyqtSignal()
 
     def __init__(self, *args):
         super().__init__(*args)
-        # self.installEventFilter(self)
-        # self.barClick.connect(self.setSizing)
+        self.installEventFilter(self)
+        self.last = None
+        #self.barClick.connect(self.setSizing)
 
     #   self._window = None
 
-    # def event(self, event):
-    #   print(event, event.type())
-    #  return super().event(event)
+    def event(self, event):
+        #print(event, event.type())
+        return super().event(event)
 
-    # def eventFilter(self, obj, event):
-    #    if event.type() == 214:
-    #        self.barClick.emit()
-    #
-    #        return super().eventFilter(obj, event)
+    def eventFilter(self, obj, event):
+        if event.type() in [174,175]:
+            if event.type() != self.last:
+                print(event.type())
+                self.barClick.emit()
+                self.last = event.type()
+        return super().eventFilter(obj, event)
 
     """
     def setSizing(self):

@@ -3,7 +3,7 @@ import sys
 import time
 
 from PyQt5.QtWidgets import QApplication
-from linnaeo.main import Linnaeo
+from linnaeo.main import LinnaeoApp, Linnaeo
 
 start_time = time.perf_counter()
 
@@ -12,7 +12,7 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
     appLogger = logging.getLogger("INIT")
 
-    app = QApplication(sys.argv)
+    app = LinnaeoApp(sys.argv)
     appLogger.debug("Trying stylesheet")
     #file = QFile(":/qss/linnaeo.qss")
     #file.open(QFile.ReadOnly)
