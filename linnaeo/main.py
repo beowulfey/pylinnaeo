@@ -132,10 +132,16 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
     def eventFilter(self, obj, event):
         """ Designed to capture the edge mouse click upon resizing """
-        if event.type() == 99:
-            print("Detected edge")
+        if event.type() in [99]:
+            #print("Detected edge")
             self.edgeClick.emit()
         return super().eventFilter(obj, event)
+
+    def resizeEvent(self, event):
+        #   # TODO: THIS IS THE ONLY ONE THAT DOESN'T TURN OFF COLOR WHEN RESIZING
+        #self.setSizing()
+        return super().resizeEvent(event)
+
 
     def guiFinalize(self):
         # Tree setup
@@ -210,14 +216,14 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             if self._currentWindow and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
                 print("REDRAWING FRAME FROM MAIN")
                 self._currentWindow.widget_.userIsResizing = True
-                self._currentWindow.widget_.seqArrangeNoColor()
+                self._currentWindow.widget_.seqArrange(color=False)
         elif self.beingClicked:
             self.beingClicked = False
             if self._currentWindow and self._currentWindow.isMaximized():
                 print("DONE REDRAWING FROM MAIN")
                 self._currentWindow.widget_.userIsResizing = False
 
-                self._currentWindow.widget_.seqArrangeColor()
+                self._currentWindow.widget_.seqArrange()
 
     # SINGLE-USE SLOTS
     def newWorkspace(self):
@@ -821,7 +827,6 @@ class LinnaeoApp(QApplication):
     def eventFilter(self, obj, event):
         if event.type() in [174,175]:
             if event.type() != self.last:
-                print(event.type())
                 self.barClick.emit()
                 self.last = event.type()
         return super().eventFilter(obj, event)

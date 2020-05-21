@@ -4,7 +4,7 @@ import sys
 
 from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
-    QTextCursor, QFontMetricsF
+    QTextCursor, QFontMetricsF, QTextDocument, QCursor
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QDialog, QDialogButtonBox, QApplication
 
@@ -121,6 +121,8 @@ class MDISubWindow(QMdiSubWindow):
         super(MDISubWindow, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self.widget_ = None
+        #self.setMouseTracking(True)
+
         # TODO: TAKE OUT EXTRA CLOSE COMMAND IN MDISUBWINDOW
         # remove extra close command
         # menu = self.systemMenu()
@@ -129,6 +131,10 @@ class MDISubWindow(QMdiSubWindow):
         #        print("Found")
         #        menu.actions().remove(action)
         # self.setSystemMenu(menu)
+
+    def mouseMoveEvent(self, event):
+        #print(QCursor.pos())
+        return super().mouseMoveEvent(event)
 
     def event(self, event):
         # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
@@ -305,3 +311,18 @@ class ItemModel(QStandardItemModel):
             self.modelLogger.debug("Detected exception, but probably fine: "+str(exctype))
         finally:
             return super(ItemModel, self).setData(index, value, role)
+
+
+class AlignDoc(QTextDocument):
+    def __init__(self):
+        super().__init__()
+        self.setMouseTracking(True)
+
+    def event(self, event):
+        print(event, event.type())
+        return super().event(event)
+
+    def mouseMoveEvent(self, event):
+        print(QCursor.pos())
+        return super().mouseMoveEvent(event)
+
