@@ -57,11 +57,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
         self.refseq = None
         self.maxlen = 0
+        self.maxname = 0
 
         # options to do
         # TODO: Implement these
-        self.showRuler = False
-        self.showColors = True
+        self.showRuler = True
+        self.showColors = True  # Partially implemented
         self.relColors = False
 
         if self.showColors:
@@ -109,6 +110,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 self.maxlen = len(seq)
         for name, seq in self._seqs.items():
             self.splitNames.append(name)
+            if len(name) > self.maxname:
+                self.maxname = len(name)
             local = []
             for i in range(self.maxlen):
                 try:
@@ -133,23 +136,32 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                              self.alignPane.verticalScrollBar().size().width() / charpx)
 
         lines = int(self.maxlen / char_count)
-        print(lines)
         self.alignPane.clear()
         self.namePane.clear()
         self.alignPane.setTextBackgroundColor(Qt.white)
+        self.namePane.setMinimumWidth((self.maxname * charpx) + 5)
         nline = 0
         for line in range(lines):
+            self.alignPane.moveCursor(QTextCursor.End)
             start = nline * char_count
             end = nline * char_count + char_count
+            if self.showRuler:
+                self.namePane.insertPlainText("\n")
+                ruler = str(start + 1) + " " * (char_count - len(str(start + 1)) - len(str(end))) + str(end)
+                self.alignPane.insertPlainText(ruler)
+                self.alignPane.insertPlainText("\n")
             for n in range(nseqs):
                 self.namePane.setAlignment(Qt.AlignRight)
-                self.namePane.append(self.splitNames[n])
-                self.alignPane.append("".join([x[0] for x in self.splitSeqs[n][start:end]]))
-            self.alignPane.append("")
-            self.namePane.append("")
+                self.namePane.insertPlainText(self.splitNames[n])
+                self.namePane.insertPlainText("\n")
+                self.alignPane.moveCursor(QTextCursor.End)
+                self.alignPane.insertPlainText("".join([x[0] for x in self.splitSeqs[n][start:end]]))
+                self.alignPane.insertPlainText("\n")
+            nline += 1
+            self.alignPane.insertPlainText("\n")
+            self.namePane.insertPlainText("\n")
             self.alignPane.moveCursor(QTextCursor.Start)
             self.namePane.moveCursor(QTextCursor.Start)
-            nline += 1
 
     def seqArrangeColor(self):
         #print("COLOR")
@@ -160,25 +172,32 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         if self.alignPane.verticalScrollBar().isVisible():
             char_count = int(width / charpx - 20 / charpx - \
                              self.alignPane.verticalScrollBar().size().width() / charpx)
-
         lines = int(self.maxlen/char_count)
         self.alignPane.clear()
         self.namePane.clear()
+        self.namePane.setMinimumWidth((self.maxname * charpx) + 5)
         nline = 0
         for line in range(lines):
+            self.alignPane.moveCursor(QTextCursor.End)
             start = nline * char_count
             end = nline * char_count + char_count
+            if self.showRuler:
+                self.namePane.insertPlainText("\n")
+                ruler = str(start+1)+" "*(char_count-len(str(start+1))-len(str(end)))+str(end)
+                self.alignPane.insertPlainText(ruler)
+                self.alignPane.insertPlainText("\n")
             for n in range(nseqs):
                 self.namePane.setAlignment(Qt.AlignRight)
-                self.namePane.append(self.splitNames[n])
+                self.namePane.insertPlainText(self.splitNames[n])
                 for i in range(start, end):
-                    self.alignPane.moveCursor(QTextCursor.End)
+                    #self.alignPane.moveCursor(QTextCursor.End)
                     self.alignPane.setTextBackgroundColor(Qt.white)
                     if self.splitSeqs[n][i][1]:
                         self.alignPane.setTextBackgroundColor(self.splitSeqs[n][i][1])
                     self.alignPane.insertPlainText(self.splitSeqs[n][i][0])
                     self.alignPane.setTextBackgroundColor(Qt.white)
                 self.alignPane.insertPlainText("\n")
+                self.namePane.insertPlainText("\n")
             nline += 1
             self.alignPane.insertPlainText("\n")
             self.namePane.insertPlainText("\n")
