@@ -81,7 +81,7 @@
      <x>0</x>
      <y>0</y>
      <width>807</width>
-     <height>20</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -176,7 +176,8 @@
    <addaction name="actionNewFolder"/>
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
-   <addaction name="actionTrees"/>
+   <addaction name="actionRulers"/>
+   <addaction name="actionColors"/>
   </widget>
   <action name="actionAlign">
    <property name="text">
@@ -328,9 +329,20 @@
     <string>Close</string>
    </property>
   </action>
-  <action name="actionTrees">
+  <action name="actionRulers">
    <property name="text">
-    <string>Trees</string>
+    <string>Rulers</string>
+   </property>
+   <property name="toolTip">
+    <string>Show or hide sequence ruler</string>
+   </property>
+  </action>
+  <action name="actionColors">
+   <property name="text">
+    <string>Colors</string>
+   </property>
+   <property name="toolTip">
+    <string>Show or hide sequence colors</string>
    </property>
   </action>
  </widget>

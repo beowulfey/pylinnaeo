@@ -106,6 +106,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def toggleRulers(self):
         self.showRuler = not self.showRuler
+        self.seqArrange()
+
+    def toggleColors(self):
+        self. showColors = not self.showColors
+        self.seqArrange()
 
     def mousePressEvent(self, event):
         print(self.alignPane.textCursor().positionInBlock())

@@ -120,7 +120,7 @@ class MDISubWindow(QMdiSubWindow):
     def __init__(self):
         super(MDISubWindow, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose, False)
-        self.widget_ = None
+        self._widget = None
         #self.setMouseTracking(True)
 
         # TODO: TAKE OUT EXTRA CLOSE COMMAND IN MDISUBWINDOW
@@ -143,24 +143,24 @@ class MDISubWindow(QMdiSubWindow):
         if event.type() == 2:
             #linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
             #print("REDRAWING FROM MDI")
-            self.widget_.userIsResizing = True
-            #self.widget_.seqArrangeNoColor()
+            self._widget.userIsResizing = True
+            #self._widget.seqArrangeNoColor()
         elif event.type() == 3:
             #print("DONE REDRAWING FROM MDI")
-            self.widget_.userIsResizing = False
-            self.widget_.resized.emit()
-            #self.widget_.seqArrangeColor()
+            self._widget.userIsResizing = False
+            self._widget.resized.emit()
+            #self._widget.seqArrangeColor()
         return super().event(event)
 
     def setWidget(self, widget):
-        self.widget_ = widget
+        self._widget = widget
         super(MDISubWindow, self).setWidget(widget)
 
     def widget(self):
-        return self.widget_
+        return self._widget
 
     def show(self):
-        self.widget_.show()
+        self._widget.show()
         super(MDISubWindow, self).show()
 
     def closeEvent(self, event):

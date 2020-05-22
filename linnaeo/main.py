@@ -92,7 +92,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
         self.mainLogger.debug("guiSet took took %f seconds" % float(time.perf_counter() - self.start))
 
-
         if trees:
             # For loading a window on File>Open
             print("Using saved workspace")
@@ -201,7 +200,8 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.bioModel.nameChanged.connect(self.postNameChange)
         self.processTimer.timeout.connect(self.updateUsage)
 
-        self.actionTrees.triggered.connect(self.queryTrees)
+        self.actionRulers.triggered.connect(self.toggleRulers)
+        self.actionColors.triggered.connect(self.toggleColors)
         LinnaeoApp.instance().barClick.connect(self.setSizing)
         self.edgeClick.connect(self.setSizing)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
@@ -215,15 +215,21 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             self.beingClicked = True
             if self._currentWindow and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
                 print("REDRAWING FRAME FROM MAIN")
-                self._currentWindow.widget_.userIsResizing = True
-                self._currentWindow.widget_.seqArrange(color=False)
+                self._currentWindow.widget().userIsResizing = True
+                self._currentWindow.widget().seqArrange(color=False)
         elif self.beingClicked:
             self.beingClicked = False
             if self._currentWindow and self._currentWindow.isMaximized():
                 print("DONE REDRAWING FROM MAIN")
-                self._currentWindow.widget_.userIsResizing = False
+                self._currentWindow.widget().userIsResizing = False
 
-                self._currentWindow.widget_.seqArrange()
+                self._currentWindow.widget().seqArrange()
+
+    def toggleRulers(self):
+        self._currentWindow.widget().toggleRulers()
+
+    def toggleColors(self):
+        self._currentWindow.widget().toggleColors()
 
     # SINGLE-USE SLOTS
     def newWorkspace(self):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/linnaeo.ui'
+# Form implementation generated from reading ui file 'linnaeo.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.2
 #
@@ -39,7 +39,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.splitter, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.mainMenu = QtWidgets.QMenuBar(MainWindow)
-        self.mainMenu.setGeometry(QtCore.QRect(0, 0, 807, 20))
+        self.mainMenu.setGeometry(QtCore.QRect(0, 0, 807, 23))
         self.mainMenu.setObjectName("mainMenu")
         self.menuFile = QtWidgets.QMenu(self.mainMenu)
         self.menuFile.setObjectName("menuFile")
@@ -106,8 +106,10 @@ class Ui_MainWindow(object):
         self.actionSorry_no_help_available.setObjectName("actionSorry_no_help_available")
         self.actionClose = QtWidgets.QAction(MainWindow)
         self.actionClose.setObjectName("actionClose")
-        self.actionTrees = QtWidgets.QAction(MainWindow)
-        self.actionTrees.setObjectName("actionTrees")
+        self.actionRulers = QtWidgets.QAction(MainWindow)
+        self.actionRulers.setObjectName("actionRulers")
+        self.actionColors = QtWidgets.QAction(MainWindow)
+        self.actionColors.setObjectName("actionColors")
         self.menuImport.addAction(self.actionFasta)
         self.menuImport.addAction(self.actionClustal)
         self.menuExport.addAction(self.actionSequence)
@@ -147,7 +149,8 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionNewFolder)
         self.toolBar.addAction(self.actionDelete)
         self.toolBar.addSeparator()
-        self.toolBar.addAction(self.actionTrees)
+        self.toolBar.addAction(self.actionRulers)
+        self.toolBar.addAction(self.actionColors)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -199,4 +202,7 @@ class Ui_MainWindow(object):
         self.actionTile.setText(_translate("MainWindow", "Tile"))
         self.actionSorry_no_help_available.setText(_translate("MainWindow", "Sorry, no help available!"))
         self.actionClose.setText(_translate("MainWindow", "Close"))
-        self.actionTrees.setText(_translate("MainWindow", "Trees"))
+        self.actionRulers.setText(_translate("MainWindow", "Rulers"))
+        self.actionRulers.setToolTip(_translate("MainWindow", "Show or hide sequence ruler"))
+        self.actionColors.setText(_translate("MainWindow", "Colors"))
+        self.actionColors.setToolTip(_translate("MainWindow", "Show or hide sequence colors"))
