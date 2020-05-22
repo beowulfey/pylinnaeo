@@ -202,6 +202,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
         self.actionRulers.triggered.connect(self.toggleRulers)
         self.actionColors.triggered.connect(self.toggleColors)
+        self.actionSave_Image.triggered.connect(self.saveImage)
         LinnaeoApp.instance().barClick.connect(self.setSizing)
         self.edgeClick.connect(self.setSizing)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
@@ -210,7 +211,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self._currentWindow = self.mdiArea.activeSubWindow()
 
     def setSizing(self):
-
         if not self.beingClicked:
             self.beingClicked = True
             if self._currentWindow and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
@@ -224,6 +224,13 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
                 self._currentWindow.widget().userIsResizing = False
 
                 self._currentWindow.widget().seqArrange()
+
+    def saveImage(self):
+        file = QFileDialog.getSaveFileName(self, "Save as...", "name",
+                                            "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
+        print(file[0]+file[1][-5:-1])
+        self._currentWindow.widget().seqArrange(color=True)
+        self._currentWindow.widget().grab().save(file[0]+file[1][-5:-1])
 
     def toggleRulers(self):
         self._currentWindow.widget().toggleRulers()

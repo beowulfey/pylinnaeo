@@ -178,6 +178,7 @@
    <addaction name="separator"/>
    <addaction name="actionRulers"/>
    <addaction name="actionColors"/>
+   <addaction name="actionSave_Image"/>
   </widget>
   <action name="actionAlign">
    <property name="text">
@@ -343,6 +344,14 @@
    </property>
    <property name="toolTip">
     <string>Show or hide sequence colors</string>
+   </property>
+  </action>
+  <action name="actionSave_Image">
+   <property name="text">
+    <string>Save Image</string>
+   </property>
+   <property name="toolTip">
+    <string>Capture current window as an image</string>
    </property>
   </action>
  </widget>

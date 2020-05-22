@@ -110,6 +110,8 @@ class Ui_MainWindow(object):
         self.actionRulers.setObjectName("actionRulers")
         self.actionColors = QtWidgets.QAction(MainWindow)
         self.actionColors.setObjectName("actionColors")
+        self.actionSave_Image = QtWidgets.QAction(MainWindow)
+        self.actionSave_Image.setObjectName("actionSave_Image")
         self.menuImport.addAction(self.actionFasta)
         self.menuImport.addAction(self.actionClustal)
         self.menuExport.addAction(self.actionSequence)
@@ -151,6 +153,7 @@ class Ui_MainWindow(object):
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionRulers)
         self.toolBar.addAction(self.actionColors)
+        self.toolBar.addAction(self.actionSave_Image)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -206,3 +209,5 @@ class Ui_MainWindow(object):
         self.actionRulers.setToolTip(_translate("MainWindow", "Show or hide sequence ruler"))
         self.actionColors.setText(_translate("MainWindow", "Colors"))
         self.actionColors.setToolTip(_translate("MainWindow", "Show or hide sequence colors"))
+        self.actionSave_Image.setText(_translate("MainWindow", "Save Image"))
+        self.actionSave_Image.setToolTip(_translate("MainWindow", "Capture current window as an image"))
