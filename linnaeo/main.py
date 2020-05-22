@@ -94,7 +94,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
         if trees:
             # For loading a window on File>Open
-            print("Using saved workspace")
+            self.mainLogger.info("Loading saved workspace!")
             self.bioModel, self.projectModel = trees
             self.sequences, self.titles, self.windex = data
             self.windex = int(self.windex)
@@ -763,7 +763,6 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.mainLogger.debug("Tree names: " + str(names) + " vs. Stored names: " + str(self.titles))
         self.titles = [x for x in self.titles and names if x not in pruned]
         self.mainLogger.debug("Removed " + str(pruned) + ", leaving " + str(self.titles))
-        #print("SEQUENCES: ", self.sequences)
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown"""

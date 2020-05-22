@@ -107,6 +107,83 @@ def iterTreeView(root):
         yield from recurse(root)
 
 
+def buildRuler(chars, gap, start, end):
+    ruler = None
+    if start != end:
+        print("\nBEGIN LINE!")
+        print("Chars, Gap, Start, End: ", chars,gap,start,end)
+        if gap != 0 and chars != end-start:
+            if end - start > 8:
+                chars = (end - start)
+                print("Setting chars to ",chars)
+            else:
+                chars = 8
+        labels = list(range(start+1, end+1))
+        print(labels)
+        #print(len(labels))
+        # This shows numbers on beginning and end. Easy!
+        # This shows them spaced out a set number.
+        # Finds all the factors of the spacing.
+        #factors = []
+        #for i in range(1, chars+1):
+        #    if chars % i == 0:
+        #        factors.append(i)
+        #print("Factors: ",factors)
+        #pos = int(len(factors)/2)
+
+        if chars < 20:
+            spacing = chars
+        elif 20 <= chars < 60:
+            spacing = int(chars/2)
+        elif 60 <= chars < 100:
+            spacing = int(chars/3)
+        elif 100 <= chars < 150:
+            spacing = int(chars/4)
+        elif 150 <= chars:
+            spacing = int(chars/5)
+        print("Selected spacing: ", spacing)
+        n = 0
+        speclabels = []
+        rulerlist = []
+        while n < chars:
+            speclabels.append(labels[n])
+            n+=spacing
+        if labels[-1] not in speclabels:
+            speclabels.append(labels[-1])
+        for n in range(1,4):
+            if labels[-1]-n in speclabels:
+                speclabels.remove(labels[-1]-n)
+        print(speclabels)
+        if len(speclabels)>2:
+            count = range(1,len(speclabels))
+            print("COUNT", list(count))
+            for x in count:
+                if x == count[-1]:
+                    print("Appending ", str(speclabels[x - 1]))
+                    rulerlist.append(str(speclabels[x - 1]))
+                    print("FINAL gap, ", (chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
+                    rulerlist.append(" "*(chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
+                    print("Appending final:", str(speclabels[x]))
+                    rulerlist.append(str(speclabels[x]))
+
+                else:
+                    print("Appending ", str(speclabels[x - 1]))
+                    rulerlist.append(str(speclabels[x-1]))
+                    first = 0
+                    if x == count[0]:
+                        first = len(str(speclabels[x-1]))
+                    next = len(str(speclabels[x]))
+                    print("For gap after", str(speclabels[x - 1]), "space is",(spacing - next - first+1))
+                    rulerlist.append(" "*(spacing - next - first+1))
+            ruler = "".join(rulerlist)
+        elif len(speclabels)==2:
+            ruler = str(start + 1) + " " * (chars - len(str(start + 1)) - len(str(end))) + str(end)
+        else:
+            ruler = str(start+1)
+
+    return ruler
+
+
 class AlignThread(QThread):
     finished = pyqtSignal()
     error = pyqtSignal(tuple)

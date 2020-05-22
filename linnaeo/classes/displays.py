@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QColor, QFontDatabase, QFont, QFontMetricsF, QTextCursor, QCursor
 from PyQt5.QtWidgets import QWidget, QApplication, QDialog, QDialogButtonBox
 
-from linnaeo.classes import widgets
+from linnaeo.classes import widgets, utilities
 from linnaeo.resources import linnaeo_rc
 from linnaeo.ui import alignment_ui, quit_ui
 
@@ -180,10 +180,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             char_count = int(width / charpx - 20 / charpx - \
                              self.alignPane.verticalScrollBar().size().width() / charpx)
         lines = int(self.maxlen/char_count)+1
-        self.alignPane.clear()
-        self.namePane.clear()
         self.namePane.setMinimumWidth((self.maxname * charpx) + 5)
         nline = 0
+        #if not self.userIsResizing:
+        # TODO: ISOLATE THIS OUT TO DO IN THREADS
+        self.alignPane.clear()
+        self.namePane.clear()
         for line in range(lines):
             self.alignPane.moveCursor(QTextCursor.End)
             start = nline * char_count
@@ -192,11 +194,15 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             if line == lines-1:
                 oldend = end
                 end = start+len(self.splitSeqs[0][start:])
-                #gap = oldend - end
-            if self.showRuler:
+                gap = oldend - end
+            if self.showRuler and not self.userIsResizing:  # TODO REMOVE AND NOT
                 self.namePane.insertPlainText("\n")
-                ruler = str(start+1)+" "*(char_count-gap-len(str(start+1))-len(str(end)))+str(end)
+                ruler = utilities.buildRuler(char_count, gap, start, end)
                 self.alignPane.insertPlainText(ruler)
+                self.alignPane.insertPlainText("\n")
+            elif self.showRuler:  # TODO MOVE THIS TO BELOW
+                self.namePane.insertPlainText("\n")
+                self.alignPane.insertPlainText(" ")
                 self.alignPane.insertPlainText("\n")
             for n in range(nseqs):
                 self.namePane.setAlignment(Qt.AlignRight)
@@ -207,7 +213,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     self.alignPane.insertPlainText("\n")
                 elif color:
                     for i in range(start, end):
-
                         self.alignPane.moveCursor(QTextCursor.End)
                         self.alignPane.setTextBackgroundColor(Qt.white)
                         if self.splitSeqs[n][i][1]:
@@ -221,6 +226,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.namePane.insertPlainText("\n")
         self.alignPane.moveCursor(QTextCursor.Start)
         self.namePane.moveCursor(QTextCursor.Start)
+       # elif self.userIsResizing:  # TODO DO IN SEPARATE THREAD
+        #    print("RESIZING")
+        #    self.alignPane.clear()
+        #    self.namePane.clear()
 
 
     def seqs(self):
@@ -231,12 +240,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.seqArrange()
 
     def updateName(self, old, new):
-        print("Changing name emitted!")
-        print(self._seqs)
         seq = self._seqs[old]
         self._seqs[new] = seq
         self._seqs.pop(old)
-        print(self._seqs)
         self.seqInit()
         self.seqArrange()
 
