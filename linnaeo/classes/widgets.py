@@ -67,7 +67,7 @@ class MDIArea(QMdiArea):
         # self.tabBar.setAutoHide(True)
         self.setTabsMovable(True)
         self.setTabsClosable(True)
-        #self.tabBar.tabCloseRequested.connect(self.closeTab)
+        self.tabBar.tabCloseRequested.connect(self.closeTab)
 
     def closeTab(self):
         try:
@@ -290,9 +290,11 @@ class ItemModel(QStandardItemModel):
                     self.dupeName.emit()
                     self.modelLogger.debug("Name changed to "+str(value))
                 try:
+                    print("setDataTryLoop")
                     sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
-                    sub.widget().updateName(oldvalue, newvalue)
+                    sub.widget().nameChange.emit(oldvalue, newvalue)
                 except KeyError:
+                    print("KEY ERROR")
                     pass
                 if self.itemFromIndex(index).data(role=Qt.UserRole+2):
                     seqr = self.itemFromIndex(index).data(role=Qt.UserRole+2)[0]

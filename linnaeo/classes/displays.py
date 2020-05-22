@@ -13,6 +13,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     # TODO: This does not maintain the alignment order. Shant be helped?...
     """
     resized = pyqtSignal()
+    nameChange = pyqtSignal((str, str))
     toolTipReq = pyqtSignal()
 
 
@@ -44,6 +45,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.resized.connect(self.externalResizeDone)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.toolTipReq.connect(self.getSeqTT)
+        self.nameChange.connect(self.updateName)
         self.theme = None
         self.splitNames = []
         self.splitSeqs = []
@@ -100,7 +102,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.setToolTip("%s, %s" % (str(pos.x()), str(pos.y())))
         self.alignPane.toolTip()
 
-
     def setTheme(self, theme):
         self.theme = theme
 
@@ -143,7 +144,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         Second layer is SEQUENCE POSITION
         Third layer is RESIDUE and COLOR
         """
-
+        self.splitSeqs = []
+        self.splitNames = []
         for seq in self._seqs.values():
             if len(seq) > self.maxlen:
                 self.maxlen = len(seq)
@@ -229,9 +231,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.seqArrange()
 
     def updateName(self, old, new):
+        print("Changing name emitted!")
+        print(self._seqs)
         seq = self._seqs[old]
-        self._seqs[new]=seq
+        self._seqs[new] = seq
         self._seqs.pop(old)
+        print(self._seqs)
+        self.seqInit()
         self.seqArrange()
 
 

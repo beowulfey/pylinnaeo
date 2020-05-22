@@ -763,7 +763,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.mainLogger.debug("Tree names: " + str(names) + " vs. Stored names: " + str(self.titles))
         self.titles = [x for x in self.titles and names if x not in pruned]
         self.mainLogger.debug("Removed " + str(pruned) + ", leaving " + str(self.titles))
-        print("SEQUENCES: ", self.sequences)
+        #print("SEQUENCES: ", self.sequences)
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown"""
