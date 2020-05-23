@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
 # Internal components
 import linnaeo
 from linnaeo.classes import models, widgets, utilities
-from linnaeo.classes.displays import QuitDialog, AlignSubWindow
+from linnaeo.classes.displays import QuitDialog, AlignSubWindow, AboutDialog
 from linnaeo.ui import linnaeo_ui
 
 
@@ -187,6 +187,9 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         self.actionClose.triggered.connect(self.closeTab)
         self.actionClose_all.triggered.connect(self.closeAllTabs)
 
+        # HELP
+        self.actionAbout.triggered.connect(self.showAbout)
+
         # Data awareness connections
         self.bioTree.doubleClicked.connect(self.seqDbClick)
         self.bioModel.dupeName.connect(self.dupeNameMsg)
@@ -210,26 +213,39 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
     def setCurrentWindow(self):
         self._currentWindow = self.mdiArea.activeSubWindow()
 
+    def showAbout(self):
+        qDialog = AboutDialog(self)
+        qDialog.exec()
+        """if confirm == 1:
+            result = self.saveWorkspace()
+            if result:
+                print("YES")
+                return True
+        elif confirm == 2:
+            print("NO")
+            return False
+        else:
+            return None
+            """
+
     def setSizing(self):
         if not self.beingClicked:
             self.beingClicked = True
             if self._currentWindow and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
-                print("REDRAWING FRAME FROM MAIN")
+                # print("REDRAWING FRAME FROM MAIN")
                 self._currentWindow.widget().userIsResizing = True
-                self._currentWindow.widget().seqArrange(color=False)
+                self._currentWindow.widget().seqArrange(color=False, rulers=False)
         elif self.beingClicked:
             self.beingClicked = False
             if self._currentWindow and self._currentWindow.isMaximized():
-                print("DONE REDRAWING FROM MAIN")
+                # print("DONE REDRAWING FROM MAIN")
                 self._currentWindow.widget().userIsResizing = False
-
                 self._currentWindow.widget().seqArrange()
 
     def saveImage(self):
         file = QFileDialog.getSaveFileName(self, "Save as...", "name",
                                             "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
-        print(file[0]+file[1][-5:-1])
-        self._currentWindow.widget().seqArrange(color=True)
+        self._currentWindow.widget().seqArrange(color=True, rulers=True)
         self._currentWindow.widget().grab().save(file[0]+file[1][-5:-1])
 
     def toggleRulers(self):
@@ -289,7 +305,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
 
     def newSequence(self):
         sel = QFileDialog.getOpenFileName(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
-                                          filter="Fasta File (*.fa*);;Any (*)")
+                                          filter="Fasta File (*.fa *.fasta);;Any (*)")
         seqr = None
         filename = sel[0]
         badfile = True

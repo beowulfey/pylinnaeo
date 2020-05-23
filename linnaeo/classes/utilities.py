@@ -1,59 +1,12 @@
 import logging
 import sys
 import traceback
-from textwrap import TextWrapper
-import re
 
-from PyQt5.QtCore import pyqtSignal, QThread, QTimer, QObject
-
-from clustalo import clustalo
+from PyQt5.QtCore import pyqtSignal, QThread, QTimer
+import clustalo
 
 """
 Additional classes and functions that are used within Sherlock, but are not responsible for viewing data.
-"""
-
-"""
-class SeqWrap(TextWrapper):
-    _whitespace = '\t\n\x0b\x0c\r '
-    word_punct = r'[\w!"\'&.,?]'
-    letter = r'[^\d\W]'
-    whitespace = r'[%s]' % re.escape(_whitespace)
-    nowhitespace = '[^' + whitespace[1:]
-    wordsep_re = re.compile(fr'''
-        ( # any whitespace
-          {whitespace}+
-        #| # em-dash between words
-        #  (?<={word_punct}) -{{2,}} (?=\w)
-        | # word, possibly hyphenated
-          {nowhitespace}+? #(?:
-            # hyphenated word
-            #  -(?: (?<={letter}{{2}}-) | (?<={letter}-{letter}-))
-            #  (?= {letter} -? {letter})
-            #| # end of word
-            #  (?={whitespace}|\Z)
-            #| # em-dash
-            #  (?<={word_punct}) (?=-{{2,}}\w)
-            #)
-        )''',
-                            re.VERBOSE)
-    del word_punct, letter, nowhitespace
-
-    def __init__(self, **kwargs):
-        super().__init__(kwargs)
-
-    def _handle_long_word(self, reversed_chunks, cur_line, cur_len, width):
-        # OVERRIDDEN
-        if width < 1:
-            space_left = 1
-        else:
-            space_left = width - cur_len
-        if self.break_long_words:
-            cur_line.append(reversed_chunks[-1][:space_left])
-            reversed_chunks[-1] = reversed_chunks[-1][space_left:]
-
-        elif not cur_line:
-            cur_line.append(reversed_chunks.pop())
-
 """
 
 
@@ -95,44 +48,36 @@ def iterTreeView(root):
     Internal function for iterating a TreeModel.
     Usage: for node in _iterTreeView(root): etc.
     """
-
     def recurse(parent):
         for row in range(parent.rowCount()):
             child = parent.child(row)
             yield child
             if child.hasChildren():
                 yield from recurse(child)
-
     if root is not None:
         yield from recurse(root)
 
 
 def buildRuler(chars, gap, start, end):
+    """
+    Fairly complicated function for generating the ruler. Calculates the spacing
+    and labeling based on the width of the screen. Might be computational intensive,
+    so I make a point to hide it (and the colors) when resizing.
+    """
     ruler = None
     if start != end:
-        print("\nBEGIN LINE!")
-        print("Chars, Gap, Start, End: ", chars,gap,start,end)
+        #print("\nBEGIN LINE!")
+        #print("Chars, Gap, Start, End: ", chars,gap,start,end)
         if gap != 0 and chars != end-start:
             if end - start > 8:
                 chars = (end - start)
-                print("Setting chars to ",chars)
+        #        print("Setting chars to ",chars)
             else:
                 chars = 8
         labels = list(range(start+1, end+1))
-        print(labels)
-        #print(len(labels))
-        # This shows numbers on beginning and end. Easy!
-        # This shows them spaced out a set number.
-        # Finds all the factors of the spacing.
-        #factors = []
-        #for i in range(1, chars+1):
-        #    if chars % i == 0:
-        #        factors.append(i)
-        #print("Factors: ",factors)
-        #pos = int(len(factors)/2)
-
+        spacing = chars
         if chars < 20:
-            spacing = chars
+            pass
         elif 20 <= chars < 60:
             spacing = int(chars/2)
         elif 60 <= chars < 100:
@@ -141,7 +86,7 @@ def buildRuler(chars, gap, start, end):
             spacing = int(chars/4)
         elif 150 <= chars:
             spacing = int(chars/5)
-        print("Selected spacing: ", spacing)
+        #print("Selected spacing: ", spacing)
         n = 0
         speclabels = []
         rulerlist = []
@@ -153,34 +98,32 @@ def buildRuler(chars, gap, start, end):
         for n in range(1,4):
             if labels[-1]-n in speclabels:
                 speclabels.remove(labels[-1]-n)
-        print(speclabels)
+        # print(speclabels)
         if len(speclabels)>2:
             count = range(1,len(speclabels))
-            print("COUNT", list(count))
+            # print("COUNT", list(count))
             for x in count:
                 if x == count[-1]:
-                    print("Appending ", str(speclabels[x - 1]))
+                    # print("Appending ", str(speclabels[x - 1]))
                     rulerlist.append(str(speclabels[x - 1]))
-                    print("FINAL gap, ", (chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
+                    # print("FINAL gap, ", (chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
                     rulerlist.append(" "*(chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
-                    print("Appending final:", str(speclabels[x]))
+                    # print("Appending final:", str(speclabels[x]))
                     rulerlist.append(str(speclabels[x]))
-
                 else:
-                    print("Appending ", str(speclabels[x - 1]))
+                    # print("Appending ", str(speclabels[x - 1]))
                     rulerlist.append(str(speclabels[x-1]))
                     first = 0
                     if x == count[0]:
                         first = len(str(speclabels[x-1]))
                     next = len(str(speclabels[x]))
-                    print("For gap after", str(speclabels[x - 1]), "space is",(spacing - next - first+1))
+                    # print("For gap after", str(speclabels[x - 1]), "space is",(spacing - next - first+1))
                     rulerlist.append(" "*(spacing - next - first+1))
             ruler = "".join(rulerlist)
         elif len(speclabels)==2:
             ruler = str(start + 1) + " " * (chars - len(str(start + 1)) - len(str(end))) + str(end)
         else:
             ruler = str(start+1)
-
     return ruler
 
 
@@ -198,7 +141,7 @@ class AlignThread(QThread):
 
     def run(self):
         try:
-            result = clustalo(*self.args, **self.kwargs)
+            result = clustalo.clustalo(*self.args, **self.kwargs)
         except:
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]

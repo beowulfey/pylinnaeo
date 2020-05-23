@@ -2,9 +2,9 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QColor, QFontDatabase, QFont, QFontMetricsF, QTextCursor, QCursor
 from PyQt5.QtWidgets import QWidget, QApplication, QDialog, QDialogButtonBox
 
-from linnaeo.classes import widgets, utilities
+from linnaeo.classes import widgets, utilities, themes
 from linnaeo.resources import linnaeo_rc
-from linnaeo.ui import alignment_ui, quit_ui
+from linnaeo.ui import alignment_ui, quit_ui, about_ui
 
 
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
@@ -23,17 +23,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     neg = QColor(255, 70, 90)
     cys = QColor(255, 255, 85)
     aro = QColor(145, 255, 168)
+    gly = QColor(255, 255, 0)
 
-    defTheme = {
-        # Charged; positive
-        "R": pos, "H": aro, "K": pos,
-        # Charged, negative
-        "D": neg, "E": neg,
-        # Misc
-        "C": cys, #"G": gly, "A": ala,
-        # Aromatic
-        "W": aro, "F": aro, "Y": aro
-    }
+
+
 
     def __init__(self, seqs):
         super(self.__class__, self).__init__()
@@ -74,7 +67,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.relColors = False
 
         if self.showColors:
-            self.theme = self.defTheme
+            self.theme = themes.PaleTheme().theme
+            print(self.theme)
 
         self.seqInit()
 
@@ -124,7 +118,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         it calls a resizeEvent upon release too.
         """
         if self.userIsResizing:
-            self.seqArrange(color=False)
+            self.seqArrange(color=False, rulers=False)
         elif not self.userIsResizing:
             self.resized.emit()
         super(AlignSubWindow, self).resizeEvent(event)
@@ -169,9 +163,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     local.append([char, None])
             self.splitSeqs.append(local)
 
-    def seqArrange(self, color=True):
+    def seqArrange(self, color=True, rulers=True):
         if not self.showColors:
             color = False
+        if not self.showRuler:
+            rulers = False
         nseqs = len(self._seqs.keys())  # Calculate number of sequences
         charpx = self.fmF.averageCharWidth()
         width = self.alignPane.size().width() - 30
@@ -195,12 +191,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 oldend = end
                 end = start+len(self.splitSeqs[0][start:])
                 gap = oldend - end
-            if self.showRuler and not self.userIsResizing:  # TODO REMOVE AND NOT
+            if self.showRuler and rulers:  # TODO REMOVE AND NOT
                 self.namePane.insertPlainText("\n")
                 ruler = utilities.buildRuler(char_count, gap, start, end)
                 self.alignPane.insertPlainText(ruler)
                 self.alignPane.insertPlainText("\n")
-            elif self.showRuler:  # TODO MOVE THIS TO BELOW
+            elif self.showRuler and not rulers:  # TODO MOVE THIS TO BELOW
                 self.namePane.insertPlainText("\n")
                 self.alignPane.insertPlainText(" ")
                 self.alignPane.insertPlainText("\n")
@@ -231,7 +227,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         #    self.alignPane.clear()
         #    self.namePane.clear()
 
-
     def seqs(self):
         return self._seqs
 
@@ -260,3 +255,14 @@ class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
 
     def discard(self):
         self.done(2)
+
+
+class AboutDialog(QDialog, about_ui.Ui_Dialog):
+    def __init__(self, parent):
+        super(self.__class__, self).__init__(parent)
+        self.setupUi(self)
+        self.setWindowTitle("Thanks for reading this!")
+        self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.ok)
+
+    def ok(self):
+        self.done(1)
