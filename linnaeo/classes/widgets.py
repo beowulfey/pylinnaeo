@@ -2,11 +2,12 @@
 import logging
 import sys
 
-from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression
+from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
     QTextCursor, QFontMetricsF, QTextDocument, QCursor
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
-    QDialog, QDialogButtonBox, QApplication
+    QDialog, QDialogButtonBox, QApplication, QTextEdit, QAbstractScrollArea, QToolTip
+from PyQt5.uic.properties import QtCore, QtWidgets
 
 from linnaeo.resources import linnaeo_rc
 from linnaeo.classes import utilities
@@ -121,7 +122,8 @@ class MDISubWindow(QMdiSubWindow):
         super(MDISubWindow, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self._widget = None
-        #self.setMouseTracking(True)
+        self.setMouseTracking(True)
+        #self.installEventFilter(self.widget().alignPane)
 
         # TODO: TAKE OUT EXTRA CLOSE COMMAND IN MDISUBWINDOW
         # remove extra close command
@@ -131,6 +133,13 @@ class MDISubWindow(QMdiSubWindow):
         #        print("Found")
         #        menu.actions().remove(action)
         # self.setSystemMenu(menu)
+
+    #def eventFilter(self, obj, event):
+    #    if event.type() == 129:
+    #        print("HOVER")
+    #    if event.type() == 5:
+    #        print("MOUSE MOVE")
+    #    return super().eventFilter(obj, event)
 
     def mouseMoveEvent(self, event):
         #print(QCursor.pos())
@@ -171,82 +180,6 @@ class MDISubWindow(QMdiSubWindow):
 
     def close(self):
         super(MDISubWindow, self).close()
-
-
-class AlignTheme(QSyntaxHighlighter):
-    theme = None
-
-    def setTheme(self, theme=1):
-        """
-        Should make a dictionary of formats per type.
-        """
-        fmtPos = QTextCharFormat()
-        fmtNeg = QTextCharFormat()
-        fmtAro = QTextCharFormat()
-        fmtHydro = QTextCharFormat()
-        fmtPolar = QTextCharFormat()
-        fmtCys = QTextCharFormat()
-        fmtGly = QTextCharFormat()
-        fmtPro = QTextCharFormat()
-
-        if theme == 0:
-            fmtPos.setBackground(QColor(50, 69, 97))
-            fmtPos.setForeground(Qt.white)
-            fmtNeg.setBackground(QColor(158, 31, 50))
-            fmtNeg.setForeground(Qt.white)
-            fmtAro.setBackground(QColor(85,133,142))
-            fmtAro.setForeground(Qt.black)
-            fmtHydro.setBackground(QColor(150,173,200))
-            fmtHydro.setForeground(Qt.black)
-            fmtPolar.setBackground(QColor(103,125,76))
-            fmtPolar.setForeground(Qt.white)
-            fmtCys.setBackground(QColor(241,154,74))
-            fmtCys.setForeground(Qt.black)
-            fmtGly.setBackground(QColor(245,200,185))
-            fmtGly.setForeground(Qt.black)
-            fmtPro.setBackground(QColor(243,65,63))
-            fmtPro.setForeground(Qt.black)
-
-        if theme == 1:
-            fmtPos.setBackground(QColor(70,70,70))
-            fmtPos.setForeground(Qt.white)
-            fmtNeg.setBackground(QColor(47,47,47))
-            fmtNeg.setForeground(Qt.white)
-            fmtAro.setBackground(QColor(24,24,24))
-            fmtAro.setForeground(Qt.white)
-            fmtHydro.setBackground(QColor(93,93,93))
-            fmtHydro.setForeground(Qt.white)
-            fmtPolar.setBackground(QColor(186,186,186))
-            fmtPolar.setForeground(Qt.black)
-            fmtCys.setBackground(QColor(140,140,140))
-            fmtCys.setForeground(Qt.white)
-            fmtGly.setBackground(QColor(163,163,163))
-            fmtGly.setForeground(Qt.black)
-            fmtPro.setBackground(QColor(116,116,116))
-            fmtPro.setForeground(Qt.white)
-
-        self.theme = {
-            "[R,K]": fmtPos,
-            "[D,E]": fmtNeg,
-            "[F,Y,W,H]": fmtAro,
-            "[A,V,I,L,M]": fmtHydro,
-            "[S,T,N,Q]": fmtPolar,
-            "[G]": fmtGly,
-            "[C]": fmtCys,
-            "[P]": fmtPro
-        }
-
-    def highlightBlock(self, text):
-        for pattern, fmt in self.theme.items():
-            print("FMT: ", fmt)
-            print("Pattern: ", pattern)
-            regex = QRegularExpression(pattern)
-            index = regex.globalMatch(text)
-            while index.hasNext():
-                match = index.next()
-                start = match.capturedStart()
-                length = match.capturedLength()
-                self.setFormat(start, length, fmt)
 
 
 class ItemModel(QStandardItemModel):
@@ -327,4 +260,101 @@ class AlignDoc(QTextDocument):
     def mouseMoveEvent(self, event):
         print(QCursor.pos())
         return super().mouseMoveEvent(event)
+
+
+class AlignPane(QTextEdit):
+
+    toolTipReq = pyqtSignal(QPoint, str)
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setMouseTracking(True)
+        self.tracking = False
+        self.offset = (334,208)
+
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        self.toolTipReq.connect(self.getSeqTT)
+        self.cursorPositionChanged.connect(self.getPos)
+
+        self.setSizePolicy(sizePolicy)
+        self.setMinimumSize(QSize(200, 100))
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.setLineWrapMode(QTextEdit.NoWrap)
+        self.setReadOnly(True)
+        self.setTextInteractionFlags(Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse)
+        self.setObjectName("alignPane")
+        self.setCursorWidth(1)
+        self.setToolTipDuration(-1)
+
+    #def event(self, event):
+        #print(event, event.type())
+    #    if event.type() == 110:
+    #        self.toolTipReq.emit()
+    #    return super().event(event)
+
+    def getPos(self):
+        pass
+        #print("POS CHANGED")
+        #print(self.textCursor().position())
+        #print(self.textCursor().positionInBlock())
+
+    def getSeqTT(self, pos, selected):
+        print("TOOLTIP REQ")
+        #self.setToolTip()
+        QToolTip.showText(pos, selected)
+        #self.unsetCursor()
+        self.textCursor().clearSelection()
+
+    #def toolTipEvent(self, event):
+    #    print("TOOLTIP")
+    #    self.setToolTip(self.textCursor().selectedText())
+    #    self.textCursor().clearSelection()
+    #    return super().toolTipEvent(event)
+
+    """def mouseMoveEvent(self, event):
+        if self.tracking:
+            self.unsetCursor()
+            self.cursorForPosition(event.globalPos())
+            self.mousePressEvent(event)
+        else:
+            super().mouseMoveEvent(event)
+
+
+    def mousePressEvent(self, event):
+        self.unsetCursor()
+        super().mousePressEvent(event)
+        print("CLICK!", event.globalPos())
+        self.setTextCursor(self.cursorForPosition(self.mapFromGlobal(event.globalPos())))
+        self.moveCursor(QTextCursor.Left, mode=QTextCursor.MoveAnchor)
+        self.moveCursor(QTextCursor.Left, mode=QTextCursor.MoveAnchor)
+        self.moveCursor(QTextCursor.Left, mode=QTextCursor.KeepAnchor)
+        text = self.textCursor().selectedText()
+        self.unsetCursor()
+
+        self.toolTipReq.emit(event.globalPos(), text)
+        self.tracking = True
+
+    def mouseReleaseEvent(self, event):
+        print("UNCLICK")
+        super().mouseReleaseEvent(event)
+        self.tracking = False
+
+
+
+
+
+    #def mouseMoveEvent(self, event):
+        # TODO THIS DOES NOT MATCH TRUE CURSOR ... QCURSOR RETURNS ABSOLUTE VALUE!
+        #cursor = self.mapFromGlobal(QPoint(QCursor.pos()))
+        #tcursor = self.cursorForPosition(cursor)
+        #self.setTextCursor(tcursor)
+        #print(QCursor.pos())
+        #return super().mouseMoveEvent(event)"""
+
+
 

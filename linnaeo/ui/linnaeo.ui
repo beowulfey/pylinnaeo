@@ -179,6 +179,8 @@
    <addaction name="actionRulers"/>
    <addaction name="actionColors"/>
    <addaction name="actionSave_Image"/>
+   <addaction name="actionBigger"/>
+   <addaction name="actionSmaller"/>
   </widget>
   <action name="actionAlign">
    <property name="text">
@@ -355,6 +357,22 @@
    </property>
    <property name="toolTip">
     <string>Capture current window as an image</string>
+   </property>
+  </action>
+  <action name="actionBigger">
+   <property name="text">
+    <string>Bigger</string>
+   </property>
+   <property name="toolTip">
+    <string>Increase text size</string>
+   </property>
+  </action>
+  <action name="actionSmaller">
+   <property name="text">
+    <string>Smaller</string>
+   </property>
+   <property name="toolTip">
+    <string>Decrease font size</string>
    </property>
   </action>
  </widget>

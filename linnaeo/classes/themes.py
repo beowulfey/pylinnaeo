@@ -3,14 +3,13 @@ from PyQt5.QtGui import QColor
 
 class DefaultTheme:
     """ My personal taste. Not recommended. """
+
+    # THEMES #
     pos = QColor(100, 140, 255)
     neg = QColor(255, 70, 90)
-    pol = QColor(30, 30, 100)
-    aro = QColor(145, 255, 168)
-    phb = QColor(100, 100, 100)
     cys = QColor(255, 255, 85)
-    gly = QColor(255, 100, 0)
-    pro = QColor(255, 255, 255)
+    aro = QColor(145, 255, 168)
+    gly = QColor(255, 255, 0)
 
     def __init__(self):
         self.theme = {}

@@ -12,7 +12,7 @@ from Bio.Alphabet import generic_protein
 
 # PyQt components
 from PyQt5.QtCore import Qt, QThreadPool, QDir, QFile, QIODevice, QDataStream, pyqtSignal
-from PyQt5.QtGui import QStandardItem
+from PyQt5.QtGui import QStandardItem, QCursor
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QFileDialog
 
 # Internal components
@@ -137,10 +137,10 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         return super().eventFilter(obj, event)
 
     def resizeEvent(self, event):
-        #   # TODO: THIS IS THE ONLY ONE THAT DOESN'T TURN OFF COLOR WHEN RESIZING
-        #self.setSizing()
+    #    # TODO: THIS IS THE ONLY ONE THAT DOESN'T TURN OFF COLOR WHEN RESIZING
+        # Just flashes of and on...
+        # self.setSizing()
         return super().resizeEvent(event)
-
 
     def guiFinalize(self):
         # Tree setup
@@ -209,6 +209,16 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
         LinnaeoApp.instance().barClick.connect(self.setSizing)
         self.edgeClick.connect(self.setSizing)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
+        self.actionBigger.triggered.connect(self.increaseTextSize)
+        self.actionSmaller.triggered.connect(self.decreaseTextSize)
+
+    def increaseTextSize(self):
+        self._currentWindow.widget().increaseFont()
+        self.mainStatus.showMessage("Setting font size to %s " % self._currentWindow.widget().getFontSize(), msecs=1000)
+
+    def decreaseTextSize(self):
+        self._currentWindow.widget().decreaseFont()
+        self.mainStatus.showMessage("Setting font size to %s " % self._currentWindow.widget().getFontSize(), msecs=1000)
 
     def setCurrentWindow(self):
         self._currentWindow = self.mdiArea.activeSubWindow()

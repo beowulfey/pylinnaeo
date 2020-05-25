@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/alignment.ui'
+# Form implementation generated from reading ui file 'alignment.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.14.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -50,25 +50,6 @@ class Ui_aliWindow(object):
         self.namePane.setReadOnly(True)
         self.namePane.setObjectName("namePane")
         self.horizontalLayout.addWidget(self.namePane, 0, QtCore.Qt.AlignRight)
-        self.alignPane = QtWidgets.QTextEdit(aliWindow)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.alignPane.sizePolicy().hasHeightForWidth())
-        self.alignPane.setSizePolicy(sizePolicy)
-        self.alignPane.setMinimumSize(QtCore.QSize(200, 100))
-        font = QtGui.QFont()
-        font.setFamily("Liberation Mono")
-        font.setPointSize(10)
-        self.alignPane.setFont(font)
-        self.alignPane.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.alignPane.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.alignPane.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.alignPane.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
-        self.alignPane.setReadOnly(True)
-        self.alignPane.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
-        self.alignPane.setObjectName("alignPane")
-        self.horizontalLayout.addWidget(self.alignPane)
 
         self.retranslateUi(aliWindow)
         QtCore.QMetaObject.connectSlotsByName(aliWindow)
