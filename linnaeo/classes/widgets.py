@@ -248,20 +248,6 @@ class ItemModel(QStandardItemModel):
             return super(ItemModel, self).setData(index, value, role)
 
 
-class AlignDoc(QTextDocument):
-    def __init__(self):
-        super().__init__()
-        self.setMouseTracking(True)
-
-    def event(self, event):
-        print(event, event.type())
-        return super().event(event)
-
-    def mouseMoveEvent(self, event):
-        print(QCursor.pos())
-        return super().mouseMoveEvent(event)
-
-
 class AlignPane(QTextEdit):
 
     toolTipReq = pyqtSignal(QPoint, str)
@@ -270,7 +256,7 @@ class AlignPane(QTextEdit):
         super().__init__(parent)
         self.setMouseTracking(True)
         self.tracking = False
-        self.offset = (334,208)
+        self.lastpos = None
 
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -288,7 +274,7 @@ class AlignPane(QTextEdit):
         self.setReadOnly(True)
         self.setTextInteractionFlags(Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse)
         self.setObjectName("alignPane")
-        self.setCursorWidth(1)
+        self.setCursorWidth(0)
         self.setToolTipDuration(-1)
 
     #def event(self, event):
@@ -296,6 +282,9 @@ class AlignPane(QTextEdit):
     #    if event.type() == 110:
     #        self.toolTipReq.emit()
     #    return super().event(event)
+
+    def scrollEvent(self, event):
+        print("SCROLL")
 
     def getPos(self):
         pass
@@ -316,25 +305,25 @@ class AlignPane(QTextEdit):
     #    self.textCursor().clearSelection()
     #    return super().toolTipEvent(event)
 
-    """def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event):
         if self.tracking:
+            super().mouseMoveEvent(event)
             self.unsetCursor()
-            self.cursorForPosition(event.globalPos())
+            #self.setTextCursor(self.cursorForPosition(event.globalPos()))
             self.mousePressEvent(event)
         else:
             super().mouseMoveEvent(event)
 
 
     def mousePressEvent(self, event):
-        self.unsetCursor()
         super().mousePressEvent(event)
         print("CLICK!", event.globalPos())
-        self.setTextCursor(self.cursorForPosition(self.mapFromGlobal(event.globalPos())))
-        self.moveCursor(QTextCursor.Left, mode=QTextCursor.MoveAnchor)
-        self.moveCursor(QTextCursor.Left, mode=QTextCursor.MoveAnchor)
-        self.moveCursor(QTextCursor.Left, mode=QTextCursor.KeepAnchor)
+        #self.setTextCursor(self.cursorForPosition(self.mapFromGlobal(event.globalPos())))
+        #self.moveCursor(QTextCursor.Left, mode=QTextCursor.MoveAnchor)
+        #self.moveCursor(QTextCursor.Left, mode=QTextCursor.MoveAnchor)
+        self.moveCursor(QTextCursor.PreviousCharacter, mode=QTextCursor.KeepAnchor)
         text = self.textCursor().selectedText()
-        self.unsetCursor()
+        #self.unsetCursor()
 
         self.toolTipReq.emit(event.globalPos(), text)
         self.tracking = True
@@ -342,6 +331,10 @@ class AlignPane(QTextEdit):
     def mouseReleaseEvent(self, event):
         print("UNCLICK")
         super().mouseReleaseEvent(event)
+        curs = self.textCursor()
+        curs.clearSelection()
+        self.setTextCursor(curs)
+
         self.tracking = False
 
 
@@ -354,7 +347,7 @@ class AlignPane(QTextEdit):
         #tcursor = self.cursorForPosition(cursor)
         #self.setTextCursor(tcursor)
         #print(QCursor.pos())
-        #return super().mouseMoveEvent(event)"""
+        #return super().mouseMoveEvent(event)
 
 
 

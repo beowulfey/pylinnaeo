@@ -10,6 +10,44 @@ Additional classes and functions that are used within Sherlock, but are not resp
 """
 
 
+def redrawBasic(seqs, chars, lines, rulers=False):
+    html = ["<pre>\n"]
+    n = 0
+    for line in range(lines):
+        if rulers:
+            html.append("\n")
+        start = n * chars
+        end = n * chars + chars
+        if line == lines - 1:
+            end = start + len(seqs[0][start:])
+        for i in range(len(seqs)):
+            html.append("".join([x[0][-8] for x in seqs[i][start:end]])+"\n")
+        html.append("\n")
+        n+=1
+    html.append("</pre>")
+    return "".join(html)
+
+
+def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
+    html = ["<pre>"]
+    n = 0
+    for line in range(lines):
+        start = n * chars
+        end = start + len(seqs[0][start:]) if line == lines - 1 else n * chars + chars
+        gap = (n * chars + chars) - end
+        if rulers:
+            html.append(str(buildRuler(chars, gap, start, end))+"\n")
+        for i in range(len(seqs)):
+            if colors:
+                html.append("".join([x[0] for x in seqs[i][start:end]])+"\n")
+            else:
+                html.append("".join([x[0][-8] for x in seqs[i][start:end]]) + "\n")
+        html.append("\n")
+        n += 1
+    html.append("</pre>")
+    return "".join(html)
+
+
 def checkName(name, titles, layer=0):
     """ Tool for checking a title list. Used for generating new titles if duplicate"""
     #print("\nBEGIN CHECK-- Layer ", layer)

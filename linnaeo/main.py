@@ -244,7 +244,7 @@ class Linnaeo(QMainWindow, linnaeo_ui.Ui_MainWindow):
             if self._currentWindow and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
                 # print("REDRAWING FRAME FROM MAIN")
                 self._currentWindow.widget().userIsResizing = True
-                self._currentWindow.widget().seqArrange(color=False, rulers=False)
+                self._currentWindow.widget().seqArrange(color=False) #, rulers=False)
         elif self.beingClicked:
             self.beingClicked = False
             if self._currentWindow and self._currentWindow.isMaximized():
