@@ -9,6 +9,25 @@ import clustalo
 Additional classes and functions that are used within Sherlock, but are not responsible for viewing data.
 """
 
+class SeqThread(QThread):
+    finished = pyqtSignal()
+    def __init__(self, *args, fancy=True):
+        QThread.__init__(self)
+        self.seqLogger = logging.getLogger("SEQDRAW")
+        self.html = None
+        self.seqs = args[0]
+        self.chars = args[1]
+        self.lines = args[2]
+        self.rulers = args[3]
+        self.colors = args[4]
+        self.fancy = fancy
+
+    def run(self):
+        if self.fancy:
+            self.html = redrawFancy(self.seqs, self.chars, self.lines, self.rulers, self.colors)
+        else:
+            self.html = redrawBasic(self.seqs, self.chars, self.lines, self.rulers)
+
 
 def redrawBasic(seqs, chars, lines, rulers=False):
     html = ["<pre>\n"]

@@ -55,7 +55,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.nameChange.connect(self.updateName)
         self.lineChange.connect(self.nameArrange)
 
-
     def setupCustomUi(self):
         self.horizontalLayout.addWidget(self.alignPane)
         self.alignPane.setFont(self.font)
@@ -91,10 +90,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     if char != "-":
                         count += 1
                 except IndexError:
-                    print("NoIndex")
                     local.append([" ", None])
                 except KeyError:
-                    print("noKey")
                     char = '<span style=\"background-color:#FFFFFF;\">'+seq[i]+"</span>"
                     local.append([char, None])
             self.splitSeqs.append(local)
@@ -102,13 +99,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def nameArrange(self, lines):
         self.namePane.clear()
         self.namePane.setMinimumWidth((self.maxname * self.fmF.averageCharWidth()) + 5)
-        names = ["<pre style=\"text-align: right;\">"]
-        if self.showRuler:
-            names.append("\n")
+        names = ["<pre style=\"text-align: right;\">\n"]
         for line in range(lines):
+            if self.showRuler:
+                names.append("\n")
             for i in range(len(self.splitNames)):
-                if self.showRuler:
-                    names.append("\n")
                 names.append(self.splitNames[i] + "\n")
             names.append("\n")
         names.append("</pre>")
@@ -130,82 +125,15 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         if lines != self.lines:
             self.lineChange.emit(lines)
         self.alignPane.clear()
-        if self.userIsResizing:
-            self.alignPane.setText(utilities.redrawBasic(self.splitSeqs, char_count, lines, rulers))
-        else:
-            self.alignPane.setHtml(utilities.redrawFancy(self.splitSeqs, char_count, lines, rulers, color))
+        fancy = False if self.userIsResizing else True
+            #self.alignPane.setText(utilities.redrawBasic(self.splitSeqs, char_count, lines, rulers))
+       #else:
+            #self.alignPane.setHtml(utilities.redrawFancy(self.splitSeqs, char_count, lines, rulers, color))
+        worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy)
+        worker.start()
 
-    def seqArrangeBk(self, color=True, rulers=True):
-        if not self.showColors:
-            color = False
-        if not self.showRuler:
-            rulers = False
-        # Calculate font and window metrics
-        nseqs = len(self._seqs.keys())
-        charpx = self.fmF.averageCharWidth()
-        width = self.alignPane.size().width() - 30
-        char_count = int(width / charpx - 20 / charpx)
-        if self.alignPane.verticalScrollBar().isVisible():
-            char_count = int(width / charpx - 20 / charpx - \
-                             self.alignPane.verticalScrollBar().size().width() / charpx)
-        lines = int(self.maxlen / char_count) + 1
-        self.namePane.setMinimumWidth((self.maxname * charpx) + 5)
-        nline = 0
-        # if not self.userIsResizing:
-        # TODO: ISOLATE THIS OUT TO DO IN THREADS
-        self.alignPane.clear()
-        self.namePane.clear()
-        for line in range(lines):
-            self.alignPane.moveCursor(QTextCursor.End)
-            start = nline * char_count
-            end = nline * char_count + char_count
-            gap = 0
-            if line == lines - 1:
-                oldend = end
-                end = start + len(self.splitSeqs[0][start:])
-                gap = oldend - end
-            if self.showRuler and rulers:  # TODO REMOVE AND NOT
-                self.namePane.insertPlainText("\n")
-                ruler = utilities.buildRuler(char_count, gap, start, end)
-                self.alignPane.insertPlainText(ruler)
-                self.alignPane.insertPlainText("\n")
-            elif self.showRuler and not rulers:  # TODO MOVE THIS TO BELOW
-                self.namePane.insertPlainText("\n")
-                self.alignPane.insertPlainText(" ")
-                self.alignPane.insertPlainText("\n")
-            for n in range(nseqs):
-                self.namePane.setAlignment(Qt.AlignRight)
-                self.namePane.insertPlainText(self.splitNames[n])
-                self.alignPane.moveCursor(QTextCursor.End)
-                if not color:
-                    self.alignPane.insertPlainText("".join([x[0] for x in self.splitSeqs[n][start:end]]))
-                    self.alignPane.insertPlainText("\n")
-                elif color:
-                    for i in range(start, end):
-                        self.alignPane.moveCursor(QTextCursor.End)
-                        self.alignPane.setTextBackgroundColor(Qt.white)
-                        if self.splitSeqs[n][i][1]:
-                            self.alignPane.setTextBackgroundColor(self.splitSeqs[n][i][1])
-                        self.alignPane.insertPlainText(self.splitSeqs[n][i][0])
-                        self.alignPane.setTextBackgroundColor(Qt.white)
-                    self.alignPane.insertPlainText("\n")
-                self.namePane.insertPlainText("\n")
-            nline += 1
-            self.alignPane.insertPlainText("\n")
-            self.namePane.insertPlainText("\n")
-        if self.lastpos:
-            self.alignPane.moveCursor(self.lastpos)
-            self.namePane.moveCursor(self.lastpos)
-        else:
-            self.alignPane.moveCursor(QTextCursor.Start)
-            self.namePane.moveCursor(QTextCursor.Start)
-
-    # elif self.userIsResizing:  # TODO DO IN SEPARATE THREAD
-    #    print("RESIZING")
-    #    self.alignPane.clear()
-    #    self.namePane.clear()
-
-
+        worker.wait()
+        self.alignPane.setText(worker.html)
 
     # UTILITY FUNCTIONS
     def setTheme(self, theme):
@@ -255,15 +183,17 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         size = self.font.pointSizeF() + 1
         self.font.setPointSizeF(size)
         self.fmF = QFontMetricsF(self.font)
-        print(self.fmF.averageCharWidth())
         self.alignPane.setFont(self.font)
+        self.namePane.setFont(self.font)
+        self.nameArrange(self.lines)
         self.seqArrange()
 
     def decreaseFont(self):
         size = self.font.pointSizeF() - 1
         self.font.setPointSizeF(size)
         self.fmF = QFontMetricsF(self.font)
-        print(self.fmF.averageCharWidth())
+        self.namePane.setFont(self.font)
+        self.nameArrange(self.lines)
         self.alignPane.setFont(self.font)
         self.seqArrange()
 
