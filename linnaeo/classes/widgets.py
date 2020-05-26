@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 import logging
 import sys
+from math import trunc
 
 from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
-    QTextCursor, QFontMetricsF, QTextDocument, QCursor
+    QTextCursor, QFontMetricsF, QTextDocument, QCursor, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QDialog, QDialogButtonBox, QApplication, QTextEdit, QAbstractScrollArea, QToolTip
 from PyQt5.uic.properties import QtCore, QtWidgets
@@ -223,11 +224,9 @@ class ItemModel(QStandardItemModel):
                     self.dupeName.emit()
                     self.modelLogger.debug("Name changed to "+str(value))
                 try:
-                    print("setDataTryLoop")
                     sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
                     sub.widget().nameChange.emit(oldvalue, newvalue)
                 except KeyError:
-                    print("KEY ERROR")
                     pass
                 if self.itemFromIndex(index).data(role=Qt.UserRole+2):
                     seqr = self.itemFromIndex(index).data(role=Qt.UserRole+2)[0]
@@ -256,14 +255,15 @@ class AlignPane(QTextEdit):
         super().__init__(parent)
         self.setMouseTracking(True)
         self.tracking = False
-        self.lastpos = None
+        self.chars = None
+        self.lines = None
+        self.seqs = None
 
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.toolTipReq.connect(self.getSeqTT)
-        self.cursorPositionChanged.connect(self.getPos)
 
         self.setSizePolicy(sizePolicy)
         self.setMinimumSize(QSize(200, 100))
@@ -275,79 +275,57 @@ class AlignPane(QTextEdit):
         self.setTextInteractionFlags(Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse)
         self.setObjectName("alignPane")
         self.setCursorWidth(0)
-        self.setToolTipDuration(-1)
+        self.setToolTipDuration(0)
 
-    #def event(self, event):
-        #print(event, event.type())
-    #    if event.type() == 110:
-    #        self.toolTipReq.emit()
-    #    return super().event(event)
 
-    def scrollEvent(self, event):
-        print("SCROLL")
+    def setChars(self, chars):
+        self.chars = chars
 
-    def getPos(self):
-        pass
-        #print("POS CHANGED")
-        #print(self.textCursor().position())
-        #print(self.textCursor().positionInBlock())
+    def getTruePosition(self, line, pos):
+        seqi = None
+        if self.parentWidget().showRuler:
+            noRulers = trunc(line/(len(self.seqs) + 1)+1)
+            line = line - noRulers
+        for n in range(len(self.seqs)):
+            if (n + line+1) / (line+1) == 1:
+                seqi = n
+        print("MATCHED",seqi)
 
-    def getSeqTT(self, pos, selected):
-        print("TOOLTIP REQ")
-        #self.setToolTip()
-        QToolTip.showText(pos, selected)
-        #self.unsetCursor()
+        return None
+
+
+
+    def getSeqTT(self, mpos, selected):
+        pos = self.textCursor().positionInBlock()
+        line = int((self.textCursor().position()-self.textCursor().positionInBlock())/(self.chars-1))
+        tpos = self.getTruePosition(line, pos)
+        tt = QToolTip
+        if selected in ['A','C','D','E','F','H','I','K',
+                        'L','M','N','P','Q','R','S','T','V','W','Y']:
+            tt.showText(mpos, selected)
+        else:
+            tt.hideText()
         self.textCursor().clearSelection()
-
-    #def toolTipEvent(self, event):
-    #    print("TOOLTIP")
-    #    self.setToolTip(self.textCursor().selectedText())
-    #    self.textCursor().clearSelection()
-    #    return super().toolTipEvent(event)
 
     def mouseMoveEvent(self, event):
         if self.tracking:
-            super().mouseMoveEvent(event)
-            self.unsetCursor()
-            #self.setTextCursor(self.cursorForPosition(event.globalPos()))
             self.mousePressEvent(event)
         else:
             super().mouseMoveEvent(event)
 
-
     def mousePressEvent(self, event):
-        super().mousePressEvent(event)
-        print("CLICK!", event.globalPos())
-        #self.setTextCursor(self.cursorForPosition(self.mapFromGlobal(event.globalPos())))
-        #self.moveCursor(QTextCursor.Left, mode=QTextCursor.MoveAnchor)
-        #self.moveCursor(QTextCursor.Left, mode=QTextCursor.MoveAnchor)
+        self.setTextCursor(self.cursorForPosition(event.pos()))
         self.moveCursor(QTextCursor.PreviousCharacter, mode=QTextCursor.KeepAnchor)
         text = self.textCursor().selectedText()
-        #self.unsetCursor()
-
         self.toolTipReq.emit(event.globalPos(), text)
         self.tracking = True
 
     def mouseReleaseEvent(self, event):
-        print("UNCLICK")
-        super().mouseReleaseEvent(event)
         curs = self.textCursor()
         curs.clearSelection()
         self.setTextCursor(curs)
-
         self.tracking = False
-
-
-
-
-
-    #def mouseMoveEvent(self, event):
-        # TODO THIS DOES NOT MATCH TRUE CURSOR ... QCURSOR RETURNS ABSOLUTE VALUE!
-        #cursor = self.mapFromGlobal(QPoint(QCursor.pos()))
-        #tcursor = self.cursorForPosition(cursor)
-        #self.setTextCursor(tcursor)
-        #print(QCursor.pos())
-        #return super().mouseMoveEvent(event)
+        super().mouseReleaseEvent(event)
 
 
 

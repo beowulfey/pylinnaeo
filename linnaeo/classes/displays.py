@@ -43,7 +43,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.maxname = 0
         self.lines = 0
 
-        self.seqInit()
 
         # Draw the window
         self.setupUi(self)
@@ -52,8 +51,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # Connect all slots and start
         self.resized.connect(self.externalResizeDone)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
+        self.namePane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
         self.nameChange.connect(self.updateName)
         self.lineChange.connect(self.nameArrange)
+
+        self.seqInit()
+
 
     def setupCustomUi(self):
         self.horizontalLayout.addWidget(self.alignPane)
@@ -95,6 +98,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     char = '<span style=\"background-color:#FFFFFF;\">'+seq[i]+"</span>"
                     local.append([char, None])
             self.splitSeqs.append(local)
+        #self.seqArrange()
+        self.alignPane.seqs = self.splitSeqs
 
     def nameArrange(self, lines):
         self.namePane.clear()
@@ -118,12 +123,15 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         charpx = self.fmF.averageCharWidth()
         width = self.alignPane.size().width() - 30
         char_count = int(width / charpx - 20 / charpx)
+        self.alignPane.setChars(char_count)
         if self.alignPane.verticalScrollBar().isVisible():
             char_count = int(width / charpx - 20 / charpx - \
                              self.alignPane.verticalScrollBar().size().width() / charpx)
         lines = int(self.maxlen / char_count) + 1
         if lines != self.lines:
             self.lineChange.emit(lines)
+            self.lines = lines
+            self.alignPane.lines = lines
         self.alignPane.clear()
         fancy = False if self.userIsResizing else True
             #self.alignPane.setText(utilities.redrawBasic(self.splitSeqs, char_count, lines, rulers))
@@ -131,7 +139,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             #self.alignPane.setHtml(utilities.redrawFancy(self.splitSeqs, char_count, lines, rulers, color))
         worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy)
         worker.start()
-
         worker.wait()
         self.alignPane.setText(worker.html)
 
