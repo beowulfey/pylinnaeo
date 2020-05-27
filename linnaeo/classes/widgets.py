@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import logging
 import sys
-from math import trunc
+from math import trunc, ceil, floor
 
 from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
@@ -285,18 +285,25 @@ class AlignPane(QTextEdit):
     def getTruePosition(self, line, pos):
         seqi = 0
         tline = 0
+        #print("POS", pos)
+        #print("CHARS", self.chars)
         if self.parentWidget().showRuler:
-            ruler = 1
-            noRulers = trunc(line/(len(self.seqs) + 1)+1)
-            line = line - noRulers
+            noRulers = floor(line/(len(self.seqs)+1)+1)
+            print("N of Rulers", noRulers)
+            line = int(line - noRulers)
         if line == -1:
             line = 0
+        #print("LINE: ", line)
         for stack in range(self.lines):
             i = line - stack*len(self.seqs)
             if i in list(range(len(self.seqs))):
+        #        print(i)
                 seqi = i
                 tline = stack
+        #print("STACK: ", tline)
         tpos = pos + tline*self.chars
+        #print("True POS: ", tpos)
+        #print("N", seqi)
         resid = self.seqs[seqi][tpos][1]
         others = []
         for n in range(len(self.seqs)):
@@ -307,14 +314,18 @@ class AlignPane(QTextEdit):
 
     def getSeqTT(self, mpos, selected):
         pos = self.textCursor().positionInBlock()
-        line = int((self.textCursor().position()-self.textCursor().positionInBlock())/(self.chars-1))
+        print("\nTT pos: ", pos)
+        print("Raw pos: ", self.textCursor().position())
+
+        line = int((self.textCursor().position()-self.textCursor().positionInBlock())/self.chars)
+        print("line:", line)
         tpos = self.getTruePosition(line, pos)
         #print(tpos)
         tt = QToolTip
         if selected in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
             string = ""
-            for i,each in enumerate(tpos):
+            for i, each in enumerate(tpos):
                 name = self.names[each[0]]
                 resi = each[1]
                 if resi == 0:
