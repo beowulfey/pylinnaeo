@@ -4,7 +4,7 @@ import Bio
 from Bio import SeqIO
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq
-from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt
+from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QFileDialog, QApplication
 

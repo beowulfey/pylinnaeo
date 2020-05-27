@@ -117,10 +117,12 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
         self.bioTree.setModel(self.bioModel)
         self.projectTree.setModel(self.projectModel)
-        self.bioTree.setExpanded(self.bioModel.invisibleRootItem().index(), True)
         self.bioModel.setHorizontalHeaderLabels(["Sequences"])
         self.projectModel.setHorizontalHeaderLabels(["Alignments"])
-        self.projectTree.setExpanded(self.projectModel.invisibleRootItem().index(), True)
+        for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+            self.bioTree.setExpanded(node.index(), True)
+        for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+            self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
 
     def event(self, event):
@@ -375,7 +377,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 seqr = node.data(role=self.SequenceRole)[0]
                 ali[seqr.name] = str(seqr.seq)
                 self.makeNewWindow(wid, ali, nonode=True)
-                self.bioTree.setExpanded(self.bioModel.indexFromItem(node), True)
+                #self.bioTree.setExpanded(self.bioModel.indexFromItem(node), True)
 
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             if node.data(role=self.SequenceRole):
@@ -390,7 +392,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 worker.wait()
                 ali = worker.aligned
                 self.makeNewWindow(wid, ali, nonode=True)
-                self.projectTree.setExpanded(self.projectModel.indexFromItem(node), True)
+                #self.projectTree.setExpanded(self.projectModel.indexFromItem(node), True)
         self.bioModel.updateWindows(self.windows)
         self.projectModel.updateWindows(self.windows)
         self.mainLogger.debug("Regenerating windows took took %f seconds" % float(time.perf_counter() - self.start))

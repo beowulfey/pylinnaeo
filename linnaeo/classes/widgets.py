@@ -285,25 +285,30 @@ class AlignPane(QTextEdit):
     def getTruePosition(self, line, pos):
         seqi = 0
         tline = 0
-        #print("POS", pos)
-        #print("CHARS", self.chars)
+        ruler = 0
+        print("POS", pos)
+        print("CHARS", self.chars)
         if self.parentWidget().showRuler:
+            ruler = 1
             noRulers = floor(line/(len(self.seqs)+1)+1)
-            #print("N of Rulers", noRulers)
-            line = int(line - noRulers)
+            print("N of Rulers", noRulers)
+            #line = line - int(noRulers)
         if line == -1:
             line = 0
-        #print("LINE: ", line)
+        print("LINE: ", line)
+        print("Total lines", self.lines)
         for stack in range(self.lines):
-            i = line - stack*len(self.seqs)
+            #print("STACK CHECK:", stack)
+            i = line - stack*(len(self.seqs)+ruler)-ruler
+            #print(line,"-",stack,"*",len(self.seqs)+ruler,"-",ruler,"=",i)
             if i in list(range(len(self.seqs))):
-        #        print(i)
+                print("STACK FOUND")
                 seqi = i
                 tline = stack
-        #print("STACK: ", tline)
+        print("STACK: ", tline)
         tpos = pos + tline*self.chars
-        #print("True POS: ", tpos)
-        #print("N", seqi)
+        print("True POS: ", tpos)
+        print("N", seqi)
         resid = self.seqs[seqi][tpos][1]
         others = []
         for n in range(len(self.seqs)):
@@ -314,25 +319,31 @@ class AlignPane(QTextEdit):
 
     def getSeqTT(self, mpos, selected):
         pos = self.textCursor().positionInBlock()
-        #print("\nTT pos: ", pos)
-        #print("Raw pos: ", self.textCursor().position())
+        print("\nTT pos: ", pos)
+        print("Raw pos: ", self.textCursor().position())
 
-        line = int((self.textCursor().position()-self.textCursor().positionInBlock())/self.chars)
-        #print("line:", line)
+        line = int((self.textCursor().position()-self.textCursor().positionInBlock())/(self.chars+1))
+        print("line:", line)
         tpos = self.getTruePosition(line, pos)
-        #print(tpos)
+        print(tpos)
         tt = QToolTip
         if selected in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
-            string = ""
+            string = []
             for i, each in enumerate(tpos):
+                print(i, each)
                 name = self.names[each[0]]
                 resi = each[1]
                 if resi == 0:
                     resi = "N/A"
-                string += str(resi)+" of "+name
-                if i < len(tpos)-1:
-                    string += "\n  --->"
+                text = str(resi)+" of "+name
+                if i > 0:
+                    text = "--->" + text
+                string.append(text)
+                if 0 < i < len(tpos):
+                    string.insert(-1,"\n")
+            print(string)
+            string = "".join(string)
 
             tt.showText(mpos, selected + " at " + string)
         else:

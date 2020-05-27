@@ -134,7 +134,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         if lines != self.lines:
             self.lineChange.emit(lines)
             self.lines = lines
-            self.alignPane.lines = lines
+        self.alignPane.lines = lines
         self.alignPane.clear()
         fancy = False if self.userIsResizing else True
             #self.alignPane.setText(utilities.redrawBasic(self.splitSeqs, char_count, lines, rulers))
