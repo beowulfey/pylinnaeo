@@ -309,7 +309,7 @@ class AlignPane(QTextEdit):
         pos = self.textCursor().positionInBlock()
         line = int((self.textCursor().position()-self.textCursor().positionInBlock())/(self.chars-1))
         tpos = self.getTruePosition(line, pos)
-        print(tpos)
+        #print(tpos)
         tt = QToolTip
         if selected in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
