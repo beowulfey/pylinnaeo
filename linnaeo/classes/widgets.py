@@ -258,6 +258,7 @@ class AlignPane(QTextEdit):
         self.chars = None
         self.lines = None
         self.seqs = None
+        self.names = None
 
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -275,34 +276,54 @@ class AlignPane(QTextEdit):
         self.setTextInteractionFlags(Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse)
         self.setObjectName("alignPane")
         self.setCursorWidth(0)
-        self.setToolTipDuration(0)
+        self.setToolTipDuration(100)
 
 
     def setChars(self, chars):
         self.chars = chars
 
     def getTruePosition(self, line, pos):
-        seqi = None
+        seqi = 0
+        tline = 0
         if self.parentWidget().showRuler:
+            ruler = 1
             noRulers = trunc(line/(len(self.seqs) + 1)+1)
             line = line - noRulers
+        if line == -1:
+            line = 0
+        for stack in range(self.lines):
+            i = line - stack*len(self.seqs)
+            if i in list(range(len(self.seqs))):
+                seqi = i
+                tline = stack
+        tpos = pos + tline*self.chars
+        resid = self.seqs[seqi][tpos][1]
+        others = []
         for n in range(len(self.seqs)):
-            if (n + line+1) / (line+1) == 1:
-                seqi = n
-        print("MATCHED",seqi)
-
-        return None
-
+            if n != seqi:
+                others.append([n,self.seqs[n][tpos][1]])
+        return [[seqi, resid]]+others
 
 
     def getSeqTT(self, mpos, selected):
         pos = self.textCursor().positionInBlock()
         line = int((self.textCursor().position()-self.textCursor().positionInBlock())/(self.chars-1))
         tpos = self.getTruePosition(line, pos)
+        print(tpos)
         tt = QToolTip
-        if selected in ['A','C','D','E','F','H','I','K',
+        if selected in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
-            tt.showText(mpos, selected)
+            string = ""
+            for i,each in enumerate(tpos):
+                name = self.names[each[0]]
+                resi = each[1]
+                if resi == 0:
+                    resi = "N/A"
+                string += str(resi)+" of "+name
+                if i < len(tpos)-1:
+                    string += "\n  --->"
+
+            tt.showText(mpos, selected + " at " + string)
         else:
             tt.hideText()
         self.textCursor().clearSelection()

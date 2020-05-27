@@ -82,21 +82,23 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.splitNames.append(name)
             if len(name) > self.maxname:
                 self.maxname = len(name)
+            if len(seq) < self.maxlen:
+                for n in range(self.maxlen - len(seq)):
+                    seq.append(" ")
             local = []
             count = 0
             for i in range(self.maxlen):
-                try:
-                    char = seq[i]
+                color = None
+                char = seq[i]
+                if char not in ["-", " "]:
+                    count += 1
+                    tcount = count
                     color = self.theme[char]
                     char = '<span style=\"background-color:'+color.name()+';\">'+char+"</span>"
-                    local.append([char, count])
-                    if char != "-":
-                        count += 1
-                except IndexError:
-                    local.append([" ", None])
-                except KeyError:
-                    char = '<span style=\"background-color:#FFFFFF;\">'+seq[i]+"</span>"
-                    local.append([char, None])
+                else:
+                    char = '<span style=\"background-color:#FFFFFF;\">' + seq[i] + "</span>"
+                    tcount = 0
+                local.append([char, tcount])
             self.splitSeqs.append(local)
         #self.seqArrange()
         self.alignPane.seqs = self.splitSeqs
@@ -123,11 +125,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         charpx = self.fmF.averageCharWidth()
         width = self.alignPane.size().width() - 30
         char_count = int(width / charpx - 20 / charpx)
-        self.alignPane.setChars(char_count)
         if self.alignPane.verticalScrollBar().isVisible():
             char_count = int(width / charpx - 20 / charpx - \
                              self.alignPane.verticalScrollBar().size().width() / charpx)
         lines = int(self.maxlen / char_count) + 1
+        self.alignPane.setChars(char_count)
+        self.alignPane.names = self.splitNames
         if lines != self.lines:
             self.lineChange.emit(lines)
             self.lines = lines
