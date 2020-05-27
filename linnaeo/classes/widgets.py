@@ -289,7 +289,7 @@ class AlignPane(QTextEdit):
         #print("CHARS", self.chars)
         if self.parentWidget().showRuler:
             noRulers = floor(line/(len(self.seqs)+1)+1)
-            print("N of Rulers", noRulers)
+            #print("N of Rulers", noRulers)
             line = int(line - noRulers)
         if line == -1:
             line = 0
@@ -314,11 +314,11 @@ class AlignPane(QTextEdit):
 
     def getSeqTT(self, mpos, selected):
         pos = self.textCursor().positionInBlock()
-        print("\nTT pos: ", pos)
-        print("Raw pos: ", self.textCursor().position())
+        #print("\nTT pos: ", pos)
+        #print("Raw pos: ", self.textCursor().position())
 
         line = int((self.textCursor().position()-self.textCursor().positionInBlock())/self.chars)
-        print("line:", line)
+        #print("line:", line)
         tpos = self.getTruePosition(line, pos)
         #print(tpos)
         tt = QToolTip

@@ -2,7 +2,6 @@ import logging
 import sys
 import time
 
-from PyQt5.QtWidgets import QApplication
 from linnaeo.main import LinnaeoApp, Linnaeo
 
 start_time = time.perf_counter()
