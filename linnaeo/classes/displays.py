@@ -151,6 +151,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def toggleRulers(self):
         self.showRuler = not self.showRuler
+        self.nameArrange(self.lines)
         self.seqArrange()
 
     def toggleColors(self):
