@@ -60,7 +60,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def setupCustomUi(self):
         self.horizontalLayout.addWidget(self.alignPane)
-        self.alignPane.setFont(self.font)
+        self.alignPane.document().setDefaultFont(self.font)
         self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; background-color: \
                                              rgb(255,255,255)}")
         self.namePane.setStyleSheet("QTextEdit {padding-top:1px;}")
