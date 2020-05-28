@@ -126,7 +126,9 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
 
-        self.splitter_2.splitterMoved.connect(self.setSizing)
+        #self.splitter_2.splitterMoved.connect(self.setSizing)
+        self.setAttribute(Qt.WA_NativeWindow)
+        print("WINDOW",self.testAttribute(Qt.WA_NativeWindow))
 
     def eventFilter(self, obj, event):
         """ Designed to capture the edge mouse click upon resizing """
@@ -484,9 +486,9 @@ class LinnaeoApp(QApplication):
 
     def __init__(self, *args):
         super().__init__(*args)
+
+        QCoreApplication.setAttribute(Qt.AA_NativeWindows)
         print(QCoreApplication.testAttribute(Qt.AA_NativeWindows))
-        print(QCoreApplication.testAttribute(Qt.AA_DontCreateNativeWidgetSiblings))
-        QCoreApplication.setAttribute(Qt.AA_SynthesizeTouchForUnhandledMouseEvents)
         QCoreApplication.setAttribute(Qt.AA_CompressHighFrequencyEvents)
         self.installEventFilter(QCoreApplication.instance())
         self.last = None
