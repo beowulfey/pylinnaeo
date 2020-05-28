@@ -1,4 +1,4 @@
 pyqt5==5.9
 psutil
-biopython_minimal
+biopython
 clustalo
