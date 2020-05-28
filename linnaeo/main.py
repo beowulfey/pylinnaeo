@@ -498,7 +498,7 @@ class LinnaeoApp(QApplication):
     def event(self, event):
         if event.type() in [2,3]:
             print(event.type())
-        super().event(event)
+        return super().event(event)
 
     def eventFilter(self, obj, event):
         if event.type() in [174,175]:
