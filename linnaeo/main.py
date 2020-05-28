@@ -494,6 +494,8 @@ class LinnaeoApp(QApplication):
     def eventFilter(self, obj, event):
         if event.type() in [2, 3, 174,175]:
             if event.type() != self.last:
+                print("Unique event!", event.type())
+                print("Last observed to be: ", self.last)
                 self.barClick.emit()
                 self.last = event.type()
         return super().eventFilter(obj, event)
