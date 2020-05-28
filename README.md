@@ -18,6 +18,34 @@ That's a basic idea. Most likely those criteria will change.
 
 #### How do I get set up? ####
 
+###### MAC
+Install homebrew if you don't have it... it will make your life significantly easier. 
+Then follow these steps:
+```
+brew install python3
+pip3 install virtualenv
+brew install clustal-omega
+brew install openmpi
+```
+Move to where you want the app to live and clone Linnaeo, and prep your env:
+``` 
+cd ~/devel
+git clone https://github.com/beowulfey/linnaeo.git
+cd linnaeo
+python3 -m virtualenv venv
+source venv/bin/activate
+```
+Install PyClustalo into it first. This is the trickiest one, and I hope it works for you. 
+```
+export CC=gcc-9
+pip3 install --global-option=build_ext --global-option="-I/usr/local/include/clustalo" --global-option="-L/usr/local/lib" clustalo
+``` 
+Finally, install linnaeo, and run the program.
+```
+python3 setup.py build install
+python3 -c 'import linnaeo; linnaeo.main()
+```
+
 ###### Linux
 Create a new python3.7 environment, then compile 
 
@@ -36,13 +64,12 @@ pip install ./INSTALL/clustalo...etc.whl
 conda install rust, pyoxidizer
 ```
 
-PyOxidizer makes use of the pyoxidizer.bzl file to build! 
+(PyOxidizer makes use of the pyoxidizer.bzl file to build.) 
 
 
 I'm trying to get this into a conda package that can be installed easily (akin to PyMOL -- they figured it out somehow!). Here's hoping I am successful. If I am, I'll be sure to update that here.
 
-Repositories I am eternal grateful for and need to cite:
+Repositories I am eternally grateful for -- they helped me get this onto windows -- and need to cite:
 
 * [ARGTABLE2](https://github.com/jonathanmarvens/argtable2) -- for building Clustal Omega on Windows
-* [Clustal Omega, adapted to use CMake (SO, SO GRATEFUL) from GSL Biotech (You guys rock, seriously)](https://github.com/GSLBiotech/clustal-omega/tree/master/src)
-*
+* [Clustal Omega, adapted to use CMake (so, so grateful) from GSL Biotech](https://github.com/GSLBiotech/clustal-omega/tree/master/src)
