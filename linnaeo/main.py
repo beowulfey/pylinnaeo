@@ -495,6 +495,11 @@ class LinnaeoApp(QApplication):
     def focusChange(self):
         print("FOCUS CHANGED")
 
+    def event(self, event):
+        if event.type() in [2,3]:
+            print(event.type())
+        super().event(event)
+
     def eventFilter(self, obj, event):
         if event.type() in [174,175]:
             if event.type() != self.last:
