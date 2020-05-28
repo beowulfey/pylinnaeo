@@ -29,9 +29,10 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     """
 
     def __init__(self, *args, **kwargs):
-
         super(self.__class__, self).__init__(*args, **kwargs)
+        self.setWindowFlags(Qt.FramelessWindowHint)
         self.start = linnaeo.start_time
+
         # Initialize UI
         self.beingClicked = True
         self.setAttribute(Qt.WA_QuitOnClose)
@@ -125,7 +126,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
-        self.statusBar().setSizeGripEnabled(False)
+        self.installEventFilter(self.splitter_2)
+        #self.statusBar().setSizeGripEnabled(False)
 
         #self.splitter_2.splitterMoved.connect(self.setSizing)
 
@@ -133,7 +135,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         """ Designed to capture the edge mouse click upon resizing """
         #print(event, event.type())
         if event.type() in [99]:
-            #print("Detected edge")
+            print("Detected edge")
             self.edgeClick.emit()
         return super().eventFilter(obj, event)
 
@@ -485,7 +487,8 @@ class LinnaeoApp(QApplication):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.focusChanged.connect(self.focusChange)
+        #self.focusChanged.connect(self.focusChange)
+
 
         QCoreApplication.setAttribute(Qt.AA_CompressHighFrequencyEvents)
         self.installEventFilter(self)
