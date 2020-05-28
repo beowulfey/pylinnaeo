@@ -125,6 +125,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
+        self.statusBar().setSizeGripEnabled(False)
 
         #self.splitter_2.splitterMoved.connect(self.setSizing)
 
@@ -484,11 +485,15 @@ class LinnaeoApp(QApplication):
 
     def __init__(self, *args):
         super().__init__(*args)
+        self.focusChanged.connect(self.focusChange)
 
         QCoreApplication.setAttribute(Qt.AA_CompressHighFrequencyEvents)
         self.installEventFilter(self)
         self.last = None
         #self.barClick.connect(self.setSizing)
+
+    def focusChange(self):
+        print("FOCUS CHANGED")
 
     def eventFilter(self, obj, event):
         if event.type() in [174,175]:
