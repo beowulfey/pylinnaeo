@@ -486,12 +486,12 @@ class LinnaeoApp(QApplication):
         super().__init__(*args)
 
         QCoreApplication.setAttribute(Qt.AA_CompressHighFrequencyEvents)
-        self.installEventFilter(QCoreApplication.instance())
+        self.installEventFilter(self)
         self.last = None
         #self.barClick.connect(self.setSizing)
 
     def eventFilter(self, obj, event):
-        if event.type() in [2, 3, 174,175]:
+        if event.type() in [174,175]:
             if event.type() != self.last:
                 print("Unique event!", event.type())
                 print("Last observed to be: ", self.last)
