@@ -32,16 +32,17 @@ class Slots:
         qDialog.exec()
 
     def setSizing(self):
+        print("being clicked?", self.beingClicked)
         if not self.beingClicked:
             self.beingClicked = True
             if self._currentWindow and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
-                # print("REDRAWING FRAME FROM MAIN")
+                print("REDRAWING FRAME FROM MAIN")
                 self._currentWindow.widget().userIsResizing = True
                 self._currentWindow.widget().seqArrange(color=False) #, rulers=False)
         elif self.beingClicked:
             self.beingClicked = False
             if self._currentWindow and self._currentWindow.isMaximized():
-                # print("DONE REDRAWING FROM MAIN")
+                print("DONE REDRAWING FROM MAIN")
                 self._currentWindow.widget().userIsResizing = False
                 self._currentWindow.widget().seqArrange()
 
