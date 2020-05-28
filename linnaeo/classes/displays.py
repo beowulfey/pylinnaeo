@@ -10,7 +10,11 @@ from linnaeo.ui import alignment_ui, quit_ui, about_ui
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
     Alignment SubWindow UI. Takes in a dictionary of sequences that have been aligned and arranges them.
-    # TODO: This does not maintain the alignment order. Shant be helped?...
+    Sequences in the alignment are threaded and prepared as HTML; the color is stored in the array in order to
+    reduce the load on display. However, just drawing the display is computationally expensive (as is generating
+    the ruler for it), so both are turned off during resizing.
+    # TODO: Currently, the shut off does not happen on MacOS because Qt on macs doesn't alert on window presses. Damn.
+    # TODO: This does not maintain the alignment order -- trouble with the ClustalO API. Shant be helped?...
     """
     resized = pyqtSignal()
     nameChange = pyqtSignal((str, str))

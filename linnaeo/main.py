@@ -9,7 +9,7 @@ import psutil
 # PyQt components
 from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal, QCoreApplication
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSizeGrip
 
 # Internal components
 import linnaeo
@@ -127,6 +127,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
         self.installEventFilter(self.splitter_2)
+        self.sizeGrip = QSizeGrip(self.splitter)
+        #self.splitter.addWidget()
         #self.statusBar().setSizeGripEnabled(False)
 
         #self.splitter_2.splitterMoved.connect(self.setSizing)

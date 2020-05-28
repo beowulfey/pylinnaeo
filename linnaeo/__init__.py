@@ -2,16 +2,24 @@ import logging
 import sys
 import time
 
+from pyqtconsole.console import PythonConsole
+from contextlib import redirect_stderr, redirect_stdout
 from linnaeo.main import LinnaeoApp, Linnaeo
 
 start_time = time.perf_counter()
-
+conout = None
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
     appLogger = logging.getLogger("INIT")
+    #handler = logging.StreamHandler(sys.stderr)
+    #appLogger.addHandler(handler)
+
 
     app = LinnaeoApp(sys.argv)
+    #console = PythonConsole()
+    #console.show()
+    #console.eval_in_thread()
     appLogger.debug("Trying stylesheet")
     #file = QFile(":/qss/linnaeo.qss")
     #file.open(QFile.ReadOnly)
