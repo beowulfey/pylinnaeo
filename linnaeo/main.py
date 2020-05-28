@@ -366,7 +366,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         """
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
             if node.data(role=self.SequenceRole):
-                print(node.data())
+                self.mainLogger.info("Loading sequence: "+node.data())
                 ali = {}  # empty dict needed to send to open window
                 wid = node.data(role=self.WindowRole)
                 seqr = node.data(role=self.SequenceRole)[0]
@@ -376,7 +376,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             if node.data(role=self.SequenceRole):
-                print(node.data())
+                self.mainLogger.info("Loading alignment: "+node.data())
                 seqs = {}
                 wid = node.data(role=self.WindowRole)
                 seqr = node.data(role=self.SequenceRole)
