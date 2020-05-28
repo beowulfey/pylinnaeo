@@ -8,19 +8,19 @@ Author-email: wolfe.aarond@gmail.com
 License: UNKNOWN
 Description: # LINNAEO #
         
-        Linnaeo is a python program I made mostly as an exercise in learning how to code GUI programs... but also to solve a
-        basic problem I had: nothing out there is very good for storing and making protein alignments.
+        Linnaeo is a python program I made mostly as an exercise in learning how to code a GUI... but also to solve a
+        basic problem I had: nothing out there is very good for making, storing and viewing protein alignments.
         
         
         ### Protein alignments? ###
         
-        Yes, out there in the world are countless amino acid sequences, and their sequences are connected to
+        Yes, out there in the world are countless amino acid sequences, and their sequences (and small differences) are connected to
         protein functions... but it's often hard to see that. This program is intended to help with this
         by meeting a few basic criteria:
         
         1) It should be fast.
-        2) It should store any sequence you want.
-        3) It should be easy to create and store alignments.
+        2) It should store any sequence you want. (but right now, just FASTA protein sequences, sorry)
+        3) It should be easy to create, store, and export alignments.
         
         That's a basic idea. Most likely those criteria will change.
         

@@ -1,0 +1,4 @@
+pyqt5==5.9
+biopython
+psutil
+clustalo

@@ -24,7 +24,6 @@ def main():
     window.show()
     appLogger.info("Startup took %f seconds" % float(time.perf_counter()-start_time))
 
-
     sys.exit(app.exec_())
 
 
