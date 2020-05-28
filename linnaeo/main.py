@@ -126,12 +126,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.installEventFilter(self)
 
     def event(self, event):
-        #print(event, event.type())
+        if event.type() in [2,3]:
+            print("FROM MainWindow")
+            print(event, event.type())
         return super().event(event)
 
     def eventFilter(self, obj, event):
         """ Designed to capture the edge mouse click upon resizing """
-        if event.type() in [99]:
+        if event.type() in [99, 2, 3]:
             #print("Detected edge")
             self.edgeClick.emit()
         return super().eventFilter(obj, event)
@@ -490,8 +492,15 @@ class LinnaeoApp(QApplication):
 
     #   self._window = None
 
+    def nativeEvent(self, event):
+        print("NATIVE EVENT")
+        print(event, event.type())
+        return super().nativeEvent(event)
+
     def event(self, event):
-        #print(event, event.type())
+        if event.type() in [2,3]:
+            print("EVENT FROM QAPP")
+            print(event, event.type())
         return super().event(event)
 
     def eventFilter(self, obj, event):
