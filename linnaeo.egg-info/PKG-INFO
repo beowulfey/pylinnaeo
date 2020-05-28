@@ -12,7 +12,7 @@ Description: # LINNAEO #
         basic problem I had: nothing out there is very good for making, storing and viewing protein alignments.
         
         
-        ### Protein alignments? ###
+        #### Protein alignments? ####
         
         Yes, out there in the world are countless amino acid sequences, and their sequences (and small differences) are connected to
         protein functions... but it's often hard to see that. This program is intended to help with this
@@ -24,10 +24,12 @@ Description: # LINNAEO #
         
         That's a basic idea. Most likely those criteria will change.
         
-        ### How do I get set up? ###
+        #### How do I get set up? ####
         
-        Current requirements and build process. Primarily building on Windows, but this should be nearly system-agnostic:
+        ###### Linux
+        Create a new python3.7 environment, then compile 
         
+        ###### Windows
         Install Anaconda3 and create a new environment:
         
         ```
