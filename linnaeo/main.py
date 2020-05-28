@@ -7,7 +7,7 @@ import time
 
 import psutil
 # PyQt components
-from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal
+from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal, QCoreApplication
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
 
@@ -79,6 +79,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.connectSlots()
         self.mainLogger.debug("Slots connected after %f seconds" % float(time.perf_counter() - self.start))
         self.mainLogger.debug("Setup took %f seconds" % float(time.perf_counter() - self.start))
+        self.setMouseTracking(True)
 
     def guiSet(self, trees=None, data=None):
         """ Initialize GUI with default parameters. """
@@ -125,15 +126,12 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
 
-    def event(self, event):
-        if event.type() in [2,3]:
-            print("FROM MainWindow")
-            print(event, event.type())
-        return super().event(event)
+        self.splitter_2.splitterMoved.connect(self.setSizing)
 
     def eventFilter(self, obj, event):
         """ Designed to capture the edge mouse click upon resizing """
-        if event.type() in [99, 2, 3]:
+        #print(event, event.type())
+        if event.type() in [99]:
             #print("Detected edge")
             self.edgeClick.emit()
         return super().eventFilter(obj, event)
@@ -486,26 +484,24 @@ class LinnaeoApp(QApplication):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.installEventFilter(self)
+        print(QCoreApplication.testAttribute(Qt.AA_NativeWindows))
+        print(QCoreApplication.testAttribute(Qt.AA_DontCreateNativeWidgetSiblings))
+        QCoreApplication.setAttribute(Qt.AA_SynthesizeTouchForUnhandledMouseEvents)
+        self.installEventFilter(QCoreApplication.instance())
         self.last = None
         #self.barClick.connect(self.setSizing)
 
-    #   self._window = None
-
-    def nativeEvent(self, event):
-        print("NATIVE EVENT")
-        print(event, event.type())
-        return super().nativeEvent(event)
-
-    def event(self, event):
-        if event.type() in [2,3]:
-            print("EVENT FROM QAPP")
-            print(event, event.type())
-        return super().event(event)
-
     def eventFilter(self, obj, event):
-        if event.type() in [174,175]:
+        if event.type() in [2, 3, 174,175]:
             if event.type() != self.last:
                 self.barClick.emit()
                 self.last = event.type()
         return super().eventFilter(obj, event)
+
+    """
+     def event(self, event):
+         if event.type() in [2,3]:
+             print("EVENT FROM QAPP")
+         #print(event, event.type())
+         return super().event(event)
+     """
