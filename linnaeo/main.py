@@ -487,6 +487,7 @@ class LinnaeoApp(QApplication):
         print(QCoreApplication.testAttribute(Qt.AA_NativeWindows))
         print(QCoreApplication.testAttribute(Qt.AA_DontCreateNativeWidgetSiblings))
         QCoreApplication.setAttribute(Qt.AA_SynthesizeTouchForUnhandledMouseEvents)
+        QCoreApplication.setAttribute(Qt.AA_CompressHighFrequencyEvents)
         self.installEventFilter(QCoreApplication.instance())
         self.last = None
         #self.barClick.connect(self.setSizing)
