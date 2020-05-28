@@ -28,7 +28,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.family = (QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(
             ':/fonts/LiberationMono.ttf'))[0])
         self.font = QFont(self.family, 10)
-        self.fmF = QFontMetricsF(self.font) # FontMetrics Float... because default FontMetrics gives Int
+        self.fmF = QFontMetricsF(self.font)  # FontMetrics Float... because default FontMetrics gives Int, which is bad.
 
         # Initialize settings
         self.theme = themes.PaleTheme().theme
@@ -108,6 +108,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.seqs = self.splitSeqs
 
     def nameArrange(self, lines):
+        """ Generates the name panel; only fires if the number of lines changes to avoid needless computation"""
         self.namePane.clear()
         self.namePane.setMinimumWidth((self.maxname * self.fmF.averageCharWidth()) + 5)
         names = ["<pre style=\"text-align: right;\">\n"]
@@ -121,6 +122,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.namePane.setHtml("".join(names))
 
     def seqArrange(self, color=True, rulers=True):
+        """
+        The bread and butter. This fires upon creation and any resizing event. Computing the resize is done
+        in a separate thread to help with smoothness; showing color and rulers is still very slow though. Resize events
+        call this function with color off, and the ruler is turned off automatically.
+        """
         if not self.showColors:
             color = False
         if not self.showRuler:
@@ -141,9 +147,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.lines = lines
         self.alignPane.clear()
         fancy = False if self.userIsResizing else True
-            #self.alignPane.setText(utilities.redrawBasic(self.splitSeqs, char_count, lines, rulers))
-       #else:
-            #self.alignPane.setHtml(utilities.redrawFancy(self.splitSeqs, char_count, lines, rulers, color))
         worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy)
         worker.start()
         worker.wait()

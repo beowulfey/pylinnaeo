@@ -6,11 +6,17 @@ from PyQt5.QtCore import pyqtSignal, QThread, QTimer
 import clustalo
 
 """
-Additional classes and functions that are used within Sherlock, but are not responsible for viewing data.
+Additional classes and functions that are used within Linnaeo, but are not responsible for viewing data.
 """
 
+
 class SeqThread(QThread):
+    """
+     Determines which type of redraw should occur based on the values of rulers, colors, and "fancy", then
+     does this in a separate thread.
+     """
     finished = pyqtSignal()
+
     def __init__(self, *args, fancy=True):
         QThread.__init__(self)
         self.seqLogger = logging.getLogger("SEQDRAW")
@@ -30,6 +36,7 @@ class SeqThread(QThread):
 
 
 def redrawBasic(seqs, chars, lines, rulers=False):
+    """ Black and white only; keeps space for ruler but does not calculate the ruler, which helps with speed."""
     html = ["<pre>\n"]
     n = 0
     for line in range(lines):
@@ -48,6 +55,7 @@ def redrawBasic(seqs, chars, lines, rulers=False):
 
 
 def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
+    """ Fancy like the name implies. Called at the end of resize events. Keeps your opinion on colors and rulers. """
     html = ["<pre>"]
     n = 0
     for line in range(lines):
@@ -68,42 +76,36 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
 
 
 def checkName(name, titles, layer=0):
-    """ Tool for checking a title list. Used for generating new titles if duplicate"""
-    #print("\nBEGIN CHECK-- Layer ", layer)
-    #print("Searching in", titles)
+    """ Tool for checking a list of titles. Used for generating a new title if it is duplicated"""
+    # TODO: This isn't perfect, as it prevents duplicates of folders too... but that won't be fixed here.
+    # TODO: Fix it in the item model.
     if name not in titles:
-        # SAFE! You can add and return
-    #    print("Final:",name)
+        # SAFE! You can add name and return
         finalname = name
     elif name[-2] == "_" and int(name[-1]):
         # if there's already a name with an _1, add a number
         newlayer = layer+1
         newname = str(name[:-1] + str(newlayer))
-    #    print("Trying: ",newname)
         finalname, titles = checkName(newname, titles, layer=newlayer)
         if layer > 0:
-    #        print("returning")
             return finalname, titles
     else:
-        # It's a duplicate! Better
-    #    print("Dupe found: [", name, "] Descending")
+        # It's a duplicate! Give it an underscore.
         newlayer = layer + 1
         newname = str(name + "_" + str(newlayer))
-    #    print("Trying ", newname)
         # Run the check again with the new name
         finalname, titles = checkName(newname, titles, layer=newlayer)
         if layer > 0:
             return finalname, titles
     if layer == 0:
         titles.append(finalname)
-    #    print("Appended: ",titles, "\n")
     return finalname, titles
 
 
 def iterTreeView(root):
     """
-    Internal function for iterating a TreeModel.
-    Usage: for node in _iterTreeView(root): etc.
+    Internal function for iterating a TreeModel. Shamelessly stolen from StackOverflow. It is wonderful though.
+    Usage: for node in iterTreeView(root): --> returns all the nodes.
     """
     def recurse(parent):
         for row in range(parent.rowCount()):
@@ -118,21 +120,26 @@ def iterTreeView(root):
 def buildRuler(chars, gap, start, end):
     """
     Fairly complicated function for generating the ruler. Calculates the spacing
-    and labeling based on the width of the screen. Might be computational intensive,
+    and labeling based on the width of the screen. Pretty computationally intensive,
     so I make a point to hide it (and the colors) when resizing.
     """
     ruler = None
     if start != end:
-        #print("\nBEGIN LINE!")
-        #print("Chars, Gap, Start, End: ", chars,gap,start,end)
         if gap != 0 and chars != end-start:
+            # Have to adjust the spacing for the last line
+            # Don't go below 8 chars so the numbers don't merge.
+            # May want to extend to 10... rare but some seqs are >1000
             if end - start > 8:
                 chars = (end - start)
-        #        print("Setting chars to ",chars)
             else:
                 chars = 8
+        # labels is all the possible numbers between the start and end
         labels = list(range(start+1, end+1))
         spacing = chars
+        # My hacky way to add more numbers as the screen increases in size.
+        # Spacing is the distance between numbers of the rulers.
+        # Not all numbers are divisible by 2, 3, etc so there are uneven spaces, which I account for badly below.
+        # TODO: Consider changing this to floor?
         if chars < 20:
             pass
         elif 20 <= chars < 60:
@@ -143,48 +150,52 @@ def buildRuler(chars, gap, start, end):
             spacing = int(chars/4)
         elif 150 <= chars:
             spacing = int(chars/5)
-        #print("Selected spacing: ", spacing)
         n = 0
         speclabels = []
         rulerlist = []
+        # spec labels are the numbers that are actually used based on the spacing.
         while n < chars:
             speclabels.append(labels[n])
             n+=spacing
         if labels[-1] not in speclabels:
+            # a little hack because sometimes the end doesn't  get added
             speclabels.append(labels[-1])
         for n in range(1,4):
+            # another little hack for when math makes it so there are two labels right next to each other at the end
             if labels[-1]-n in speclabels:
                 speclabels.remove(labels[-1]-n)
-        # print(speclabels)
         if len(speclabels)>2:
+            # more complicated logic for when there are multiple labels
+            # builds a list (compressed to a string) of the labels and spacing, accounting for the length of the numbers
             count = range(1,len(speclabels))
-            # print("COUNT", list(count))
             for x in count:
                 if x == count[-1]:
-                    # print("Appending ", str(speclabels[x - 1]))
                     rulerlist.append(str(speclabels[x - 1]))
-                    # print("FINAL gap, ", (chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
                     rulerlist.append(" "*(chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
-                    # print("Appending final:", str(speclabels[x]))
                     rulerlist.append(str(speclabels[x]))
                 else:
-                    # print("Appending ", str(speclabels[x - 1]))
                     rulerlist.append(str(speclabels[x-1]))
                     first = 0
                     if x == count[0]:
                         first = len(str(speclabels[x-1]))
                     next = len(str(speclabels[x]))
-                    # print("For gap after", str(speclabels[x - 1]), "space is",(spacing - next - first+1))
                     rulerlist.append(" "*(spacing - next - first+1))
             ruler = "".join(rulerlist)
         elif len(speclabels)==2:
+            # Ah! so easy.
             ruler = str(start + 1) + " " * (chars - len(str(start + 1)) - len(str(end))) + str(end)
         else:
+            # Just show a single number.
             ruler = str(start+1)
     return ruler
 
 
 class AlignThread(QThread):
+    """
+    Clustal Omega is run in a separate thread. Currently have no idea how to access the alignment order;
+    I'm hoping there is a way, rather than returning it with the input order.
+    I can't find anything in the source code of ClustalO for the API though, sadly.
+    """
     finished = pyqtSignal()
     error = pyqtSignal(tuple)
 
@@ -209,6 +220,7 @@ class AlignThread(QThread):
 
 
 class TimerThread(QThread):
+    """ Thread for the timer, because Windows complains like hell otherwise. """
     timeout = pyqtSignal()
 
     def __init__(self):
