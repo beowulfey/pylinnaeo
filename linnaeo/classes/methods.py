@@ -321,6 +321,9 @@ class Slots:
     def closeAllTabs(self):
         self.mdiArea.closeAllSubWindows()
 
+    def dupeNameMsg(self):
+        self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
+
 class Debug:
     def DEBUG(self):
         # STRICTLY FOR TESTING -- FAKE DATA.

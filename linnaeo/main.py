@@ -212,30 +212,38 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.actionBigger.triggered.connect(self.increaseTextSize)
         self.actionSmaller.triggered.connect(self.decreaseTextSize)
 
-    def callAlign(self, seqarray):
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # UTILITY METHODS
+    # Represents the fundamental methods of UI interaction logic.
+    def seqInit(self, seqr):
         """
-        Generates a sequence alignment using Clustal Omega in a separate thread. Currently returns with the same
-        order as the nodes were clicked; need to figure out how to return with alignment order.
-        This is also called upon double clicking a single sequence, but just passes it through if so.
+        Ran upon adding a sequence. Input is SeqRecord. Assigns a unique Window ID and adds to list of all Seqs.
+        The Window ID is the core identifier for all sequence and alignment objects, and remains static for as
+        long as the sequence or alignment exists.
+        Creates a node in the BioModel/BioTree with the title linked to the Name
+        Updating this node name only modifies the sName; the sequence ID from the FASTA remains unchanged.
         """
-        # TODO: Do pairwise here if only 2!
-        if len(list(seqarray.values())) > 1:
-            # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
-            worker = utilities.AlignThread(seqarray, seqtype=3, num_threads=self.threadpool.maxThreadCount())
-            worker.start()
-            worker.wait()
-            aligned = worker.aligned
-        #  elif len(list(seqarray.values())) == 2:
-        else:
-            aligned = seqarray  # send single sequence
-        return aligned
+        wid = str(int(self.windex) + 1)
+        sname = seqr.name
+        # Check if title already exists, and if so, changes it.
+        sname, self.titles = utilities.checkName(sname, self.titles)
+        if sname != seqr.name:
+            seqr.name = sname
+        # Adds to the list of sequences, by its Window ID
+        self.sequences[wid] = [seqr]
+        node = QStandardItem(sname)
+        node.setData([seqr], self.SequenceRole)
+        node.setData(node.data(role=self.SequenceRole)[0].name)
+        node.setData(wid, self.WindowRole)
+        node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
+        self.bioModel.appendRow(node)
+        self.windex = int(wid)
 
     def seqDbClick(self):
         """
-        This assesses what has been selected, adds that to the parent list of sequences,
-        and depending on whether it is a single sequence or multiple,
-        either creates, stores and (re)displays the window or first makes an alignment then does all that.
-        Ignores any folders that were included in the selection.
+        This assesses what has been selected, and if >2 selected, adds the combo to the list of all sequences.
+        Depending on whether it is a single sequence or multiple, either creates, stores and (re)displays the window or
+        first makes an alignment then does all that. Ignores any folders that were included in the selection.
         Will not duplicate alignments. Creates a new window only if alignment is new.
         """
         # Items is an input dictionary for sending to clustalo
@@ -282,44 +290,31 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 self.openWindow(sub)
                 self.windex = self.windex + 1
 
+    def callAlign(self, seqarray):
+        """
+        Generates a sequence alignment using Clustal Omega in a separate thread. Currently returns with the same
+        order as the nodes were clicked; need to figure out how to return with alignment order.
+        This is also called upon double clicking a single sequence, but just passes it through if so.
+        """
+        # TODO: Do pairwise here if only 2!
+        if len(list(seqarray.values())) > 1:
+            # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
+            worker = utilities.AlignThread(seqarray, seqtype=3, num_threads=self.threadpool.maxThreadCount())
+            worker.start()
+            worker.wait()
+            aligned = worker.aligned
+        #  elif len(list(seqarray.values())) == 2:
+        else:
+            aligned = seqarray  # send single sequence
+        return aligned
+
     def alignmentDbClick(self):
-        # Checks if not a folder first, then:
-        # Gets the selected item (only single selection allowed), and opens the window
+        """ Simple method that confirms you didn't click on a folder, then opens the window """
+        # Only a single item is selectable at once in the alignment tree.
         item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
         if item.data(role=self.WindowRole):
             sub = self.windows[item.data(role=self.WindowRole)]
             self.openWindow(sub)
-
-    def dupeNameMsg(self):
-        self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
-
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # UTILITY METHODS
-    # Represents the fundamental methods that are not accessed via UI objects.
-    #
-    def seqInit(self, seqr):
-        """
-        Ran upon adding a sequence. Input is SeqRecord. Assigns a unique WID and adds to list of all Seqs.
-        The Window ID is the core identifier for all sequence and alignment objects, and remains static for as
-        long as the sequence or alignment exists.
-        Creates a node in the BioModel/BioTree with the title linked to the sName.
-        Updating this node name only modifies the sName; the sequence ID from the FASTA remains unchanged.
-        """
-        wid = str(int(self.windex) + 1)
-        sname = seqr.name
-        # Check if title already exists, and if so, changes it.
-        sname, self.titles = utilities.checkName(sname, self.titles)
-        if sname != seqr.name:
-            seqr.name = sname
-        # Adds to the list of sequences, by its Window ID
-        self.sequences[wid] = [seqr]
-        node = QStandardItem(sname)
-        node.setData([seqr], self.SequenceRole)
-        node.setData(node.data(role=self.SequenceRole)[0].name)
-        node.setData(wid, self.WindowRole)
-        node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
-        self.bioModel.appendRow(node)
-        self.windex = int(wid)
 
     def makeNewWindow(self, wid, ali, nonode=False):
         """
