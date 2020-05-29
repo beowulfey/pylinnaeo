@@ -20,7 +20,9 @@ That's a basic idea. Most likely those criteria will change.
 
 I've attempted to build portable binaries for all three platforms. [They can be found here.](https://drive.google.com/drive/folders/1uk4Vd8ioxuDsuYsToDWuR-IZZBSoDJhy?usp=sharing)
 
-NOTE: v0.1.5 (the current version) has a debug module in place that preloads with 2 sequences already. You can delete those, but I forgot to, so sorry about that. 
+Download the correct platform, unzip, and run the linnaeo(.exe,.app) binary. Note that the executable HAS to be in the same directory as the other libraries -- it won't work otherwise! Symlinks don't work on linux (but shortcuts on Windows do work, so you can add it to your start menu). 
+
+NOTE: v0.1.5 (the current version) has a debug module in place that preloads with 2 sequences already. You can delete those, but I forgot to, so sorry about that. I promise the next version won't have that. 
 
 If you want to try building it yourself, or they don't work, here are some instructions:
 
