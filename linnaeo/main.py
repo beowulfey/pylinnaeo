@@ -19,9 +19,6 @@ from linnaeo.classes.displays import QuitDialog, AlignSubWindow
 from linnaeo.ui import linnaeo_ui
 
 
-# TODO: USE RESIZE EVENT TO LAUNCH A TIMER THAT COUNTS DOWN FOR TURNING ON COLOR AGAIN
-# This is how I'll get around the platform difficulties and should be cleaner. Will have to rip out a ton of code.
-
 class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindow):
     """
     Constructor for the Main Window of the Sherlock App
@@ -123,13 +120,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
-
-    #def eventFilter(self, obj, event):
-    #    """ Designed to capture the edge mouse click upon resizing """
-    #    if event.type() == 14:
-    #        print("WINDOW RESIZE")
-    #        self.activeResize.emit()
-    #    return super().eventFilter(obj, event)
 
     def guiFinalize(self):
         # Tree setup
