@@ -19,6 +19,9 @@ That's a basic idea. Most likely those criteria will change.
 #### How do I get set up? ####
 
 I've attempted to build portable binaries for all three platforms. [They can be found here.](https://drive.google.com/drive/folders/1uk4Vd8ioxuDsuYsToDWuR-IZZBSoDJhy?usp=sharing)
+
+NOTE: v0.1.5 (the current version) has a debug module in place that preloads with 2 sequences already. You can delete those, but I forgot to, so sorry about that. 
+
 If you want to try building it yourself, or they don't work, here are some instructions:
 
 ###### MAC
