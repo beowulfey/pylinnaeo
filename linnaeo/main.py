@@ -9,7 +9,7 @@ import psutil
 # PyQt components
 from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal, QCoreApplication
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSizeGrip
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSizeGrip, QVBoxLayout
 
 # Internal components
 import linnaeo
@@ -30,7 +30,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-#        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint)
         self.start = linnaeo.start_time
 
         # Initialize UI
@@ -127,11 +127,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
         self.installEventFilter(self.splitter_2)
- #       self.sizeGrip = QSizeGrip(self.splitter)
-        #self.splitter.addWidget()
-        #self.statusBar().setSizeGripEnabled(False)
 
-        #self.splitter_2.splitterMoved.connect(self.setSizing)
 
     def eventFilter(self, obj, event):
         """ Designed to capture the edge mouse click upon resizing """

@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
     QTextCursor, QFontMetricsF, QTextDocument, QCursor, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
-    QDialog, QDialogButtonBox, QApplication, QTextEdit, QAbstractScrollArea, QToolTip
+    QDialog, QDialogButtonBox, QApplication, QTextEdit, QAbstractScrollArea, QToolTip, QHBoxLayout, QLabel, QPushButton
 from PyQt5.uic.properties import QtCore, QtWidgets
 
 from linnaeo.resources import linnaeo_rc
