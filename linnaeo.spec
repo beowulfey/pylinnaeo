@@ -3,11 +3,11 @@
 block_cipher = None
 
 
-a = Analysis(['linnaeo\\__init__.py'],
-             pathex=['C:\\Users\\wolfe\\devel\\linnaeo'],
+a = Analysis(['linnaeo/__init__.py'],
+             pathex=['/home/wolfey/devel/python/linnaeo'],
              binaries=[],
              datas=[],
-             hiddenimports=[],
+             hiddenimports=['psutil'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
