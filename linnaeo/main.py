@@ -30,7 +30,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+#        self.setWindowFlags(Qt.FramelessWindowHint)
         self.start = linnaeo.start_time
 
         # Initialize UI
@@ -127,7 +127,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
         self.installEventFilter(self.splitter_2)
-        self.sizeGrip = QSizeGrip(self.splitter)
+ #       self.sizeGrip = QSizeGrip(self.splitter)
         #self.splitter.addWidget()
         #self.statusBar().setSizeGripEnabled(False)
 
