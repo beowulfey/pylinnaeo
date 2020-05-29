@@ -18,6 +18,9 @@ That's a basic idea. Most likely those criteria will change.
 
 #### How do I get set up? ####
 
+I've attempted to build portable binaries for all three platforms. [They can be found here.](https://drive.google.com/drive/folders/1uk4Vd8ioxuDsuYsToDWuR-IZZBSoDJhy?usp=sharing)
+If you want to try building it yourself, or they don't work, here are some instructions:
+
 ###### MAC
 Install homebrew if you don't have it... it will make your life significantly easier. 
 Then follow these steps:
