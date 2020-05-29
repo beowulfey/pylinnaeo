@@ -56,6 +56,16 @@ class Theme2(AbstractTheme):
     pro = QColor(251, 215, 188)  # light orange
 
 
+class ColorSafe(AbstractTheme):
+    pos = QColor(161, 200, 236) 
+    neg = QColor(95, 158, 209)
+    pol = QColor(1, 103, 171)
+    aro = QColor(200, 82, 0)
+    phb = QColor(255, 128, 15)
+    cys = QColor(137, 137, 137)
+    gly = QColor(207, 207, 207)
+    pro = QColor(251, 189, 119)
+
 class PaleByType(AbstractTheme):
     """ Paler version of Theme2. My favorite -- default colors."""
     pos = QColor(219, 138, 139) # red
