@@ -74,3 +74,16 @@ Repositories I am eternally grateful for -- they helped me get this onto windows
 
 * [ARGTABLE2](https://github.com/jonathanmarvens/argtable2) -- for building Clustal Omega on Windows
 * [Clustal Omega, adapted to use CMake (so, so grateful) from GSL Biotech](https://github.com/GSLBiotech/clustal-omega/tree/master/src)
+
+#### What's up next?
+
+There is a lot I still want to do! Check out the "Issues" tab for stuff I know is broken. A quick list of features I want to add:
+
+* Currently only supports the Clustal Omega algorithm, and calls it even for just two sequences
+* Alignment order is not captured from ClustalO --> it just returns the input order, which is deceiving and confusing if you are used to the ClustalO website behavior
+* There is no way to export a sequence or alignment (although you can ctrl-C a sequence out!)
+* I want to add better drag-and-drop functionality, such as dragging a new sequence onto an alignment window, deleting sequences from an alignment, or rerranging the order (the former 2 would be non-destructive)
+* I need to make a preferences panel, with the preferences stored
+* I want to add more color themes
+* I want to make a dark theme for the app itself
+* I want to incorporate a PDB viewer
