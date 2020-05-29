@@ -47,27 +47,20 @@ python3 -c 'import linnaeo; linnaeo.main()
 ```
 
 ###### Linux
-Create a new python3.7 environment, then compile 
+Instructions are similar. You can try using the prebuilt wheel I have in the INSTALL folder, but they seem to have issues with compilation. I haven't debugged this but you can try yourself with your own compiled version of clustalo. I'll try and update this soon.
 
 ###### Windows
 Install Anaconda3 and create a new environment:
 
 ```
 conda create env --name linnaeo python=3.7
-pip install biopython, psutil, pyqt5=5.9
-# If on linux:
-pip install --global-option=build_ext --global-option="-I/usr/local/sci/clustalo/current/include/clustalo/" --global-option="-L/usr/local/sci/clustalo/current/lib/" clustalo
-# Windows:
-pip install ./INSTALL/clustalo...etc.whl
-
-# To actually build an executable:
-conda install rust, pyoxidizer
+cd C:\Users\<You>\devel\ 	# or where ever you want it to live
+git clone https://github.com/beowulfey/linnaeo.git
+cd linnaeo
+python setup.py build install
 ```
+On Windows, I have a pre-compiled clustalo wheel file that seems to usually work. Please let me know if it doesn't. 
 
-(PyOxidizer makes use of the pyoxidizer.bzl file to build.) 
-
-
-I'm trying to get this into a conda package that can be installed easily (akin to PyMOL -- they figured it out somehow!). Here's hoping I am successful. If I am, I'll be sure to update that here.
 
 Repositories I am eternally grateful for -- they helped me get this onto windows -- and need to cite:
 
