@@ -78,12 +78,12 @@ class MDIArea(QMdiArea):
             # So I can close all tabs
             pass
 
-    def resizeEvent(self, event):
-        # TODO: CAN I DELETE THIS??
-        # passes a resize event to all subwindows to make sure the sequence is updated
-        for sub in self.subWindowList():
-            sub.resizeEvent(event)
-        return super(MDIArea, self).resizeEvent(event)
+    #def resizeEvent(self, event):
+    #    # TODO: CAN I DELETE THIS??
+    #    # passes a resize event to all subwindows to make sure the sequence is updated
+    #    for sub in self.subWindowList():
+    #        sub.resizeEvent(event)
+    #    return super(MDIArea, self).resizeEvent(event)
 
     def addSubWindow(self, window, flags=Qt.WindowFlags()):
         super(MDIArea, self).addSubWindow(window, flags)
@@ -129,7 +129,7 @@ class MDISubWindow(QMdiSubWindow):
         #self.resizeTimer = utilities.ResizeTimerThread()
         self.resizeTimer = QTimer(self)
         self.resizeTimer.setSingleShot(True)
-        self.resizeTimer.setInterval(250)
+        self.resizeTimer.setInterval(100)
         self.resizeTimer.timeout.connect(self.drawFancy)
         self.resizing.connect(self.drawSimple)
         self.installEventFilter(self)
@@ -152,12 +152,14 @@ class MDISubWindow(QMdiSubWindow):
     def drawSimple(self):
         print("Draww Simple")
         if self._widget:
-            self._widget.seqArrange(color=False)
+            self._widget.userIsResizing = True
+            self._widget.seqArrange()
             print("START TIMER")
             self.resizeTimer.start()
 
     def drawFancy(self):
         print("TIMEROUT")
+        self._widget.userIsResizing = False
         self._widget.seqArrange()
 
     """def mouseMoveEvent(self, event):

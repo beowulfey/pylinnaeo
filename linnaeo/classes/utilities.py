@@ -27,6 +27,7 @@ class SeqThread(QThread):
         self.rulers = args[3]
         self.colors = args[4]
         self.fancy = fancy
+        print(self.fancy)
 
     def run(self):
         if self.fancy:

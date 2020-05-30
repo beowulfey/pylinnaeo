@@ -126,6 +126,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         in a separate thread to help with smoothness; showing color and rulers is still very slow though. Resize events
         call this function with color off, and the ruler is turned off automatically.
         """
+        print(self.userIsResizing)
         if not self.showColors:
             color = False
         if not self.showRuler:
@@ -146,7 +147,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.lines = lines
         self.alignPane.clear()
         fancy = False if self.userIsResizing else True
-        worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy)
+        print("FANCY IS ", fancy)
+        worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
         worker.start()
         worker.wait()
         self.alignPane.setText(worker.html)
