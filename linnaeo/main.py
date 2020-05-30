@@ -352,8 +352,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         If it is not, reopens the window. If it is, gives focus.
         """
         if sub.mdiArea() != self.mdiArea:
-            self.mainLogger.debug("Adding window to MDI Area; \
-                                creation took %f seconds" % float(time.perf_counter() - self.localtime))
+            self.mainLogger.debug("Adding window to MDI Area; creation took %f seconds" %
+                                  float(time.perf_counter() - self.localtime))
             self.mdiArea.addSubWindow(sub)
         else:
             sub.show()

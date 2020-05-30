@@ -1,12 +1,11 @@
-from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtGui import QColor, QFontDatabase, QFont, QFontMetricsF, QTextCursor, QCursor
-from PyQt5.QtWidgets import QWidget, QApplication, QDialog, QDialogButtonBox
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF
+from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox
 
 from linnaeo.classes import widgets, utilities, themes
-from linnaeo.resources import linnaeo_rc
 from linnaeo.ui import alignment_ui, quit_ui, about_ui
 
-
+from linnaeo.resources import linnaeo_rc
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
     Alignment SubWindow UI. Takes in a dictionary of sequences that have been aligned and arranges them.
