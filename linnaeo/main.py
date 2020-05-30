@@ -9,7 +9,7 @@ import psutil
 # PyQt components
 from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal, QCoreApplication
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSizeGrip, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSizeGrip, QVBoxLayout, QStyleFactory
 
 # Internal components
 import linnaeo
@@ -30,7 +30,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-        self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint)
+        self.setWindowFlags(Qt.Window | Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint | Qt.WindowMinMaxButtonsHint)
         self.start = linnaeo.start_time
 
         # Initialize UI

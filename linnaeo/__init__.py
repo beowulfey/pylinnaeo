@@ -4,6 +4,8 @@ import time
 
 #from pyqtconsole.console import PythonConsole
 #from contextlib import redirect_stderr, redirect_stdout
+from PyQt5.QtWidgets import QStyleFactory
+
 from linnaeo.main import LinnaeoApp, Linnaeo
 
 start_time = time.perf_counter()
@@ -14,7 +16,6 @@ def main():
     appLogger = logging.getLogger("INIT")
     #handler = logging.StreamHandler(sys.stderr)
     #appLogger.addHandler(handler)
-
 
     app = LinnaeoApp(sys.argv)
     #console = PythonConsole()
