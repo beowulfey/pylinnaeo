@@ -169,10 +169,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         This gets called anytime the window is in the process of being redrawn. If the MDI Subwindow is maximized,
         it calls a resizeEvent upon release too.
         """
-        if self.userIsResizing:
-            self.seqArrange(color=False) #rulers=False)
-        elif not self.userIsResizing:
-            self.resized.emit()
+
+        #if self.userIsResizing:
+        #    self.seqArrange(color=False) #rulers=False)
+        #elif not self.userIsResizing:
+        #self.resized.emit()
         super(AlignSubWindow, self).resizeEvent(event)
 
     def externalResizeDone(self):

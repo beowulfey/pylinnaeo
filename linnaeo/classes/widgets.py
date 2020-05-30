@@ -3,7 +3,7 @@ import logging
 import sys
 from math import trunc, ceil, floor
 
-from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint
+from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint, QTimer
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
     QTextCursor, QFontMetricsF, QTextDocument, QCursor, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
@@ -119,12 +119,20 @@ class MDISubWindow(QMdiSubWindow):
     Have to subclass QMdiSubWindow because it doesn't automatically
     show the widget if I close the window, which is strange and annoying.
     """
+    resizing = pyqtSignal()
+
     def __init__(self):
         super(MDISubWindow, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self._widget = None
         self.setMouseTracking(True)
-        #self.installEventFilter(self.widget().alignPane)
+        #self.resizeTimer = utilities.ResizeTimerThread()
+        self.resizeTimer = QTimer(self)
+        self.resizeTimer.setSingleShot(True)
+        self.resizeTimer.setInterval(250)
+        self.resizeTimer.timeout.connect(self.drawFancy)
+        self.resizing.connect(self.drawSimple)
+        self.installEventFilter(self)
 
         # TODO: TAKE OUT EXTRA CLOSE COMMAND IN MDISUBWINDOW
         # remove extra close command
@@ -135,21 +143,33 @@ class MDISubWindow(QMdiSubWindow):
         #        menu.actions().remove(action)
         # self.setSystemMenu(menu)
 
-    #def eventFilter(self, obj, event):
-    #    if event.type() == 129:
-    #        print("HOVER")
-    #    if event.type() == 5:
-    #        print("MOUSE MOVE")
-    #    return super().eventFilter(obj, event)
+    def eventFilter(self, obj, event):
+        if event.type() == 14:
+            print("SUBWINDOW RESIZE")
+            self.resizing.emit()
+        return super().eventFilter(obj, event)
 
-    def mouseMoveEvent(self, event):
+    def drawSimple(self):
+        print("Draww Simple")
+        if self._widget:
+            self._widget.seqArrange(color=False)
+            print("START TIMER")
+            self.resizeTimer.start()
+
+    def drawFancy(self):
+        print("TIMEROUT")
+        self._widget.seqArrange()
+
+    """def mouseMoveEvent(self, event):
         #print(QCursor.pos())
-        return super().mouseMoveEvent(event)
+        return super().mouseMoveEvent(event)"""
 
-    def event(self, event):
+    """def event(self, event):
         # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
         # Is there a better way to do this???
         #print(event, event.type())
+        if event.type() == 14:
+            print("SUBWINDOW RESIZE")
         if event.type() == 2:
             #linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
             #print("REDRAWING FROM MDI")
@@ -160,7 +180,7 @@ class MDISubWindow(QMdiSubWindow):
             self._widget.userIsResizing = False
             self._widget.resized.emit()
             #self._widget.seqArrangeColor()
-        return super().event(event)
+        return super().event(event)"""
 
     def setWidget(self, widget):
         self._widget = widget

@@ -219,16 +219,44 @@ class AlignThread(QThread):
             self.clustalLogger.debug("ClustalO thread returned alignment successfully")
 
 
-class TimerThread(QThread):
-    """ Thread for the timer, because Windows complains like hell otherwise. """
+class ProcTimerThread(QThread):
+    """
+    Thread for the timer, because Windows complains like hell otherwise.
+    For memory and CPU usage refresh.
+    """
     timeout = pyqtSignal()
 
     def __init__(self):
         QThread.__init__(self)
         self.processTimer = QTimer()
         self.processTimer.setInterval(1000)
-        self.processTimer.start()
         self.processTimer.timeout.connect(self.timerDone)
+        self.processTimer.start()
 
     def timerDone(self):
         self.timeout.emit()
+
+class ResizeTimerThread(QThread):
+    """
+    Thread for the timer, because Windows complains like hell otherwise.
+    Also used for resizing with a super short countdown
+    """
+    timeout = pyqtSignal()
+
+    def __init__(self):
+        QThread.__init__(self)
+        self.processTimer = QTimer()
+        #self.processTimer.setSingleShot(True)
+        self.processTimer.setInterval(500)
+        self.processTimer.timeout.connect(self.timerDone)
+
+    def timerDone(self):
+        print(self.processTimer.interval(), "TIMER STOP")
+        self.timeout.emit()
+
+    def run(self):
+        print("STARTING TIMER")
+        self.processTimer.start()
+
+
+
