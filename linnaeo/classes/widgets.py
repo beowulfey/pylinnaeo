@@ -57,13 +57,13 @@ class MDIArea(QMdiArea):
 
     def setTabs(self, on):
         if on:
-            self.setViewMode(1)
+            self.setViewMode(self.TabbedView)
             self.tabbed = True
             self.tabBar = self.findChild(QTabBar)
             self.setupTabBar()
         else:
             self.tabbed = False
-            self.setViewMode(0)
+            self.setViewMode(self.SubWindowView)
 
     def setupTabBar(self):
         # self.tabBar.setAutoHide(True)
@@ -129,7 +129,7 @@ class MDISubWindow(QMdiSubWindow):
         #self.resizeTimer = utilities.ResizeTimerThread()
         self.resizeTimer = QTimer(self)
         self.resizeTimer.setSingleShot(True)
-        self.resizeTimer.setInterval(150)
+        self.resizeTimer.setInterval(200)
         self.resizeTimer.timeout.connect(self.drawFancy)
         self.resizing.connect(self.drawSimple)
         self.installEventFilter(self)

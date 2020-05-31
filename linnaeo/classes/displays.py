@@ -147,7 +147,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.lines = lines
         self.alignPane.clear()
         fancy = False if self.userIsResizing else True
-        print("FANCY IS ", fancy)
         worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
         worker.start()
         worker.wait()
