@@ -303,23 +303,24 @@ class AlignPane(QTextEdit):
     def getTruePosition(self, line, pos):
         seqi = 0
         tline = 0
-        ruler = 0
         print("POS", pos)
         print("CHARS", self.chars)
-        if self.parentWidget().showRuler:
-            ruler = 1
-            print("RULERCALC: ", line, "DIVIDED BY ", len(self.seqs)+1, "+ 1")
-            noRulers = floor(line/(len(self.seqs)+1)+1)
-            print("N of Rulers", noRulers)
-            line = line - int(noRulers)
-        if line == -1:
+        print("Prot lines", self.lines)
+        ruler = 1 if self.parentWidget().showRuler else 0
+        # total lines, including rulers
+        rlines = self.lines*(len(self.seqs)+ruler)
+        rulers = ceil((line-1)/(len(self.seqs)+1))+1
+        # adjust line number to ignore rulers
+        line = line - self.lines
+        if line < 0:
             line = 0
         print("LINE: ", line)
-        print("Total lines", self.lines)
+        print("Total lines", rlines)
+
         for stack in range(self.lines):
             print("STACK CHECK:", stack)
-            i = line - stack*(len(self.seqs)+ruler)-ruler
-            print(line,"-",stack,"*",len(self.seqs)+ruler,"-",ruler,"=",i)
+            i = line - stack*len(self.seqs)
+            print(line,"-",stack,"*",len(self.seqs),"=",i)
             if i in list(range(len(self.seqs))):
                 print("STACK FOUND")
                 seqi = i
@@ -341,7 +342,10 @@ class AlignPane(QTextEdit):
         print("\nTT pos: ", pos)
         print("Raw pos: ", self.textCursor().position())
 
-        line = int((self.textCursor().position()-self.textCursor().positionInBlock())/(self.chars+1))
+        # Calculate line number from absolute position.
+        # +1 is needed because of the '/n' on each line.
+        # line calc includes the rulers, but not the empty space line.
+        line = floor(self.textCursor().position()/(self.chars+1))
         print("line:", line)
         tpos = self.getTruePosition(line, pos)
         print(tpos)
