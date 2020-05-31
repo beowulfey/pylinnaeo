@@ -41,7 +41,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.splitSeqs = []
         self.userIsResizing = False
         self.refseq = None
-        self.lastpos = None
+        self.last = None
         self.maxlen = 0
         self.maxname = 0
         self.lines = 0
@@ -52,7 +52,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.setupCustomUi()
 
         # Connect all slots and start
-        self.resized.connect(self.externalResizeDone)
+        #self.resized.connect(self.externalResizeDone)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.namePane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
         self.nameChange.connect(self.updateName)
@@ -91,7 +91,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             local = []
             count = 0
             for i in range(self.maxlen):
-                color = None
                 char = seq[i]
                 if char not in ["-", " "]:
                     count += 1
@@ -103,7 +102,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     tcount = 0
                 local.append([char, tcount])
             self.splitSeqs.append(local)
-        #self.seqArrange()
         self.alignPane.seqs = self.splitSeqs
 
     def nameArrange(self, lines):
@@ -126,7 +124,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         in a separate thread to help with smoothness; showing color and rulers is still very slow though. Resize events
         call this function with color off, and the ruler is turned off automatically.
         """
-        print(self.userIsResizing)
+        self.last = None
         if not self.showColors:
             color = False
         if not self.showRuler:
@@ -138,6 +136,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         if self.alignPane.verticalScrollBar().isVisible():
             char_count = int(width / charpx - 20 / charpx - \
                              self.alignPane.verticalScrollBar().size().width() / charpx)
+            # This is for saving the scroll position
+            self.last = self.alignPane.verticalScrollBar().value()
+            print(self.last)
         lines = int(self.maxlen / char_count) + 1
         self.alignPane.setChars(char_count)
         self.alignPane.names = self.splitNames
@@ -151,6 +152,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         worker.start()
         worker.wait()
         self.alignPane.setText(worker.html)
+        if self.last:
+            print("SCROLL POS", self.last)
+            self.alignPane.verticalScrollBar().setValue(self.last)
 
     # UTILITY FUNCTIONS
     def setTheme(self, theme):
@@ -165,6 +169,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.showColors = not self.showColors
         self.seqArrange()
 
+    '''
     def resizeEvent(self, event):
         """
         This gets called anytime the window is in the process of being redrawn. If the MDI Subwindow is maximized,
@@ -177,6 +182,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         #self.resized.emit()
         print("RESIZE FROM WIDGET!")
         super(AlignSubWindow, self).resizeEvent(event)
+        """
 
     def externalResizeDone(self):
         """
@@ -184,7 +190,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         not normally call the resizeEvent for the alignment window for some reason.
         """
         pass
-        #self.seqArrange()
+        #self.seqArrange() 
+        '''
 
     def seqs(self):
         return self._seqs

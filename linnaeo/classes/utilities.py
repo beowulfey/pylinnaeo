@@ -27,7 +27,6 @@ class SeqThread(QThread):
         self.rulers = args[3]
         self.colors = args[4]
         self.fancy = fancy
-        print(self.fancy)
 
     def run(self):
         if self.fancy:
@@ -236,7 +235,7 @@ class ProcTimerThread(QThread):
 
     def timerDone(self):
         self.timeout.emit()
-
+'''
 class ResizeTimerThread(QThread):
     """
     Thread for the timer, because Windows complains like hell otherwise.
@@ -252,12 +251,11 @@ class ResizeTimerThread(QThread):
         self.processTimer.timeout.connect(self.timerDone)
 
     def timerDone(self):
-        print(self.processTimer.interval(), "TIMER STOP")
         self.timeout.emit()
 
     def run(self):
-        print("STARTING TIMER")
         self.processTimer.start()
+'''
 
 
 
