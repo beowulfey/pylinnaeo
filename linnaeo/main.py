@@ -23,8 +23,6 @@ from linnaeo.ui import linnaeo_ui
 # This is how I'll get around the platform difficulties and should be cleaner. Will have to rip out a ton of code.
 
 class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindow):
-    edgeClick = pyqtSignal()
-    activeResize = pyqtSignal()
     """
     Constructor for the Main Window of the Sherlock App
     Contains all the user interface functions, as well as underlying code for major features.
@@ -37,7 +35,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.start = linnaeo.start_time
 
         # Initialize UI
-        self.beingClicked = True
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
 

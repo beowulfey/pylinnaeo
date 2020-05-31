@@ -34,7 +34,7 @@ class Slots:
     def saveImage(self):
         file = QFileDialog.getSaveFileName(self, "Save as...", "name",
                                             "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
-        self._currentWindow.widget().seqArrange(color=True, rulers=True)
+        #self._currentWindow.widget().seqArrange(color=True, rulers=True)
         self._currentWindow.widget().grab().save(file[0]+file[1][-5:-1])
 
     def toggleRulers(self):

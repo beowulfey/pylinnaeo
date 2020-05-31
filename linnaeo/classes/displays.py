@@ -176,6 +176,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         #    self.seqArrange(color=False) #rulers=False)
         #elif not self.userIsResizing:
         #self.resized.emit()
+        print("RESIZE FROM WIDGET!")
         super(AlignSubWindow, self).resizeEvent(event)
 
     def externalResizeDone(self):
@@ -183,7 +184,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         This only happens if the MDI sub window is not maximized and it gets resized; that does
         not normally call the resizeEvent for the alignment window for some reason.
         """
-        self.seqArrange()
+        pass
+        #self.seqArrange()
 
     def seqs(self):
         return self._seqs
