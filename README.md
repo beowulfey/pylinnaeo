@@ -59,7 +59,7 @@ python3 -c 'import linnaeo; linnaeo.main()
 ```
 
 ###### Linux
-Instructions are similar. You can try using the prebuilt wheel I have in the INSTALL folder, but they seem to have issues with compilation. I haven't debugged this but you can try yourself with your own compiled version of clustalo. I'll try and update this soon.
+Instructions are similar. You can try using the prebuilt wheel I have in the INSTALL folder, but they seem to have issues with compilation (the Python 3.8 version works better, so try using a venv with Py3.8). I haven't debugged this but it stopped working after I updated to Ubuntu 20.04. You can try yourself with your own compiled version of clustalo -- I'll try and update this soon with more information.
 
 ###### Windows
 Install Anaconda3 and create a new environment:
