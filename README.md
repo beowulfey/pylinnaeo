@@ -1,3 +1,7 @@
+Quick note -- this program is still being actively developed! It's not quite feature complete, although it's close! If you like it but find something is missing or broken, please leave a note in the issues tab (or wait a few days -- I'm adding stuff pretty regularly at the moment)
+
+Thanks! --beowulfey
+
 # LINNAEO #
 
 Linnaeo is a python program I made mostly as an exercise in learning how to code a GUI... but also to solve a
