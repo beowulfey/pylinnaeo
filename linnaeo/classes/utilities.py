@@ -69,7 +69,7 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
                 html.append("".join([x[0] for x in seqs[i][start:end]])+"\n")
             else:
                 html.append("".join([x[0][-8] for x in seqs[i][start:end]]) + "\n")
-        html.append("\n")
+        html.append(" "*chars+"\n")
         n += 1
     html.append("</pre>")
     return "".join(html)

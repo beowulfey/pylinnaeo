@@ -140,12 +140,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.last = self.alignPane.verticalScrollBar().value()
             print(self.last)
         lines = int(self.maxlen / char_count) + 1
-        self.alignPane.setChars(char_count)
-        self.alignPane.names = self.splitNames
         if lines != self.lines:
             self.lineChange.emit(lines)
             self.lines = lines
         self.alignPane.lines = lines
+        self.alignPane.setChars(char_count)
+        self.alignPane.names = self.splitNames
         self.alignPane.clear()
         fancy = False if self.userIsResizing else True
         worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
@@ -162,6 +162,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def toggleRulers(self):
         self.showRuler = not self.showRuler
+        print("RULER TOGGLED is now", self.showRuler)
         self.nameArrange(self.lines)
         self.seqArrange()
 

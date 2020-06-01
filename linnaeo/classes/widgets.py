@@ -299,62 +299,78 @@ class AlignPane(QTextEdit):
 
     def setChars(self, chars):
         self.chars = chars
+        self.lastchars = len(self.seqs[0])-self.chars*(self.lines-1)
+        #print("LAST LINE:",self.chars, self.lastchars)
 
-    def getTruePosition(self, line, pos):
+    def getTruePosition(self, line, pos, tlines, cutoff=False):
+        seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
         seqi = 0
         tline = 0
-        print("POS", pos)
-        print("CHARS", self.chars)
-        print("Prot lines", self.lines)
-        ruler = 1 if self.parentWidget().showRuler else 0
-        # total lines, including rulers
-        rlines = self.lines*(len(self.seqs)+ruler)
-        rulers = ceil((line-1)/(len(self.seqs)+1))+1
+        chars = self.lastchars if cutoff else self.chars
+        print("\nProt lines", self.lines)
+        #print("POS", pos, "out of", chars,"CHARS")
+        print("LINE", line, "out of", tlines)
+        #rulers = 0
+        #if self.parentWidget().showRuler:
+        #    rulers = floor(line/seqsperline)+1
+            # rulers is number of protein lines at this line
+        #    print("Rulers", rulers)
         # adjust line number to ignore rulers
-        line = line - self.lines
-        if line < 0:
-            line = 0
-        print("LINE: ", line)
-        print("Total lines", rlines)
+        #line = line - rulers - floor(line/seqsperline)
+        #print("Adjusted line:",line)
+        #if line < 0:
+        #    line = 0
+        #print("LINE: ", line)
 
         for stack in range(self.lines):
-            print("STACK CHECK:", stack)
-            i = line - stack*len(self.seqs)
-            print(line,"-",stack,"*",len(self.seqs),"=",i)
+            #print("STACK CHECK:", stack)
+            # i points to whether it is ruler, seq or blank line
+            i = line - stack*seqsperline - 1
+            #print(line,"-",stack,"*",seqsperline,"=",i)
             if i in list(range(len(self.seqs))):
-                print("STACK FOUND")
+                #print("STACK FOUND")
                 seqi = i
                 tline = stack
-        print("STACK: ", tline)
-        tpos = pos + tline*self.chars
+        #print("STACK: ", tline)
+        #if tline == self.lines:
+        #    tpos = (tline-1)*self.chars+pos
+        #else:
+        tpos = tline*self.chars+pos -1
         print("True POS: ", tpos)
         print("N", seqi)
-        resid = self.seqs[seqi][tpos][1]
         others = []
+        resid = self.seqs[seqi][tpos][1]
         for n in range(len(self.seqs)):
             if n != seqi:
-                others.append([n,self.seqs[n][tpos][1]])
-        return [[seqi, resid]]+others
-
+                others.append([n, self.seqs[n][tpos][1]])
+        return [[seqi, resid]] + others
 
     def getSeqTT(self, mpos, selected):
-        pos = self.textCursor().positionInBlock()
-        print("\nTT pos: ", pos)
-        print("Raw pos: ", self.textCursor().position())
+        # takes the cursor position and calculates the line number and position in the line
+        above_cutoff = False
+        pos = self.textCursor().position()
+        rpos = self.textCursor().positionInBlock()
+        seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
+        # find the total number of characters in the array, not including the last lines
+        #tchars = (self.lines-1)*seqsperline*(self.chars+1)+seqsperline*(self.lastchars+1)
+        cutoff = (self.lines-1)*seqsperline*(self.chars+1)
+        if pos <= cutoff:
+            line = floor(pos/(self.chars+1))
+        else:
+            #
+            print(pos,cutoff,1)
+            print((pos-cutoff-2)/(self.lastchars+1))
+            print(((self.lines-1)*seqsperline),'+',floor((pos-cutoff-2)/(self.lastchars+1)))
+            line = ((self.lines-1)*seqsperline)+floor((pos-cutoff-2)/(self.lastchars+1))
+            above_cutoff = True
+        tlines = ((self.lines - 1) * seqsperline + seqsperline - 1)
 
-        # Calculate line number from absolute position.
-        # +1 is needed because of the '/n' on each line.
-        # line calc includes the rulers, but not the empty space line.
-        line = floor(self.textCursor().position()/(self.chars+1))
-        print("line:", line)
-        tpos = self.getTruePosition(line, pos)
-        print(tpos)
         tt = QToolTip
         if selected in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
+            tpos = self.getTruePosition(line, rpos, tlines, cutoff=above_cutoff)
             string = []
             for i, each in enumerate(tpos):
-                print(i, each)
                 name = self.names[each[0]]
                 resi = each[1]
                 if resi == 0:
@@ -365,7 +381,6 @@ class AlignPane(QTextEdit):
                 string.append(text)
                 if 0 < i < len(tpos):
                     string.insert(-1,"\n")
-            print(string)
             string = "".join(string)
 
             tt.showText(mpos, selected + " at " + string)
@@ -381,7 +396,7 @@ class AlignPane(QTextEdit):
 
     def mousePressEvent(self, event):
         self.setTextCursor(self.cursorForPosition(event.pos()))
-        self.moveCursor(QTextCursor.PreviousCharacter, mode=QTextCursor.KeepAnchor)
+        self.moveCursor(QTextCursor.NextCharacter, mode=QTextCursor.KeepAnchor)
         text = self.textCursor().selectedText()
         self.toolTipReq.emit(event.globalPos(), text)
         self.tracking = True
