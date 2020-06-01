@@ -305,38 +305,16 @@ class AlignPane(QTextEdit):
         seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
         seqi = 0
         tline = 0
-        chars = self.lastchars if cutoff else self.chars
-        print("\nProt lines", self.lines)
-        print("POS", pos, "out of", chars,"CHARS")
-        print("LINE", line, "out of", tlines)
-        #rulers = 0
-        #if self.parentWidget().showRuler:
-        #    rulers = floor(line/seqsperline)+1
-            # rulers is number of protein lines at this line
-        #    print("Rulers", rulers)
-        # adjust line number to ignore rulers
-        #line = line - rulers - floor(line/seqsperline)
-        #print("Adjusted line:",line)
-        #if line < 0:
-        #    line = 0
-        #print("LINE: ", line)
-
         for stack in range(self.lines):
-            print("STACK CHECK:", stack)
+            #print("STACK CHECK:", stack)
             # i points to whether it is ruler, seq or blank line
             i = line - stack*seqsperline - int(self.parentWidget().showRuler)
-            print(line,"-",stack,"*",seqsperline,"=",i)
+            #print(line,"-",stack,"*",seqsperline,"=",i)
             if i in list(range(len(self.seqs))):
-                print("STACK FOUND")
+                #print("STACK FOUND")
                 seqi = i
                 tline = stack
-        #print("STACK: ", tline)
-        #if tline == self.lines:
-        #    tpos = (tline-1)*self.chars+pos
-        #else:
-        tpos = tline*self.chars+pos -1
-        #print("True POS: ", tpos)
-        #print("N", seqi)
+        tpos = tline*self.chars+pos - 1
         others = []
         resid = self.seqs[seqi][tpos][1]
         for n in range(len(self.seqs)):
@@ -350,21 +328,22 @@ class AlignPane(QTextEdit):
         pos = self.textCursor().position()
         rpos = self.textCursor().positionInBlock()
         seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
-        # find the total number of characters in the array, not including the last lines
-        #tchars = (self.lines-1)*seqsperline*(self.chars+1)+seqsperline*(self.lastchars+1)
         cutoff = (self.lines-1)*seqsperline*(self.chars+1)
+        # Have to do special stuff if it's on the last line, since there are no blank characters to keep the pattern.
+        # Probably should have put them in to make my life easier, but whatever, I already figured it out.
         if pos <= cutoff:
             line = floor(pos/(self.chars+1))
         else:
             line = ((self.lines-1)*seqsperline)+floor((pos-cutoff-2)/(self.lastchars+1))
             above_cutoff = True
         tlines = ((self.lines - 1) * seqsperline + seqsperline - 1)
-
         tt = QToolTip
+        # Such elegance.
         if selected in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
             tpos = self.getTruePosition(line, rpos, tlines, cutoff=above_cutoff)
             string = []
+            # Build the tool tip from the returned info.
             for i, each in enumerate(tpos):
                 name = self.names[each[0]]
                 resi = each[1]
