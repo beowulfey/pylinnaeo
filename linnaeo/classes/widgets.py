@@ -88,7 +88,6 @@ class MDIArea(QMdiArea):
     def addSubWindow(self, window, flags=Qt.WindowFlags()):
         super(MDIArea, self).addSubWindow(window, flags)
         if self.tabbed:
-            print(self.tabbed)
             for sub in self.subWindowList():
                 sub.showMinimized()
             self.activeSubWindow().showMaximized()
@@ -308,7 +307,7 @@ class AlignPane(QTextEdit):
         tline = 0
         chars = self.lastchars if cutoff else self.chars
         print("\nProt lines", self.lines)
-        #print("POS", pos, "out of", chars,"CHARS")
+        print("POS", pos, "out of", chars,"CHARS")
         print("LINE", line, "out of", tlines)
         #rulers = 0
         #if self.parentWidget().showRuler:
@@ -323,12 +322,12 @@ class AlignPane(QTextEdit):
         #print("LINE: ", line)
 
         for stack in range(self.lines):
-            #print("STACK CHECK:", stack)
+            print("STACK CHECK:", stack)
             # i points to whether it is ruler, seq or blank line
-            i = line - stack*seqsperline - 1
-            #print(line,"-",stack,"*",seqsperline,"=",i)
+            i = line - stack*seqsperline - int(self.parentWidget().showRuler)
+            print(line,"-",stack,"*",seqsperline,"=",i)
             if i in list(range(len(self.seqs))):
-                #print("STACK FOUND")
+                print("STACK FOUND")
                 seqi = i
                 tline = stack
         #print("STACK: ", tline)
@@ -336,8 +335,8 @@ class AlignPane(QTextEdit):
         #    tpos = (tline-1)*self.chars+pos
         #else:
         tpos = tline*self.chars+pos -1
-        print("True POS: ", tpos)
-        print("N", seqi)
+        #print("True POS: ", tpos)
+        #print("N", seqi)
         others = []
         resid = self.seqs[seqi][tpos][1]
         for n in range(len(self.seqs)):
@@ -357,10 +356,6 @@ class AlignPane(QTextEdit):
         if pos <= cutoff:
             line = floor(pos/(self.chars+1))
         else:
-            #
-            print(pos,cutoff,1)
-            print((pos-cutoff-2)/(self.lastchars+1))
-            print(((self.lines-1)*seqsperline),'+',floor((pos-cutoff-2)/(self.lastchars+1)))
             line = ((self.lines-1)*seqsperline)+floor((pos-cutoff-2)/(self.lastchars+1))
             above_cutoff = True
         tlines = ((self.lines - 1) * seqsperline + seqsperline - 1)

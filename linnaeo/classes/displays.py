@@ -138,7 +138,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                              self.alignPane.verticalScrollBar().size().width() / charpx)
             # This is for saving the scroll position
             self.last = self.alignPane.verticalScrollBar().value()
-            print(self.last)
         lines = int(self.maxlen / char_count) + 1
         if lines != self.lines:
             self.lineChange.emit(lines)
