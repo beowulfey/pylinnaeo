@@ -216,7 +216,7 @@ class AlignThread(QThread):
             self.error.emit((exctype, value, traceback.format_exc()))
         else:
             self.aligned = result
-            self.clustalLogger.debug("ClustalO thread returned alignment successfully")
+            self.clustalLogger.debug("Thread returned alignment successfully")
 
 
 class ProcTimerThread(QThread):
