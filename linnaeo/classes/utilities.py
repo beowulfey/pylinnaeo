@@ -69,7 +69,7 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
                 html.append("".join([x[0] for x in seqs[i][start:end]])+"\n")
             else:
                 html.append("".join([x[0][-8] for x in seqs[i][start:end]]) + "\n")
-        html.append("\n")
+        html.append(" "*chars+"\n")
         n += 1
     html.append("</pre>")
     return "".join(html)
@@ -219,16 +219,43 @@ class AlignThread(QThread):
             self.clustalLogger.debug("ClustalO thread returned alignment successfully")
 
 
-class TimerThread(QThread):
-    """ Thread for the timer, because Windows complains like hell otherwise. """
+class ProcTimerThread(QThread):
+    """
+    Thread for the timer, because Windows complains like hell otherwise.
+    For memory and CPU usage refresh.
+    """
     timeout = pyqtSignal()
 
     def __init__(self):
         QThread.__init__(self)
         self.processTimer = QTimer()
         self.processTimer.setInterval(1000)
+        self.processTimer.timeout.connect(self.timerDone)
         self.processTimer.start()
+
+    def timerDone(self):
+        self.timeout.emit()
+'''
+class ResizeTimerThread(QThread):
+    """
+    Thread for the timer, because Windows complains like hell otherwise.
+    Also used for resizing with a super short countdown
+    """
+    timeout = pyqtSignal()
+
+    def __init__(self):
+        QThread.__init__(self)
+        self.processTimer = QTimer()
+        #self.processTimer.setSingleShot(True)
+        self.processTimer.setInterval(500)
         self.processTimer.timeout.connect(self.timerDone)
 
     def timerDone(self):
         self.timeout.emit()
+
+    def run(self):
+        self.processTimer.start()
+'''
+
+
+

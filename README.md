@@ -20,6 +20,13 @@ by meeting a few basic criteria:
 
 That's a basic idea. Most likely those criteria will change.
 
+#### Nice. What's it look like? 
+
+Here is a screenshot as of May 31, 2020:
+
+![screenshot](linnaeo/resources/images/tt-example.png "Title")
+
+
 #### How do I get set up? ####
 
 I've attempted to build portable binaries for all three platforms. [They can be found here.](https://drive.google.com/drive/folders/1uk4Vd8ioxuDsuYsToDWuR-IZZBSoDJhy?usp=sharing)

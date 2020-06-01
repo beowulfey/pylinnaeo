@@ -9,7 +9,7 @@ import psutil
 # PyQt components
 from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal, QCoreApplication
 from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSizeGrip, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
 
 # Internal components
 import linnaeo
@@ -20,7 +20,6 @@ from linnaeo.ui import linnaeo_ui
 
 
 class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindow):
-    edgeClick = pyqtSignal()
     """
     Constructor for the Main Window of the Sherlock App
     Contains all the user interface functions, as well as underlying code for major features.
@@ -30,19 +29,17 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-        self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint)
         self.start = linnaeo.start_time
 
         # Initialize UI
-        self.beingClicked = True
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
 
         # System instants; status bar and threads
         self.memLabel = QLabel()
         self.mainProcess = psutil.Process(os.getpid())
-        # self.processTimer = QTimer()
-        self.processTimer = utilities.TimerThread()
+        self.processTimer = utilities.ProcTimerThread()
+
         self.mainLogger = logging.getLogger("Main")
         self.threadpool = QThreadPool()
         self.mainLogger.info("Threading with a maximum of %d threads" % self.threadpool.maxThreadCount())
@@ -103,10 +100,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
             self.windows = {}
             self.rebuildTrees()
-            # TODO: Figure out why tree is not expanding!
-            #print("SEQS: ", self.sequences)
-            #print("TITLES: ", self.titles)
-            #print("WINDEX: ", self.windex)
+
         else:
             self.bioRoot = QStandardItem("Folder")
             self.bioModel = widgets.ItemModel(self.windows, seqTree=True)
@@ -126,22 +120,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             self.projectTree.setExpanded(node.index(), True)
         self.installEventFilter(self)
-        self.installEventFilter(self.splitter_2)
-
-
-    def eventFilter(self, obj, event):
-        """ Designed to capture the edge mouse click upon resizing """
-        #print(event, event.type())
-        if event.type() in [99]:
-            print("Detected edge")
-            self.edgeClick.emit()
-        return super().eventFilter(obj, event)
-
-    def resizeEvent(self, event):
-    #    # TODO: THIS IS THE ONLY ONE THAT DOESN'T TURN OFF COLOR WHEN RESIZING
-        # Just flashes of and on...
-        # self.setSizing()
-        return super().resizeEvent(event)
 
     def guiFinalize(self):
         # Tree setup
@@ -157,8 +135,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.updateUsage()
         self.statusBar().addPermanentWidget(self.memLabel)
         self.mainLogger.debug("After StatusbarUpdate")
-        # self.processTimer.setInterval(1000)
-        # self.processTimer.start()
 
         self.DEBUG()
 
@@ -203,12 +179,13 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # self.bioModel.nameChanging.connect(self.preNameChange)
         self.bioModel.nameChanged.connect(self.postNameChange)
         self.processTimer.timeout.connect(self.updateUsage)
+       # self.resizeTimer.timeout.connect(self.drawColors)
 
         self.actionRulers.triggered.connect(self.toggleRulers)
         self.actionColors.triggered.connect(self.toggleColors)
         self.actionSave_Image.triggered.connect(self.saveImage)
-        LinnaeoApp.instance().barClick.connect(self.setSizing)
-        self.edgeClick.connect(self.setSizing)
+        #LinnaeoApp.instance().barClick.connect(self.drawSimple)
+        #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
         self.actionBigger.triggered.connect(self.increaseTextSize)
         self.actionSmaller.triggered.connect(self.decreaseTextSize)
@@ -352,8 +329,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         If it is not, reopens the window. If it is, gives focus.
         """
         if sub.mdiArea() != self.mdiArea:
-            self.mainLogger.debug("Adding window to MDI Area; \
-                                creation took %f seconds" % float(time.perf_counter() - self.localtime))
+            self.mainLogger.debug("Adding window to MDI Area; creation took %f seconds" %
+                                  float(time.perf_counter() - self.localtime))
             self.mdiArea.addSubWindow(sub)
         else:
             sub.show()
@@ -373,7 +350,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 seqr = node.data(role=self.SequenceRole)[0]
                 ali[seqr.name] = str(seqr.seq)
                 self.makeNewWindow(wid, ali, nonode=True)
-                #self.bioTree.setExpanded(self.bioModel.indexFromItem(node), True)
 
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             if node.data(role=self.SequenceRole):
@@ -388,7 +364,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 worker.wait()
                 ali = worker.aligned
                 self.makeNewWindow(wid, ali, nonode=True)
-                #self.projectTree.setExpanded(self.projectModel.indexFromItem(node), True)
         self.bioModel.updateWindows(self.windows)
         self.projectModel.updateWindows(self.windows)
         self.mainLogger.debug("Regenerating windows took took %f seconds" % float(time.perf_counter() - self.start))
@@ -480,7 +455,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
 
 class LinnaeoApp(QApplication):
-    """ Custom QApplication that detects when the border is being pressed. """
+    """ Custom QApplication that detects resizing/when the border is being pressed. """
     barClick = pyqtSignal()
 
     def __init__(self, *args):
@@ -488,27 +463,24 @@ class LinnaeoApp(QApplication):
         #self.focusChanged.connect(self.focusChange)
 
 
-        QCoreApplication.setAttribute(Qt.AA_CompressHighFrequencyEvents)
+        #QCoreApplication.setAttribute(Qt.AA_CompressHighFrequencyEvents)
         self.installEventFilter(self)
         self.last = None
-        #self.barClick.connect(self.setSizing)
 
-    def focusChange(self):
-        print("FOCUS CHANGED")
+    #def focusChange(self):
+    #    print("FOCUS CHANGED")
 
-    def event(self, event):
-        if event.type() in [2,3]:
-            print(event.type())
-        return super().event(event)
-
-    def eventFilter(self, obj, event):
-        if event.type() in [174,175]:
-            if event.type() != self.last:
-                print("Unique event!", event.type())
-                print("Last observed to be: ", self.last)
-                self.barClick.emit()
-                self.last = event.type()
-        return super().eventFilter(obj, event)
+    #def eventFilter(self, obj, event):
+     #   if event.type() == 14:
+            #print("RESIZE APP")
+            #self.barClick.emit()
+        #if event.type() in [174,175]:
+            #if event.type() != self.last:
+                #print("Unique event!", event.type())
+                #print("Last observed to be: ", self.last)
+                #self.barClick.emit()
+                #self.last = event.type()
+      #  return super().eventFilter(obj, event)
 
     """
      def event(self, event):

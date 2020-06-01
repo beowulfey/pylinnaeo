@@ -3,7 +3,7 @@ import logging
 import sys
 from math import trunc, ceil, floor
 
-from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint
+from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint, QTimer
 from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
     QTextCursor, QFontMetricsF, QTextDocument, QCursor, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
@@ -57,13 +57,13 @@ class MDIArea(QMdiArea):
 
     def setTabs(self, on):
         if on:
-            self.setViewMode(1)
+            self.setViewMode(self.TabbedView)
             self.tabbed = True
             self.tabBar = self.findChild(QTabBar)
             self.setupTabBar()
         else:
             self.tabbed = False
-            self.setViewMode(0)
+            self.setViewMode(self.SubWindowView)
 
     def setupTabBar(self):
         # self.tabBar.setAutoHide(True)
@@ -78,12 +78,12 @@ class MDIArea(QMdiArea):
             # So I can close all tabs
             pass
 
-    def resizeEvent(self, event):
-        # TODO: CAN I DELETE THIS??
-        # passes a resize event to all subwindows to make sure the sequence is updated
-        for sub in self.subWindowList():
-            sub.resizeEvent(event)
-        return super(MDIArea, self).resizeEvent(event)
+    #def resizeEvent(self, event):
+    #    # TODO: CAN I DELETE THIS??
+    #    # passes a resize event to all subwindows to make sure the sequence is updated
+    #    for sub in self.subWindowList():
+    #        sub.resizeEvent(event)
+    #    return super(MDIArea, self).resizeEvent(event)
 
     def addSubWindow(self, window, flags=Qt.WindowFlags()):
         super(MDIArea, self).addSubWindow(window, flags)
@@ -119,12 +119,20 @@ class MDISubWindow(QMdiSubWindow):
     Have to subclass QMdiSubWindow because it doesn't automatically
     show the widget if I close the window, which is strange and annoying.
     """
+    resizing = pyqtSignal()
+
     def __init__(self):
         super(MDISubWindow, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self._widget = None
         self.setMouseTracking(True)
-        #self.installEventFilter(self.widget().alignPane)
+        #self.resizeTimer = utilities.ResizeTimerThread()
+        self.resizeTimer = QTimer(self)
+        self.resizeTimer.setSingleShot(True)
+        self.resizeTimer.setInterval(200)
+        self.resizeTimer.timeout.connect(self.drawFancy)
+        self.resizing.connect(self.drawSimple)
+        self.installEventFilter(self)
 
         # TODO: TAKE OUT EXTRA CLOSE COMMAND IN MDISUBWINDOW
         # remove extra close command
@@ -135,21 +143,31 @@ class MDISubWindow(QMdiSubWindow):
         #        menu.actions().remove(action)
         # self.setSystemMenu(menu)
 
-    #def eventFilter(self, obj, event):
-    #    if event.type() == 129:
-    #        print("HOVER")
-    #    if event.type() == 5:
-    #        print("MOUSE MOVE")
-    #    return super().eventFilter(obj, event)
+    def eventFilter(self, obj, event):
+        if event.type() == 14:
+            self.resizing.emit()
+        return super().eventFilter(obj, event)
 
-    def mouseMoveEvent(self, event):
+    def drawSimple(self):
+        if self._widget:
+            self._widget.userIsResizing = True
+            self._widget.seqArrange()
+            self.resizeTimer.start()
+
+    def drawFancy(self):
+        self._widget.userIsResizing = False
+        self._widget.seqArrange()
+
+    """def mouseMoveEvent(self, event):
         #print(QCursor.pos())
-        return super().mouseMoveEvent(event)
+        return super().mouseMoveEvent(event)"""
 
-    def event(self, event):
+    """def event(self, event):
         # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
         # Is there a better way to do this???
         #print(event, event.type())
+        if event.type() == 14:
+            print("SUBWINDOW RESIZE")
         if event.type() == 2:
             #linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
             #print("REDRAWING FROM MDI")
@@ -160,7 +178,7 @@ class MDISubWindow(QMdiSubWindow):
             self._widget.userIsResizing = False
             self._widget.resized.emit()
             #self._widget.seqArrangeColor()
-        return super().event(event)
+        return super().event(event)"""
 
     def setWidget(self, widget):
         self._widget = widget
@@ -281,57 +299,78 @@ class AlignPane(QTextEdit):
 
     def setChars(self, chars):
         self.chars = chars
+        self.lastchars = len(self.seqs[0])-self.chars*(self.lines-1)
+        #print("LAST LINE:",self.chars, self.lastchars)
 
-    def getTruePosition(self, line, pos):
+    def getTruePosition(self, line, pos, tlines, cutoff=False):
+        seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
         seqi = 0
         tline = 0
-        ruler = 0
-        #print("POS", pos)
-        #print("CHARS", self.chars)
-        if self.parentWidget().showRuler:
-            ruler = 1
-            noRulers = floor(line/(len(self.seqs)+1)+1)
-            #print("N of Rulers", noRulers)
-            #line = line - int(noRulers)
-        if line == -1:
-            line = 0
+        chars = self.lastchars if cutoff else self.chars
+        print("\nProt lines", self.lines)
+        #print("POS", pos, "out of", chars,"CHARS")
+        print("LINE", line, "out of", tlines)
+        #rulers = 0
+        #if self.parentWidget().showRuler:
+        #    rulers = floor(line/seqsperline)+1
+            # rulers is number of protein lines at this line
+        #    print("Rulers", rulers)
+        # adjust line number to ignore rulers
+        #line = line - rulers - floor(line/seqsperline)
+        #print("Adjusted line:",line)
+        #if line < 0:
+        #    line = 0
         #print("LINE: ", line)
-        #print("Total lines", self.lines)
+
         for stack in range(self.lines):
             #print("STACK CHECK:", stack)
-            i = line - stack*(len(self.seqs)+ruler)-ruler
-            #print(line,"-",stack,"*",len(self.seqs)+ruler,"-",ruler,"=",i)
+            # i points to whether it is ruler, seq or blank line
+            i = line - stack*seqsperline - 1
+            #print(line,"-",stack,"*",seqsperline,"=",i)
             if i in list(range(len(self.seqs))):
                 #print("STACK FOUND")
                 seqi = i
                 tline = stack
         #print("STACK: ", tline)
-        tpos = pos + tline*self.chars
-        #print("True POS: ", tpos)
-        #print("N", seqi)
-        resid = self.seqs[seqi][tpos][1]
+        #if tline == self.lines:
+        #    tpos = (tline-1)*self.chars+pos
+        #else:
+        tpos = tline*self.chars+pos -1
+        print("True POS: ", tpos)
+        print("N", seqi)
         others = []
+        resid = self.seqs[seqi][tpos][1]
         for n in range(len(self.seqs)):
             if n != seqi:
-                others.append([n,self.seqs[n][tpos][1]])
-        return [[seqi, resid]]+others
-
+                others.append([n, self.seqs[n][tpos][1]])
+        return [[seqi, resid]] + others
 
     def getSeqTT(self, mpos, selected):
-        pos = self.textCursor().positionInBlock()
-        #print("\nTT pos: ", pos)
-        #print("Raw pos: ", self.textCursor().position())
+        # takes the cursor position and calculates the line number and position in the line
+        above_cutoff = False
+        pos = self.textCursor().position()
+        rpos = self.textCursor().positionInBlock()
+        seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
+        # find the total number of characters in the array, not including the last lines
+        #tchars = (self.lines-1)*seqsperline*(self.chars+1)+seqsperline*(self.lastchars+1)
+        cutoff = (self.lines-1)*seqsperline*(self.chars+1)
+        if pos <= cutoff:
+            line = floor(pos/(self.chars+1))
+        else:
+            #
+            print(pos,cutoff,1)
+            print((pos-cutoff-2)/(self.lastchars+1))
+            print(((self.lines-1)*seqsperline),'+',floor((pos-cutoff-2)/(self.lastchars+1)))
+            line = ((self.lines-1)*seqsperline)+floor((pos-cutoff-2)/(self.lastchars+1))
+            above_cutoff = True
+        tlines = ((self.lines - 1) * seqsperline + seqsperline - 1)
 
-        line = int((self.textCursor().position()-self.textCursor().positionInBlock())/(self.chars+1))
-        #print("line:", line)
-        tpos = self.getTruePosition(line, pos)
-        #print(tpos)
         tt = QToolTip
         if selected in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
+            tpos = self.getTruePosition(line, rpos, tlines, cutoff=above_cutoff)
             string = []
             for i, each in enumerate(tpos):
-                #print(i, each)
                 name = self.names[each[0]]
                 resi = each[1]
                 if resi == 0:
@@ -342,7 +381,6 @@ class AlignPane(QTextEdit):
                 string.append(text)
                 if 0 < i < len(tpos):
                     string.insert(-1,"\n")
-            #print(string)
             string = "".join(string)
 
             tt.showText(mpos, selected + " at " + string)
@@ -358,7 +396,7 @@ class AlignPane(QTextEdit):
 
     def mousePressEvent(self, event):
         self.setTextCursor(self.cursorForPosition(event.pos()))
-        self.moveCursor(QTextCursor.PreviousCharacter, mode=QTextCursor.KeepAnchor)
+        self.moveCursor(QTextCursor.NextCharacter, mode=QTextCursor.KeepAnchor)
         text = self.textCursor().selectedText()
         self.toolTipReq.emit(event.globalPos(), text)
         self.tracking = True

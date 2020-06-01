@@ -4,7 +4,7 @@ import Bio
 from Bio import SeqIO
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq
-from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir
+from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QTimer
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QFileDialog, QApplication
 
@@ -31,25 +31,10 @@ class Slots:
         qDialog = AboutDialog(self)
         qDialog.exec()
 
-    def setSizing(self):
-        print("being clicked?", self.beingClicked)
-        if not self.beingClicked:
-            self.beingClicked = True
-            if self._currentWindow: #and self._currentWindow.isMaximized():  # and self.mdiArea.activeSubWindow().isMaximized():
-                print("REDRAWING FRAME FROM MAIN")
-                self._currentWindow.widget().userIsResizing = True
-                self._currentWindow.widget().seqArrange(color=False) #, rulers=False)
-        elif self.beingClicked:
-            self.beingClicked = False
-            if self._currentWindow: #and self._currentWindow.isMaximized():
-                print("DONE REDRAWING FROM MAIN")
-                self._currentWindow.widget().userIsResizing = False
-                self._currentWindow.widget().seqArrange()
-
     def saveImage(self):
         file = QFileDialog.getSaveFileName(self, "Save as...", "name",
                                             "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
-        self._currentWindow.widget().seqArrange(color=True, rulers=True)
+        #self._currentWindow.widget().seqArrange(color=True, rulers=True)
         self._currentWindow.widget().grab().save(file[0]+file[1][-5:-1])
 
     def toggleRulers(self):
