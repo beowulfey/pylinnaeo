@@ -90,28 +90,26 @@
     </property>
     <widget class="QMenu" name="menuImport">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="title">
       <string>Import</string>
      </property>
-     <addaction name="actionFasta"/>
-     <addaction name="actionClustal"/>
+     <addaction name="actionImportSeq"/>
+     <addaction name="actionImportAlign"/>
     </widget>
     <widget class="QMenu" name="menuExport">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="title">
       <string>Export</string>
      </property>
-     <addaction name="actionSequence"/>
-     <addaction name="actionAlignment_2"/>
+     <addaction name="actionExportSeq"/>
+     <addaction name="actionExportAlign"/>
     </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
-    <addaction name="separator"/>
-    <addaction name="actionAdd"/>
     <addaction name="menuImport"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
@@ -209,9 +207,9 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionFasta">
+  <action name="actionImportAlign">
    <property name="text">
-    <string>Fasta Alignment</string>
+    <string>Alignment</string>
    </property>
   </action>
   <action name="actionNew">
@@ -222,25 +220,20 @@
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="actionAdd">
+  <action name="actionImportSeq">
    <property name="text">
-    <string>Add Sequence</string>
+    <string>Sequence</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
    </property>
   </action>
-  <action name="actionClustal">
-   <property name="text">
-    <string>Clustal Alignment</string>
-   </property>
-  </action>
-  <action name="actionSequence">
+  <action name="actionExportSeq">
    <property name="text">
     <string>Sequence</string>
    </property>
   </action>
-  <action name="actionAlignment_2">
+  <action name="actionExportAlign">
    <property name="text">
     <string>Alignment</string>
    </property>

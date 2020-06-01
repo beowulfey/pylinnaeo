@@ -1,7 +1,8 @@
+import copy
 import time
 
 import Bio
-from Bio import SeqIO
+from Bio import SeqIO, AlignIO
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq
 from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QTimer
@@ -34,7 +35,6 @@ class Slots:
     def saveImage(self):
         file = QFileDialog.getSaveFileName(self, "Save as...", "name",
                                             "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
-        #self._currentWindow.widget().seqArrange(color=True, rulers=True)
         self._currentWindow.widget().grab().save(file[0]+file[1][-5:-1])
 
     def toggleRulers(self):
@@ -43,7 +43,6 @@ class Slots:
     def toggleColors(self):
         self._currentWindow.widget().toggleColors()
 
-    # SINGLE-USE SLOTS
     def newWorkspace(self):
         result = self.maybeClose()
         if result is not None:
@@ -54,20 +53,13 @@ class Slots:
 
     def restore_tree(self, parent, datastream, num_childs=None):
         if not num_childs:
-            #print("First line: reading UInt32")
             num_childs = datastream.readUInt32()
-            #print(num_childs)
         for i in range(0, num_childs):
-            #print("Reading node")
             child = QStandardItem()
             child.read(datastream)
             parent.appendRow(child)
-            #print(child.data(role=Qt.UserRole + 1))
-            #print(child.data(role=Qt.UserRole + 2))
-            #print(child.data(role=Qt.UserRole + 3))
             num_childs = datastream.readUInt32()
             if num_childs > 0:
-                #print("reading children")
                 self.restore_tree(child, datastream, num_childs)
 
     def openWorkspace(self):
@@ -80,11 +72,8 @@ class Slots:
         fstream = QDataStream(file)
         self.mainLogger.info("Starting restore")
         sequences = fstream.readQVariantHash()
-        #print("Sequences: ", sequences)
         titles = fstream.readQVariantList()
-        #print("Titles: ", titles)
         windex = fstream.readUInt32()
-        #print("Windex: ", windex)
         windows = {}
         self.mdiArea.closeAllSubWindows()
         newBModel = widgets.ItemModel(windows, seqTree=True)
@@ -94,10 +83,11 @@ class Slots:
         self.start = time.perf_counter()
         self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
 
-    def newSequence(self):
+    def importSequence(self):
         sel = QFileDialog.getOpenFileName(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
                                           filter="Fasta File (*.fa *.fasta);;Any (*)")
         seqr = None
+        print(sel)
         filename = sel[0]
         badfile = True
         if filename[-3:] == ".fa":
@@ -108,15 +98,46 @@ class Slots:
             try:
                 seq = SeqIO.read(filename, "fasta")
                 if seq:
-                    #print("name: ", seq.name)
-                    #print("id: ", seq.id)
-                    #print("desc: ", seq.description)
                     seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
                     self.seqInit(seqr)
             except:
                 self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
         else:
             self.mainStatus.showMessage("Please only add fasta file!", msecs=1000)
+
+    def importAlignment(self):
+        sel = QFileDialog.getOpenFileName(parent=self, caption="Load an Alignment", directory=QDir.homePath(),
+                                          filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
+        filename = sel[0]
+        filter = sel[1][-8:-1]
+        type = None
+        if filter =="*.fasta":
+            type = 'fasta'
+        elif filter == "clustal":
+            type = 'clustal'
+        aln = AlignIO.read(filename, type)
+        items = {}
+        combo = []
+
+        for seqr in aln:
+            cleanseq = str(seqr.seq).replace('-','')
+            seqr_clean = models.SeqR(cleanseq)
+            seqr_clean.convert(seqr)
+            seqr_clean.seq = cleanseq
+            items[seqr_clean.name] = str(seqr.seq)
+            combo.append(seqr_clean.seq)
+            if seqr_clean not in self.sequences.values():
+                self.seqInit(seqr_clean, folder='Import')
+        combo.sort()
+        if combo not in self.sequences.values():
+            wid = str(int(self.windex) + 1)
+            self.sequences[wid] = combo
+            sub = self.makeNewWindow(wid, items)
+            self.openWindow(sub)
+            self.windex = self.windex + 1
+        else:
+            self.mainStatus.showMessage("Alignment already imported!",msecs=2000)
+
 
     def saveWorkspace(self):
         sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(),
@@ -129,26 +150,17 @@ class Slots:
             file.open(QIODevice.WriteOnly)
             out = QDataStream(file)
             self.mainLogger.debug("Beginning file save")
-            #print("TREE DATA")
-            #self.queryTrees()
-            #print("Writing Sequences, Titles, Windex")
-            #print(self.sequences)
-            #print(self.titles)
-            #print(type(self.windex), self.windex)
             out.writeQVariantHash(self.sequences)
             out.writeQVariantList(self.titles)
             out.writeUInt32(self.windex)
             #####################################
             # Sequence View
             ###
-            print("SEQUENCE TREE")
-            print("Invs.Root Children: ", self.bioModel.invisibleRootItem().rowCount())
+            self.mainLogger.debug("SEQUENCE TREE")
+            self.mainLogger.debug("Children count: ", self.bioModel.invisibleRootItem().rowCount())
             out.writeUInt32(self.bioModel.invisibleRootItem().rowCount())
             for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-                print("Text: ", str(node.text()))
-                print("Data1: ", str(node.data()))
-                print("Data2: ", str(node.data(role=self.SequenceRole)))
-                print("Data3: ", str(node.data(role=self.WindowRole)))
+                self.mainLogger.debug("Node: ", str(node.text()))
                 node.write(out)
                 out.writeUInt32(node.rowCount())
             #####################################
@@ -156,14 +168,11 @@ class Slots:
             # Does not save any metadata! Only the two sequences
             # So I can't save window options at the moment.
             # TODO: Consider adding "window modes" to the node.
-            print("ALIGNMENT TREE")
-            print("Invs.Root Children: ", self.bioModel.invisibleRootItem().rowCount())
+            self.mainLogger.debug("ALIGNMENT TREE")
+            self.mainLogger.debug("Children count: ", self.bioModel.invisibleRootItem().rowCount())
             out.writeUInt32(self.projectModel.invisibleRootItem().rowCount())
             for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
-                print("Text: ", str(node.text()))
-                print("Data1: ", str(node.data()))
-                print("Data2: ", str(node.data(role=self.SequenceRole)))
-                print("Data3: ", str(node.data(role=self.WindowRole)))
+                self.mainLogger.debug("Node: ", str(node.text()))
                 node.write(out)
                 out.writeUInt32(node.rowCount())
             self.mainLogger.debug("Save complete")
@@ -171,7 +180,7 @@ class Slots:
             file.close()
             return True
         else:
-            #print("No filename chosen; canceling")
+            self.mainLogger.debug("No filename chosen; canceling")
             return False
 
     def copyOut(self):

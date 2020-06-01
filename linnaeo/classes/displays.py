@@ -1,11 +1,14 @@
+import logging
+
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF
 from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox
 
 from linnaeo.classes import widgets, utilities, themes
 from linnaeo.ui import alignment_ui, quit_ui, about_ui
-
 from linnaeo.resources import linnaeo_rc
+
+
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
     Alignment SubWindow UI. Takes in a dictionary of sequences that have been aligned and arranges them.
@@ -23,9 +26,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         super(self.__class__, self).__init__()
 
         # Construct the window
+        self.alignLogger = logging.getLogger("AlignWindow")
         self.alignPane = widgets.AlignPane(self)
-        self.family = (QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(
-            ':/fonts/LiberationMono.ttf'))[0])
+        self.family = (QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(':/fonts/LiberationMono.ttf'))[0])
         self.font = QFont(self.family, 10)
         self.fmF = QFontMetricsF(self.font)  # FontMetrics Float... because default FontMetrics gives Int, which is bad.
 
@@ -78,6 +81,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         """
         self.splitSeqs = []
         self.splitNames = []
+        self.maxname = 0
         for seq in self._seqs.values():
             if len(seq) > self.maxlen:
                 self.maxlen = len(seq)
@@ -152,7 +156,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         worker.wait()
         self.alignPane.setText(worker.html)
         if self.last:
-            print("SCROLL POS", self.last)
             self.alignPane.verticalScrollBar().setValue(self.last)
 
     # UTILITY FUNCTIONS
@@ -161,37 +164,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def toggleRulers(self):
         self.showRuler = not self.showRuler
-        print("RULER TOGGLED is now", self.showRuler)
         self.nameArrange(self.lines)
         self.seqArrange()
 
     def toggleColors(self):
         self.showColors = not self.showColors
         self.seqArrange()
-
-    '''
-    def resizeEvent(self, event):
-        """
-        This gets called anytime the window is in the process of being redrawn. If the MDI Subwindow is maximized,
-        it calls a resizeEvent upon release too.
-        """
-
-        #if self.userIsResizing:
-        #    self.seqArrange(color=False) #rulers=False)
-        #elif not self.userIsResizing:
-        #self.resized.emit()
-        print("RESIZE FROM WIDGET!")
-        super(AlignSubWindow, self).resizeEvent(event)
-        """
-
-    def externalResizeDone(self):
-        """
-        This only happens if the MDI sub window is not maximized and it gets resized; that does
-        not normally call the resizeEvent for the alignment window for some reason.
-        """
-        pass
-        #self.seqArrange() 
-        '''
 
     def seqs(self):
         return self._seqs
@@ -201,11 +179,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.seqArrange()
 
     def updateName(self, old, new):
+        self.alignLogger.debug("Received name change alert")
         seq = self._seqs[old]
         self._seqs[new] = seq
         self._seqs.pop(old)
         self.seqInit()
         self.seqArrange()
+        self.nameArrange(self.lines)
 
     def increaseFont(self):
         size = self.font.pointSizeF() + 1

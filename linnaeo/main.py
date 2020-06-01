@@ -7,7 +7,7 @@ import time
 
 import psutil
 # PyQt components
-from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal, QCoreApplication
+from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
 
@@ -143,7 +143,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # FILE
         self.actionNew.triggered.connect(self.newWorkspace)
         self.actionOpen.triggered.connect(self.openWorkspace)
-        self.actionAdd.triggered.connect(self.newSequence)
+        self.actionImportSeq.triggered.connect(self.importSequence)
+        self.actionImportAlign.triggered.connect(self.importAlignment)
         self.actionSave.triggered.connect(self.saveWorkspace)
         self.actionQuit.triggered.connect(self.quit)
 
@@ -179,7 +180,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # self.bioModel.nameChanging.connect(self.preNameChange)
         self.bioModel.nameChanged.connect(self.postNameChange)
         self.processTimer.timeout.connect(self.updateUsage)
-       # self.resizeTimer.timeout.connect(self.drawColors)
 
         self.actionRulers.triggered.connect(self.toggleRulers)
         self.actionColors.triggered.connect(self.toggleColors)
@@ -193,7 +193,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # UTILITY METHODS
     # Represents the fundamental methods of UI interaction logic.
-    def seqInit(self, seqr):
+    def seqInit(self, seqr, folder=None):
         """
         Ran upon adding a sequence. Input is SeqRecord. Assigns a unique Window ID and adds to list of all Seqs.
         The Window ID is the core identifier for all sequence and alignment objects, and remains static for as
@@ -214,7 +214,20 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         node.setData(node.data(role=self.SequenceRole)[0].name)
         node.setData(wid, self.WindowRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
-        self.bioModel.appendRow(node)
+        if not folder:
+            self.bioModel.appendRow(node)
+        else:
+            found = False
+            folder_node = utilities.iterTreeView(self.bioModel.invisibleRootItem())
+            for n in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+                if n.text() == folder:
+                    n.appendRow(node)
+                    found=True
+            if not found:
+                nFolder = QStandardItem(str(folder))
+                nFolder.appendRow(node)
+                self.bioModel.appendRow(nFolder)
+                self.bioTree.setExpanded(nFolder.index(), True)
         self.windex = int(wid)
 
     def seqDbClick(self):
@@ -455,32 +468,13 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
 
 class LinnaeoApp(QApplication):
-    """ Custom QApplication that detects resizing/when the border is being pressed. """
+    """ Custom QApplication that I made to detect events. Currently not needed."""
     barClick = pyqtSignal()
 
     def __init__(self, *args):
         super().__init__(*args)
-        #self.focusChanged.connect(self.focusChange)
-
-
-        #QCoreApplication.setAttribute(Qt.AA_CompressHighFrequencyEvents)
         self.installEventFilter(self)
         self.last = None
-
-    #def focusChange(self):
-    #    print("FOCUS CHANGED")
-
-    #def eventFilter(self, obj, event):
-     #   if event.type() == 14:
-            #print("RESIZE APP")
-            #self.barClick.emit()
-        #if event.type() in [174,175]:
-            #if event.type() != self.last:
-                #print("Unique event!", event.type())
-                #print("Last observed to be: ", self.last)
-                #self.barClick.emit()
-                #self.last = event.type()
-      #  return super().eventFilter(obj, event)
 
     """
      def event(self, event):

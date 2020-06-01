@@ -1,18 +1,15 @@
 #!/usr/bin/python3
 import logging
 import sys
-from math import trunc, ceil, floor
+from math import floor
 
-from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint, QTimer
-from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
-    QTextCursor, QFontMetricsF, QTextDocument, QCursor, QMouseEvent
-from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
-    QDialog, QDialogButtonBox, QApplication, QTextEdit, QAbstractScrollArea, QToolTip, QHBoxLayout, QLabel, QPushButton
-from PyQt5.uic.properties import QtCore, QtWidgets
+from PyQt5.QtCore import Qt, pyqtSignal, QSize, QPoint, QTimer
+from PyQt5.QtGui import QStandardItemModel, QTextCursor
+from PyQt5.QtWidgets import QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
+    QTextEdit, QAbstractScrollArea, QToolTip
 
 from linnaeo.resources import linnaeo_rc
 from linnaeo.classes import utilities
-from linnaeo.ui import alignment_ui, quit_ui
 
 
 class TreeView(QTreeView):
@@ -242,6 +239,7 @@ class ItemModel(QStandardItemModel):
                     self.modelLogger.debug("Name changed to "+str(value))
                 try:
                     sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
+                    self.modelLogger.debug("Found window -- updating name")
                     sub.widget().nameChange.emit(oldvalue, newvalue)
                 except KeyError:
                     pass
@@ -255,7 +253,6 @@ class ItemModel(QStandardItemModel):
         try:
             sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
             sub.setWindowTitle(value)
-
             sub.mdiArea().setActiveSubWindow(sub)
         except:
             exctype, val = sys.exc_info()[:2]
