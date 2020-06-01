@@ -86,57 +86,77 @@ class Slots:
     def importSequence(self):
         sel = QFileDialog.getOpenFileName(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
                                           filter="Fasta File (*.fa *.fasta);;Any (*)")
-        seqr = None
-        print(sel)
         filename = sel[0]
-        badfile = True
-        if filename[-3:] == ".fa":
-            badfile = False
-        elif filename[-6:] == ".fasta":
-            badfile = False
-        if not badfile:
-            try:
-                seq = SeqIO.read(filename, "fasta")
+        filter = sel[1][-8:-1]
+        type = None
+        if filter == "*.fasta":
+            type = 'fasta'
+        #elif filter == "clustal":
+        #    type = 'clustal'
+        try:
+            with open(filename, 'r'):
+                seq = SeqIO.read(filename, type)
                 if seq:
                     seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
                     self.seqInit(seqr)
-            except:
+        except:
                 self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
-        else:
-            self.mainStatus.showMessage("Please only add fasta file!", msecs=1000)
 
     def importAlignment(self):
         sel = QFileDialog.getOpenFileName(parent=self, caption="Load an Alignment", directory=QDir.homePath(),
                                           filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
         filename = sel[0]
-        filter = sel[1][-8:-1]
-        type = None
-        if filter =="*.fasta":
-            type = 'fasta'
+        afilter = sel[1][-8:-1]
+        atype = None
+        if filter == "*.fasta":
+            atype = 'fasta'
         elif filter == "clustal":
-            type = 'clustal'
-        aln = AlignIO.read(filename, type)
-        items = {}
-        combo = []
+            atype = 'clustal'
+        try:
+            with open(filename, 'r'):
+                aln = AlignIO.read(filename, atype)
+            items = {}
+            combo = []
 
-        for seqr in aln:
-            cleanseq = str(seqr.seq).replace('-','')
-            seqr_clean = models.SeqR(cleanseq)
-            seqr_clean.convert(seqr)
-            seqr_clean.seq = cleanseq
-            items[seqr_clean.name] = str(seqr.seq)
-            combo.append(seqr_clean.seq)
-            if seqr_clean not in self.sequences.values():
-                self.seqInit(seqr_clean, folder='Import')
-        combo.sort()
-        if combo not in self.sequences.values():
-            wid = str(int(self.windex) + 1)
-            self.sequences[wid] = combo
-            sub = self.makeNewWindow(wid, items)
-            self.openWindow(sub)
-            self.windex = self.windex + 1
-        else:
-            self.mainStatus.showMessage("Alignment already imported!",msecs=2000)
+            for seqr in aln:
+                cleanseq = str(seqr.seq).replace('-','')
+                seqr_clean = models.SeqR(cleanseq)
+                seqr_clean.convert(seqr)
+                seqr_clean.seq = cleanseq
+                items[seqr_clean.name] = str(seqr.seq)
+                combo.append(seqr_clean.seq)
+                if seqr_clean not in self.sequences.values():
+                    self.seqInit(seqr_clean, folder='Import')
+            combo.sort()
+            if combo not in self.sequences.values():
+                wid = str(int(self.windex) + 1)
+                self.sequences[wid] = combo
+                sub = self.makeNewWindow(wid, items)
+                self.openWindow(sub)
+                self.windex = self.windex + 1
+            else:
+                self.mainStatus.showMessage("Alignment already imported!",msecs=3000)
+        except:
+            self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
+
+    def exportAlignment(self):
+        sel = QFileDialog.getSaveFileName(parent=self, caption="Save Alignment", directory=QDir.homePath(),
+                                          filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
+        print(sel)
+        afilter = sel[1][-8:-1]
+        atype = None
+        if afilter == "*.fasta":
+            atype = 'fasta'
+        elif afilter == "clustal":
+            atype = 'clustal'
+        filename = sel[0]+'.'+atype
+        print(atype)
+        index = self.projectTree.selectedIndexes()[0]
+        aliR = self.projectModel.itemFromIndex(index).data(role=self.SequenceRole)
+        print(aliR)
+        # try:
+        with open(filename, 'w'):
+            AlignIO.write(aliR, filename, atype)
 
 
     def saveWorkspace(self):

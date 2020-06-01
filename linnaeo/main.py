@@ -7,6 +7,9 @@ import time
 
 import psutil
 # PyQt components
+from Bio.Align import MultipleSeqAlignment
+from Bio.Alphabet import generic_protein
+from Bio.Seq import Seq
 from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
@@ -14,7 +17,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
 # Internal components
 import linnaeo
 from linnaeo.resources import linnaeo_rc
-from linnaeo.classes import widgets, utilities, methods
+from linnaeo.classes import widgets, utilities, methods, models
 from linnaeo.classes.displays import QuitDialog, AlignSubWindow
 from linnaeo.ui import linnaeo_ui
 
@@ -145,6 +148,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.actionOpen.triggered.connect(self.openWorkspace)
         self.actionImportSeq.triggered.connect(self.importSequence)
         self.actionImportAlign.triggered.connect(self.importAlignment)
+        self.actionExportAlign.triggered.connect(self.exportAlignment)
         self.actionSave.triggered.connect(self.saveWorkspace)
         self.actionQuit.triggered.connect(self.quit)
 
@@ -320,9 +324,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             if nonode:
                 self.windows[wid] = sub
             else:
+                seqrs = []
+                for key,value in ali.items():
+                    seqr = models.SeqR(Seq(value, generic_protein),name=key,id=key)
+                    seqrs.append(seqr)
+                aliR = MultipleSeqAlignment(seqrs)
                 node = QStandardItem(sub.windowTitle())
                 node.setData(sub.windowTitle())
-                node.setData(self.sequences[wid], self.SequenceRole)
+                node.setData(aliR, self.SequenceRole)
                 node.setData(wid, self.WindowRole)
                 self.projectRoot.appendRow(node)
                 self.projectTree.setExpanded(node.parent().index(), True)
