@@ -227,7 +227,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Items is an input dictionary for sending to clustalo
         # combo is an array of SeqRecords, sorted, to prevent creating duplicate alignments.
         self.localtime = time.perf_counter()
-        self.mainLogger.debug("Beginning window creation at %s" % float(self.localtime))
+        self.mainLogger.debug("Window requested at %s" % float(self.localtime))
         items = {}
         combo = []
         # Collect the selected sequence(s)
