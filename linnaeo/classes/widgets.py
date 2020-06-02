@@ -118,12 +118,12 @@ class MDISubWindow(QMdiSubWindow):
     """
     resizing = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, wid):
         super(MDISubWindow, self).__init__()
+        self.wid = wid
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self._widget = None
         self.setMouseTracking(True)
-        #self.resizeTimer = utilities.ResizeTimerThread()
         self.resizeTimer = QTimer(self)
         self.resizeTimer.setSingleShot(True)
         self.resizeTimer.setInterval(200)
@@ -196,7 +196,6 @@ class MDISubWindow(QMdiSubWindow):
 
     def close(self):
         super(MDISubWindow, self).close()
-
 
 class ItemModel(QStandardItemModel):
     nameChanging = pyqtSignal()

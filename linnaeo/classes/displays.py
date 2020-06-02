@@ -35,9 +35,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
         # Initialize settings
         self.params = params
-        self.theme = themes.PaleTheme().theme
-        self.showRuler = False
-        self.showColors = False
+        print("Set params")
+        self.theme = self.convertTheme(self.params['theme'])
+        self.showRuler = self.params['ruler']
+        self.showColors = self.params['colors']
         self.consvColors = False
 
         # Init functional variables
@@ -162,7 +163,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     # UTILITY FUNCTIONS
     def setTheme(self, theme):
-        self.theme = theme
+        print("Updated theme to ",theme)
+        self.theme = self.convertTheme(theme)
+        print(self.theme)
+        self.seqInit()
+        self.seqArrange()
 
     def toggleRuler(self, state):
         self.showRuler = state
@@ -214,6 +219,65 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def setParams(self, params):
         self.params = params
+        print("ALIGN PARAMS:\n", self.params)
+
+        #self.toggleRuler(self.params['ruler'])
+        #self.toggleColors(self.params['colors'])
+
+    def convertTheme(self, theme):
+        converted = themes.PaleByType().theme
+        if theme == 'Bold':
+            converted = themes.Theme2().theme
+        elif theme == 'Monochrome':
+            converted = themes.Mono().theme
+        #elif theme == 'Color Safe':
+        #    converted = themes.ColorSafe().theme
+        return converted
+
+
+class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
+    updateParam = pyqtSignal(dict)
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setupUi(self)
+        self.setFixedWidth(140)
+        self.params = {}
+        self.themeIndices = {}
+        self.initPane()
+
+    def initPane(self):
+        for index in range(0, self.comboTheme.model().rowCount()):
+            self.themeIndices[self.comboTheme.model().itemData(self.comboTheme.model().index(index,0))[0]] = index
+
+        self.checkRuler.toggled.connect(self.rulerToggle)
+        self.checkColors.toggled.connect(self.colorToggle)
+        self.comboTheme.currentIndexChanged.connect(self.returnParams)
+
+    def rulerToggle(self):
+        self.params['ruler']=self.checkRuler.isChecked()
+        self.returnParams()
+
+    def colorToggle(self):
+        self.params['colors'] = self.checkColors.isChecked()
+        self.returnParams()
+
+    def returnParams(self):
+        print("Changed state")
+        self.updateParam.emit(self.params.copy())
+
+    def setParams(self, params):
+        """ These are set by the preferences pane --> default for every new window """
+        self.params = params.copy()
+        print("RECEIVED PARAMS", self.params)
+        # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
+        self.checkRuler.setChecked(self.params['ruler'])
+        self.checkColors.setChecked(self.params['colors'])
+        self.checkConsv.setChecked(self.params['byconsv'])
+        self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
+        self.spinFontSize.setValue(self.params['fontsize'])
+        self.comboFont.setCurrentFont(QFont(qApp.instance().fonts.applicationFontFamilies(
+            self.params['font'])[0], self.spinFontSize.value()))
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
@@ -240,32 +304,3 @@ class AboutDialog(QDialog, about_ui.Ui_Dialog):
 
     def ok(self):
         self.done(1)
-
-
-class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.setupUi(self)
-        self.setFixedWidth(140)
-        self.params = {}
-        self.themeIndices = {}
-        self.initPane()
-
-    def initPane(self):
-        for index in range(0, self.comboTheme.model().rowCount()):
-            self.themeIndices[self.comboTheme.model().itemData(self.comboTheme.model().index(index,0))[0]] = index
-
-    def params(self):
-        return self.params
-
-    def setParams(self, params):
-        """ These are set by the preferences pane --> default for every new window """
-        self.params = params
-        # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
-        self.checkRuler.setChecked(self.params['ruler'])
-        self.checkColors.setChecked(self.params['colors'])
-        self.checkConsv.setChecked(self.params['byconsv'])
-        self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
-        self.spinFontSize.setValue(self.params['fontsize'])
-        self.comboFont.setCurrentFont(QFont(qApp.instance().fonts.applicationFontFamilies(
-            self.params['font'])[0], self.spinFontSize.value()))

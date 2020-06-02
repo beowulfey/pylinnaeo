@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # Bioscience components
+import copy
 import logging
 import os
 import time
@@ -105,7 +106,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                        'byconsv': False, 'tabbed': False,
                        'darkmode': False,
                        }
-        self.optionsPane.setParams(self.params)
+        self.optionsPane.setParams(self.params.copy())
 
         # This is fired upon loading a saved workspace.
         if trees:
@@ -197,7 +198,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.bioTree.doubleClicked.connect(self.seqDbClick)
         self.bioModel.dupeName.connect(self.dupeNameMsg)
         self.projectTree.doubleClicked.connect(self.alignmentDbClick)
-        self.sendParams.connect(self.optionsPane.setParams)
+        self.sendParams.connect(self.optionsPane.setParams)  # This is to keep the pane in check with an opening window
+        self.optionsPane.updateParam.connect(self.nodeUpdate)  # This is to make sure the node data is up to date
 
         # Utility slots
         self.bioTree.generalClick.connect(self.deselectProject)
@@ -210,10 +212,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Toolbar slots
         #self.actionRulers.triggered.connect(self.toggleRulers)
         #self.actionColors.triggered.connect(self.toggleColors)
-        self.optionsPane.checkRuler.toggled.connect(self.toggleRuler)
-        self.optionsPane.checkColors.toggled.connect(self.toggleColors)
         self.actionSave_Image.triggered.connect(self.saveImage)
         self.actionOptions.toggled.connect(self.toggleOptionsPane)
+        self.optionsPane.checkRuler.toggled.connect(self.toggleRuler)
+        self.optionsPane.checkColors.toggled.connect(self.toggleColors)
+        self.optionsPane.comboTheme.currentIndexChanged.connect(self.changeTheme)
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)
         #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
@@ -243,7 +246,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         node.setData([seqr], self.SequenceRole)
         node.setData(node.data(role=self.SequenceRole)[0].name)
         node.setData(wid, self.WindowRole)
-        node.setData(self.params, self.AlignDisplayRole)
+        node.setData(copy.deepcopy(self.params.copy()), self.AlignDisplayRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         if not folder:
             self.bioModel.appendRow(node)
@@ -270,7 +273,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Items is an input dictionary for sending to clustalo
         # combo is an array of SeqRecords, sorted, to prevent creating duplicate alignments.
         self.localtime = time.perf_counter()
-        self.mainLogger.debug("Beginning window creation at %s" % float(self.localtime))
+        self.mainLogger.debug("Window for sequence or alignment requested")
         items = {}
         combo = []
         # Collect the selected sequence(s)
@@ -343,8 +346,9 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         a sequence node, or multiple sequence nodes, if those are not already in the form of a window.
         After generation, stores the window in the list of all windows by its window ID.
         """
-        sub = widgets.MDISubWindow()
-        widget = AlignSubWindow(ali, self.params)
+        print("MAKE NEW WITH ID",wid)
+        sub = widgets.MDISubWindow(wid)
+        widget = AlignSubWindow(ali, self.params.copy())
         sub.setWidget(widget)
         if len(ali.keys()) > 1:
             # If alignment:
@@ -360,7 +364,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 node.setData(sub.windowTitle())
                 node.setData(aliR, self.SequenceRole)
                 node.setData(wid, self.WindowRole)
-                node.setData(self.params, role=self.AlignDisplayRole)
+                node.setData(self.params.copy(), role=self.AlignDisplayRole)
                 self.projectRoot.appendRow(node)
                 self.projectTree.setExpanded(node.parent().index(), True)
                 self.windows[wid] = sub
@@ -382,10 +386,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         if sub.mdiArea() != self.mdiArea:
             self.mainLogger.debug("Adding window to MDI Area; creation took %f seconds" %
                                   float(time.perf_counter() - self.localtime))
-            self.sendParams.emit(sub.widget().params)
+            print(sub.widget().params)
+            self.sendParams.emit(sub.widget().params.copy())
             self.mdiArea.addSubWindow(sub)
 
         else:
+            print("SHOWING OLD WINDOW")
+            print(sub.widget().params)
+            self.sendParams.emit(sub.widget().params.copy())
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
 

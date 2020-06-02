@@ -35,11 +35,6 @@ class AbstractTheme:
         }
 
 
-class NoTheme(AbstractTheme):
-    """ Empty theme, just to not have it say 'AbstractTheme' in the list """
-    pass
-
-
 class FirstTheme(AbstractTheme):
     """ My first attempt. Not recommended. Kept for historical purposes """
     pos = QColor(100, 140, 255)
@@ -61,7 +56,7 @@ class Theme2(AbstractTheme):
     pro = QColor(251, 215, 188)  # light orange
 
 
-class PaleTheme(AbstractTheme):
+class PaleByType(AbstractTheme):
     """ Paler version of Theme2. My favorite -- default colors."""
     pos = QColor(219, 138, 139) # red
     neg = QColor(225, 144, 226)  # magenta
@@ -73,7 +68,7 @@ class PaleTheme(AbstractTheme):
     pro = QColor(246, 222, 204) # light orange
 
 
-class MonoTheme(AbstractTheme):
+class Mono(AbstractTheme):
     """ Crappy blue to red mono theme. Total junk"""
     phb = QColor(174, 98, 204)
     gly = QColor(157, 106, 216)

@@ -46,6 +46,27 @@ class Slots:
     def toggleOptionsPane(self, state):
         self.optionsPane.show() if state else self.optionsPane.hide()
 
+    def changeTheme(self, index):
+        print(self.optionsPane.comboTheme.currentText())
+        self._currentWindow.widget().setTheme(self.optionsPane.comboTheme.currentText())
+
+    def nodeUpdate(self, params):
+        print("FROM OPTION PANE", params)
+        self.mdiArea.activeSubWindow().widget().setParams(params.copy())
+        wid = self.mdiArea.activeSubWindow().wid
+        print("WINDOW",wid)
+        found = False
+        for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+            if node.data(role=self.WindowRole) == wid:
+                print("Found node in biotree")
+                node.setData(params, self.AlignDisplayRole)
+                found = True
+        if not found:
+            for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+                if node.data(role=self.WindowRole) == wid:
+                    print("Found node in projecttree")
+                    node.setData(params, self.AlignDisplayRole)
+
 
     def newWorkspace(self):
         result = self.maybeClose()

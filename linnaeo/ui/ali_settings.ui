@@ -86,17 +86,12 @@
      </item>
      <item>
       <property name="text">
+       <string>Bold</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Monochrome</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Color Safe</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>User Theme</string>
       </property>
      </item>
     </widget>
