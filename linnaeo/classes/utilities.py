@@ -2,7 +2,7 @@ import logging
 import sys
 import traceback
 
-from PyQt5.QtCore import pyqtSignal, QThread, QTimer
+from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt
 import clustalo
 
 """
@@ -115,6 +115,27 @@ def iterTreeView(root):
                 yield from recurse(child)
     if root is not None:
         yield from recurse(root)
+
+
+def nodeSelector(tree, model):
+    """ Utility for selection of nodes and anything under a folder. """
+    seqs = []
+    copied = []
+    indices = tree.selectedIndexes()
+    if indices:
+        for index in indices:
+            node = model.itemFromIndex(index)
+            if not node.data(role=Qt.UserRole + 2):
+                for subnode in iterTreeView(model.itemFromIndex(index)):
+                    i = model.indexFromItem(subnode)
+                    copied.append(i)
+                    seqr = subnode.data(role=Qt.UserRole + 2)[0]
+                    seqs.append(seqr)
+            if node.data(role=Qt.UserRole + 2) and index not in copied:
+                copied.append(index)
+                seqr = node.data(role=Qt.UserRole + 2)[0]
+                seqs.append(seqr)
+    return seqs
 
 
 def buildRuler(chars, gap, start, end):

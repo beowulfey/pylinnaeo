@@ -96,9 +96,12 @@ class Slots:
         try:
             with open(filename, 'r'):
                 seq = SeqIO.read(filename, type)
-                if seq:
-                    seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
+                seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
+                print([seqr.seq])
+                if [seqr.seq] not in self.sequences.values():
                     self.seqInit(seqr)
+                else:
+                    self.mainStatus.showMessage("You've already loaded that sequence!",msecs=4000)
         except:
                 self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
 
@@ -108,9 +111,9 @@ class Slots:
         filename = sel[0]
         afilter = sel[1][-8:-1]
         atype = None
-        if filter == "*.fasta":
+        if afilter == "*.fasta":
             atype = 'fasta'
-        elif filter == "clustal":
+        elif afilter == "clustal":
             atype = 'clustal'
         try:
             with open(filename, 'r'):
@@ -139,24 +142,53 @@ class Slots:
         except:
             self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
 
+    def exportSequence(self):
+        index = self.bioTree.selectedIndexes()
+        if index:
+            sel = QFileDialog.getSaveFileName(parent=self, caption="Save Alignment", directory=QDir.homePath(),
+                                              filter="Fasta File (*.fa *.fasta);;Any (*)")
+            if sel != ('', ''):
+                afilter = sel[1][-8:-1]
+                atype = None
+                if afilter == "*.fasta":
+                    atype = 'fasta'
+                filename = sel[0] + '.' + atype
+                seqR = self.bioModel.itemFromIndex(index[0]).data(role=self.SequenceRole)[0]
+                try:
+                    with open(filename, 'w'):
+                        SeqIO.write(seqR, filename, atype)
+                        print(seqR)
+                except:
+                    self.mainStatus.showMessage("Something went wrong!")
+        else:
+            self.mainStatus.showMessage("Hey, pick a sequence first!", msecs=4000)
+
     def exportAlignment(self):
-        sel = QFileDialog.getSaveFileName(parent=self, caption="Save Alignment", directory=QDir.homePath(),
+        index = self.projectTree.selectedIndexes()
+        if index:
+            sel = QFileDialog.getSaveFileName(parent=self, caption="Save Alignment", directory=QDir.homePath(),
                                           filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
-        print(sel)
-        afilter = sel[1][-8:-1]
-        atype = None
-        if afilter == "*.fasta":
-            atype = 'fasta'
-        elif afilter == "clustal":
-            atype = 'clustal'
-        filename = sel[0]+'.'+atype
-        print(atype)
-        index = self.projectTree.selectedIndexes()[0]
-        aliR = self.projectModel.itemFromIndex(index).data(role=self.SequenceRole)
-        print(aliR)
-        # try:
-        with open(filename, 'w'):
-            AlignIO.write(aliR, filename, atype)
+            if sel != ('', ''):
+                afilter = sel[1][-8:-1]
+                atype = None
+                if afilter == "*.fasta":
+                    atype = 'fasta'
+                elif afilter == "clustal":
+                    atype = 'clustal'
+                filename = sel[0]+'.'+atype if sel[0][-1*len(atype):] != atype else sel[0]
+                aliR = self.projectModel.itemFromIndex(index[0]).data(role=self.SequenceRole)
+                try:
+                    with open(filename, 'w'):
+                        AlignIO.write(aliR, filename, atype)
+                        print(aliR)
+                except:
+                    self.mainStatus.showMessage("Something went wrong!")
+        else:
+            self.mainStatus.showMessage("Hey, pick an alignment first!",msecs=4000)
+
+
+
+
 
 
     def saveWorkspace(self):
@@ -205,14 +237,12 @@ class Slots:
 
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:
-            seqs = []
-            indices = self.lastClickedTree.selectedIndexes()
-            for index in indices:
-                node = self.bioModel.itemFromIndex(index)
-                seqr = node.data(role=self.SequenceRole)[0]
+            seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
+            fseqs = []
+            for seqr in seqs:
                 print(seqr.format("fasta"))
-                seqs.append(seqr.format("fasta"))
-            QApplication.clipboard().setText("".join(seqs))
+                fseqs.append(seqr.format("fasta"))
+            QApplication.clipboard().setText("".join(fseqs))
             if len(seqs) > 1:
                 self.mainStatus.showMessage("Copied sequences to clipboard!", msecs=1000)
             elif len(seqs) == 1:

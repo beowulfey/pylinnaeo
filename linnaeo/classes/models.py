@@ -11,6 +11,7 @@ class SeqR(SeqRecord.SeqRecord, ABC):
     Otherwise, the ID and name end up the same.
     However, the name is the part that is always changed, and does not show up when exporting.
     # TODO: exporting sequence, allow for choosing fasta format, or name only!
+    # TODO: Fix "format" option so that it doesn't include "unknown description"
     """
     def __init__(self,
                  seq,

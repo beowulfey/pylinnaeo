@@ -148,6 +148,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.actionOpen.triggered.connect(self.openWorkspace)
         self.actionImportSeq.triggered.connect(self.importSequence)
         self.actionImportAlign.triggered.connect(self.importAlignment)
+        self.actionExportSeq.triggered.connect(self.exportSequence)
         self.actionExportAlign.triggered.connect(self.exportAlignment)
         self.actionSave.triggered.connect(self.saveWorkspace)
         self.actionQuit.triggered.connect(self.quit)
@@ -248,13 +249,13 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         items = {}
         combo = []
         # Collect the selected sequence(s)
-        for index in self.bioTree.selectedIndexes():
-            # Need to make a dictionary of { Name:Sequence } for sending to ClustalO.
-            # Only does the thing if there is a sequence present in the node.
-            if self.bioModel.itemFromIndex(index).data(role=self.SequenceRole):
-                seqr = self.bioModel.itemFromIndex(index).data(role=self.SequenceRole)[0]
+        if self.lastClickedTree == self.bioTree:
+            seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
+            for seqr in seqs:
                 items[seqr.name] = str(seqr.seq)
                 combo.append(seqr)
+        else:
+            self.mainStatus.showMessage("Please selected sequences",msecs=3000)
         combo.sort()
         aligned = self.callAlign(items)
         if items:
