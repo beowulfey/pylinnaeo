@@ -1,11 +1,11 @@
 import logging
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF
-from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox
+from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF, QStandardItem
+from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, qApp
 
 from linnaeo.classes import widgets, utilities, themes
-from linnaeo.ui import alignment_ui, quit_ui, about_ui
+from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui
 from linnaeo.resources import linnaeo_rc
 
 
@@ -22,21 +22,23 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     nameChange = pyqtSignal((str, str))
     lineChange = pyqtSignal(int)
 
-    def __init__(self, seqs):
+    def __init__(self, seqs, params):
         super(self.__class__, self).__init__()
 
         # Construct the window
         self.alignLogger = logging.getLogger("AlignWindow")
         self.alignPane = widgets.AlignPane(self)
-        self.family = (QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(':/fonts/LiberationMono.ttf'))[0])
+        self.family = (QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(':/fonts/DEFAULT.ttf'))[0])
+        #print("FAMILY", self.family)
         self.font = QFont(self.family, 10)
         self.fmF = QFontMetricsF(self.font)  # FontMetrics Float... because default FontMetrics gives Int, which is bad.
 
         # Initialize settings
+        self.params = params
         self.theme = themes.PaleTheme().theme
-        self.showRuler = True
-        self.showColors = True
-        self.relColors = False
+        self.showRuler = False
+        self.showColors = False
+        self.consvColors = False
 
         # Init functional variables
         self._seqs = seqs
@@ -162,13 +164,15 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def setTheme(self, theme):
         self.theme = theme
 
-    def toggleRulers(self):
-        self.showRuler = not self.showRuler
+    def toggleRuler(self, state):
+        self.showRuler = state
+        self.params['ruler'] = state
         self.nameArrange(self.lines)
         self.seqArrange()
 
-    def toggleColors(self):
-        self.showColors = not self.showColors
+    def toggleColors(self, state):
+        self.showColors = state
+        self.params['colors'] = state
         self.seqArrange()
 
     def seqs(self):
@@ -208,6 +212,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def getFontSize(self):
         return self.font.pointSize()
 
+    def setParams(self, params):
+        self.params = params
+
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
     def __init__(self, parent):
@@ -233,3 +240,32 @@ class AboutDialog(QDialog, about_ui.Ui_Dialog):
 
     def ok(self):
         self.done(1)
+
+
+class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setupUi(self)
+        self.setFixedWidth(140)
+        self.params = {}
+        self.themeIndices = {}
+        self.initPane()
+
+    def initPane(self):
+        for index in range(0, self.comboTheme.model().rowCount()):
+            self.themeIndices[self.comboTheme.model().itemData(self.comboTheme.model().index(index,0))[0]] = index
+
+    def params(self):
+        return self.params
+
+    def setParams(self, params):
+        """ These are set by the preferences pane --> default for every new window """
+        self.params = params
+        # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
+        self.checkRuler.setChecked(self.params['ruler'])
+        self.checkColors.setChecked(self.params['colors'])
+        self.checkConsv.setChecked(self.params['byconsv'])
+        self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
+        self.spinFontSize.setValue(self.params['fontsize'])
+        self.comboFont.setCurrentFont(QFont(qApp.instance().fonts.applicationFontFamilies(
+            self.params['font'])[0], self.spinFontSize.value()))

@@ -48,6 +48,11 @@
         </property>
         <item row="0" column="0">
          <widget class="QSplitter" name="splitter_2">
+          <property name="font">
+           <font>
+            <stylestrategy>PreferAntialias</stylestrategy>
+           </font>
+          </property>
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -56,6 +61,11 @@
        </layout>
       </widget>
       <widget class="QWidget" name="mdiWidget" native="true">
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <property name="leftMargin">
          <number>2</number>
@@ -174,11 +184,7 @@
    <addaction name="actionNewFolder"/>
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
-   <addaction name="actionRulers"/>
-   <addaction name="actionColors"/>
    <addaction name="actionSave_Image"/>
-   <addaction name="actionBigger"/>
-   <addaction name="actionSmaller"/>
   </widget>
   <action name="actionAlign">
    <property name="text">
@@ -366,6 +372,17 @@
    </property>
    <property name="toolTip">
     <string>Decrease font size</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Options Pane</string>
+   </property>
+   <property name="toolTip">
+    <string>Open window settings pane</string>
    </property>
   </action>
  </widget>

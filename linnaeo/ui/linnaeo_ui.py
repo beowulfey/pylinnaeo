@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'linnaeo.ui'
+# Form implementation generated from reading ui file 'ui/linnaeo.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.0
 #
@@ -29,10 +29,16 @@ class Ui_MainWindow(object):
         self.gridLayout_3.setContentsMargins(2, 2, 2, 2)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.splitter_2 = QtWidgets.QSplitter(self.widget)
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.splitter_2.setFont(font)
         self.splitter_2.setOrientation(QtCore.Qt.Vertical)
         self.splitter_2.setObjectName("splitter_2")
         self.gridLayout_3.addWidget(self.splitter_2, 0, 0, 1, 1)
         self.mdiWidget = QtWidgets.QWidget(self.splitter)
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.mdiWidget.setFont(font)
         self.mdiWidget.setObjectName("mdiWidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.mdiWidget)
         self.gridLayout_2.setContentsMargins(2, 2, 2, 2)
@@ -115,6 +121,9 @@ class Ui_MainWindow(object):
         self.actionBigger.setObjectName("actionBigger")
         self.actionSmaller = QtWidgets.QAction(MainWindow)
         self.actionSmaller.setObjectName("actionSmaller")
+        self.actionOptions = QtWidgets.QAction(MainWindow)
+        self.actionOptions.setCheckable(True)
+        self.actionOptions.setObjectName("actionOptions")
         self.menuImport.addAction(self.actionImportSeq)
         self.menuImport.addAction(self.actionImportAlign)
         self.menuExport.addAction(self.actionExportSeq)
@@ -152,11 +161,7 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionNewFolder)
         self.toolBar.addAction(self.actionDelete)
         self.toolBar.addSeparator()
-        self.toolBar.addAction(self.actionRulers)
-        self.toolBar.addAction(self.actionColors)
         self.toolBar.addAction(self.actionSave_Image)
-        self.toolBar.addAction(self.actionBigger)
-        self.toolBar.addAction(self.actionSmaller)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -218,3 +223,5 @@ class Ui_MainWindow(object):
         self.actionBigger.setToolTip(_translate("MainWindow", "Increase text size"))
         self.actionSmaller.setText(_translate("MainWindow", "Smaller"))
         self.actionSmaller.setToolTip(_translate("MainWindow", "Decrease font size"))
+        self.actionOptions.setText(_translate("MainWindow", "Options Pane"))
+        self.actionOptions.setToolTip(_translate("MainWindow", "Open window settings pane"))

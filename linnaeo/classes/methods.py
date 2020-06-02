@@ -37,11 +37,15 @@ class Slots:
                                             "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
         self._currentWindow.widget().grab().save(file[0]+file[1][-5:-1])
 
-    def toggleRulers(self):
-        self._currentWindow.widget().toggleRulers()
+    def toggleRuler(self, state):
+        self._currentWindow.widget().toggleRuler(state)
 
-    def toggleColors(self):
-        self._currentWindow.widget().toggleColors()
+    def toggleColors(self, state):
+        self._currentWindow.widget().toggleColors(state)
+
+    def toggleOptionsPane(self, state):
+        self.optionsPane.show() if state else self.optionsPane.hide()
+
 
     def newWorkspace(self):
         result = self.maybeClose()
@@ -185,11 +189,6 @@ class Slots:
                     self.mainStatus.showMessage("Something went wrong!")
         else:
             self.mainStatus.showMessage("Hey, pick an alignment first!",msecs=4000)
-
-
-
-
-
 
     def saveWorkspace(self):
         sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(),

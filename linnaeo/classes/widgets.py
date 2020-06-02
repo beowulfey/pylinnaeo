@@ -35,8 +35,8 @@ class MDIArea(QMdiArea):
     due to how the closing was happening. I've subclassed it to make things easy in finding bugs.
     This works well and should be more customizable if needed.
     """
-    def __init__(self):
-        super(MDIArea, self).__init__()
+    def __init__(self, parent):
+        super(MDIArea, self).__init__(parent)
         self.tabbed = False  # tabbed by default
         self.tabBar = None
         self.setTabs(True) if self.tabbed else self.setTabs(False)
@@ -105,6 +105,7 @@ class MDIArea(QMdiArea):
                 self.activeSubWindow().showMaximized()
         else:
             super(MDIArea, self).setActiveSubWindow(window)
+            self.activeSubWindow().showMaximized()
             window.widget().resized.emit()
             #print("Unable to resize")
             #self.activeSubWindow().showMaximized()
@@ -378,6 +379,3 @@ class AlignPane(QTextEdit):
         self.setTextCursor(curs)
         self.tracking = False
         super().mouseReleaseEvent(event)
-
-
-

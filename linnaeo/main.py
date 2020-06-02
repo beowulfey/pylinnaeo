@@ -11,13 +11,12 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal
-from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView
+from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSplitter, qApp, QWidget, QSizePolicy
 
-# Internal components
 import linnaeo
 from linnaeo.resources import linnaeo_rc
-from linnaeo.classes import widgets, utilities, methods, models
+from linnaeo.classes import widgets, utilities, methods, models, displays
 from linnaeo.classes.displays import QuitDialog, AlignSubWindow
 from linnaeo.ui import linnaeo_ui
 
@@ -29,6 +28,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     The bulk of the program is located here.
     Please see classes.methods for additional methods for this class. 
     """
+    sendParams = pyqtSignal(dict)
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
@@ -48,9 +48,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.mainLogger.info("Threading with a maximum of %d threads" % self.threadpool.maxThreadCount())
 
         # Project instants and inherent variables for logic.
+        self.params = {}
         self.localtime = 0
         self.SequenceRole = Qt.UserRole + 2
         self.WindowRole = Qt.UserRole + 3
+        self.AlignDisplayRole = Qt.UserRole + 4
         self.lastClickedTree = None
         self.lastAlignment = None
         self.windows = None  # Windows stored as { windex : MDISubWindow }
@@ -64,8 +66,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self._currentWindow = None
 
         # MDI Window
-        self.mdiArea = widgets.MDIArea()
+        self.mdiArea = widgets.MDIArea(self)
+        self.optionsPane = displays.OptionsPane(self)
         self.gridLayout_2.addWidget(self.mdiArea)
+        self.gridLayout_2.addWidget(self.optionsPane,0,2)
+        self.optionsPane.hide()
 
         # Tree stuff
         self.bioTree = widgets.TreeView()
@@ -92,15 +97,24 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
         self.mainLogger.debug("guiSet took took %f seconds" % float(time.perf_counter() - self.start))
 
+        # Load default options for windows (from parameters file if saved)
+        # if PARAMETERS FILE:
+        #   params = FROMFILE
+        self.params = {'ruler': True, 'colors': True, 'fontsize': 10,
+                       'theme': 'Default', 'font': qApp.instance().defFontId,
+                       'byconsv': False, 'tabbed': False,
+                       'darkmode': False,
+                       }
+        self.optionsPane.setParams(self.params)
+
+        # This is fired upon loading a saved workspace.
         if trees:
-            # For loading a window on File>Open
             self.mainLogger.info("Loading saved workspace!")
             self.bioModel, self.projectModel = trees
             self.sequences, self.titles, self.windex = data
             self.windex = int(self.windex)
             self.bioRoot = self.bioModel.invisibleRootItem().child(0)  # TODO: ELIMINATE USE OF ROOT. Use InvsRoot
             self.projectRoot = self.projectModel.invisibleRootItem().child(0)
-
             self.windows = {}
             self.rebuildTrees()
 
@@ -134,12 +148,18 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.splitter_2.addWidget(self.projectTree)
         self.mainLogger.debug("Adding all GUI objects took %f seconds" % float(time.perf_counter() - self.start))
 
+        # Tool bar setup
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        self.toolBar.addWidget(spacer)
+        self.toolBar.addAction(self.actionOptions)
         # Status bar setup
         self.updateUsage()
         self.statusBar().addPermanentWidget(self.memLabel)
         self.mainLogger.debug("After StatusbarUpdate")
 
-        self.DEBUG()
+        # Load
+        self.DEBUG()  # TODO: DELETE THIS NEPHEW
 
     def connectSlots(self):
         # Toolbar and MenuBar
@@ -177,6 +197,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.bioTree.doubleClicked.connect(self.seqDbClick)
         self.bioModel.dupeName.connect(self.dupeNameMsg)
         self.projectTree.doubleClicked.connect(self.alignmentDbClick)
+        self.sendParams.connect(self.optionsPane.setParams)
 
         # Utility slots
         self.bioTree.generalClick.connect(self.deselectProject)
@@ -186,14 +207,18 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.bioModel.nameChanged.connect(self.postNameChange)
         self.processTimer.timeout.connect(self.updateUsage)
 
-        self.actionRulers.triggered.connect(self.toggleRulers)
-        self.actionColors.triggered.connect(self.toggleColors)
+        # Toolbar slots
+        #self.actionRulers.triggered.connect(self.toggleRulers)
+        #self.actionColors.triggered.connect(self.toggleColors)
+        self.optionsPane.checkRuler.toggled.connect(self.toggleRuler)
+        self.optionsPane.checkColors.toggled.connect(self.toggleColors)
         self.actionSave_Image.triggered.connect(self.saveImage)
+        self.actionOptions.toggled.connect(self.toggleOptionsPane)
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)
         #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
-        self.actionBigger.triggered.connect(self.increaseTextSize)
-        self.actionSmaller.triggered.connect(self.decreaseTextSize)
+        #self.actionBigger.triggered.connect(self.increaseTextSize)
+        #self.actionSmaller.triggered.connect(self.decreaseTextSize)
 
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # UTILITY METHODS
@@ -218,21 +243,21 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         node.setData([seqr], self.SequenceRole)
         node.setData(node.data(role=self.SequenceRole)[0].name)
         node.setData(wid, self.WindowRole)
+        node.setData(self.params, self.AlignDisplayRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         if not folder:
             self.bioModel.appendRow(node)
         else:
             found = False
-            folder_node = utilities.iterTreeView(self.bioModel.invisibleRootItem())
             for n in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
                 if n.text() == folder:
                     n.appendRow(node)
                     found=True
             if not found:
-                nFolder = QStandardItem(str(folder))
-                nFolder.appendRow(node)
-                self.bioModel.appendRow(nFolder)
-                self.bioTree.setExpanded(nFolder.index(), True)
+                nfolder = QStandardItem(str(folder))
+                nfolder.appendRow(node)
+                self.bioModel.appendRow(nfolder)
+                self.bioTree.setExpanded(nfolder.index(), True)
         self.windex = int(wid)
 
     def seqDbClick(self):
@@ -319,26 +344,29 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         After generation, stores the window in the list of all windows by its window ID.
         """
         sub = widgets.MDISubWindow()
-        widget = AlignSubWindow(ali)
+        widget = AlignSubWindow(ali, self.params)
         sub.setWidget(widget)
         if len(ali.keys()) > 1:
+            # If alignment:
             if nonode:
                 self.windows[wid] = sub
             else:
                 seqrs = []
-                for key,value in ali.items():
-                    seqr = models.SeqR(Seq(value, generic_protein),name=key,id=key)
+                for key, value in ali.items():
+                    seqr = models.SeqR(Seq(value, generic_protein), name=key, id=key)
                     seqrs.append(seqr)
                 aliR = MultipleSeqAlignment(seqrs)
                 node = QStandardItem(sub.windowTitle())
                 node.setData(sub.windowTitle())
                 node.setData(aliR, self.SequenceRole)
                 node.setData(wid, self.WindowRole)
+                node.setData(self.params, role=self.AlignDisplayRole)
                 self.projectRoot.appendRow(node)
                 self.projectTree.setExpanded(node.parent().index(), True)
                 self.windows[wid] = sub
                 self.projectModel.updateWindows(self.windows)
         else:
+            # If sequence:
             seq = self.sequences[wid][0]
             sub.setWindowTitle(seq.name)
             self.windows[wid] = sub
@@ -354,7 +382,9 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         if sub.mdiArea() != self.mdiArea:
             self.mainLogger.debug("Adding window to MDI Area; creation took %f seconds" %
                                   float(time.perf_counter() - self.localtime))
+            self.sendParams.emit(sub.widget().params)
             self.mdiArea.addSubWindow(sub)
+
         else:
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
@@ -472,19 +502,19 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown """
-        mem = self.mainProcess.memory_info().rss / 1000000
+        mem = self.mainProcess.memory_full_info().uss / 1000000
         cpu = self.mainProcess.cpu_percent()
         self.memLabel.setText("CPU: " + str(cpu) + " % | RAM: " + str(round(mem, 2)) + " MB")
 
 
 class LinnaeoApp(QApplication):
     """ Custom QApplication that I made to detect events. Currently not needed."""
-    barClick = pyqtSignal()
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.installEventFilter(self)
-        self.last = None
+        self.fonts = QFontDatabase()
+        self.defFontId = self.fonts.addApplicationFont(':/fonts/DEFAULT.ttf')
+        #print(self.fonts.applicationFontFamilies(self.defFontId))
 
     """
      def event(self, event):
