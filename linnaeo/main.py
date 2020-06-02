@@ -29,7 +29,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     The bulk of the program is located here.
     Please see classes.methods for additional methods for this class. 
     """
-    sendParams = pyqtSignal(dict)
+    #sendParams = pyqtSignal(dict)
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
@@ -53,7 +53,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.localtime = 0
         self.SequenceRole = Qt.UserRole + 2
         self.WindowRole = Qt.UserRole + 3
-        self.AlignDisplayRole = Qt.UserRole + 4
         self.lastClickedTree = None
         self.lastAlignment = None
         self.windows = None  # Windows stored as { windex : MDISubWindow }
@@ -101,12 +100,13 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Load default options for windows (from parameters file if saved)
         # if PARAMETERS FILE:
         #   params = FROMFILE
-        self.params = {'ruler': True, 'colors': True, 'fontsize': 10,
-                       'theme': 'Default', 'font': qApp.instance().defFontId,
+        self.default_params = {'ruler': True, 'colors': True, 'fontsize': 10,
+                       'theme': 'Default', 'font': qApp.instance().defFont,
                        'byconsv': False, 'tabbed': False,
                        'darkmode': False,
                        }
-        self.optionsPane.setParams(self.params.copy())
+        self.params = self.default_params.copy()
+        self.optionsPane.setParams(self.params)
 
         # This is fired upon loading a saved workspace.
         if trees:
@@ -198,8 +198,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.bioTree.doubleClicked.connect(self.seqDbClick)
         self.bioModel.dupeName.connect(self.dupeNameMsg)
         self.projectTree.doubleClicked.connect(self.alignmentDbClick)
-        self.sendParams.connect(self.optionsPane.setParams)  # This is to keep the pane in check with an opening window
-        self.optionsPane.updateParam.connect(self.nodeUpdate)  # This is to make sure the node data is up to date
+        #self.sendParams.connect(self.optionsPane.setParams)  # This is to keep the pane in check with an opening window
+        #self.optionsPane.updateParam.connect(self.nodeUpdate)  # This is to make sure the node data is up to date
 
         # Utility slots
         self.bioTree.generalClick.connect(self.deselectProject)
@@ -217,6 +217,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.optionsPane.checkRuler.toggled.connect(self.toggleRuler)
         self.optionsPane.checkColors.toggled.connect(self.toggleColors)
         self.optionsPane.comboTheme.currentIndexChanged.connect(self.changeTheme)
+        self.optionsPane.comboFont.currentFontChanged.connect(self.changeFont)
+        self.optionsPane.spinFontSize.valueChanged.connect(self.changeFontSize)
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)
         #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
@@ -246,7 +248,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         node.setData([seqr], self.SequenceRole)
         node.setData(node.data(role=self.SequenceRole)[0].name)
         node.setData(wid, self.WindowRole)
-        node.setData(copy.deepcopy(self.params.copy()), self.AlignDisplayRole)
+        #node.setData(copy.deepcopy(self.params.copy()), self.AlignDisplayRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
         if not folder:
             self.bioModel.appendRow(node)
@@ -348,7 +350,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         """
         print("MAKE NEW WITH ID",wid)
         sub = widgets.MDISubWindow(wid)
-        widget = AlignSubWindow(ali, self.params.copy())
+        widget = AlignSubWindow(ali, self.params)
         sub.setWidget(widget)
         if len(ali.keys()) > 1:
             # If alignment:
@@ -364,7 +366,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 node.setData(sub.windowTitle())
                 node.setData(aliR, self.SequenceRole)
                 node.setData(wid, self.WindowRole)
-                node.setData(self.params.copy(), role=self.AlignDisplayRole)
+                #node.setData(self.params.copy(), role=self.AlignDisplayRole)
                 self.projectRoot.appendRow(node)
                 self.projectTree.setExpanded(node.parent().index(), True)
                 self.windows[wid] = sub
@@ -383,17 +385,18 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         """
+        sub.widget().setParams(self.optionsPane.params)
         if sub.mdiArea() != self.mdiArea:
             self.mainLogger.debug("Adding window to MDI Area; creation took %f seconds" %
                                   float(time.perf_counter() - self.localtime))
-            print(sub.widget().params)
-            self.sendParams.emit(sub.widget().params.copy())
+            #print(sub.widget().params)
+            #self.sendParams.emit(sub.widget().params.copy())
             self.mdiArea.addSubWindow(sub)
 
         else:
-            print("SHOWING OLD WINDOW")
-            print(sub.widget().params)
-            self.sendParams.emit(sub.widget().params.copy())
+            #print("SHOWING OLD WINDOW")
+            #print(sub.widget().params)
+            #self.sendParams.emit(sub.widget().params.copy())
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
 
@@ -522,7 +525,7 @@ class LinnaeoApp(QApplication):
         super().__init__(*args)
         self.fonts = QFontDatabase()
         self.defFontId = self.fonts.addApplicationFont(':/fonts/DEFAULT.ttf')
-        #print(self.fonts.applicationFontFamilies(self.defFontId))
+        self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
 
     """
      def event(self, event):

@@ -17,6 +17,7 @@ class Slots:
     """
     Split out methods for clarity. These are all simple slot functions associated with UI actions!
     """
+
     def increaseTextSize(self):
         self._currentWindow.widget().increaseFont()
         self.mainStatus.showMessage("Setting font size to %s " % self._currentWindow.widget().getFontSize(), msecs=1000)
@@ -33,9 +34,18 @@ class Slots:
         qDialog.exec()
 
     def saveImage(self):
+        self._currentWindow.widget().grab()  # TODO The first time this runs it redraws the window, but never after...
+        w = self._currentWindow.widget().alignPane.size().width()
+        sw = self._currentWindow.widget().alignPane.verticalScrollBar().size().width()
+        self._currentWindow.widget().alignPane.verticalScrollBar().hide()
+        self._currentWindow.widget().alignPane.size().setWidth(int(w - sw))
         file = QFileDialog.getSaveFileName(self, "Save as...", "name",
-                                            "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
-        self._currentWindow.widget().grab().save(file[0]+file[1][-5:-1])
+                                           "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)")
+        self._currentWindow.widget().grab().save(file[0] + file[1][-5:-1])
+        self._currentWindow.widget().alignPane.verticalScrollBar().show()
+
+    def toggleOptionsPane(self, state):
+        self.optionsPane.show() if state else self.optionsPane.hide()
 
     def toggleRuler(self, state):
         self._currentWindow.widget().toggleRuler(state)
@@ -43,14 +53,17 @@ class Slots:
     def toggleColors(self, state):
         self._currentWindow.widget().toggleColors(state)
 
-    def toggleOptionsPane(self, state):
-        self.optionsPane.show() if state else self.optionsPane.hide()
-
-    def changeTheme(self, index):
-        print(self.optionsPane.comboTheme.currentText())
+    def changeTheme(self):
         self._currentWindow.widget().setTheme(self.optionsPane.comboTheme.currentText())
 
-    def nodeUpdate(self, params):
+    def changeFont(self, font):
+        self._currentWindow.widget().setFont(font)
+
+    def changeFontSize(self, size):
+        print(size)
+        self._currentWindow.widget().setFontSize(size)
+
+    """def nodeUpdate(self, params):
         print("FROM OPTION PANE", params)
         self.mdiArea.activeSubWindow().widget().setParams(params.copy())
         wid = self.mdiArea.activeSubWindow().wid
@@ -66,7 +79,7 @@ class Slots:
                 if node.data(role=self.WindowRole) == wid:
                     print("Found node in projecttree")
                     node.setData(params, self.AlignDisplayRole)
-
+    """
 
     def newWorkspace(self):
         result = self.maybeClose()
@@ -116,7 +129,7 @@ class Slots:
         type = None
         if filter == "*.fasta":
             type = 'fasta'
-        #elif filter == "clustal":
+        # elif filter == "clustal":
         #    type = 'clustal'
         try:
             with open(filename, 'r'):
@@ -126,9 +139,9 @@ class Slots:
                 if [seqr.seq] not in self.sequences.values():
                     self.seqInit(seqr)
                 else:
-                    self.mainStatus.showMessage("You've already loaded that sequence!",msecs=4000)
+                    self.mainStatus.showMessage("You've already loaded that sequence!", msecs=4000)
         except:
-                self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
+            self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
 
     def importAlignment(self):
         sel = QFileDialog.getOpenFileName(parent=self, caption="Load an Alignment", directory=QDir.homePath(),
@@ -147,7 +160,7 @@ class Slots:
             combo = []
 
             for seqr in aln:
-                cleanseq = str(seqr.seq).replace('-','')
+                cleanseq = str(seqr.seq).replace('-', '')
                 seqr_clean = models.SeqR(cleanseq)
                 seqr_clean.convert(seqr)
                 seqr_clean.seq = cleanseq
@@ -163,7 +176,7 @@ class Slots:
                 self.openWindow(sub)
                 self.windex = self.windex + 1
             else:
-                self.mainStatus.showMessage("Alignment already imported!",msecs=3000)
+                self.mainStatus.showMessage("Alignment already imported!", msecs=3000)
         except:
             self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
 
@@ -192,7 +205,7 @@ class Slots:
         index = self.projectTree.selectedIndexes()
         if index:
             sel = QFileDialog.getSaveFileName(parent=self, caption="Save Alignment", directory=QDir.homePath(),
-                                          filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
+                                              filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
             if sel != ('', ''):
                 afilter = sel[1][-8:-1]
                 atype = None
@@ -200,7 +213,7 @@ class Slots:
                     atype = 'fasta'
                 elif afilter == "clustal":
                     atype = 'clustal'
-                filename = sel[0]+'.'+atype if sel[0][-1*len(atype):] != atype else sel[0]
+                filename = sel[0] + '.' + atype if sel[0][-1 * len(atype):] != atype else sel[0]
                 aliR = self.projectModel.itemFromIndex(index[0]).data(role=self.SequenceRole)
                 try:
                     with open(filename, 'w'):
@@ -209,7 +222,7 @@ class Slots:
                 except:
                     self.mainStatus.showMessage("Something went wrong!")
         else:
-            self.mainStatus.showMessage("Hey, pick an alignment first!",msecs=4000)
+            self.mainStatus.showMessage("Hey, pick an alignment first!", msecs=4000)
 
     def saveWorkspace(self):
         sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(),
@@ -388,6 +401,7 @@ class Slots:
 
     def dupeNameMsg(self):
         self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
+
 
 class Debug:
     def DEBUG(self):

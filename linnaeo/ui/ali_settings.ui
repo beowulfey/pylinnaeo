@@ -98,6 +98,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="checkConsv">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>By conservation</string>
      </property>
@@ -105,6 +108,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="checkColorDesc">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>Color meanings</string>
      </property>
