@@ -56,10 +56,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.params = {}
         self.setParams(params)
 
-        self.fmF = QFontMetricsF(self.font())  # FontMetrics Float...
-        self.setFont(QFont(self.params['font']))
-        print(self.fmF.averageCharWidth())
+        #self.fmF = QFontMetricsF(self.font())  # FontMetrics Float...
+        #self.setFont(QFont(self.params['font']))
+        print("AFTER LOAD",self.font().pointSize())
         self.done = True
+        self.seqInit()
 
 
     def setupCustomUi(self):
@@ -126,7 +127,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         in a separate thread to help with smoothness; showing color and rulers is still very slow though. Resize events
         call this function with color off, and the ruler is turned off automatically.
         """
-        print("CHAR WIDTH", self.fmF.averageCharWidth())
         self.last = None
         if not self.showColors:
             color = False
@@ -136,7 +136,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         charpx = self.fmF.averageCharWidth()
         width = self.alignPane.size().width() - 30
         char_count = int(width / charpx - 20 / charpx)
-        print("COUNT", char_count)
         if self.alignPane.verticalScrollBar().isVisible():
             char_count = int(width / charpx - 20 / charpx - \
                              self.alignPane.verticalScrollBar().size().width() / charpx)
@@ -196,50 +195,38 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.nameArrange(self.lines)
 
     def setFont(self, font):
-        print("COMPARE FONT SIZE (old, new)", self.font().pointSize(), font.pointSize())
+        # Choosing a new font has a built in size, which is annoying
         if font.family() != self.font().family() and font.pointSize() != self.font().pointSize():
+            print("IGNORING")
             font.setPointSize(self.font().pointSize())
         print(font.pointSize())
         super().setFont(font)
+        print("FINAL", self.font().pointSize())
         self.fmF = QFontMetricsF(self.font())
         if self.done:
+            print("REDRAWING")
             self.seqInit()
             self.seqArrange()
             self.nameArrange(self.lines)
 
     def setFontSize(self, size):
-        print("RECEIVED SIZE", size)
         font = self.font()
         font.setPointSize(size)
+        print("FONT",font.pointSize(), self.font().pointSize())
         self.setFont(font)
-        print("NEW SIZE", self.font().pointSize())
-
-
-
-    """def increaseFont(self):
-        self.fontsize = self.font.pointSizeF() + 1
-        self.font.setPointSizeF(self.fontsize)
-        self.updateFontMetrics()
-
-    def decreaseFont(self):
-        self.fontsize = self.font.pointSizeF() - 1
-        self.font.setPointSizeF(self.fontsize)
-        self.updateFontMetrics()
-
-    def getFontSize(self):
-        return self.font.pointSize()
-    
-    """
 
     def setParams(self, params):
+        print("UPDATING VALUES")
         self.params = params
+        print(self.params)
         self.showRuler = self.params['ruler']
         self.showColors = self.params['colors']
         self.consvColors = self.params['byconsv']
-
+        if self.font().pointSize() != self.params['fontsize']:
+            print("Changing font size")
+            self.setFontSize(self.params['fontsize'])
         if self.font() != self.params['font']:
             self.setFont(self.params['font'])
-
         newtheme = self.convertTheme(self.params['theme'])
         if self.theme != newtheme:
             self.theme = newtheme
@@ -273,7 +260,6 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
     def initPane(self):
         for index in range(0, self.comboTheme.model().rowCount()):
             self.themeIndices[self.comboTheme.model().itemData(self.comboTheme.model().index(index,0))[0]] = index
-        print(self.themeIndices)
 
         self.checkRuler.toggled.connect(self.rulerToggle)
         self.checkColors.toggled.connect(self.colorToggle)
@@ -299,7 +285,6 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
     def setParams(self, params):
         """ These are set by the preferences pane --> default for every new window """
         self.params = params.copy()
-        print("RECEIVED PARAMS", self.params)
         # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
         self.checkRuler.setChecked(self.params['ruler'])
         self.checkColors.setChecked(self.params['colors'])

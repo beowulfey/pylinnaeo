@@ -219,6 +219,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.optionsPane.comboTheme.currentIndexChanged.connect(self.changeTheme)
         self.optionsPane.comboFont.currentFontChanged.connect(self.changeFont)
         self.optionsPane.spinFontSize.valueChanged.connect(self.changeFontSize)
+        #self.mdiArea.refreshParams.connect(self.refreshParams)
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)
         #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
@@ -350,7 +351,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         """
         print("MAKE NEW WITH ID",wid)
         sub = widgets.MDISubWindow(wid)
-        widget = AlignSubWindow(ali, self.params)
+        widget = AlignSubWindow(ali, self.optionsPane.params)
         sub.setWidget(widget)
         if len(ali.keys()) > 1:
             # If alignment:
@@ -385,6 +386,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         """
+        print(self.optionsPane.params)
         sub.widget().setParams(self.optionsPane.params)
         if sub.mdiArea() != self.mdiArea:
             self.mainLogger.debug("Adding window to MDI Area; creation took %f seconds" %
@@ -394,9 +396,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             self.mdiArea.addSubWindow(sub)
 
         else:
-            #print("SHOWING OLD WINDOW")
-            #print(sub.widget().params)
-            #self.sendParams.emit(sub.widget().params.copy())
+            print("SHOWING OLD WINDOW")
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
 

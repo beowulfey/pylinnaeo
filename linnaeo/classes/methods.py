@@ -63,6 +63,11 @@ class Slots:
         print(size)
         self._currentWindow.widget().setFontSize(size)
 
+    #def refreshParams(self, window):
+    #    print("SUBWINDOW CHANGED")
+    #    print(self.optionsPane.params)
+    #    window.widget().setParams(self.optionsPane.params)
+
     """def nodeUpdate(self, params):
         print("FROM OPTION PANE", params)
         self.mdiArea.activeSubWindow().widget().setParams(params.copy())
