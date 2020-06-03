@@ -1,7 +1,7 @@
 import logging
 
 from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF, QStandardItem
+from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF, QStandardItem, QColor
 from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, qApp
 
 from linnaeo.classes import widgets, utilities, themes
@@ -58,7 +58,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
         #self.fmF = QFontMetricsF(self.font())  # FontMetrics Float...
         #self.setFont(QFont(self.params['font']))
-        print("AFTER LOAD",self.font().pointSize())
+        #print("AFTER LOAD",self.font().pointSize())
         self.done = True
         self.seqInit()
 
@@ -98,7 +98,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     count += 1
                     tcount = count
                     color = self.theme[char]
-                    char = '<span style=\"background-color:'+color.name()+';\">'+char+"</span>"
+                    #print(color.name(),color.getHsl()[2]/255*100,(100-(color.getHsl()[2]/255*100))*5)
+                    tcolor = '#FFFFFF' if color.getHsl()[2]/255*100 <= 50 else '#000000'
+                    char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (color.name(), tcolor, char)
                 else:
                     char = '<span style=\"background-color:#FFFFFF;\">' + seq[i] + "</span>"
                     tcount = 0
@@ -135,7 +137,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 rulers = False
             # Calculate font and window metrics
             charpx = self.fmF.averageCharWidth()
-            print("AVG CHAR W", charpx)
             width = self.alignPane.size().width() - 30
             char_count = int(width / charpx - 20 / charpx)
             if self.alignPane.verticalScrollBar().isVisible():
@@ -202,15 +203,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # Choosing a new font has a built in size, which is annoying
 
         if font.family() != self.font().family() and font.pointSize() != self.font().pointSize():
-            print("IGNORING")
+            #print("IGNORING")
             font.setPointSize(self.font().pointSize())
-        print(font.pointSize())
+        #print(font.pointSize())
         super().setFont(font)
-        print("FINAL", self.font().pointSize())
+        #print("FINAL", self.font().pointSize())
         self.fmF = QFontMetricsF(self.font())
-        # TODO: THIS IS BUGGY. FIGURE OUT HOW TO PREVENT FONT CHANGE IF IT'S BAD
         if self.done:
-            print("REDRAWING")
+            #print("REDRAWING")
             self.seqInit()
             self.seqArrange()
             self.nameArrange(self.lines)
@@ -218,18 +218,18 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def setFontSize(self, size):
         font = self.font()
         font.setPointSize(size)
-        print("FONT",font.pointSize(), self.font().pointSize())
+        #print("FONT",font.pointSize(), self.font().pointSize())
         self.setFont(font)
 
     def setParams(self, params):
-        print("UPDATING VALUES")
+        #print("UPDATING VALUES")
         self.params = params
-        print(self.params)
+        #print(self.params)
         self.showRuler = self.params['ruler']
         self.showColors = self.params['colors']
         self.consvColors = self.params['byconsv']
         if self.font().pointSize() != self.params['fontsize']:
-            print("Changing font size")
+            #print("Changing font size")
             self.setFontSize(self.params['fontsize'])
         if self.font() != self.params['font']:
             self.setFont(self.params['font'])
@@ -244,11 +244,15 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         if theme == 'Default':
             converted = themes.PaleByType().theme
         elif theme == 'Bold':
-            converted = themes.Theme2().theme
+            converted = themes.Bold().theme
         elif theme == 'Monochrome':
             converted = themes.Mono().theme
         elif theme == 'ColorSafe':
             converted = themes.ColorSafe().theme
+        elif theme == 'Rainbow':
+            converted = themes.Rainbow().theme
+        elif theme == 'Grayscale':
+            converted = themes.Grayscale().theme
         return converted
 
 

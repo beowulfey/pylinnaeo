@@ -160,7 +160,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.mainLogger.debug("After StatusbarUpdate")
 
         # Load
-        self.DEBUG()  # TODO: DELETE THIS NEPHEW
+        #self.DEBUG()  # TODO: DELETE THIS NEPHEW
 
     def connectSlots(self):
         # Toolbar and MenuBar
@@ -349,7 +349,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         a sequence node, or multiple sequence nodes, if those are not already in the form of a window.
         After generation, stores the window in the list of all windows by its window ID.
         """
-        print("MAKE NEW WITH ID",wid)
         sub = widgets.MDISubWindow(wid)
         widget = AlignSubWindow(ali, self.optionsPane.params)
         sub.setWidget(widget)
@@ -386,7 +385,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         """
-        print(self.optionsPane.params)
         sub.widget().setParams(self.optionsPane.params)
         if sub.mdiArea() != self.mdiArea:
             self.mainLogger.debug("Adding window to MDI Area; creation took %f seconds" %
@@ -396,7 +394,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             self.mdiArea.addSubWindow(sub)
 
         else:
-            print("SHOWING OLD WINDOW")
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
 
