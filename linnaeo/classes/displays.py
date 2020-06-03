@@ -1,11 +1,14 @@
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF
-from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox
+import logging
+
+from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF, QStandardItem, QColor
+from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, qApp
 
 from linnaeo.classes import widgets, utilities, themes
-from linnaeo.ui import alignment_ui, quit_ui, about_ui
-
+from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui
 from linnaeo.resources import linnaeo_rc
+
+
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
     Alignment SubWindow UI. Takes in a dictionary of sequences that have been aligned and arranges them.
@@ -19,21 +22,12 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     nameChange = pyqtSignal((str, str))
     lineChange = pyqtSignal(int)
 
-    def __init__(self, seqs):
+    def __init__(self, seqs, params):
         super(self.__class__, self).__init__()
-
+        self.done = False
         # Construct the window
+        self.alignLogger = logging.getLogger("AlignWindow")
         self.alignPane = widgets.AlignPane(self)
-        self.family = (QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(
-            ':/fonts/LiberationMono.ttf'))[0])
-        self.font = QFont(self.family, 10)
-        self.fmF = QFontMetricsF(self.font)  # FontMetrics Float... because default FontMetrics gives Int, which is bad.
-
-        # Initialize settings
-        self.theme = themes.PaleTheme().theme
-        self.showRuler = True
-        self.showColors = True
-        self.relColors = False
 
         # Init functional variables
         self._seqs = seqs
@@ -46,7 +40,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.maxname = 0
         self.lines = 0
 
-
         # Draw the window
         self.setupUi(self)
         self.setupCustomUi()
@@ -58,12 +51,20 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.nameChange.connect(self.updateName)
         self.lineChange.connect(self.nameArrange)
 
+        # Initialize settings
+        self.theme = self.convertTheme('Default')
+        self.params = {}
+        self.setParams(params)
+
+        #self.fmF = QFontMetricsF(self.font())  # FontMetrics Float...
+        #self.setFont(QFont(self.params['font']))
+        #print("AFTER LOAD",self.font().pointSize())
+        self.done = True
         self.seqInit()
 
 
     def setupCustomUi(self):
         self.horizontalLayout.addWidget(self.alignPane)
-        self.alignPane.document().setDefaultFont(self.font)
         self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; background-color: \
                                              rgb(255,255,255)}")
         self.namePane.setStyleSheet("QTextEdit {padding-top:1px;}")
@@ -78,6 +79,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         """
         self.splitSeqs = []
         self.splitNames = []
+        self.maxname = 0
         for seq in self._seqs.values():
             if len(seq) > self.maxlen:
                 self.maxlen = len(seq)
@@ -96,7 +98,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     count += 1
                     tcount = count
                     color = self.theme[char]
-                    char = '<span style=\"background-color:'+color.name()+';\">'+char+"</span>"
+                    #print(color.name(),color.getHsl()[2]/255*100,(100-(color.getHsl()[2]/255*100))*5)
+                    tcolor = '#FFFFFF' if color.getHsl()[2]/255*100 <= 50 else '#000000'
+                    char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (color.name(), tcolor, char)
                 else:
                     char = '<span style=\"background-color:#FFFFFF;\">' + seq[i] + "</span>"
                     tcount = 0
@@ -108,7 +112,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         """ Generates the name panel; only fires if the number of lines changes to avoid needless computation"""
         self.namePane.clear()
         self.namePane.setMinimumWidth((self.maxname * self.fmF.averageCharWidth()) + 5)
-        names = ["<pre style=\"text-align: right;\">\n"]
+        names = ["<pre style=\"font-family:%s; font-size:%spt; text-align: right;\">\n" % (self.font().family(),
+                                                                                           self.font().pointSize())]
         for line in range(lines):
             if self.showRuler:
                 names.append("\n")
@@ -124,74 +129,58 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         in a separate thread to help with smoothness; showing color and rulers is still very slow though. Resize events
         call this function with color off, and the ruler is turned off automatically.
         """
-        self.last = None
-        if not self.showColors:
-            color = False
-        if not self.showRuler:
-            rulers = False
-        # Calculate font and window metrics
-        charpx = self.fmF.averageCharWidth()
-        width = self.alignPane.size().width() - 30
-        char_count = int(width / charpx - 20 / charpx)
-        if self.alignPane.verticalScrollBar().isVisible():
-            char_count = int(width / charpx - 20 / charpx - \
-                             self.alignPane.verticalScrollBar().size().width() / charpx)
-            # This is for saving the scroll position
-            self.last = self.alignPane.verticalScrollBar().value()
-        lines = int(self.maxlen / char_count) + 1
-        if lines != self.lines:
-            self.lineChange.emit(lines)
-            self.lines = lines
-        self.alignPane.lines = lines
-        self.alignPane.setChars(char_count)
-        self.alignPane.names = self.splitNames
-        self.alignPane.clear()
-        fancy = False if self.userIsResizing else True
-        worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
-        worker.start()
-        worker.wait()
-        self.alignPane.setText(worker.html)
-        if self.last:
-            print("SCROLL POS", self.last)
-            self.alignPane.verticalScrollBar().setValue(self.last)
+        try:
+            self.last = None
+            if not self.showColors:
+                color = False
+            if not self.showRuler:
+                rulers = False
+            # Calculate font and window metrics
+            charpx = self.fmF.averageCharWidth()
+            width = self.alignPane.size().width() - 30
+            char_count = int(width / charpx - 20 / charpx)
+            if self.alignPane.verticalScrollBar().isVisible():
+                char_count = int(width / charpx - 20 / charpx - \
+                                 self.alignPane.verticalScrollBar().size().width() / charpx)
+                # This is for saving the scroll position
+                self.last = self.alignPane.verticalScrollBar().value()
+            lines = int(self.maxlen / char_count) + 1
+            if lines != self.lines:
+                self.lineChange.emit(lines)
+                self.lines = lines
+            self.alignPane.lines = lines
+            self.alignPane.setChars(char_count)
+            self.alignPane.names = self.splitNames
+            self.alignPane.clear()
+            fancy = False if self.userIsResizing else True
+            worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
+            worker.start()
+            worker.wait()
+            style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (self.font().family(), self.font().pointSize())
+            self.alignPane.setHtml(style+worker.html)
+
+            if self.last:
+                self.alignPane.verticalScrollBar().setValue(self.last)
+        except ZeroDivisionError:
+            self.alignLogger.info("Font returned zero char width. Please choose a different font")
 
     # UTILITY FUNCTIONS
     def setTheme(self, theme):
-        self.theme = theme
+        self.theme = self.convertTheme(theme)
+        self.params['theme'] = theme
+        self.seqInit()
+        self.seqArrange()
 
-    def toggleRulers(self):
-        self.showRuler = not self.showRuler
-        print("RULER TOGGLED is now", self.showRuler)
+    def toggleRuler(self, state):
+        self.showRuler = state
+        self.params['ruler'] = state
         self.nameArrange(self.lines)
         self.seqArrange()
 
-    def toggleColors(self):
-        self.showColors = not self.showColors
+    def toggleColors(self, state):
+        self.showColors = state
+        self.params['colors'] = state
         self.seqArrange()
-
-    '''
-    def resizeEvent(self, event):
-        """
-        This gets called anytime the window is in the process of being redrawn. If the MDI Subwindow is maximized,
-        it calls a resizeEvent upon release too.
-        """
-
-        #if self.userIsResizing:
-        #    self.seqArrange(color=False) #rulers=False)
-        #elif not self.userIsResizing:
-        #self.resized.emit()
-        print("RESIZE FROM WIDGET!")
-        super(AlignSubWindow, self).resizeEvent(event)
-        """
-
-    def externalResizeDone(self):
-        """
-        This only happens if the MDI sub window is not maximized and it gets resized; that does
-        not normally call the resizeEvent for the alignment window for some reason.
-        """
-        pass
-        #self.seqArrange() 
-        '''
 
     def seqs(self):
         return self._seqs
@@ -201,32 +190,124 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.seqArrange()
 
     def updateName(self, old, new):
+        self.alignLogger.debug("Received name change alert")
         seq = self._seqs[old]
         self._seqs[new] = seq
         self._seqs.pop(old)
-        self.seqInit()
-        self.seqArrange()
+        if self.done:
+            self.seqInit()
+            self.seqArrange()
+            self.nameArrange(self.lines)
 
-    def increaseFont(self):
-        size = self.font.pointSizeF() + 1
-        self.font.setPointSizeF(size)
-        self.fmF = QFontMetricsF(self.font)
-        self.alignPane.setFont(self.font)
-        self.namePane.setFont(self.font)
-        self.nameArrange(self.lines)
-        self.seqArrange()
+    def setFont(self, font):
+        # Choosing a new font has a built in size, which is annoying
 
-    def decreaseFont(self):
-        size = self.font.pointSizeF() - 1
-        self.font.setPointSizeF(size)
-        self.fmF = QFontMetricsF(self.font)
-        self.namePane.setFont(self.font)
-        self.nameArrange(self.lines)
-        self.alignPane.setFont(self.font)
-        self.seqArrange()
+        if font.family() != self.font().family() and font.pointSize() != self.font().pointSize():
+            #print("IGNORING")
+            font.setPointSize(self.font().pointSize())
+        #print(font.pointSize())
+        super().setFont(font)
+        #print("FINAL", self.font().pointSize())
+        self.fmF = QFontMetricsF(self.font())
+        if self.done:
+            #print("REDRAWING")
+            self.seqInit()
+            self.seqArrange()
+            self.nameArrange(self.lines)
 
-    def getFontSize(self):
-        return self.font.pointSize()
+    def setFontSize(self, size):
+        font = self.font()
+        font.setPointSize(size)
+        #print("FONT",font.pointSize(), self.font().pointSize())
+        self.setFont(font)
+
+    def setParams(self, params):
+        #print("UPDATING VALUES")
+        self.params = params
+        #print(self.params)
+        self.showRuler = self.params['ruler']
+        self.showColors = self.params['colors']
+        self.consvColors = self.params['byconsv']
+        if self.font().pointSize() != self.params['fontsize']:
+            #print("Changing font size")
+            self.setFontSize(self.params['fontsize'])
+        if self.font() != self.params['font']:
+            self.setFont(self.params['font'])
+        newtheme = self.convertTheme(self.params['theme'])
+        if self.theme != newtheme:
+            self.theme = newtheme
+            self.seqInit()
+            self.seqArrange()
+
+    def convertTheme(self, theme):
+        """ Converts the stored theme name into a class """
+        if theme == 'Default':
+            converted = themes.PaleByType().theme
+        elif theme == 'Bold':
+            converted = themes.Bold().theme
+        elif theme == 'Monochrome':
+            converted = themes.Mono().theme
+        elif theme == 'ColorSafe':
+            converted = themes.ColorSafe().theme
+        elif theme == 'Rainbow':
+            converted = themes.Rainbow().theme
+        elif theme == 'Grayscale':
+            converted = themes.Grayscale().theme
+        return converted
+
+
+class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
+    #updateParam = pyqtSignal(dict)
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setupUi(self)
+        self.setFixedWidth(140)
+        self.params = {}
+        self.themeIndices = {}
+        self.initPane()
+
+    def initPane(self):
+        for index in range(0, self.comboTheme.model().rowCount()):
+            self.themeIndices[self.comboTheme.model().itemData(self.comboTheme.model().index(index,0))[0]] = index
+
+        self.checkRuler.toggled.connect(self.rulerToggle)
+        self.checkColors.toggled.connect(self.colorToggle)
+        self.comboTheme.currentIndexChanged.connect(self.changeTheme)
+        self.comboFont.currentFontChanged.connect(self.changeFont)
+        self.spinFontSize.valueChanged.connect(self.changeFontSize)
+
+    def setParams(self, params):
+        """ These are set by the preferences pane --> default for every new window """
+        self.params = params.copy()
+        # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
+        self.checkRuler.setChecked(self.params['ruler'])
+        self.checkColors.setChecked(self.params['colors'])
+        self.checkConsv.setChecked(self.params['byconsv'])
+        self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
+        self.spinFontSize.setValue(self.params['fontsize'])
+        self.comboFont.setCurrentFont(self.params['font'])
+
+    def rulerToggle(self):
+        self.params['ruler']=self.checkRuler.isChecked()
+
+    def colorToggle(self):
+        self.params['colors'] = self.checkColors.isChecked()
+
+    def changeTheme(self):
+        self.params['theme']=self.comboTheme.currentText()
+
+    def changeFont(self):
+        self.params['font']=self.comboFont.currentFont()
+
+    def changeFontSize(self):
+        self.params['fontsize'] = self.spinFontSize.value()
+
+    def showColorDesc(self):
+        self.params['colordesc'] = self.checkColorDesc.isChecked()
+
+
+
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):

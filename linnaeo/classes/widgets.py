@@ -1,18 +1,15 @@
 #!/usr/bin/python3
 import logging
 import sys
-from math import trunc, ceil, floor
+from math import floor
 
-from PyQt5.QtCore import Qt, pyqtSignal, QRegularExpression, QSize, QPoint, QTimer
-from PyQt5.QtGui import QStandardItemModel, QFont, QFontDatabase, QColor, QSyntaxHighlighter, QTextCharFormat, \
-    QTextCursor, QFontMetricsF, QTextDocument, QCursor, QMouseEvent
-from PyQt5.QtWidgets import QWidget, QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
-    QDialog, QDialogButtonBox, QApplication, QTextEdit, QAbstractScrollArea, QToolTip, QHBoxLayout, QLabel, QPushButton
-from PyQt5.uic.properties import QtCore, QtWidgets
+from PyQt5.QtCore import Qt, pyqtSignal, QSize, QPoint, QTimer
+from PyQt5.QtGui import QStandardItemModel, QTextCursor
+from PyQt5.QtWidgets import QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
+    QTextEdit, QAbstractScrollArea, QToolTip
 
 from linnaeo.resources import linnaeo_rc
 from linnaeo.classes import utilities
-from linnaeo.ui import alignment_ui, quit_ui
 
 
 class TreeView(QTreeView):
@@ -32,87 +29,6 @@ class TreeView(QTreeView):
         return super(TreeView, self).mousePressEvent(event)
 
 
-class MDIArea(QMdiArea):
-    """
-    Custom QMdiArea class -- the native class had some strange bugs with closing tabs, where it would keep the tab
-    due to how the closing was happening. I've subclassed it to make things easy in finding bugs.
-    This works well and should be more customizable if needed.
-    """
-    def __init__(self):
-        super(MDIArea, self).__init__()
-        self.tabbed = False  # tabbed by default
-        self.tabBar = None
-        self.setTabs(True) if self.tabbed else self.setTabs(False)
-        self.WindowOrder(2)
-
-    def toggleTabs(self):
-        self.tabbed = not self.tabbed
-        if self.tabbed:
-            self.setTabs(True)
-        else:
-            self.setTabs(False)
-            for sub in self.subWindowList():
-                sub.showNormal()
-            self.tileSubWindows()
-
-    def setTabs(self, on):
-        if on:
-            self.setViewMode(self.TabbedView)
-            self.tabbed = True
-            self.tabBar = self.findChild(QTabBar)
-            self.setupTabBar()
-        else:
-            self.tabbed = False
-            self.setViewMode(self.SubWindowView)
-
-    def setupTabBar(self):
-        # self.tabBar.setAutoHide(True)
-        self.setTabsMovable(True)
-        self.setTabsClosable(True)
-        self.tabBar.tabCloseRequested.connect(self.closeTab)
-
-    def closeTab(self):
-        try:
-            self.activeSubWindow().showMaximized()
-        except:
-            # So I can close all tabs
-            pass
-
-    #def resizeEvent(self, event):
-    #    # TODO: CAN I DELETE THIS??
-    #    # passes a resize event to all subwindows to make sure the sequence is updated
-    #    for sub in self.subWindowList():
-    #        sub.resizeEvent(event)
-    #    return super(MDIArea, self).resizeEvent(event)
-
-    def addSubWindow(self, window, flags=Qt.WindowFlags()):
-        super(MDIArea, self).addSubWindow(window, flags)
-        if self.tabbed:
-            for sub in self.subWindowList():
-                sub.showMinimized()
-            self.activeSubWindow().showMaximized()
-        window.show()
-        self.setActiveSubWindow(window)
-
-    def setActiveSubWindow(self, window):
-        if self.tabbed:
-            titles = []
-            for index in range(len(self.tabBar.children())):
-                titles.append(self.tabBar.tabText(index))
-            if window.windowTitle() not in titles:
-                self.addSubWindow(window)
-                self.tabBar.addTab(window.windowIcon(), window.windowTitle())
-                self.activeSubWindow().showMaximized()
-            else:
-                super(MDIArea, self).setActiveSubWindow(window)
-                self.activeSubWindow().showMaximized()
-        else:
-            super(MDIArea, self).setActiveSubWindow(window)
-            window.widget().resized.emit()
-            #print("Unable to resize")
-            #self.activeSubWindow().showMaximized()
-
-
 class MDISubWindow(QMdiSubWindow):
     """
     Have to subclass QMdiSubWindow because it doesn't automatically
@@ -120,12 +36,12 @@ class MDISubWindow(QMdiSubWindow):
     """
     resizing = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, wid):
         super(MDISubWindow, self).__init__()
+        self.wid = wid
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self._widget = None
         self.setMouseTracking(True)
-        #self.resizeTimer = utilities.ResizeTimerThread()
         self.resizeTimer = QTimer(self)
         self.resizeTimer.setSingleShot(True)
         self.resizeTimer.setInterval(200)
@@ -199,6 +115,90 @@ class MDISubWindow(QMdiSubWindow):
     def close(self):
         super(MDISubWindow, self).close()
 
+class MDIArea(QMdiArea):
+    """
+    Custom QMdiArea class -- the native class had some strange bugs with closing tabs, where it would keep the tab
+    due to how the closing was happening. I've subclassed it to make things easy in finding bugs.
+    This works well and should be more customizable if needed.
+    """
+    refreshParams = pyqtSignal(MDISubWindow)
+
+    def __init__(self, parent):
+        super(MDIArea, self).__init__(parent)
+        self.tabbed = False  # tabbed by default
+        self.tabBar = None
+        self.setTabs(True) if self.tabbed else self.setTabs(False)
+        self.WindowOrder(2)
+
+    def toggleTabs(self):
+        self.tabbed = not self.tabbed
+        if self.tabbed:
+            self.setTabs(True)
+        else:
+            self.setTabs(False)
+            for sub in self.subWindowList():
+                sub.showNormal()
+            self.tileSubWindows()
+
+    def setTabs(self, on):
+        if on:
+            self.setViewMode(self.TabbedView)
+            self.tabbed = True
+            self.tabBar = self.findChild(QTabBar)
+            self.setupTabBar()
+        else:
+            self.tabbed = False
+            self.setViewMode(self.SubWindowView)
+
+    def setupTabBar(self):
+        # self.tabBar.setAutoHide(True)
+        self.setTabsMovable(True)
+        self.setTabsClosable(True)
+        self.tabBar.tabCloseRequested.connect(self.closeTab)
+
+    def closeTab(self):
+        try:
+            self.activeSubWindow().showMaximized()
+        except:
+            # So I can close all tabs
+            pass
+
+    # def resizeEvent(self, event):
+    #    # TODO: CAN I DELETE THIS??
+    #    # passes a resize event to all subwindows to make sure the sequence is updated
+    #    for sub in self.subWindowList():
+    #        sub.resizeEvent(event)
+    #    return super(MDIArea, self).resizeEvent(event)
+
+    def addSubWindow(self, window, flags=Qt.WindowFlags()):
+        super(MDIArea, self).addSubWindow(window, flags)
+        if self.tabbed:
+            for sub in self.subWindowList():
+                sub.showMinimized()
+            self.activeSubWindow().showMaximized()
+        window.show()
+        self.setActiveSubWindow(window)
+
+    def setActiveSubWindow(self, window):
+        #self.refreshParams.emit(window)
+        if self.tabbed:
+            titles = []
+            for index in range(len(self.tabBar.children())):
+                titles.append(self.tabBar.tabText(index))
+            if window.windowTitle() not in titles:
+                self.addSubWindow(window)
+                self.tabBar.addTab(window.windowIcon(), window.windowTitle())
+                self.activeSubWindow().showMaximized()
+            else:
+                super(MDIArea, self).setActiveSubWindow(window)
+                self.activeSubWindow().showMaximized()
+        else:
+            super(MDIArea, self).setActiveSubWindow(window)
+            self.activeSubWindow().showMaximized()
+            window.widget().resized.emit()
+            # print("Unable to resize")
+            # self.activeSubWindow().showMaximized()
+
 
 class ItemModel(QStandardItemModel):
     nameChanging = pyqtSignal()
@@ -242,6 +242,7 @@ class ItemModel(QStandardItemModel):
                     self.modelLogger.debug("Name changed to "+str(value))
                 try:
                     sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
+                    self.modelLogger.debug("Found window -- updating name")
                     sub.widget().nameChange.emit(oldvalue, newvalue)
                 except KeyError:
                     pass
@@ -255,7 +256,6 @@ class ItemModel(QStandardItemModel):
         try:
             sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
             sub.setWindowTitle(value)
-
             sub.mdiArea().setActiveSubWindow(sub)
         except:
             exctype, val = sys.exc_info()[:2]
@@ -381,6 +381,3 @@ class AlignPane(QTextEdit):
         self.setTextCursor(curs)
         self.tracking = False
         super().mouseReleaseEvent(event)
-
-
-

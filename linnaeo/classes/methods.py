@@ -1,7 +1,8 @@
+import copy
 import time
 
 import Bio
-from Bio import SeqIO
+from Bio import SeqIO, AlignIO
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq
 from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QTimer
@@ -16,6 +17,7 @@ class Slots:
     """
     Split out methods for clarity. These are all simple slot functions associated with UI actions!
     """
+
     def increaseTextSize(self):
         self._currentWindow.widget().increaseFont()
         self.mainStatus.showMessage("Setting font size to %s " % self._currentWindow.widget().getFontSize(), msecs=1000)
@@ -32,18 +34,43 @@ class Slots:
         qDialog.exec()
 
     def saveImage(self):
+        self._currentWindow.widget().grab()  # TODO The first time this runs it redraws the window, but never after...
+        w = self._currentWindow.widget().alignPane.size().width()
+        sw = self._currentWindow.widget().alignPane.verticalScrollBar().size().width()
+        self._currentWindow.widget().alignPane.verticalScrollBar().hide()
+        self._currentWindow.widget().alignPane.size().setWidth(int(w - sw))
         file = QFileDialog.getSaveFileName(self, "Save as...", "name",
-                                            "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
-        #self._currentWindow.widget().seqArrange(color=True, rulers=True)
-        self._currentWindow.widget().grab().save(file[0]+file[1][-5:-1])
+                                           "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)")
+        self._currentWindow.widget().grab().save(file[0] + file[1][-5:-1])
+        self._currentWindow.widget().alignPane.verticalScrollBar().show()
 
-    def toggleRulers(self):
-        self._currentWindow.widget().toggleRulers()
+    def toggleOptionsPane(self, state):
+        self.optionsPane.show() if state else self.optionsPane.hide()
 
-    def toggleColors(self):
-        self._currentWindow.widget().toggleColors()
+    def toggleRuler(self, state):
+        self._currentWindow.widget().toggleRuler(state)
 
-    # SINGLE-USE SLOTS
+    def toggleColors(self, state):
+        self._currentWindow.widget().toggleColors(state)
+
+    def changeTheme(self):
+        try:
+            self._currentWindow.widget().setTheme(self.optionsPane.comboTheme.currentText())
+        except:
+            print("Skipping theme set")
+
+    def changeFont(self, font):
+        self._currentWindow.widget().setFont(font)
+
+    def changeFontSize(self, size):
+        print(size)
+        self._currentWindow.widget().setFontSize(size)
+
+    #def refreshParams(self, window):
+    #    print("SUBWINDOW CHANGED")
+    #    print(self.optionsPane.params)
+    #    window.widget().setParams(self.optionsPane.params)
+
     def newWorkspace(self):
         result = self.maybeClose()
         if result is not None:
@@ -54,69 +81,136 @@ class Slots:
 
     def restore_tree(self, parent, datastream, num_childs=None):
         if not num_childs:
-            #print("First line: reading UInt32")
             num_childs = datastream.readUInt32()
-            #print(num_childs)
         for i in range(0, num_childs):
-            #print("Reading node")
             child = QStandardItem()
             child.read(datastream)
             parent.appendRow(child)
-            #print(child.data(role=Qt.UserRole + 1))
-            #print(child.data(role=Qt.UserRole + 2))
-            #print(child.data(role=Qt.UserRole + 3))
             num_childs = datastream.readUInt32()
             if num_childs > 0:
-                #print("reading children")
                 self.restore_tree(child, datastream, num_childs)
 
     def openWorkspace(self):
         sel = QFileDialog.getOpenFileName(parent=self, caption="Open Workspace", directory=QDir.homePath(),
                                           filter="Linnaeo Workspace (*.lno);;Any (*)")
-        filename = sel[0]
-        self.mainLogger.debug("Opening file: " + str(filename))
-        file = QFile(filename)
-        file.open(QIODevice.ReadOnly)
-        fstream = QDataStream(file)
-        self.mainLogger.info("Starting restore")
-        sequences = fstream.readQVariantHash()
-        #print("Sequences: ", sequences)
-        titles = fstream.readQVariantList()
-        #print("Titles: ", titles)
-        windex = fstream.readUInt32()
-        #print("Windex: ", windex)
-        windows = {}
-        self.mdiArea.closeAllSubWindows()
-        newBModel = widgets.ItemModel(windows, seqTree=True)
-        newPModel = widgets.ItemModel(windows)
-        self.restore_tree(newBModel.invisibleRootItem(), fstream)
-        self.restore_tree(newPModel.invisibleRootItem(), fstream)
-        self.start = time.perf_counter()
-        self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
+        if sel != ('', ''):
+            filename = sel[0]
+            self.mainLogger.debug("Opening file: " + str(filename))
+            file = QFile(filename)
+            file.open(QIODevice.ReadOnly)
+            fstream = QDataStream(file)
+            self.mainLogger.info("Starting restore")
+            sequences = fstream.readQVariantHash()
+            titles = fstream.readQVariantList()
+            windex = fstream.readUInt32()
+            windows = {}
+            self.mdiArea.closeAllSubWindows()
+            newBModel = widgets.ItemModel(windows, seqTree=True)
+            newPModel = widgets.ItemModel(windows)
+            self.restore_tree(newBModel.invisibleRootItem(), fstream)
+            self.restore_tree(newPModel.invisibleRootItem(), fstream)
+            self.start = time.perf_counter()
+            self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
 
-    def newSequence(self):
+    def importSequence(self):
         sel = QFileDialog.getOpenFileName(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
                                           filter="Fasta File (*.fa *.fasta);;Any (*)")
-        seqr = None
         filename = sel[0]
-        badfile = True
-        if filename[-3:] == ".fa":
-            badfile = False
-        elif filename[-6:] == ".fasta":
-            badfile = False
-        if not badfile:
-            try:
-                seq = SeqIO.read(filename, "fasta")
-                if seq:
-                    #print("name: ", seq.name)
-                    #print("id: ", seq.id)
-                    #print("desc: ", seq.description)
-                    seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
+        afilter = sel[1][-8:-1]
+        type = None
+        if afilter == "*.fasta":
+            type = 'fasta'
+        # elif filter == "clustal":
+        #    type = 'clustal'
+        try:
+            with open(filename, 'r'):
+                seq = SeqIO.read(filename, type)
+                seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
+                print([seqr.seq])
+                if [seqr.seq] not in self.sequences.values():
                     self.seqInit(seqr)
-            except:
+                else:
+                    self.mainStatus.showMessage("You've already loaded that sequence!", msecs=4000)
+        except:
+            if type == 'fasta':
+                self.mainStatus.showMessage("ERROR -- Please check file. Could this have been an alignment?", msecs=4000)
+            else:
                 self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
+
+    def importAlignment(self):
+        sel = QFileDialog.getOpenFileName(parent=self, caption="Load an Alignment", directory=QDir.homePath(),
+                                          filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
+        filename = sel[0]
+        afilter = sel[1][-8:-1]
+        atype = None
+        if afilter == "*.fasta":
+            atype = 'fasta'
+        elif afilter == "clustal":
+            atype = 'clustal'
+        try:
+            with open(filename, 'r'):
+                aln = AlignIO.read(filename, atype)
+            items = {}
+            combo = []
+
+            for seqr in aln:
+                cleanseq = str(seqr.seq).replace('-', '')
+                seqr_clean = models.SeqR(cleanseq)
+                seqr_clean.convert(seqr)
+                seqr_clean.seq = cleanseq
+                items[seqr_clean.name] = str(seqr.seq)
+                combo.append(seqr_clean.seq)
+                if seqr_clean not in self.sequences.values():
+                    self.seqInit(seqr_clean, folder='Import')
+            combo.sort()
+            if combo not in self.sequences.values():
+                wid = str(int(self.windex) + 1)
+                self.sequences[wid] = combo
+                sub = self.makeNewWindow(wid, items)
+                self.openWindow(sub)
+                self.windex = self.windex + 1
+            else:
+                self.mainStatus.showMessage("Alignment already imported!", msecs=3000)
+        except:
+            self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
+
+    def exportSequence(self):
+        index = self.bioTree.selectedIndexes()
+        if index:
+            sel = QFileDialog.getSaveFileName(parent=self, caption="Save Alignment", directory=QDir.homePath(),
+                                              filter="Fasta File (*.fa *.fasta);;Any (*)")
+            if sel != ('', ''):
+                afilter = sel[1][-8:-1]
+                atype = None
+                if afilter == "*.fasta":
+                    atype = 'fasta'
+                filename = sel[0] + '.' + atype
+                seqR = self.bioModel.itemFromIndex(index[0]).data(role=self.SequenceRole)[0]
+                with open(filename, 'w'):
+                    SeqIO.write(seqR, filename, atype)
+                    print(seqR)
         else:
-            self.mainStatus.showMessage("Please only add fasta file!", msecs=1000)
+            self.mainStatus.showMessage("Hey, pick a sequence first!", msecs=4000)
+
+    def exportAlignment(self):
+        index = self.projectTree.selectedIndexes()
+        if index:
+            sel = QFileDialog.getSaveFileName(parent=self, caption="Save Alignment", directory=QDir.homePath(),
+                                              filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
+            if sel != ('', ''):
+                afilter = sel[1][-8:-1]
+                atype = None
+                if afilter == "*.fasta":
+                    atype = 'fasta'
+                elif afilter == "clustal":
+                    atype = 'clustal'
+                filename = sel[0] + '.' + atype if sel[0][-1 * len(atype):] != atype else sel[0]
+                aliR = self.projectModel.itemFromIndex(index[0]).data(role=self.SequenceRole)
+                with open(filename, 'w'):
+                    AlignIO.write(aliR, filename, atype)
+                    print(aliR)
+        else:
+            self.mainStatus.showMessage("Hey, pick an alignment first!", msecs=4000)
 
     def saveWorkspace(self):
         sel = QFileDialog.getSaveFileName(parent=self, caption="Save Workspace", directory=QDir.homePath(),
@@ -129,26 +223,17 @@ class Slots:
             file.open(QIODevice.WriteOnly)
             out = QDataStream(file)
             self.mainLogger.debug("Beginning file save")
-            #print("TREE DATA")
-            #self.queryTrees()
-            #print("Writing Sequences, Titles, Windex")
-            #print(self.sequences)
-            #print(self.titles)
-            #print(type(self.windex), self.windex)
             out.writeQVariantHash(self.sequences)
             out.writeQVariantList(self.titles)
             out.writeUInt32(self.windex)
             #####################################
             # Sequence View
             ###
-            print("SEQUENCE TREE")
-            print("Invs.Root Children: ", self.bioModel.invisibleRootItem().rowCount())
+            self.mainLogger.debug("SEQUENCE TREE")
+            self.mainLogger.debug("Children count: %s" % self.bioModel.invisibleRootItem().rowCount())
             out.writeUInt32(self.bioModel.invisibleRootItem().rowCount())
             for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-                print("Text: ", str(node.text()))
-                print("Data1: ", str(node.data()))
-                print("Data2: ", str(node.data(role=self.SequenceRole)))
-                print("Data3: ", str(node.data(role=self.WindowRole)))
+                self.mainLogger.debug("Node: %s" % str(node.text()))
                 node.write(out)
                 out.writeUInt32(node.rowCount())
             #####################################
@@ -156,14 +241,11 @@ class Slots:
             # Does not save any metadata! Only the two sequences
             # So I can't save window options at the moment.
             # TODO: Consider adding "window modes" to the node.
-            print("ALIGNMENT TREE")
-            print("Invs.Root Children: ", self.bioModel.invisibleRootItem().rowCount())
+            self.mainLogger.debug("ALIGNMENT TREE")
+            self.mainLogger.debug("Children count: %s" % self.bioModel.invisibleRootItem().rowCount())
             out.writeUInt32(self.projectModel.invisibleRootItem().rowCount())
             for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
-                print("Text: ", str(node.text()))
-                print("Data1: ", str(node.data()))
-                print("Data2: ", str(node.data(role=self.SequenceRole)))
-                print("Data3: ", str(node.data(role=self.WindowRole)))
+                self.mainLogger.debug("Node: %s" % str(node.text()))
                 node.write(out)
                 out.writeUInt32(node.rowCount())
             self.mainLogger.debug("Save complete")
@@ -171,19 +253,17 @@ class Slots:
             file.close()
             return True
         else:
-            #print("No filename chosen; canceling")
+            self.mainLogger.debug("No filename chosen; canceling")
             return False
 
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:
-            seqs = []
-            indices = self.lastClickedTree.selectedIndexes()
-            for index in indices:
-                node = self.bioModel.itemFromIndex(index)
-                seqr = node.data(role=self.SequenceRole)[0]
+            seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
+            fseqs = []
+            for seqr in seqs:
                 print(seqr.format("fasta"))
-                seqs.append(seqr.format("fasta"))
-            QApplication.clipboard().setText("".join(seqs))
+                fseqs.append(seqr.format("fasta"))
+            QApplication.clipboard().setText("".join(fseqs))
             if len(seqs) > 1:
                 self.mainStatus.showMessage("Copied sequences to clipboard!", msecs=1000)
             elif len(seqs) == 1:
@@ -309,6 +389,7 @@ class Slots:
 
     def dupeNameMsg(self):
         self.mainStatus.showMessage("Please choose a unique name!", msecs=1000)
+
 
 class Debug:
     def DEBUG(self):
