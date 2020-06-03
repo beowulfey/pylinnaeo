@@ -1,6 +1,7 @@
 <RCC>
   <qresource>
     <file>qss/linnaeo.qss</file>
-    <file>fonts/DEFAULT.ttf</file>
+    <file>fonts/noto-default.ttf</file>
+    <file>fonts/LiberationMono.ttf</file>
   </qresource>
 </RCC>

@@ -86,6 +86,11 @@
      </item>
      <item>
       <property name="text">
+       <string>ColorSafe</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Bold</string>
       </property>
      </item>
@@ -129,6 +134,9 @@
       <font>
        <family>Liberation Mono</family>
       </font>
+     </property>
+     <property name="writingSystem">
+      <enum>QFontDatabase::Latin</enum>
      </property>
      <property name="fontFilters">
       <set>QFontComboBox::MonospacedFonts</set>

@@ -127,37 +127,41 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         in a separate thread to help with smoothness; showing color and rulers is still very slow though. Resize events
         call this function with color off, and the ruler is turned off automatically.
         """
-        self.last = None
-        if not self.showColors:
-            color = False
-        if not self.showRuler:
-            rulers = False
-        # Calculate font and window metrics
-        charpx = self.fmF.averageCharWidth()
-        width = self.alignPane.size().width() - 30
-        char_count = int(width / charpx - 20 / charpx)
-        if self.alignPane.verticalScrollBar().isVisible():
-            char_count = int(width / charpx - 20 / charpx - \
-                             self.alignPane.verticalScrollBar().size().width() / charpx)
-            # This is for saving the scroll position
-            self.last = self.alignPane.verticalScrollBar().value()
-        lines = int(self.maxlen / char_count) + 1
-        if lines != self.lines:
-            self.lineChange.emit(lines)
-            self.lines = lines
-        self.alignPane.lines = lines
-        self.alignPane.setChars(char_count)
-        self.alignPane.names = self.splitNames
-        self.alignPane.clear()
-        fancy = False if self.userIsResizing else True
-        worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
-        worker.start()
-        worker.wait()
-        style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (self.font().family(), self.font().pointSize())
-        self.alignPane.setHtml(style+worker.html)
+        try:
+            self.last = None
+            if not self.showColors:
+                color = False
+            if not self.showRuler:
+                rulers = False
+            # Calculate font and window metrics
+            charpx = self.fmF.averageCharWidth()
+            print("AVG CHAR W", charpx)
+            width = self.alignPane.size().width() - 30
+            char_count = int(width / charpx - 20 / charpx)
+            if self.alignPane.verticalScrollBar().isVisible():
+                char_count = int(width / charpx - 20 / charpx - \
+                                 self.alignPane.verticalScrollBar().size().width() / charpx)
+                # This is for saving the scroll position
+                self.last = self.alignPane.verticalScrollBar().value()
+            lines = int(self.maxlen / char_count) + 1
+            if lines != self.lines:
+                self.lineChange.emit(lines)
+                self.lines = lines
+            self.alignPane.lines = lines
+            self.alignPane.setChars(char_count)
+            self.alignPane.names = self.splitNames
+            self.alignPane.clear()
+            fancy = False if self.userIsResizing else True
+            worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
+            worker.start()
+            worker.wait()
+            style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (self.font().family(), self.font().pointSize())
+            self.alignPane.setHtml(style+worker.html)
 
-        if self.last:
-            self.alignPane.verticalScrollBar().setValue(self.last)
+            if self.last:
+                self.alignPane.verticalScrollBar().setValue(self.last)
+        except ZeroDivisionError:
+            self.alignLogger.info("Font returned zero char width. Please choose a different font")
 
     # UTILITY FUNCTIONS
     def setTheme(self, theme):
@@ -196,6 +200,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def setFont(self, font):
         # Choosing a new font has a built in size, which is annoying
+
         if font.family() != self.font().family() and font.pointSize() != self.font().pointSize():
             print("IGNORING")
             font.setPointSize(self.font().pointSize())
@@ -203,6 +208,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         super().setFont(font)
         print("FINAL", self.font().pointSize())
         self.fmF = QFontMetricsF(self.font())
+        # TODO: THIS IS BUGGY. FIGURE OUT HOW TO PREVENT FONT CHANGE IF IT'S BAD
         if self.done:
             print("REDRAWING")
             self.seqInit()
@@ -241,8 +247,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             converted = themes.Theme2().theme
         elif theme == 'Monochrome':
             converted = themes.Mono().theme
-        #elif theme == 'Color Safe':
-        #    converted = themes.ColorSafe().theme
+        elif theme == 'ColorSafe':
+            converted = themes.ColorSafe().theme
         return converted
 
 
@@ -267,6 +273,17 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
         self.comboFont.currentFontChanged.connect(self.changeFont)
         self.spinFontSize.valueChanged.connect(self.changeFontSize)
 
+    def setParams(self, params):
+        """ These are set by the preferences pane --> default for every new window """
+        self.params = params.copy()
+        # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
+        self.checkRuler.setChecked(self.params['ruler'])
+        self.checkColors.setChecked(self.params['colors'])
+        self.checkConsv.setChecked(self.params['byconsv'])
+        self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
+        self.spinFontSize.setValue(self.params['fontsize'])
+        self.comboFont.setCurrentFont(self.params['font'])
+
     def rulerToggle(self):
         self.params['ruler']=self.checkRuler.isChecked()
 
@@ -282,16 +299,11 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
     def changeFontSize(self):
         self.params['fontsize'] = self.spinFontSize.value()
 
-    def setParams(self, params):
-        """ These are set by the preferences pane --> default for every new window """
-        self.params = params.copy()
-        # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
-        self.checkRuler.setChecked(self.params['ruler'])
-        self.checkColors.setChecked(self.params['colors'])
-        self.checkConsv.setChecked(self.params['byconsv'])
-        self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
-        self.spinFontSize.setValue(self.params['fontsize'])
-        self.comboFont.setCurrentFont(self.params['font'])
+    def showColorDesc(self):
+        self.params['colordesc'] = self.checkColorDesc.isChecked()
+
+
+
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):

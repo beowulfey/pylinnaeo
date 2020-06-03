@@ -35,6 +35,7 @@ class AbstractTheme:
         }
 
 
+
 class FirstTheme(AbstractTheme):
     """ My first attempt. Not recommended. Kept for historical purposes """
     pos = QColor(100, 140, 255)
