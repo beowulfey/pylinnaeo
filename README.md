@@ -7,7 +7,6 @@ Thanks! --beowulfey
 Linnaeo is a python program I made mostly as an exercise in learning how to code a GUI... but also to solve a
 basic problem I had: nothing out there is very good for making, storing and viewing protein alignments.
 
-
 #### Protein alignments? ####
 
 Yes, out there in the world are countless amino acid sequences, and their sequences (and small differences) are connected to
@@ -27,13 +26,36 @@ Here is a screenshot as of Jun 3, 2020:
 ![screenshot](linnaeo/resources/images/tt-example.png "Title")
 
 
+#### What's the latest? 
+Here's a basic feature list so far (v0.1.6): 
+* Import/export of protein sequences and alignments
+* Save/Load workspaces to keep your work
+* Combine sequences as needed to make new alignments using ClustalO
+* Sequences and alignments can be renamed and organized in subfolders as needed
+* Alignments wrap dynamically within the size of the window
+* Includes a ruler and a tooltip popup on click that shows the currently highlighted residue (and the corresponding numbers for the other sequences)
+* Preliminary residue theming, multiple themes available (more to come, subject to change)
+* Font and point size selection for the window
+* Can export the alignment window to PNG. 
+
+### What's up next?
+
+There is a lot I still want to do! Check out the "Issues" tab for stuff I know is broken. A quick list of features I want to add:
+
+* Currently only supports the Clustal Omega algorithm, and calls it even for just two sequences
+* Alignment order is not captured from ClustalO --> it just returns the input order, which is deceiving and confusing if you are used to the ClustalO website behavior
+* I want to add better drag-and-drop functionality, such as dragging a new sequence onto an alignment window, deleting sequences from an alignment, or rerranging the order (the former 2 would be non-destructive)
+* I need to make a preferences panel, with default preferences stored upon loading the app
+* I want to add more color themes
+* I want to make a dark theme for the app itself
+* I want to incorporate a PDB viewer
+* I want to show secondary structure within the alignment window.
+
 #### How do I get set up? ####
 
 I've attempted to build portable binaries for all three platforms. [They can be found here.](https://drive.google.com/drive/folders/1uk4Vd8ioxuDsuYsToDWuR-IZZBSoDJhy?usp=sharing)
 
 Download the correct platform, unzip, and run the linnaeo(.exe,.app) binary. Note that the executable HAS to be in the same directory as the other libraries -- it won't work otherwise! Symlinks don't work on linux (but shortcuts on Windows do work, so you can add it to your start menu). 
-
-NOTE: v0.1.5 (the current version) has a debug module in place that preloads with 2 sequences already. You can delete those, but I forgot to, so sorry about that. I promise the next version won't have that. 
 
 If you want to try building it yourself, or they don't work, here are some instructions:
 
@@ -86,15 +108,3 @@ Repositories I am eternally grateful for -- they helped me get this onto windows
 * [ARGTABLE2](https://github.com/jonathanmarvens/argtable2) -- for building Clustal Omega on Windows
 * [Clustal Omega, adapted to use CMake (so, so grateful) from GSL Biotech](https://github.com/GSLBiotech/clustal-omega/tree/master/src)
 
-#### What's up next?
-
-There is a lot I still want to do! Check out the "Issues" tab for stuff I know is broken. A quick list of features I want to add:
-
-* Currently only supports the Clustal Omega algorithm, and calls it even for just two sequences
-* Alignment order is not captured from ClustalO --> it just returns the input order, which is deceiving and confusing if you are used to the ClustalO website behavior
-* There is no way to export a sequence or alignment (although you can ctrl-C a sequence out!)
-* I want to add better drag-and-drop functionality, such as dragging a new sequence onto an alignment window, deleting sequences from an alignment, or rerranging the order (the former 2 would be non-destructive)
-* I need to make a preferences panel, with the preferences stored
-* I want to add more color themes
-* I want to make a dark theme for the app itself
-* I want to incorporate a PDB viewer

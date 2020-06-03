@@ -98,6 +98,7 @@ class Ui_MainWindow(object):
         self.actionPaste = QtWidgets.QAction(MainWindow)
         self.actionPaste.setObjectName("actionPaste")
         self.actionPreferences = QtWidgets.QAction(MainWindow)
+        self.actionPreferences.setEnabled(False)
         self.actionPreferences.setObjectName("actionPreferences")
         self.actionToggle_Tabs = QtWidgets.QAction(MainWindow)
         self.actionToggle_Tabs.setObjectName("actionToggle_Tabs")
