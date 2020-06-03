@@ -22,7 +22,7 @@ That's a basic idea. Most likely those criteria will change.
 
 #### Nice. What's it look like? 
 
-Here is a screenshot as of May 31, 2020:
+Here is a screenshot as of Jun 3, 2020:
 
 ![screenshot](linnaeo/resources/images/tt-example.png "Title")
 
