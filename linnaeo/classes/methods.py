@@ -159,26 +159,22 @@ class Slots:
             items = {}
             combo = []
 
+
             for seqr in aln:
                 cleanseq = str(seqr.seq).replace('-', '')
                 cleanseq2 = MutableSeq(cleanseq, generic_protein)
-                print(cleanseq2)
                 seqr_clean = models.SeqR(cleanseq2)
                 seqr_clean.convert(seqr)
                 seqr_clean.seq = cleanseq2
-                items[seqr_clean.name] = str(seqr_clean.seq)
+                items[seqr_clean.name] = str(seqr.seq)
                 combo.append(seqr_clean.seq)
-                print(items)
                 if seqr_clean not in self.sequences.values():
-                    print("ADDING NEW SEQ")
                     self.seqInit(seqr_clean, folder='Import')
             combo.sort()
             if combo not in self.sequences.values():
-                print("ADDING NEW COMBO")
                 wid = str(int(self.windex) + 1)
                 self.sequences[wid] = combo
                 sub = self.makeNewWindow(wid, items)
-                print(sub)
                 self.openWindow(sub)
                 self.windex = self.windex + 1
             else:
