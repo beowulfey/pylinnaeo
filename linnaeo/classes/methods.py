@@ -119,34 +119,38 @@ class Slots:
             self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
 
     def importSequence(self):
-        sel = QFileDialog.getOpenFileName(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
-                                          filter="Fasta File (*.fa *.fasta);;Any (*)")
-        filename = sel[0]
+        #diag = QFileDialog(self)
+        #diag.setDirectory(QDir.homePath())
+        #diag.setFileMode(QFileDialog.ExistingFiles)
+        #diag.setNameFilter("Fasta File (*.fa *.fasta);;Any (*)")
+        sel = QFileDialog.getOpenFileNames(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
+                                          filter="Fasta File (*.fa *.fasta)")
+        print(sel)
+        filenames = sel[0]
         afilter = sel[1][-8:-1]
-        type = None
+        stype = None
         if afilter == "*.fasta":
-            type = 'fasta'
-        # elif filter == "clustal":
-        #    type = 'clustal'
+            stype = 'fasta'
         try:
-            with open(filename, 'r'):
-                seq = SeqIO.read(filename, type)
-                seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
-                print([seqr.seq])
-                if [seqr.seq] not in self.sequences.values():
-                    self.seqInit(seqr)
-                else:
-                    self.mainStatus.showMessage("You've already loaded that sequence!", msecs=4000)
+            for filename in filenames:
+                with open(filename, 'r'):
+                    seq = SeqIO.read(filename, type)
+                    seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
+                    print([seqr.seq])
+                    if [seqr.seq] not in self.sequences.values():
+                        self.seqInit(seqr)
+                    else:
+                        self.mainStatus.showMessage("You've already loaded that sequence!", msecs=4000)
         except:
-            if type == 'fasta':
+            if stype == 'fasta':
                 self.mainStatus.showMessage("ERROR -- Please check file. Could this have been an alignment?", msecs=4000)
             else:
                 self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
 
     def importAlignment(self):
-        sel = QFileDialog.getOpenFileName(parent=self, caption="Load an Alignment", directory=QDir.homePath(),
+        sel = QFileDialog.getOpenFileNames(parent=self, caption="Load an Alignment", directory=QDir.homePath(),
                                           filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
-        filename = sel[0]
+        filenames = sel[0]
         afilter = sel[1][-8:-1]
         atype = None
         if afilter == "*.fasta":
@@ -154,31 +158,31 @@ class Slots:
         elif afilter == "clustal":
             atype = 'clustal'
         try:
-            with open(filename, 'r'):
-                aln = AlignIO.read(filename, atype)
-            items = {}
-            combo = []
+            for filename in filenames:
+                with open(filename, 'r'):
+                    aln = AlignIO.read(filename, atype)
+                items = {}
+                combo = []
 
-
-            for seqr in aln:
-                cleanseq = str(seqr.seq).replace('-', '')
-                cleanseq2 = MutableSeq(cleanseq, generic_protein)
-                seqr_clean = models.SeqR(cleanseq2)
-                seqr_clean.convert(seqr)
-                seqr_clean.seq = cleanseq2
-                items[seqr_clean.name] = str(seqr.seq)
-                combo.append(seqr_clean.seq)
-                if seqr_clean not in self.sequences.values():
-                    self.seqInit(seqr_clean, folder='Import')
-            combo.sort()
-            if combo not in self.sequences.values():
-                wid = str(int(self.windex) + 1)
-                self.sequences[wid] = combo
-                sub = self.makeNewWindow(wid, items)
-                self.openWindow(sub)
-                self.windex = self.windex + 1
-            else:
-                self.mainStatus.showMessage("Alignment already imported!", msecs=3000)
+                for seqr in aln:
+                    cleanseq = str(seqr.seq).replace('-', '')
+                    cleanseq2 = MutableSeq(cleanseq, generic_protein)
+                    seqr_clean = models.SeqR(cleanseq2)
+                    seqr_clean.convert(seqr)
+                    seqr_clean.seq = cleanseq2
+                    items[seqr_clean.name] = str(seqr.seq)
+                    combo.append(seqr_clean.seq)
+                    if seqr_clean not in self.sequences.values():
+                        self.seqInit(seqr_clean, folder='Import')
+                combo.sort()
+                if combo not in self.sequences.values():
+                    wid = str(int(self.windex) + 1)
+                    self.sequences[wid] = combo
+                    sub = self.makeNewWindow(wid, items)
+                    self.openWindow(sub)
+                    self.windex = self.windex + 1
+                else:
+                    self.mainStatus.showMessage("Alignment already imported!", msecs=3000)
         except:
             traceback.print_exc()
             self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
