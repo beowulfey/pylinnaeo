@@ -2,7 +2,8 @@ import logging
 
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF, QStandardItem, QColor
-from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, qApp
+from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, qApp, QTextEdit, QPushButton, QSpacerItem, QSizePolicy, \
+    QFormLayout
 
 from linnaeo.classes import widgets, utilities, themes
 from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui
@@ -28,6 +29,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # Construct the window
         self.alignLogger = logging.getLogger("AlignWindow")
         self.alignPane = widgets.AlignPane(self)
+        self.commentPane = QTextEdit()
+        self.commentButton = QPushButton("Save")
 
         # Init functional variables
         self._seqs = seqs
@@ -39,6 +42,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.maxlen = 0
         self.maxname = 0
         self.lines = 0
+        self.comments = {}
 
         # Draw the window
         self.setupUi(self)
@@ -50,21 +54,18 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.namePane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
         self.nameChange.connect(self.updateName)
         self.lineChange.connect(self.nameArrange)
+        self.alignPane.commentAdded.connect(self.showCommentWindow)
 
         # Initialize settings
         self.theme = self.convertTheme('Default')
         self.params = {}
         self.setParams(params)
 
-        #self.fmF = QFontMetricsF(self.font())  # FontMetrics Float...
-        #self.setFont(QFont(self.params['font']))
-        #print("AFTER LOAD",self.font().pointSize())
         self.done = True
         self.seqInit()
 
-
     def setupCustomUi(self):
-        self.horizontalLayout.addWidget(self.alignPane)
+        self.gridLayout.addWidget(self.alignPane, 0, 1)
         self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; background-color: \
                                              rgb(255,255,255)}")
         self.namePane.setStyleSheet("QTextEdit {padding-top:1px;}")
@@ -98,9 +99,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     count += 1
                     tcount = count
                     color = self.theme[char]
-                    #print(color.name(),color.getHsl()[2]/255*100,(100-(color.getHsl()[2]/255*100))*5)
-                    tcolor = '#FFFFFF' if color.getHsl()[2]/255*100 <= 50 else '#000000'
-                    char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (color.name(), tcolor, char)
+                    if self.theme == themes.Comments().theme:
+                        if i in self.comments.keys():
+                            print(self.comments[i])
+                            color = QColor(Qt.yellow)
+                    tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
+                    char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (
+                        color.name(), tcolor, char)
                 else:
                     char = '<span style=\"background-color:#FFFFFF;\">' + seq[i] + "</span>"
                     tcount = 0
@@ -241,6 +246,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def convertTheme(self, theme):
         """ Converts the stored theme name into a class """
+        converted = themes.PaleByType().theme
         if theme == 'Default':
             converted = themes.PaleByType().theme
         elif theme == 'Bold':
@@ -253,7 +259,20 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             converted = themes.Rainbow().theme
         elif theme == 'Grayscale':
             converted = themes.Grayscale().theme
+        elif theme == 'Annotations':
+            converted = themes.Comments().theme
         return converted
+
+    def showCommentWindow(self, target):
+        # TODO: shows for ALL rows!
+        name = self.splitNames[target[0]]
+        resi = self.splitSeqs[target[0]][target[2]]
+        self.comments[target[2]] = "COMMENT"
+        self.seqInit()
+        self.seqArrange()
+        #self.commentPane.setText(str(name)+" "+str(resi))
+        #self.gridLayout.addWidget(self.commentButton,1,0)
+        #self.gridLayout.addWidget(self.commentPane,1,1)
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):

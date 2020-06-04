@@ -266,13 +266,16 @@ class ItemModel(QStandardItemModel):
 
 class AlignPane(QTextEdit):
 
-    toolTipReq = pyqtSignal(QPoint, str)
+    ttReq = pyqtSignal(QPoint, QTextCursor)
+    annoReq = pyqtSignal(QTextCursor)
+    commentAdded = pyqtSignal(list)
 
     def __init__(self, parent):
         super().__init__(parent)
         self.setMouseTracking(True)
         self.tracking = False
         self.chars = None
+        self.lastchars = None
         self.lines = None
         self.seqs = None
         self.names = None
@@ -281,7 +284,8 @@ class AlignPane(QTextEdit):
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
-        self.toolTipReq.connect(self.getSeqTT)
+        self.ttReq.connect(self.makeTT)
+        self.annoReq.connect(self.addAnnotation)
 
         self.setSizePolicy(sizePolicy)
         self.setMinimumSize(QSize(200, 100))
@@ -295,38 +299,11 @@ class AlignPane(QTextEdit):
         self.setCursorWidth(0)
         self.setToolTipDuration(100)
 
-
     def setChars(self, chars):
         self.chars = chars
         self.lastchars = len(self.seqs[0])-self.chars*(self.lines-1)
-        #print("LAST LINE:",self.chars, self.lastchars)
 
-    def getTruePosition(self, line, pos, tlines, cutoff=False):
-        seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
-        seqi = 0
-        tline = 0
-        for stack in range(self.lines):
-            #print("STACK CHECK:", stack)
-            # i points to whether it is ruler, seq or blank line
-            i = line - stack*seqsperline - int(self.parentWidget().showRuler)
-            #print(line,"-",stack,"*",seqsperline,"=",i)
-            if i in list(range(len(self.seqs))):
-                #print("STACK FOUND")
-                seqi = i
-                tline = stack
-        tpos = tline*self.chars+pos - 1
-        others = []
-        resid = self.seqs[seqi][tpos][1]
-        for n in range(len(self.seqs)):
-            if n != seqi:
-                others.append([n, self.seqs[n][tpos][1]])
-        return [[seqi, resid]] + others
-
-    def getSeqTT(self, mpos, selected):
-        # takes the cursor position and calculates the line number and position in the line
-        above_cutoff = False
-        pos = self.textCursor().position()
-        rpos = self.textCursor().positionInBlock()
+    def getSeqPos(self, pos, row_pos):
         seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
         cutoff = (self.lines-1)*seqsperline*(self.chars+1)
         # Have to do special stuff if it's on the last line, since there are no blank characters to keep the pattern.
@@ -335,16 +312,33 @@ class AlignPane(QTextEdit):
             line = floor(pos/(self.chars+1))
         else:
             line = ((self.lines-1)*seqsperline)+floor((pos-cutoff-2)/(self.lastchars+1))
-            above_cutoff = True
-        tlines = ((self.lines - 1) * seqsperline + seqsperline - 1)
-        tt = QToolTip
+        seqi = 0
+        tline = 0
+        for stack in range(self.lines):
+            i = line - stack * seqsperline - int(self.parentWidget().showRuler)
+            if i in list(range(len(self.seqs))):
+                seqi = i
+                tline = stack
+        tpos = tline * self.chars + row_pos - 1
+        others = []
+        resid = self.seqs[seqi][tpos][1]
+        for n in range(len(self.seqs)):
+            if n != seqi:
+                others.append([n, self.seqs[n][tpos][1]])
+        true_pos = [[seqi, resid, tpos]] + others
+        return true_pos
+
+    def makeTT(self, mpos, curs):
+        """ Converts a mouse position and text cursor into a tooltip by getting the true residue IDs """
         # Such elegance.
-        if selected in ['A','C','D','E','F','G','H','I','K',
+        resn = curs.selectedText()
+        pos = self.textCursor().position()
+        row_pos = self.textCursor().positionInBlock()
+        resids = self.getSeqPos(pos, row_pos)
+        if resn in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
-            tpos = self.getTruePosition(line, rpos, tlines, cutoff=above_cutoff)
             string = []
-            # Build the tool tip from the returned info.
-            for i, each in enumerate(tpos):
+            for i, each in enumerate(resids):
                 name = self.names[each[0]]
                 resi = each[1]
                 if resi == 0:
@@ -353,14 +347,23 @@ class AlignPane(QTextEdit):
                 if i > 0:
                     text = "--->" + text
                 string.append(text)
-                if 0 < i < len(tpos):
+                if 0 < i < len(resids):
                     string.insert(-1,"\n")
             string = "".join(string)
-
-            tt.showText(mpos, selected + " at " + string)
+            QToolTip.showText(mpos, resn + " at " + string)
         else:
-            tt.hideText()
-        self.textCursor().clearSelection()
+            QToolTip.hideText()
+
+    def addAnnotation(self, curs):
+        """ Locates the residue you double clicked"""
+        resn = curs.selectedText()
+        pos = self.textCursor().position()
+        row_pos = self.textCursor().positionInBlock()
+        resids = self.getSeqPos(pos, row_pos)
+        if resn in ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K',
+                    'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y']:
+            target = resids[0]
+            self.commentAdded.emit(target)
 
     def mouseMoveEvent(self, event):
         if self.tracking:
@@ -371,8 +374,8 @@ class AlignPane(QTextEdit):
     def mousePressEvent(self, event):
         self.setTextCursor(self.cursorForPosition(event.pos()))
         self.moveCursor(QTextCursor.NextCharacter, mode=QTextCursor.KeepAnchor)
-        text = self.textCursor().selectedText()
-        self.toolTipReq.emit(event.globalPos(), text)
+        curs = self.textCursor()
+        self.ttReq.emit(event.globalPos(), curs)
         self.tracking = True
 
     def mouseReleaseEvent(self, event):
@@ -381,3 +384,10 @@ class AlignPane(QTextEdit):
         self.setTextCursor(curs)
         self.tracking = False
         super().mouseReleaseEvent(event)
+
+    def mouseDoubleClickEvent(self, event):
+        self.setTextCursor(self.cursorForPosition(event.pos()))
+        self.moveCursor(QTextCursor.NextCharacter, mode=QTextCursor.KeepAnchor)
+        curs = self.textCursor()
+        self.annoReq.emit(curs)
+

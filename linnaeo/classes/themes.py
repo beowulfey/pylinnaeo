@@ -59,6 +59,9 @@ class AbstractTheme:
         string = 'Color categories:\n"""
 
 
+class Comments(AbstractTheme):
+    pass
+
 class ColorSafe(AbstractTheme):
     """ Colorblind-friendly. See it here https://bit.ly/2U7cSr4 """
     phb = QColor('#A1C8EC')  # blue 1
@@ -183,7 +186,6 @@ class Mono(AbstractTheme):
     cys = QColor(161, 195, 248)
     neg = QColor(210, 234, 254)
     pol = QColor(183, 217, 252)
-
 
 class Grayscale(AbstractTheme):
     phb = QColor('#D6D6D6')  # blue 1
