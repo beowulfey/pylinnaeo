@@ -50,6 +50,7 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 * I want to make a dark theme for the app itself
 * I want to incorporate a PDB viewer
 * I want to show secondary structure within the alignment window.
+* Residue annotations for marking comments and observations. 
 
 #### How do I get set up? ####
 
