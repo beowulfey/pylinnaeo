@@ -5,7 +5,7 @@ import time
 import Bio
 from Bio import SeqIO, AlignIO
 from Bio.Alphabet import generic_protein
-from Bio.Seq import MutableSeq
+from Bio.Seq import MutableSeq, Seq
 from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QTimer
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QFileDialog, QApplication
@@ -124,15 +124,15 @@ class Slots:
         #diag.setFileMode(QFileDialog.ExistingFiles)
         #diag.setNameFilter("Fasta File (*.fa *.fasta);;Any (*)")
         sel = QFileDialog.getOpenFileNames(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
-                                          filter="Fasta File (*.fa *.fasta)")
+                                           filter="Fasta File (*.fa *.fasta)")
         print(sel)
         filenames = sel[0]
         afilter = sel[1][-8:-1]
         stype = None
         if afilter == "*.fasta":
             stype = 'fasta'
-        try:
-            for filename in filenames:
+        for filename in filenames:
+            try:
                 with open(filename, 'r'):
                     seq = SeqIO.read(filename, type)
                     seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
@@ -141,15 +141,15 @@ class Slots:
                         self.seqInit(seqr)
                     else:
                         self.mainStatus.showMessage("You've already loaded that sequence!", msecs=4000)
-        except:
-            if stype == 'fasta':
-                self.mainStatus.showMessage("ERROR -- Please check file. Could this have been an alignment?", msecs=4000)
-            else:
-                self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
+            except:
+                if stype == 'fasta':
+                    self.mainStatus.showMessage("ERROR -- Please check file. Could this have been an alignment?", msecs=4000)
+                else:
+                    self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
 
     def importAlignment(self):
         sel = QFileDialog.getOpenFileNames(parent=self, caption="Load an Alignment", directory=QDir.homePath(),
-                                          filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
+                                           filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
         filenames = sel[0]
         afilter = sel[1][-8:-1]
         atype = None
@@ -157,23 +157,25 @@ class Slots:
             atype = 'fasta'
         elif afilter == "clustal":
             atype = 'clustal'
-        try:
-            for filename in filenames:
+        count = 0
+        for filename in filenames:
+            try:
                 with open(filename, 'r'):
                     aln = AlignIO.read(filename, atype)
                 items = {}
                 combo = []
 
                 for seqr in aln:
+                    # Go through each sequence in the alignment and import it if it does not already exist.
                     cleanseq = str(seqr.seq).replace('-', '')
-                    cleanseq2 = MutableSeq(cleanseq, generic_protein)
+                    cleanseq2 = Seq(cleanseq, generic_protein)
                     seqr_clean = models.SeqR(cleanseq2)
                     seqr_clean.convert(seqr)
-                    seqr_clean.seq = cleanseq2
                     items[seqr_clean.name] = str(seqr.seq)
-                    combo.append(seqr_clean.seq)
+                    combo.append(seqr_clean)
                     if seqr_clean not in self.sequences.values():
-                        self.seqInit(seqr_clean, folder='Import')
+                        num = "" if count == 0 else " "+str(count+1)
+                        self.seqInit(seqr_clean, folder='Import%s' % num)
                 combo.sort()
                 if combo not in self.sequences.values():
                     wid = str(int(self.windex) + 1)
@@ -181,11 +183,14 @@ class Slots:
                     sub = self.makeNewWindow(wid, items)
                     self.openWindow(sub)
                     self.windex = self.windex + 1
+
                 else:
                     self.mainStatus.showMessage("Alignment already imported!", msecs=3000)
-        except:
-            traceback.print_exc()
-            self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
+            except:
+                traceback.print_exc()
+                self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
+            finally:
+                count += 1
 
     def exportSequence(self):
         index = self.bioTree.selectedIndexes()
@@ -210,7 +215,7 @@ class Slots:
         index = self.projectTree.selectedIndexes()
         if index:
             sel = QFileDialog.getSaveFileName(parent=self, caption="Save Alignment", directory=QDir.homePath(),
-                                              filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta);;Any (*)")
+                                              filter="Clustal File (*.aln *.clustal);;Fasta File (*.fa *.fasta)")
             if sel != ('', ''):
                 afilter = sel[1][-8:-1]
                 atype = None
