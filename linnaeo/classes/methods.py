@@ -1,3 +1,4 @@
+import traceback
 import copy
 import time
 
@@ -165,20 +166,25 @@ class Slots:
                 seqr_clean = models.SeqR(cleanseq2)
                 seqr_clean.convert(seqr)
                 seqr_clean.seq = cleanseq2
-                items[seqr_clean.name] = seqr.seq
+                items[seqr_clean.name] = str(seqr_clean.seq)
                 combo.append(seqr_clean.seq)
+                print(items)
                 if seqr_clean not in self.sequences.values():
+                    print("ADDING NEW SEQ")
                     self.seqInit(seqr_clean, folder='Import')
             combo.sort()
             if combo not in self.sequences.values():
+                print("ADDING NEW COMBO")
                 wid = str(int(self.windex) + 1)
                 self.sequences[wid] = combo
                 sub = self.makeNewWindow(wid, items)
+                print(sub)
                 self.openWindow(sub)
                 self.windex = self.windex + 1
             else:
                 self.mainStatus.showMessage("Alignment already imported!", msecs=3000)
         except:
+            traceback.print_exc()
             self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
 
     def exportSequence(self):
