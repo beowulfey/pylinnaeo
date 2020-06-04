@@ -280,13 +280,14 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
     def setParams(self, params):
         """ These are set by the preferences pane --> default for every new window """
         self.params = params.copy()
-        # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
+        print(params["font"].family(), self.params["font"].family())# 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
         self.checkRuler.setChecked(self.params['ruler'])
         self.checkColors.setChecked(self.params['colors'])
         self.checkConsv.setChecked(self.params['byconsv'])
         self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
         self.spinFontSize.setValue(self.params['fontsize'])
         self.comboFont.setCurrentFont(self.params['font'])
+        print(self.params['font'].family())
 
     def rulerToggle(self):
         self.params['ruler']=self.checkRuler.isChecked()

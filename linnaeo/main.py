@@ -100,12 +100,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Load default options for windows (from parameters file if saved)
         # if PARAMETERS FILE:
         #   params = FROMFILE
+        print(qApp.instance().defFont.family())
         self.default_params = {'ruler': True, 'colors': True, 'fontsize': 10,
                        'theme': 'Default', 'font': qApp.instance().defFont,
                        'byconsv': False, 'tabbed': False,
                        'darkmode': False,
                        }
         self.params = self.default_params.copy()
+        print(self.params['font'].family())
         self.optionsPane.setParams(self.params)
 
         # This is fired upon loading a saved workspace.
@@ -526,6 +528,7 @@ class LinnaeoApp(QApplication):
 
         self.defFontId = self.fonts.addApplicationFont(':/fonts/noto-default.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
+        print("Fonts loaded: ",self.defFontId,self.defFontId2)
         self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
 
     """

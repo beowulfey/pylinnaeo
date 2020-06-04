@@ -54,13 +54,18 @@ class Slots:
         self._currentWindow.widget().toggleColors(state)
 
     def changeTheme(self):
-        try:
+        #try
+        if self._currentWindow:
             self._currentWindow.widget().setTheme(self.optionsPane.comboTheme.currentText())
-        except:
-            print("Skipping theme set")
+        #except:
+        #    print("Skipping theme set")
 
     def changeFont(self, font):
-        self._currentWindow.widget().setFont(font)
+        #try:
+        if self._currentWindow:
+            self._currentWindow.widget().setFont(font)
+        #except:
+        #    print("Skipping font set")
 
     def changeFontSize(self, size):
         print(size)
