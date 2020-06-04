@@ -1,4 +1,5 @@
 import logging
+from math import ceil, floor
 
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF, QStandardItem, QColor
@@ -49,7 +50,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.setupCustomUi()
 
         # Connect all slots and start
-        #self.resized.connect(self.externalResizeDone)
+        # self.resized.connect(self.externalResizeDone)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
         self.namePane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
         self.nameChange.connect(self.updateName)
@@ -136,6 +137,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         """
         try:
             self.last = None
+
             if not self.showColors:
                 color = False
             if not self.showRuler:
@@ -148,7 +150,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 char_count = int(width / charpx - 20 / charpx - \
                                  self.alignPane.verticalScrollBar().size().width() / charpx)
                 # This is for saving the scroll position
-                self.last = self.alignPane.verticalScrollBar().value()
+                sb = self.alignPane.verticalScrollBar()
+                print("BEFORE",sb.value(), sb.sliderPosition(), sb.minimum(), sb.maximum() )
+                self.last = self.alignPane.verticalScrollBar().sliderPosition() / (self.alignPane.verticalScrollBar().maximum() -
+                                                                          self.alignPane.verticalScrollBar().minimum())
             lines = int(self.maxlen / char_count) + 1
             if lines != self.lines:
                 self.lineChange.emit(lines)
@@ -161,11 +166,18 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
             worker.start()
             worker.wait()
-            style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (self.font().family(), self.font().pointSize())
-            self.alignPane.setHtml(style+worker.html)
+            style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (
+                self.font().family(), self.font().pointSize())
+            self.alignPane.setHtml(style + worker.html)
 
-            if self.last:
-                self.alignPane.verticalScrollBar().setValue(self.last)
+            if self.alignPane.verticalScrollBar().isVisible():
+                if self.last:
+                    print("RETURNING TO POSITION")
+                    self.alignPane.verticalScrollBar().setSliderPosition(int(round(((self.alignPane.verticalScrollBar().maximum() -
+                                                                            self.alignPane.verticalScrollBar().minimum()) *
+                                                                           self.last))))
+                sb = self.alignPane.verticalScrollBar()
+                print(sb.value(), sb.sliderPosition(), sb.minimum(), sb.maximum())
         except ZeroDivisionError:
             self.alignLogger.info("Font returned zero char width. Please choose a different font")
 
@@ -208,14 +220,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # Choosing a new font has a built in size, which is annoying
 
         if font.family() != self.font().family() and font.pointSize() != self.font().pointSize():
-            #print("IGNORING")
+            # print("IGNORING")
             font.setPointSize(self.font().pointSize())
-        #print(font.pointSize())
+        # print(font.pointSize())
         super().setFont(font)
-        #print("FINAL", self.font().pointSize())
+        # print("FINAL", self.font().pointSize())
         self.fmF = QFontMetricsF(self.font())
         if self.done:
-            #print("REDRAWING")
+            # print("REDRAWING")
             self.seqInit()
             self.seqArrange()
             self.nameArrange(self.lines)
@@ -223,18 +235,18 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def setFontSize(self, size):
         font = self.font()
         font.setPointSize(size)
-        #print("FONT",font.pointSize(), self.font().pointSize())
+        # print("FONT",font.pointSize(), self.font().pointSize())
         self.setFont(font)
 
     def setParams(self, params):
-        #print("UPDATING VALUES")
+        # print("UPDATING VALUES")
         self.params = params
-        #print(self.params)
+        # print(self.params)
         self.showRuler = self.params['ruler']
         self.showColors = self.params['colors']
         self.consvColors = self.params['byconsv']
         if self.font().pointSize() != self.params['fontsize']:
-            #print("Changing font size")
+            # print("Changing font size")
             self.setFontSize(self.params['fontsize'])
         if self.font() != self.params['font']:
             self.setFont(self.params['font'])
@@ -268,15 +280,16 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         name = self.splitNames[target[0]]
         resi = self.splitSeqs[target[0]][target[2]]
         self.comments[target[2]] = "COMMENT"
+        print(self.comments)
         self.seqInit()
         self.seqArrange()
-        #self.commentPane.setText(str(name)+" "+str(resi))
-        #self.gridLayout.addWidget(self.commentButton,1,0)
-        #self.gridLayout.addWidget(self.commentPane,1,1)
+        # self.commentPane.setText(str(name)+" "+str(resi))
+        # self.gridLayout.addWidget(self.commentButton,1,0)
+        # self.gridLayout.addWidget(self.commentPane,1,1)
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
-    #updateParam = pyqtSignal(dict)
+    # updateParam = pyqtSignal(dict)
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -288,7 +301,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
 
     def initPane(self):
         for index in range(0, self.comboTheme.model().rowCount()):
-            self.themeIndices[self.comboTheme.model().itemData(self.comboTheme.model().index(index,0))[0]] = index
+            self.themeIndices[self.comboTheme.model().itemData(self.comboTheme.model().index(index, 0))[0]] = index
 
         self.checkRuler.toggled.connect(self.rulerToggle)
         self.checkColors.toggled.connect(self.colorToggle)
@@ -299,7 +312,8 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
     def setParams(self, params):
         """ These are set by the preferences pane --> default for every new window """
         self.params = params.copy()
-        print(params["font"].family(), self.params["font"].family())# 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
+        print(params["font"].family(),
+              self.params["font"].family())  # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
         self.checkRuler.setChecked(self.params['ruler'])
         self.checkColors.setChecked(self.params['colors'])
         self.checkConsv.setChecked(self.params['byconsv'])
@@ -309,25 +323,22 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
         print(self.params['font'].family())
 
     def rulerToggle(self):
-        self.params['ruler']=self.checkRuler.isChecked()
+        self.params['ruler'] = self.checkRuler.isChecked()
 
     def colorToggle(self):
         self.params['colors'] = self.checkColors.isChecked()
 
     def changeTheme(self):
-        self.params['theme']=self.comboTheme.currentText()
+        self.params['theme'] = self.comboTheme.currentText()
 
     def changeFont(self):
-        self.params['font']=self.comboFont.currentFont()
+        self.params['font'] = self.comboFont.currentFont()
 
     def changeFontSize(self):
         self.params['fontsize'] = self.spinFontSize.value()
 
     def showColorDesc(self):
         self.params['colordesc'] = self.checkColorDesc.isChecked()
-
-
-
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
