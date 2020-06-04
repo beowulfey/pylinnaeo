@@ -160,10 +160,12 @@ class Slots:
 
             for seqr in aln:
                 cleanseq = str(seqr.seq).replace('-', '')
-                seqr_clean = models.SeqR(cleanseq)
+                cleanseq2 = MutableSeq(cleanseq, generic_protein)
+                print(cleanseq2)
+                seqr_clean = models.SeqR(cleanseq2)
                 seqr_clean.convert(seqr)
-                seqr_clean.seq = cleanseq
-                items[seqr_clean.name] = str(seqr.seq)
+                seqr_clean.seq = cleanseq2
+                items[seqr_clean.name] = seqr.seq
                 combo.append(seqr_clean.seq)
                 if seqr_clean not in self.sequences.values():
                     self.seqInit(seqr_clean, folder='Import')
@@ -189,8 +191,9 @@ class Slots:
                 atype = None
                 if afilter == "*.fasta":
                     atype = 'fasta'
-                filename = sel[0] + '.' + atype
+                filename = sel[0]# + '.' + atype
                 seqR = self.bioModel.itemFromIndex(index[0]).data(role=self.SequenceRole)[0]
+                print(seqR)
                 with open(filename, 'w'):
                     SeqIO.write(seqR, filename, atype)
                     print(seqR)
@@ -209,7 +212,7 @@ class Slots:
                     atype = 'fasta'
                 elif afilter == "clustal":
                     atype = 'clustal'
-                filename = sel[0] + '.' + atype if sel[0][-1 * len(atype):] != atype else sel[0]
+                filename = sel[0]# + '.' + atype if sel[0][-1 * len(atype):] != atype else sel[0]
                 aliR = self.projectModel.itemFromIndex(index[0]).data(role=self.SequenceRole)
                 with open(filename, 'w'):
                     AlignIO.write(aliR, filename, atype)
