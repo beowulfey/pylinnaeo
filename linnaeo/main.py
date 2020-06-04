@@ -13,7 +13,9 @@ from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal
 from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSplitter, qApp, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSplitter, qApp, QWidget, QSizePolicy, \
+    QGridLayout
+from nglview import NGLWidget
 
 import linnaeo
 from linnaeo.resources import linnaeo_rc
@@ -163,6 +165,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
         # Load
         self.DEBUG()  # TODO: DELETE THIS NEPHEW
+
+        #self.pdbWindow = displays.NGLviewer(self)
+
+
+        #self.pdbWindow.show()
 
     def connectSlots(self):
         # Toolbar and MenuBar

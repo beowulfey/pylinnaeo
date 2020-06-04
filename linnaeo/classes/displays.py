@@ -1,14 +1,28 @@
 import logging
 from math import ceil, floor
 
-from PyQt5.QtCore import pyqtSignal, Qt
+from Bio.PDB import PDBParser, PDBList, MMCIFParser
+from PyQt5.QtCore import pyqtSignal, Qt, QUrl
 from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF, QStandardItem, QColor
+#from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, qApp, QTextEdit, QPushButton, QSpacerItem, QSizePolicy, \
-    QFormLayout
+    QFormLayout, QMainWindow
+import nglview as nv
 
 from linnaeo.classes import widgets, utilities, themes
 from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui
 from linnaeo.resources import linnaeo_rc
+
+
+
+class NGLviewer(QMainWindow):
+    def __init__(self, parent=None):
+        super(self.__class__, self).__init__(parent)
+        webview = QWebEngineView(self)
+        webview.load(QUrl('http://nglviewer.org/ngl/'))
+        self.setCentralWidget(webview)
+
+
 
 
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
@@ -139,7 +153,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.last = None
 
             if not self.showColors:
-                color = False
+                color  = False
             if not self.showRuler:
                 rulers = False
             # Calculate font and window metrics
