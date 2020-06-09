@@ -1,8 +1,14 @@
 import logging
 import sys
 import traceback
+from io import StringIO
+from math import floor, trunc
+from typing import TextIO
 
-from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt
+import numpy
+from Bio.Blast import NCBIWWW, NCBIXML
+from Bio.PDB import FastMMCIFParser, DSSP, PDBIO
+from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryDir, QTemporaryFile
 import clustalo
 
 """
@@ -17,8 +23,8 @@ class SeqThread(QThread):
      """
     finished = pyqtSignal()
 
-    def __init__(self, *args, fancy=True):
-        QThread.__init__(self)
+    def __init__(self, *args, fancy=True, parent=None):
+        QThread.__init__(self, parent)
         self.seqLogger = logging.getLogger("SEQDRAW")
         self.html = None
         self.seqs = args[0]
@@ -135,81 +141,154 @@ def nodeSelector(tree, model):
                 copied.append(index)
                 seqr = node.data(role=Qt.UserRole + 2)[0]
                 seqs.append(seqr)
-    return seqs
+    return indices, seqs
 
 
-def buildRuler(chars, gap, start, end):
-    """
-    Fairly complicated function for generating the ruler. Calculates the spacing
-    and labeling based on the width of the screen. Pretty computationally intensive,
-    so I make a point to hide it (and the colors) when resizing.
-    """
+def buildRuler(chars,gap,start,end,interval=None):
     ruler = None
-    if start != end:
-        if gap != 0 and chars != end-start:
-            # Have to adjust the spacing for the last line
-            # Don't go below 8 chars so the numbers don't merge.
-            # May want to extend to 10... rare but some seqs are >1000
-            if end - start > 8:
-                chars = (end - start)
-            else:
-                chars = 8
-        # labels is all the possible numbers between the start and end
-        labels = list(range(start+1, end+1))
-        spacing = chars
-        # My hacky way to add more numbers as the screen increases in size.
-        # Spacing is the distance between numbers of the rulers.
-        # Not all numbers are divisible by 2, 3, etc so there are uneven spaces, which I account for badly below.
-        # TODO: Consider changing this to floor?
-        if chars < 20:
-            pass
-        elif 20 <= chars < 60:
-            spacing = int(chars/2)
-        elif 60 <= chars < 100:
-            spacing = int(chars/3)
-        elif 100 <= chars < 150:
-            spacing = int(chars/4)
-        elif 150 <= chars:
-            spacing = int(chars/5)
-        n = 0
-        speclabels = []
-        rulerlist = []
-        # spec labels are the numbers that are actually used based on the spacing.
-        while n < chars:
-            speclabels.append(labels[n])
-            n+=spacing
-        if labels[-1] not in speclabels:
-            # a little hack because sometimes the end doesn't  get added
-            speclabels.append(labels[-1])
-        for n in range(1,4):
-            # another little hack for when math makes it so there are two labels right next to each other at the end
-            if labels[-1]-n in speclabels:
-                speclabels.remove(labels[-1]-n)
-        if len(speclabels)>2:
-            # more complicated logic for when there are multiple labels
-            # builds a list (compressed to a string) of the labels and spacing, accounting for the length of the numbers
-            count = range(1,len(speclabels))
-            for x in count:
-                if x == count[-1]:
-                    rulerlist.append(str(speclabels[x - 1]))
-                    rulerlist.append(" "*(chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
-                    rulerlist.append(str(speclabels[x]))
+    if interval:
+        if start != end:
+            interval = 10 if chars < 100 else 20
+            labels = list(numpy.arange(round(start, -1), round(end, -1), interval))
+            print(start + 1, end, labels)
+            if len(labels) == 1:
+                if labels[0] <= (start + 1):
+                    print("removed ", labels[0])
+                    labels.pop(0)
+            if len(labels) > 1:
+                rm = []
+                for x in range(2):
+                    print(labels[x])
+                    if labels[x] - (start+1) < len(str(labels[-1]))*2+2:
+                        print("Removed ",labels[x])
+                        rm.append(labels[x])
+                        if len(labels) <= 1:
+                            break
+                    if end - labels[-x] < len(str(labels[-1]))*2+2:
+                        print("Removed ",labels[-x])
+                        rm.append(labels[-x])
+                [labels.remove(x) for x in rm]
+            labels.insert(0, start + 1)
+            if end-(start+1) >= len(str(start+1)) + len(str(end)) + 2:
+                labels.append(end)
+            print(labels)
+            rulel = ['<u>' + str(labels[0])[0] + '</u>' + str(labels[0])[1:]]
+            for x in labels[1:]:
+                prevx = labels[labels.index(x) - 1]
+                xlab = len(str(x))
+                if labels.index(x) == 1 and len(str(prevx)) > 1:
+                    # Different for first space because I left align the first number.
+                    xlab = len(str(x)) + len(str(prevx)) - 1
+                spacer = x - prevx - xlab
+                print("Spacer is (%s-%s)-%s=%s " % (x, prevx, xlab, spacer))
+                rulel.append("&nbsp;" * spacer)
+                rulel.append(str(x)[:-1] + '<u>' + str(x)[-1:] + '</u>')
+            ruler = "".join(rulel)
+    else:
+        """
+        Fairly complicated function for generating the ruler. Calculates the spacing
+        and labeling based on the width of the screen. Pretty computationally intensive,
+        so I make a point to hide it (and the colors) when resizing.
+        """
+        if start != end:
+            if gap != 0 and chars != end-start:
+                # Have to adjust the spacing for the last line
+                # Don't go below 8 chars so the numbers don't merge.
+                # May want to extend to 10... rare but some seqs are >1000
+                if end - start > 8:
+                    chars = (end - start)
                 else:
-                    rulerlist.append(str(speclabels[x-1]))
-                    first = 0
-                    if x == count[0]:
-                        first = len(str(speclabels[x-1]))
-                    next = len(str(speclabels[x]))
-                    rulerlist.append(" "*(spacing - next - first+1))
-            ruler = "".join(rulerlist)
-        elif len(speclabels)==2:
-            # Ah! so easy.
-            ruler = str(start + 1) + " " * (chars - len(str(start + 1)) - len(str(end))) + str(end)
-        else:
-            # Just show a single number.
-            ruler = str(start+1)
+                    chars = 8
+            # labels is all the possible numbers between the start and end
+            labels = list(range(start+1, end+1))
+            spacing = chars
+            # My hacky way to add more numbers as the screen increases in size.
+            # Spacing is the distance between numbers of the rulers.
+            # Not all numbers are divisible by 2, 3, etc so there are uneven spaces, which I account for badly below.
+            # TODO: Consider changing this to floor?
+            if chars < 20:
+                pass
+            elif 20 <= chars < 60:
+                spacing = int(chars/2)
+            elif 60 <= chars < 100:
+                spacing = int(chars/3)
+            elif 100 <= chars < 150:
+                spacing = int(chars/4)
+            elif 150 <= chars:
+                spacing = int(chars/5)
+            n = 0
+            speclabels = []
+            rulerlist = []
+            # spec labels are the numbers that are actually used based on the spacing.
+            while n < chars:
+                speclabels.append(labels[n])
+                n+=spacing
+            if labels[-1] not in speclabels:
+                # a little hack because sometimes the end doesn't  get added
+                speclabels.append(labels[-1])
+            for n in range(1,4):
+                # another little hack for when math makes it so there are two labels right next to each other at the end
+                if labels[-1]-n in speclabels:
+                    speclabels.remove(labels[-1]-n)
+            if len(speclabels)>2:
+                # more complicated logic for when there are multiple labels
+                # builds a list (compressed to a string) of the labels and spacing, accounting for the length of the numbers
+                count = range(1,len(speclabels))
+                for x in count:
+                    if x == count[-1]:
+                        #rulerlist.append('<u>'+str(speclabels[x - 1])+'</u>')
+                        rulerlist.append(str(speclabels[x - 1]))
+                        rulerlist.append(" "*(chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
+                        rulerlist.append(str(speclabels[x]))
+                    else:
+                        rulerlist.append(str(speclabels[x-1]))
+                        first = 0
+                        if x == count[0]:
+                            first = len(str(speclabels[x-1]))
+                        next = len(str(speclabels[x]))
+                        rulerlist.append(" "*(spacing - next - first))
+                ruler = "".join(rulerlist)
+            elif len(speclabels)==2:
+                # Ah! so easy.
+                ruler = str(start + 1) + " " * (chars - len(str(start + 1)) - len(str(end))) + str(end)
+            else:
+                # Just show a single number.
+                ruler = str(start+1)
     return ruler
 
+
+class BlastThread(QThread):
+    finished = pyqtSignal(StringIO)
+
+    def __init__(self, seq, parent=None):
+        QThread.__init__(self, parent)
+        self.seq = seq
+        self.result = None
+
+    def run(self):
+
+        print("BLASTING SEQUENCE: ", self.seq.format('fasta'))
+        blast = NCBIWWW.qblast('blastp', 'refseq_protein', str(self.seq.format('fasta')))
+        print("BLAST COMPLETE")
+        #blast = "yay"
+        print(type(blast))
+        self.finished.emit(blast)
+
+        '''struct = self.args[0]
+        tmp = QTemporaryFile()
+        run = {}
+        if tmp.open():
+            io = PDBIO()
+            io.set_structure(struct)
+            io.save(tmp.fileName())
+            dssp = DSSP(struct[0], tmp.fileName(), dssp='mkdssp')
+            for key in dssp.keys():
+                run[dssp[key][0]] = dssp[key][2]
+            self.sstruct = run'''
+
+class DSSPThread(QThread):
+    def __init__(self, args, parent=None):
+        QThread.__init__(self, parent)
 
 class AlignThread(QThread):
     """
@@ -222,8 +301,10 @@ class AlignThread(QThread):
 
     def __init__(self, *args, **kwargs):
         self.clustalLogger = logging.getLogger("ClustalO")
-        QThread.__init__(self)
-        self.args = args
+        self.args = list(args)
+        parent = self.args[0]
+        self.args.pop(0)
+        QThread.__init__(self, parent)
         self.kwargs = kwargs
         self.aligned = {}
         #self.clustalLogger.debug("Thread for ClustalO created")
@@ -247,8 +328,8 @@ class ProcTimerThread(QThread):
     """
     timeout = pyqtSignal()
 
-    def __init__(self):
-        QThread.__init__(self)
+    def __init__(self, parent=None):
+        QThread.__init__(self, parent)
         self.processTimer = QTimer()
         self.processTimer.setInterval(1000)
         self.processTimer.timeout.connect(self.timerDone)

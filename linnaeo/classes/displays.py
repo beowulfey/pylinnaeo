@@ -1,18 +1,12 @@
 import logging
-from math import ceil, floor
 
-from Bio.PDB import PDBParser, PDBList, MMCIFParser
 from PyQt5.QtCore import pyqtSignal, Qt, QUrl
-from PyQt5.QtGui import QFontDatabase, QFont, QFontMetricsF, QStandardItem, QColor
+from PyQt5.QtGui import QFontMetricsF, QColor
 #from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, qApp, QTextEdit, QPushButton, QSpacerItem, QSizePolicy, \
-    QFormLayout, QMainWindow
-import nglview as nv
+from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, QMainWindow
 
 from linnaeo.classes import widgets, utilities, themes
-from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui
-from linnaeo.resources import linnaeo_rc
-
+from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui, comments_ui
 
 
 class NGLviewer(QMainWindow):
@@ -23,7 +17,10 @@ class NGLviewer(QMainWindow):
         self.setCentralWidget(webview)
 
 
-
+class CommentsPane(QWidget, comments_ui.Ui_Form):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.setupUi(self)
 
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     """
@@ -44,7 +41,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # Construct the window
         self.alignLogger = logging.getLogger("AlignWindow")
         self.alignPane = widgets.AlignPane(self)
-        self.commentPane = QTextEdit()
+        self.commentPane = CommentsPane()
         self.commentButton = QPushButton("Save")
 
         # Init functional variables
@@ -177,7 +174,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.alignPane.names = self.splitNames
             self.alignPane.clear()
             fancy = False if self.userIsResizing else True
-            worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy)
+            worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy, parent=self,)
             worker.start()
             worker.wait()
             style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (
@@ -294,12 +291,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         name = self.splitNames[target[0]]
         resi = self.splitSeqs[target[0]][target[2]]
         self.comments[target[2]] = "COMMENT"
+
         print(self.comments)
         self.seqInit()
         self.seqArrange()
-        # self.commentPane.setText(str(name)+" "+str(resi))
+        self.commentPane.lineEdit.setText(str(name)+" "+str(resi))
         # self.gridLayout.addWidget(self.commentButton,1,0)
-        # self.gridLayout.addWidget(self.commentPane,1,1)
+        self.gridLayout.addWidget(self.commentPane,1,1)
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):

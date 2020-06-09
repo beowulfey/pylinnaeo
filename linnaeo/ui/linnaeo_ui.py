@@ -125,6 +125,8 @@ class Ui_MainWindow(object):
         self.actionOptions = QtWidgets.QAction(MainWindow)
         self.actionOptions.setCheckable(True)
         self.actionOptions.setObjectName("actionOptions")
+        self.actionUniPROT = QtWidgets.QAction(MainWindow)
+        self.actionUniPROT.setObjectName("actionUniPROT")
         self.menuImport.addAction(self.actionImportSeq)
         self.menuImport.addAction(self.actionImportAlign)
         self.menuExport.addAction(self.actionExportSeq)
@@ -163,6 +165,7 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionDelete)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionSave_Image)
+        self.toolBar.addAction(self.actionUniPROT)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -226,3 +229,4 @@ class Ui_MainWindow(object):
         self.actionSmaller.setToolTip(_translate("MainWindow", "Decrease font size"))
         self.actionOptions.setText(_translate("MainWindow", "Options Pane"))
         self.actionOptions.setToolTip(_translate("MainWindow", "Open window settings pane"))
+        self.actionUniPROT.setText(_translate("MainWindow", "UniPROT"))

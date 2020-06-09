@@ -185,6 +185,7 @@
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
    <addaction name="actionSave_Image"/>
+   <addaction name="actionUniPROT"/>
   </widget>
   <action name="actionAlign">
    <property name="text">
@@ -386,6 +387,11 @@
    </property>
    <property name="toolTip">
     <string>Open window settings pane</string>
+   </property>
+  </action>
+  <action name="actionUniPROT">
+   <property name="text">
+    <string>UniPROT</string>
    </property>
   </action>
  </widget>

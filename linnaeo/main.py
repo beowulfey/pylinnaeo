@@ -44,7 +44,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # System instants; status bar and threads
         self.memLabel = QLabel()
         self.mainProcess = psutil.Process(os.getpid())
-        self.processTimer = utilities.ProcTimerThread()
+        self.processTimer = utilities.ProcTimerThread(self)
 
         self.mainLogger = logging.getLogger("Main")
         self.threadpool = QThreadPool()
@@ -232,6 +232,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)
         #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
+        self.actionUniPROT.triggered.connect(self.get_UniprotId)
         #self.actionBigger.triggered.connect(self.increaseTextSize)
         #self.actionSmaller.triggered.connect(self.decreaseTextSize)
 
@@ -292,7 +293,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         combo = []
         # Collect the selected sequence(s)
         if self.lastClickedTree == self.bioTree:
-            seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
+            indices, seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
             for seqr in seqs:
                 items[seqr.name] = str(seqr.seq)
                 combo.append(seqr)
@@ -337,7 +338,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # TODO: Do pairwise here if only 2!
         if len(list(seqarray.values())) > 1:
             # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
-            worker = utilities.AlignThread(seqarray, seqtype=3, num_threads=self.threadpool.maxThreadCount())
+            worker = utilities.AlignThread(self, seqarray, seqtype=3, num_threads=self.threadpool.maxThreadCount())
             worker.start()
             worker.wait()
             aligned = worker.aligned
@@ -431,7 +432,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 seqr = node.data(role=self.SequenceRole)
                 for seq in seqr:
                     seqs[seq.name] = str(seq.seq)
-                worker = utilities.AlignThread(seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
+                worker = utilities.AlignThread(self, seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
                 worker.start()
                 worker.wait()
                 ali = worker.aligned
@@ -471,11 +472,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     def deselectProject(self):
         """Function to unselect the opposite tree when clicked. Prevents confusion when pasting"""
         self.projectTree.clearSelection()
+        self.actionUniPROT.setEnabled(True)
+        # TODO: Add more to clarify features here!
         self.lastClickedTree = self.bioTree
 
     def deselectSeqs(self):
         """Function to unselect the opposite tree when clicked. Prevents confusion when pasting"""
         self.bioTree.clearSelection()
+        self.actionUniPROT.setDisabled(True)
         self.lastClickedTree = self.projectTree
 
     def preNameChange(self):
@@ -532,7 +536,8 @@ class LinnaeoApp(QApplication):
     def __init__(self, *args):
         super().__init__(*args)
         self.fonts = QFontDatabase()
-
+        print(os.path)
+        print(os.get_exec_path())
         self.defFontId = self.fonts.addApplicationFont(':/fonts/noto-default.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
         print("Fonts loaded: ",self.defFontId,self.defFontId2)
