@@ -53,7 +53,18 @@ def redrawBasic(seqs, chars, lines, rulers=False):
         if line == lines - 1:
             end = start + len(seqs[0][start:])
         for i in range(len(seqs)):
-            html.append("".join([x[0][-8] for x in seqs[i][start:end]])+"\n")
+            html.append("".join([x[0][-8] for x in seqs[i][start:end]]))#+"\n")
+            if line == lines-1:
+                label = str(seqs[i][end - 1][1])
+                if label == "0":
+                    for y in range(chars):
+                        label = str(seqs[i][end - 1 - y][1])
+                        if label != "0":
+                            break
+                html.append(" "*2 + label + "\n")
+            else:
+                html.append("\n")
+
         html.append("\n")
         n+=1
     html.append("</pre>")
@@ -72,10 +83,21 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
             html.append(str(buildRuler(chars, gap, start, end))+"\n")
         for i in range(len(seqs)):
             if colors:
-                html.append("".join([x[0] for x in seqs[i][start:end]])+"\n")
+                html.append("".join([x[0] for x in seqs[i][start:end]]))#+"\n")
             else:
-                html.append("".join([x[0][-8] for x in seqs[i][start:end]]) + "\n")
-        html.append(" "*chars+"\n")
+                html.append("".join([x[0][-8] for x in seqs[i][start:end]]))# + "\n")
+            if line == lines-1:
+                label = str(seqs[i][end - 1][1])
+                if label == "0":
+                    for y in range(chars):
+                        label = str(seqs[i][end - 1 - y][1])
+                        if label != "0":
+                            break
+                html.append(" "*2 + label + "\n")
+            else:
+                html.append("\n")
+        if line < lines -1:
+            html.append(" "*chars+"\n")
         n += 1
     html.append("</pre>")
     return "".join(html)
@@ -144,34 +166,40 @@ def nodeSelector(tree, model):
     return indices, seqs
 
 
-def buildRuler(chars,gap,start,end,interval=None):
+def buildRuler(chars,gap,start,end,interval=False):
+    # TODO: Consider putting numbers at left and right, as in normal alignments. Particularly if also showing SS.
+    """ This version uses even spacing of the numbers (either 10 or 20 depending on screen width) but looks messy. """
     ruler = None
     if interval:
         if start != end:
             interval = 10 if chars < 100 else 20
             labels = list(numpy.arange(round(start, -1), round(end, -1), interval))
-            print(start + 1, end, labels)
+            #print(start + 1, end, labels)
             if len(labels) == 1:
+            #    print(labels[0])
                 if labels[0] <= (start + 1):
-                    print("removed ", labels[0])
+            #        print("removed ", labels[0])
+                    labels.pop(0)
+                elif labels[0] - (start+1) < len(str(labels[-1]))*2+2:
+            #        print("removed ", labels[0])
                     labels.pop(0)
             if len(labels) > 1:
                 rm = []
                 for x in range(2):
-                    print(labels[x])
+            #        print(labels[x])
                     if labels[x] - (start+1) < len(str(labels[-1]))*2+2:
-                        print("Removed ",labels[x])
+            #            print("Removed ",labels[x])
                         rm.append(labels[x])
                         if len(labels) <= 1:
                             break
                     if end - labels[-x] < len(str(labels[-1]))*2+2:
-                        print("Removed ",labels[-x])
+            #            print("Removed ",labels[-x])
                         rm.append(labels[-x])
                 [labels.remove(x) for x in rm]
             labels.insert(0, start + 1)
             if end-(start+1) >= len(str(start+1)) + len(str(end)) + 2:
                 labels.append(end)
-            print(labels)
+            #print(labels)
             rulel = ['<u>' + str(labels[0])[0] + '</u>' + str(labels[0])[1:]]
             for x in labels[1:]:
                 prevx = labels[labels.index(x) - 1]
@@ -180,13 +208,14 @@ def buildRuler(chars,gap,start,end,interval=None):
                     # Different for first space because I left align the first number.
                     xlab = len(str(x)) + len(str(prevx)) - 1
                 spacer = x - prevx - xlab
-                print("Spacer is (%s-%s)-%s=%s " % (x, prevx, xlab, spacer))
+             #   print("Spacer is (%s-%s)-%s=%s " % (x, prevx, xlab, spacer))
                 rulel.append("&nbsp;" * spacer)
                 rulel.append(str(x)[:-1] + '<u>' + str(x)[-1:] + '</u>')
             ruler = "".join(rulel)
     else:
+        # TODO: THIS IS BUGGY. ADD UNDERLINES. HAVE ALL ALIGNED (NOT ALL BUT LAST LINE)
         """
-        Fairly complicated function for generating the ruler. Calculates the spacing
+        This version is cleaner but the numbers end up with random numbers. Calculates the spacing
         and labeling based on the width of the screen. Pretty computationally intensive,
         so I make a point to hide it (and the colors) when resizing.
         """

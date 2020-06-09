@@ -304,7 +304,7 @@ class AlignPane(QTextEdit):
         self.lastchars = len(self.seqs[0])-self.chars*(self.lines-1)
 
     def getSeqPos(self, pos, row_pos):
-        seqsperline = (len(self.seqs) + int(self.parentWidget().showRuler) + 1)
+        seqsperline = (len(self.seqs) + int(self.parentWidget().parentWidget().showRuler) + 1)
         cutoff = (self.lines-1)*seqsperline*(self.chars+1)
         # Have to do special stuff if it's on the last line, since there are no blank characters to keep the pattern.
         # Probably should have put them in to make my life easier, but whatever, I already figured it out.
@@ -315,17 +315,20 @@ class AlignPane(QTextEdit):
         seqi = 0
         tline = 0
         for stack in range(self.lines):
-            i = line - stack * seqsperline - int(self.parentWidget().showRuler)
+            i = line - stack * seqsperline - int(self.parentWidget().parentWidget().showRuler)
             if i in list(range(len(self.seqs))):
                 seqi = i
                 tline = stack
         tpos = tline * self.chars + row_pos - 1
         others = []
-        resid = self.seqs[seqi][tpos][1]
-        for n in range(len(self.seqs)):
-            if n != seqi:
-                others.append([n, self.seqs[n][tpos][1]])
-        true_pos = [[seqi, resid, tpos]] + others
+        try:
+            resid = self.seqs[seqi][tpos][1]
+            for n in range(len(self.seqs)):
+                if n != seqi:
+                    others.append([n, self.seqs[n][tpos][1]])
+            true_pos = [[seqi, resid, tpos]] + others
+        except IndexError:
+            true_pos = None
         return true_pos
 
     def makeTT(self, mpos, curs):
@@ -335,7 +338,7 @@ class AlignPane(QTextEdit):
         pos = self.textCursor().position()
         row_pos = self.textCursor().positionInBlock()
         resids = self.getSeqPos(pos, row_pos)
-        if resn in ['A','C','D','E','F','G','H','I','K',
+        if resids and resn in ['A','C','D','E','F','G','H','I','K',
                         'L','M','N','P','Q','R','S','T','V','W','Y']:
             string = []
             for i, each in enumerate(resids):
