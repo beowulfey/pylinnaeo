@@ -1,0 +1,1075 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<EBIApplicationResult xmlns="http://www.ebi.ac.uk/schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ebi.ac.uk/Tools/common/schema/ApplicationResult.xsd">
+ <Header>
+  <program name="FASTA" version="36.3.8h Aug, 2019"/>
+  <commandLine command="cat fasta-R20200605-224932-0914-38617154-p1m.sequence | /nfs/public/ro/es/appbin/linux-x86_64/fasta-36.3.8h/fasta36 -l $DATA_CURRENT/fastacfg/fasta3db -L -T 32  -p -F 0.0 -b 50 -d 50 -m &quot;F9B fasta-R20200605-224932-0914-38617154-p1m.m9&quot; -z 1 \@:1- +uniprotkb+"/>
+  <parameters>
+   <sequences total="1">
+    <sequence number="1" name="EMBOSS_001" type="PROTEIN" length="586"/>
+   </sequences>
+   <databases total="1" sequences="-1" letters="-1">
+    <database number="1" name="uniprotkb" type="PROTEIN"/>
+   </databases>
+   <alignments>50</alignments>
+   <expectationLower>0.0</expectationLower>
+   <filter>none</filter>
+   <histogram>false</histogram>
+   <scores>50</scores>
+   <statistics>1</statistics>
+  </parameters>
+  <timeInfo start="2020-06-05T22:48:04+01:00" end="2020-06-05T22:53:23+01:00" search="P0Y0M0DT0H5M19.000S"/>
+ </Header>
+ <SequenceSimilaritySearchResult>
+  <hits total="50">
+   <hit number="1" database="TR" id="Q7K707" ac="Q7K707" length="586" description="Glucose-6-phosphate isomerase OS=Caenorhabditis elegans OX=6239 GN=gpi-1 PE=1 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3831</score>
+      <smithWatermanScore>3831</smithWatermanScore>
+      <initn>3831</initn>
+      <init1>3831</init1>
+      <opt>3831</opt>
+      <zScore>4644.9</zScore>
+      <bits>869.4</bits>
+      <expectation>0.0</expectation>
+      <identity>100.0</identity>
+      <positives>100.0</positives>
+      <overlap>586</overlap>
+      <strand>none/none</strand>
+      <querySeq start="1" end="586">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</pattern>
+      <matchSeq start="1" end="586">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="2" database="TR" id="Q9U1Q2" ac="Q9U1Q2" length="551" description="Glucose-6-phosphate isomerase OS=Caenorhabditis elegans OX=6239 GN=gpi-1 PE=1 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3609</score>
+      <smithWatermanScore>3609</smithWatermanScore>
+      <initn>3609</initn>
+      <init1>3609</init1>
+      <opt>3609</opt>
+      <zScore>4376.1</zScore>
+      <bits>819.6</bits>
+      <expectation>0.0</expectation>
+      <identity>100.0</identity>
+      <positives>100.0</positives>
+      <overlap>551</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="586">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</pattern>
+      <matchSeq start="1" end="551">                              MSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="3" database="TR" id="E3M911" ac="E3M911" length="572" description="Glucose-6-phosphate isomerase OS=Caenorhabditis remanei OX=31234 GN=Cre-gpi-1 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3550</score>
+      <smithWatermanScore>3550</smithWatermanScore>
+      <initn>3550</initn>
+      <init1>3550</init1>
+      <opt>3550</opt>
+      <zScore>4304.1</zScore>
+      <bits>806.3</bits>
+      <expectation>0.0</expectation>
+      <identity>93.4</identity>
+      <positives>97.9</positives>
+      <overlap>572</overlap>
+      <strand>none/none</strand>
+      <querySeq start="15" end="586">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>              :.::::::...::.::: . ::::.:::.:::::::::::::..:::: :::::.::::::: : :::::::::::::::::..::::: :::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::.::::::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::.:::.:::::::::::::::.::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: ::::::::::::::.::::::::: ::: :::::::: ::::::::::::::::::::::::::::::::.::::::::::::::::::::.::::::::::::::::::::::: .:.::::::::::::::::</pattern>
+      <matchSeq start="1" end="572">              MIGYLSDLMSSLFVGDSKNGAMSLTQDAAFVELKRHVEANEKSVQLLEWFEKDPTRFEKFTRHFKTPDGDFLFDFSKNRITDDTFQLLMNLAKSRGVEESRDAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQVGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLSKAGDASAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHFVNSPLEQNIPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRDGLHHQILLANFLAQSEALMKGKTAEVAEQELKSSGMSAESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQWGVELGKQLAKVIQPELASADKITTHDASTNGLIAFIKNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="4" database="TR" id="A0A2G5VRZ0" ac="A0A2G5VRZ0" length="573" description="Glucose-6-phosphate isomerase OS=Caenorhabditis nigoni OX=1611254 GN=Cni-gpi-1 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3525</score>
+      <smithWatermanScore>3525</smithWatermanScore>
+      <initn>3525</initn>
+      <init1>3525</init1>
+      <opt>3525</opt>
+      <zScore>4273.8</zScore>
+      <bits>800.7</bits>
+      <expectation>0.0</expectation>
+      <identity>92.8</identity>
+      <positives>98.2</positives>
+      <overlap>571</overlap>
+      <strand>none/none</strand>
+      <querySeq start="15" end="585">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>              ::.:::::...::.::: ..::::.:::.::::::::::.:::.:::. :.:::.::::::: : ::::::::::::::::::::::::.:::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::: .::::::::::::: :::::::::::::::::::::::::::::::::::::::.::::::::::.:::::::::::.:::::::::::::::.:::::::::::::::::::::::::::::::::::::: :::::::::::::::::::::::::::::::::::::::::.::::::.::::::::::::::.::::::::::::: :::.:::: ::::::::::::::::::::::::.:::::::.::::::::::::::::::::.::::::::::::::::::::::: ::.:::::::::::::::  </pattern>
+      <matchSeq start="1" end="571">              MLNYLSDLMSALFVGDSKNSAMSLTQDAAFVELKRHVEASEKDVQLLDWFQKDPSRFEKFTRHFKTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRDAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGQWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLSKAGDPAAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFENYEKLLDGAFAVDEHFVNTPLEQNIPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVRTLNPIRNGLHHQILLANFLAQSEALMKGKTAAVAEEELKASGMSAESIAKILPHKVFEGNKPTTSIVLPIVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQWGVELGKQLAKVIQPELASADKVTTHDASTNGLIAFIKNNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="5" database="TR" id="A0A2G5VRU3" ac="A0A2G5VRU3" length="579" description="Glucose-6-phosphate isomerase OS=Caenorhabditis nigoni OX=1611254 GN=Cni-gpi-1 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3503</score>
+      <smithWatermanScore>3503</smithWatermanScore>
+      <initn>3511</initn>
+      <init1>2016</init1>
+      <opt>3503</opt>
+      <zScore>4247.0</zScore>
+      <bits>795.8</bits>
+      <expectation>0.0</expectation>
+      <identity>91.9</identity>
+      <positives>97.2</positives>
+      <overlap>577</overlap>
+      <strand>none/none</strand>
+      <querySeq start="15" end="585">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKN------IPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>              ::.:::::...::.::: ..::::.:::.::::::::::.:::.:::. :.:::.::::::: : ::::::::::::::::::::::::.:::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::: .::::::::::::: :::::::::::::::::::::::::::::::::::::::.::::::::::.:::::::::::.:      ::::::::::::::.:::::::::::::::::::::::::::::::::::::: :::::::::::::::::::::::::::::::::::::::::.::::::.::::::::::::::.::::::::::::: :::.:::: ::::::::::::::::::::::::.:::::::.::::::::::::::::::::.::::::::::::::::::::::: ::.:::::::::::::::  </pattern>
+      <matchSeq start="1" end="577">              MLNYLSDLMSALFVGDSKNSAMSLTQDAAFVELKRHVEASEKDVQLLDWFQKDPSRFEKFTRHFKTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRDAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGQWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLSKAGDPAAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFENYEKLLDGAFAVDEHFVNTPLEQNQNVFLQIPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVRTLNPIRNGLHHQILLANFLAQSEALMKGKTAAVAEEELKASGMSAESIAKILPHKVFEGNKPTTSIVLPIVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQWGVELGKQLAKVIQPELASADKVTTHDASTNGLIAFIKNNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="6" database="TR" id="G0NZR3" ac="G0NZR3" length="573" description="Glucose-6-phosphate isomerase OS=Caenorhabditis brenneri OX=135651 GN=CAEBREN_28971 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3495</score>
+      <smithWatermanScore>3495</smithWatermanScore>
+      <initn>3486</initn>
+      <init1>3486</init1>
+      <opt>3495</opt>
+      <zScore>4237.4</zScore>
+      <bits>794.0</bits>
+      <expectation>0.0</expectation>
+      <identity>91.9</identity>
+      <positives>97.9</positives>
+      <overlap>571</overlap>
+      <strand>none/none</strand>
+      <querySeq start="15" end="585">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>              :.:::::....::::.: ..:: :..: .:.::::::::::::.:::: :::::.::::::: :.::::::::::::::::::::::::.::::::::::::::::::::::::::::::.:::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.::::::::::::::::::::::::::::::::::::::::::::::::::::::::.::::..::::::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::.:::::::::::::::::::.:::::::::::::::::::::::::::::::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::.::::::::::::::.::::::::  :::.:::..::: ::: ::::::::::::::::::::::::::::.::::::::::::::::::::.:::::::::::::::::::::.:.::::::::::::::::.:  </pattern>
+      <matchSeq start="1" end="571">              MIGYLSDVLSNLFIGESKNEAMFLTKDDAFIELKRHVEANEKDVQLLEWFEKDPTRFEKFTRHFSTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRNAMFSAEKINFTENRAVLHIALRNRANRPIHVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKHYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLSKAGDSSAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHFVNAPLEKNIPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRNGLHHQILLANFLAQSEALMKGKTKQVAESELKAAGMSSESIEKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQWGVELGKQLAKVIQPELASSDNVTSHDASTNGLIAFIKKNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="7" database="TR" id="G0NFU3" ac="G0NFU3" length="573" description="Glucose-6-phosphate isomerase OS=Caenorhabditis brenneri OX=135651 GN=CAEBREN_20371 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3491</score>
+      <smithWatermanScore>3491</smithWatermanScore>
+      <initn>3482</initn>
+      <init1>3482</init1>
+      <opt>3491</opt>
+      <zScore>4232.5</zScore>
+      <bits>793.1</bits>
+      <expectation>0.0</expectation>
+      <identity>91.9</identity>
+      <positives>97.5</positives>
+      <overlap>571</overlap>
+      <strand>none/none</strand>
+      <querySeq start="15" end="585">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>              :.:::::....::::.: ..::::..: .:.::::::::::::.:::: :::::.::::::: : ::::::::::::::::::::::::.::::::::::::::::::::::::::::::.:::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:: :::::::::::::::::::::::::::::::::::::::::::::::::::::.:::: .::::::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::.:::::::::::::::::::.:::::::::::::::::::::::::::::::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::.::::::::::::::.::::::::  :::.:::..::: ::: ::::::::::::::::::::::::::::.::::::::::::::::::::.:::::::::::::::::::::.:.::::::::::::::::.:  </pattern>
+      <matchSeq start="1" end="571">              MIGYLSDVLSNLFIGESKNEAMSLTKDDAFIELKRHVEANEKDVQLLEWFEKDPTRFEKFTRHFPTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRNAMFSAEKINFTENRAVLHIALRNRANRPIHVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKHYQNGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLSKAGDPSAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHFVNAPLEKNIPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRNGLHHQILLANFLAQSEALMKGKTKEVAESELKAAGMSSESIEKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQWGVELGKQLAKVIQPELASSDNVTSHDASTNGLIAFIKKNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="8" database="TR" id="A8X5M7" ac="A8X5M7" length="552" description="Glucose-6-phosphate isomerase OS=Caenorhabditis briggsae OX=6238 GN=gpi-1 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3413</score>
+      <smithWatermanScore>3413</smithWatermanScore>
+      <initn>3413</initn>
+      <init1>3413</init1>
+      <opt>3413</opt>
+      <zScore>4138.3</zScore>
+      <bits>775.6</bits>
+      <expectation>0.0</expectation>
+      <identity>93.5</identity>
+      <positives>98.0</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="585">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>                              :::.:::.::.:: .:::::::.:::. :.:: .::::::: : ::::::::::::::::::::::::.:::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.:::: .::::::::::::: :::::::::::::::::::::::::::::::::::::::.::::::::::.:::::::::::.:::::::::::::::.:::::::::::::::::::::::::::::::::::::: :::::::::::::::::::::::::::::::::::::::::.::::::.::::::::::::::.::::::::::::: :::.:::: ::::::::::::::::::::::::.:::::::.::::::::::::::::::::.::::::::::::::::::::::: ::.:::::::::::::::  </pattern>
+      <matchSeq start="1" end="550">                              MSLTQDAAFVDLKNYVEANEKDVQLLDWFQKDQSRFEKFTRHFKTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRDAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGQWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLSKAGDPAAVAKHFVALSTNVLKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFENYEKLLDGAFAVDEHFVNTPLEQNIPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVRTLNPIRNGLHHQILLANFLAQSEALMKGKTAAVAEEELKASGMSAESIAKILPHKVFEGNKPTTSIVLPIVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQWGVELGKQLAKVIQPELASADKVTTHDASTNGLIAFIKNNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="9" database="TR" id="A0A1I7UZU5" ac="A0A1I7UZU5" length="552" description="Glucose-6-phosphate isomerase OS=Caenorhabditis tropicalis OX=1561998 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3370</score>
+      <smithWatermanScore>3370</smithWatermanScore>
+      <initn>3370</initn>
+      <init1>3370</init1>
+      <opt>3370</opt>
+      <zScore>4086.1</zScore>
+      <bits>765.9</bits>
+      <expectation>0.0</expectation>
+      <identity>91.5</identity>
+      <positives>97.8</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="585">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>                              :::..: .:.::: :::::::..:::. ::.::.::::::: ::::::::::::::::::.:::::::.::::::::::::::::::::::::::::::.:::::.:::::::::::::::::::.::::::::::::.::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::.::::::::::::::::::::::::::::::.:::. .::::::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::.:::.:::::::::::::::.:::::::::::::::::::::::::::::::::::::: :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.::::::::: ::: :::.:::.  ::::::::::::::::::::::::::::::::::::::::::::::.:::::.:::::::::::::.:::::.: :..:::::::::::::.:.:  </pattern>
+      <matchSeq start="1" end="550">                              MSLTKDDAFIELKNHVEANEKSVQLLKWFEQDPSRFEKFTRHFATPDGDFLFDFSKNRITEESFQLLMKLAKSRGVEESRNAMFSAEKINFTENRAVLHIALRNRSNRPILVDGKDVMPDVNRVLGHMKEFCNEIISGQWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKHYQIGPNVHFVSNVDGTHVAEVTKKLDAETTLFIIASKTFTTQETITNAETAKEWFLSKAGNPSAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHFVNAPLEQNIPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQSEALMKGKTAEVAEKELKASGMDEASIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIVWDICSFDQWGVELGKQLAKAIQPELSSPDVITSHDASTNGLIAFVKKNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="10" database="TR" id="A0A2H2ILB8" ac="A0A2H2ILB8" length="575" description="Glucose-6-phosphate isomerase OS=Caenorhabditis japonica OX=281687 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>3338</score>
+      <smithWatermanScore>3338</smithWatermanScore>
+      <initn>3338</initn>
+      <init1>1972</init1>
+      <opt>3338</opt>
+      <zScore>4046.8</zScore>
+      <bits>758.7</bits>
+      <expectation>2.4E-215</expectation>
+      <identity>86.9</identity>
+      <positives>96.0</positives>
+      <overlap>574</overlap>
+      <strand>none/none</strand>
+      <querySeq start="15" end="586">MIFELFRFIFRKKKMLGYLSDLIGTLFIG-DSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAK-AGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>              :::::::....:::: .:  . :::.:: .:.:::  ::::::..:::. :..::.::.:::: ::::::.:::::::::::: .:.::..:::::::::::::::.:.::::::::::::.::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::::.::.::.:::::::::::::::::.:..:: :::::::::::::::::::::::::::::.: .:: .::::::::::::: :::::::: ::::::::::::::::::::::::::::::.:.::::::::.:::::::::::.:::::::::::::::.:::::::::::::::::::::::::::::::::::::: :::::::::::::::::::::::::::::::::::::::::::::::: ::::::::::::::::::::::. . ::::::.::..  .. ::::::::::::::::::::::::::::.::::::::::::::.:::::.::::::::::::::::::::: ::::.:::::::::::::.:. </pattern>
+      <matchSeq start="1" end="574">              MLGYLSDVLSALFIGPNSKSRDMSLTQDPVFLELKSFVEANEKNTQLLDWFRQDPGRFQKFTRHFATPDGQFLFDFSKNRITDATFELLIKLAKSRGVEESRNAMFAADKINFTENRAVLHIALRNRANRPILVDGKDVMPDVNRVLAHMKEFCTEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTEALKHYQVGPNVHFVSNVDGTHVAEITSRLNPETTLFIIASKTFTTQETITNAETAKEWFLSKNGGDKAAVAKHFVALSTNVPKAVEFGIDAKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFENFEKLLDGAFAVDEHFVNTPLEQNIPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRQGLHHQILLANFLAQTEALMKGKSPSEAEAELKASGLAEAQLQKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIVWDICSFDQWGVELGKQLAKVIQPELASKDTVTTHDASTNGLIAFIKQNSA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="11" database="TR" id="A0A2P4WU57" ac="A0A2P4WU57" length="476" description="Glucose-6-phosphate isomerase OS=Caenorhabditis remanei OX=31234 GN=FL81_11206 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2997</score>
+      <smithWatermanScore>2997</smithWatermanScore>
+      <initn>1524</initn>
+      <init1>1524</init1>
+      <opt>2997</opt>
+      <zScore>3635.0</zScore>
+      <bits>682.3</bits>
+      <expectation>2.1E-192</expectation>
+      <identity>94.2</identity>
+      <positives>96.9</positives>
+      <overlap>484</overlap>
+      <strand>none/none</strand>
+      <querySeq start="103" end="586">KFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              : :::::::::::.:::::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::::::::::.:::::::::::::::.:::::::::::::::::::::::::::::::::::::.:::::.::::::::::::: ::::::::::::::::::::::::::::::::::::::::::::::::::.:::::        ::::::::::::::.::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: ::::::::::::::.::::::::: ::: :::::::: ::::::::::::::::::::::::::::::::.::::::::::::::::::::.::::::::::::::::::::::: .:.::::::::::::::::</pattern>
+      <matchSeq start="1" end="476">                              MNLAKSRGVEESRDAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCKEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQVGPNVHFVSNVDGTHVTEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLSKAGDASAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHF--------IPVILAMIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRDGLHHQILLANFLAQSEALMKGKTAEVAEQELKSSGMSAESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQWGVELGKQLAKVIQPELASADKITTHDASTNGLIAFIKNNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="12" database="TR" id="A0A0C2FEI8" ac="A0A0C2FEI8" length="551" description="Glucose-6-phosphate isomerase OS=Ancylostoma duodenale OX=51022 GN=ANCDUO_24865 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2953</score>
+      <smithWatermanScore>2953</smithWatermanScore>
+      <initn>2949</initn>
+      <init1>2902</init1>
+      <opt>2953</opt>
+      <zScore>3580.1</zScore>
+      <bits>672.3</bits>
+      <expectation>2.4E-189</expectation>
+      <identity>79.6</identity>
+      <positives>91.6</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="584">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              ::: .:. : .::  :. .::.  .. : . .:: ::.:.::.. :::: .::::::.:::::.:  ::..:.::.::  : :::..:.:::::::::::.:::::.: :: :::::::::::::: ::::::..::.:.::::::::::::::::::::::::::: :.:..:::::::::::::::::.:::::::: ::::::::::::::::::::::::::::: :::: .::::::::::::: :: ::::: .::::::::::::::::::::::::::.::::..:::.:: ..:.:::: :::.:.:::.::.::::.:.::::::::::::::.:::::::::::::::::::::.:.:::::::::::::::::::::::::::::::::: :::::.:::::.:.:::::::::::::::::::::::   ::::::..    ..: :::::::::::.::::::::.:.::::: :::.:::::::::.:::: ::::::::::::::::::::::: : : :::.:::::: :::.  </pattern>
+      <matchSeq start="1" end="550">                              MSLCRDTRFQDLKSFVDCHEKEQLSIYEQLLNDPDRFNKYTRVIDTPDGPMLFDFSKHRITDETFAKLMEVARSRNVEMMRAAMFGGERINFTENRAVLHIALRNRSNTPICVDGKDVMPDVNRVLEHMKEFCHKIITGAWTGYTGKKITDVVNIGIGGSDLGPLMVCEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNAETAKEWFLKKAGDKSAVAKHFVALSTNVPKAQEFGIDPSNMFEFWDWVGGRYSLWSAIGLSIAVHVGFDNFQKLLEGAHAADQHFVNQPLEQNVPVIMAMLGVLYSNVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTREGNRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAEAELKAAKTPEDKIEKILPHKVFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDINSYDQWGVELGKQLAKVIQPELASKDPVISHDVSTNGLINFIKSL </matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="13" database="TR" id="A0A3P8AVX7" ac="A0A3P8AVX7" length="551" description="Glucose-6-phosphate isomerase OS=Heligmosomoides polygyrus OX=6339 GN=HPBE_LOCUS20202 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2905</score>
+      <smithWatermanScore>2905</smithWatermanScore>
+      <initn>2905</initn>
+      <init1>2853</init1>
+      <opt>2905</opt>
+      <zScore>3521.8</zScore>
+      <bits>661.5</bits>
+      <expectation>4.2E-186</expectation>
+      <identity>78.2</identity>
+      <positives>90.7</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="584">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              ::: .:  : .:: .:: .::.  .. . . .:: ::.:.::.. ::::. ::::::.::.: .:. :: .:.::.::  : ::::.:.:::::::::::.:::::.: ::::::::::::::::: :::.: ..::::.::::::.:: ::::::::::::::::: :.:..:::::::::::::::::.:::::::: ::::::::::::::::::::::::::::: :::: :::::::::::::: :: .::::. ::::::::::::::::::::::::::.::::...::.:: ..: :::: ::..:.:.:.::.::::.::::::::::::::::.:::::::::::::::::::::.: :::::::::::::::::::::::::::::::::: :::::.:::::.:.:::::::::::::::::::::::   :: ::...    . : :::::::::::.::::::::::.::::: :::.:::::::::.:::: :::::::::::::::::::::::  ...:::.:::::: :::.  </pattern>
+      <matchSeq start="1" end="550">                              MSLCRDPKFQDLKAYVECHEKEQLSIYQQLLNDPERFNKYTRFIDTPDGSVLFDFSKHRISDVTFDKLMDVARSRNVEAMRAAMFSGERINFTENRAVLHIALRNRSNTPILVDGKDVMPDVNRVLDHMKDFSDKIISGAWTGYTGQKIEDVVNIGIGGSDLGPLMVCEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNAETAKEWFLKKAGDKGAVAKHFVALSTNVPKAEQFGIDRTNMFEFWDWVGGRYSLWSAIGLSIAVHVGFDNFKQLLEGAHAADTHFVNEPLDRNVPIIMAMLGVLYSNIYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTREGGRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAEDELRAAKTPEDRIKKILPHKVFEGNRPTTSIVLPVVSPFTLGLLIALYEHKIFVQGVIWDINSYDQWGVELGKQLAKVIQPELASKGNISSHDVSTNGLINFIKSL </matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="14" database="TR" id="A0A0K0DI98" ac="A0A0K0DI98" length="553" description="Glucose-6-phosphate isomerase OS=Angiostrongylus cantonensis OX=6313 PE=3 SV=2">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2860</score>
+      <smithWatermanScore>2860</smithWatermanScore>
+      <initn>2814</initn>
+      <init1>2664</init1>
+      <opt>2860</opt>
+      <zScore>3467.2</zScore>
+      <bits>651.4</bits>
+      <expectation>4.7E-183</expectation>
+      <identity>77.0</identity>
+      <positives>90.4</positives>
+      <overlap>552</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="584">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRL--AKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :.: .:. : ::: .:. .::.  .. . . .:: :: ::::.. ::::  ::::::.:::. .:. :. .  :.::.::  :.:::..:.:::::::::::::::::.: ::.::::.::::::. : :::.::..::::.::::::::.::::::::::::::::::.:.:..:::::::::::::::::.:::::::. :::::::::::::::::::::::::::::  : : .::::::::::.::  :. ::::  :::::::::::::::::.:::::::::::::.::::::: ..:.:::. :::::.:::.::.:.:: :.::::::::::::::.::::::::::::::::::::: : :::::::::::::::::::::::::::::::::: :::.:.:::::.:.:::::::::::::::::::::::   ::.:::.::.  :.: ::::::.::::.::::::::.:.::::: :::.:::::::::.:::: ::::::::::::::::::::: .  .:::::.:::::: :::.  </pattern>
+      <matchSeq start="1" end="552">                              MALCRDTKFQELKCYVDCHEKEQLSIYKELLNDPDRFAKFTRVIETPDGPVLFDFSKHRITETTFEKLVCIFQARSRNVEAMRTAMFAGERINFTENRAVLHVALRNRSNTPIFVDGKNVMPDVNHELEHMKDFCDKIISGAWTGYTGKKVTDVVNIGIGGSDLGPLMVSEALRHYQIGPNVHFVSNVDGTHIAEVTKKLDPETTLFIIASKTFTTQETITNAETAKEWFLNTAQDKSAVAKHFVALSSNVPMATAFGIDPMNMFEFWDWVGGRYSLWSVIGLSIAVHIGFDNFEKLLDGAHAADQHFVTQPLEKNVPVIMAMLGILYINVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRDGARVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIVPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAETELKASGVHAEKIEKILPHKIFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDINSYDQWGVELGKQLAKVIQPELKTPGNVTSHDVSTNGLINFIKSL </matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="15" database="TR" id="A0A0R3PKD0" ac="A0A0R3PKD0" length="551" description="Glucose-6-phosphate isomerase OS=Angiostrongylus costaricensis OX=334426 GN=ACOC_LOCUS5034 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2858</score>
+      <smithWatermanScore>2858</smithWatermanScore>
+      <initn>2813</initn>
+      <init1>2813</init1>
+      <opt>2858</opt>
+      <zScore>3464.8</zScore>
+      <bits>651.0</bits>
+      <expectation>6.3E-183</expectation>
+      <identity>76.9</identity>
+      <positives>90.5</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="584">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :.: .:. : ::: .:. .::.  .. . . .:: :: ::.:.. ::::  ::::::.:::. .:. :...:.::..:  : :::..:.:::::::::::::::::.:  :.:.:.:::::::. : :::.::..::::.:::::::::::::::::::::::::::.:.:..:::::::::::::::::.:::::::. :::::::::::::::::::::::::::::  : : .::::::::::.::  :. ::::  :::::::::::::::::.:::::::::::::.::::::: ..:.:::. :::::.:::.::.:::: :.::::::::::::::.::::::::::::::::::::: : :::::::::::::::::::::::::::::::::: :::.:.:::::.:.:::::::::::::::::::::::   ::.:::.::.  :.: ::::::.::::.::::::::.:.::::: :::.:::::::::.:::. ::::::::::::::::::::: :  .:::::.:::::: :::.  </pattern>
+      <matchSeq start="1" end="550">                              MALCRDTKFQELKCYVDCHEKEQLSIYKELLNDPDRFAKFSRIIDTPDGPVLFDFSKHRITETTFEKLLEVARSRNMEAMRAAMFAGERINFTENRAVLHVALRNRSNTAIFVNGQDVMPDVNHELEHMKDFCDKIISGAWTGYTGKKITDVVNIGIGGSDLGPLMVSEALRHYQIGPNVHFVSNVDGTHIAEVTKKLDPETTLFIIASKTFTTQETITNAETAKEWFLKTAEDKSAVAKHFVALSSNVPVATAFGIDPMNMFEFWDWVGGRYSLWSVIGLSIAVHIGFDNFEKLLDGAHAADQHFVTQPLEKNVPVIMAMLGVLYINVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRDGTRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIVPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAETELKASGVPAEKIEKILPHKIFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDVNSYDQWGVELGKQLAKVIQPELKSPGNVTSHDVSTNGLINFIKSL </matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="16" database="TR" id="H3FL09" ac="H3FL09" length="1080" description="Glucose-6-phosphate isomerase OS=Pristionchus pacificus OX=54126 GN=WBGene00112519 PE=3 SV=2">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2855</score>
+      <smithWatermanScore>2855</smithWatermanScore>
+      <initn>2383</initn>
+      <init1>2319</init1>
+      <opt>2855</opt>
+      <zScore>3454.3</zScore>
+      <bits>650.0</bits>
+      <expectation>2.5E-182</expectation>
+      <identity>77.1</identity>
+      <positives>91.3</positives>
+      <overlap>554</overlap>
+      <strand>none/none</strand>
+      <querySeq start="31" end="583">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA             </querySeq>
+      <pattern>                              :. ..:.:. ::.: .:  ::::.::   :. . : ::::::.::.: . ::.: .::::::.:::. ...::. .:.:::::. :.:::...::::::.:::::.::::::: ::::.:::::::::::::::::::. ::::.:::::::::::::::::::::::::::::.:..:::::::::::::::::.::::..:.:::::::.::::::::::::::::::::::.:...:. :::::::::::: ::.:::::  ::::::::::::::::::::::::::.:.::.:::: ::  .:.::..:::::::::..::.::::.:.::::::::::::::.::::::::::::::::::.:: : ::.:.:::::::::::::::::::::::::::::::::::.:::::::.::::.:::::::::::::: :::  ... :       ::.::   ::::::::.::::::::.: :.:::::.:.:::::::::. ::. ::::::::::::::::::::::.   ::.:::::::::::::                </pattern>
+      <matchSeq start="324" end="869">LRRERIVHKQRLFEIDFKERVSARRHLPRSSSPSTMTLTADAAFQKLVAHVEAGEKTQLQIKDEFAKDPARFDKFSRTLPTPSGPMLFDFSKHRITQTTLDLLIDVARSRGVEQMRTAMFAGDKINFTEDRAVLHIALRNRANTPILVEGKDVMPDVNRVLAHMKEFCGAIISGQWTGYTGKKITDVVNIGIGGSDLGPLMVTEALRHYQIGPNVHFVSNVDGTHIAEVTRRLSAETTLFIVASKTFTTQETITNAETAKEWFLSKGASAADVAKHFVALSTNVPKATEFGIDPANMFEFWDWVGGRYSLWSAIGLSIAVHVGYDNFEKLLAGAHLADRHFAETPLEKNIPVLMAMLGVLYGNVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFITRSGARVNYATGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAKTLNPIRNGLHHEILLANFLAQTEALMTGKTIDAVRKE-----NVPEKIA---PHKVFEGNRPTTSIVLPLVDPLTLGALLALYEHKIFVQGVCWDVNSYDQWGVELGKQLAKVIQPELAGPAPVTTHDASTNGLIAFIKAHRAMLSSRSFTCEVVHFTICLALVSYQTITPQHRAPIPTSMAGYALKRLMTEYKELTLRPPEGVLASPVDEDNFF</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="17" database="TR" id="A0A2A6CCS4" ac="A0A2A6CCS4" length="1080" description="Glucose-6-phosphate isomerase OS=Pristionchus pacificus OX=54126 GN=PRIPAC_40222 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2855</score>
+      <smithWatermanScore>2855</smithWatermanScore>
+      <initn>2383</initn>
+      <init1>2319</init1>
+      <opt>2855</opt>
+      <zScore>3454.3</zScore>
+      <bits>650.0</bits>
+      <expectation>2.5E-182</expectation>
+      <identity>77.1</identity>
+      <positives>91.3</positives>
+      <overlap>554</overlap>
+      <strand>none/none</strand>
+      <querySeq start="31" end="583">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA             </querySeq>
+      <pattern>                              :. ..:.:. ::.: .:  ::::.::   :. . : ::::::.::.: . ::.: .::::::.:::. ...::. .:.:::::. :.:::...::::::.:::::.::::::: ::::.:::::::::::::::::::. ::::.:::::::::::::::::::::::::::::.:..:::::::::::::::::.::::..:.:::::::.::::::::::::::::::::::.:...:. :::::::::::: ::.:::::  ::::::::::::::::::::::::::.:.::.:::: ::  .:.::..:::::::::..::.::::.:.::::::::::::::.::::::::::::::::::.:: : ::.:.:::::::::::::::::::::::::::::::::::.:::::::.::::.:::::::::::::: :::  ... :       ::.::   ::::::::.::::::::.: :.:::::.:.:::::::::. ::. ::::::::::::::::::::::.   ::.:::::::::::::                </pattern>
+      <matchSeq start="324" end="869">LRRERIVHKQRLFEIDFKERVSARRHLPRSSSPSTMTLTADAAFQKLVAHVEAGEKTQLQIKDEFAKDPARFDKFSRTLPTPSGPMLFDFSKHRITQTTLDLLIDVARSRGVEQMRTAMFAGDKINFTEDRAVLHIALRNRANTPILVEGKDVMPDVNRVLAHMKEFCGAIISGQWTGYTGKKITDVVNIGIGGSDLGPLMVTEALRHYQIGPNVHFVSNVDGTHIAEVTRRLSAETTLFIVASKTFTTQETITNAETAKEWFLSKGASAADVAKHFVALSTNVPKATEFGIDPANMFEFWDWVGGRYSLWSAIGLSIAVHVGYDNFEKLLAGAHLADRHFAETPLEKNIPVLMAMLGVLYGNVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFITRSGARVNYATGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAKTLNPIRNGLHHEILLANFLAQTEALMTGKTIDAVRKE-----NVPEKIA---PHKVFEGNRPTTSIVLPLVDPLTLGALLALYEHKIFVQGVCWDVNSYDQWGVELGKQLAKVIQPELAGPAPVTTHDASTNGLIAFIKAHRAMLSSRSFTCEVVHFTICLALVSYQTITPQHRAPIPTSMAGYALKRLMTEYKELTLRPPEGVLASPVDEDNFF</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="18" database="TR" id="A0A0D8XZ53" ac="A0A0D8XZ53" length="544" description="Glucose-6-phosphate isomerase OS=Dictyocaulus viviparus OX=29172 GN=DICVIV_03958 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2840</score>
+      <smithWatermanScore>2840</smithWatermanScore>
+      <initn>2845</initn>
+      <init1>1820</init1>
+      <opt>2840</opt>
+      <zScore>3443.1</zScore>
+      <bits>647.0</bits>
+      <expectation>1.0E-181</expectation>
+      <identity>79.0</identity>
+      <positives>90.1</positives>
+      <overlap>538</overlap>
+      <strand>none/none</strand>
+      <querySeq start="48" end="584">YLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :  :. .::.  .. . . .:: ::.:::: . ::::  ::::::.:::: .:. :...:.:: ::. : :::..:.:::::::::::.:::::.: ::.:::::::::::. : :::.:::.::.: ::::::::::::::::::::::::::: :.:. :::::::::::::::::.:::::::: ::::::::::::::::::::::::::::: :::. .::::::::::::: ::. ::::  :.:::::::::::::::.:::::::::::::.::::::: ..:::::. :::.:::::.::.:.:: :.:::::.::::::::.::::::::::::::::::::    :::::::::::::::::::::::::::::::::: :::.:.:::::::::::::::::::::::::::::::   :::::..:::  :.: ::::::.::::.::::::::.:.::::: :::.:::::::::.:::: ::::::::::::::::::::: :   .:::: :::::: :::.  </pattern>
+      <matchSeq start="10" end="543">                     MMMRSSKISKCFVDCHEKEQLSIYKELLNDPERFNKFTRYIETPDGAVLFDFSKHRITDTTFEKLIEVARSRDVEKMRAAMFDGERINFTENRAVLHIALRNRSNTPIFVDGKDVMPDVNHELEHMKDFCNKIINGIWTGYTGKKITDVVNIGIGGSDLGPLMVCEALRYYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNAETAKEWFLKKAGNKSAVAKHFVALSTNVPKATAFGIDPMNLFEFWDWVGGRYSLWSVIGLSIAVHIGFDNFEKLLDGAHAADEHFVSQPLEQNIPVIMAMLGILYINVYGAETQALLPYDQYLHRFAAYFQQGDMESNGKFVT----RVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIVPAKTLNPIRGGLHHQILLANFLAQTEALMKGKTHDEAEAELRGSGMPSEKIEKILPHKIFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDINSYDQWGVELGKQLAKVIQPELKSPGDITSHDISTNGLINFIKSF </matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="19" database="TR" id="A0A2A2JRH0" ac="A0A2A2JRH0" length="554" description="Glucose-6-phosphate isomerase OS=Diploscapter pachys OX=2018661 GN=WR25_20482 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2826</score>
+      <smithWatermanScore>2826</smithWatermanScore>
+      <initn>2825</initn>
+      <init1>2825</init1>
+      <opt>2826</opt>
+      <zScore>3425.9</zScore>
+      <bits>643.8</bits>
+      <expectation>9.3E-181</expectation>
+      <identity>76.5</identity>
+      <positives>90.3</positives>
+      <overlap>548</overlap>
+      <strand>none/none</strand>
+      <querySeq start="37" end="584">RFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA  </querySeq>
+      <pattern>                              .::.:  :.::: .:. ::: . . ::: ::: ::.:..: :::::: ..:::::.:::: ::. :. ::.:::::. :.::::.: :::::.:::::::::::.:  :::.:.:::: ::.:: ::. : : .:.::: :::::::::::::::::::::: ::::.:..:: ::.:::::::::::. :::.::: :::::::::::::::::::::::::::::  :::  ::::::::::::  :.::::::  :::::::::::::::::::::::..::::::.:.:: :: :.: :: .:::..:::::.::.:.:: :.:.::::::::::::.::::::::::::::::::::: :.:::::::::.::::::::::::::::::::::::::::: ::::::::..:..:::.:::.:::::::::::   :: ::..:::. ..: .:.::::::::.:::::::::.:: :::.:::::::::::::.:::: :::::::::::::::..::::..  ..:::::::::.:::.:.    </pattern>
+      <matchSeq start="3" end="550">                            MAALSHDDKFLELKGYVDENEKAVTIAELFAKDPNRFDKYSRSFATPDGPIMFDFSKHRITDASFEKLIALARSRGVEKMRDAMFSGEPINFTEGRAVLHVALRNRSNTSILVNGEDVMPGVNHVLEHMRTFTNAVIDGSWLGYTGKKITDVVNIGIGGSDLGPYMVTEALRHYQEGPDVHFVSNVDGTHIYEVTRKLNPETTLFIIASKTFTTQETITNAETAKEWFLKTAGDQTAVAKHFVALSTNEKKVVEFGIDPANMFEFWDWVGGRYSLWSAIGLSISLHIGFDNFEQLLAGAHSADLHFKQTPLDQNIPVIMAMLGILYINVYNAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRSGHRVDYSTGPIIWGEPGTNGQHAFYQLIHQGTRLIPADFIAAVKTLNPIRNSLQQQILFANFVAQTEALMKGKTREEAEKELRDSGMNEQQIQHIVPHKVFEGNRPTTSIVLPVLTPSTLGSLIAFYEHKIFVQGVIWDINSYDQWGVELGKQLAKIVQPELTAEGVTTSHDASTNGIIAFFKHINKA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="20" database="TR" id="A0A2A2JF40" ac="A0A2A2JF40" length="1224" description="Glucose-6-phosphate isomerase OS=Diploscapter pachys OX=2018661 GN=WR25_25319 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2818</score>
+      <smithWatermanScore>2818</smithWatermanScore>
+      <initn>2813</initn>
+      <init1>2813</init1>
+      <opt>2818</opt>
+      <zScore>3408.1</zScore>
+      <bits>641.6</bits>
+      <expectation>9.2E-180</expectation>
+      <identity>74.3</identity>
+      <positives>89.9</positives>
+      <overlap>565</overlap>
+      <strand>none/none</strand>
+      <querySeq start="22" end="584">         MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEK-AMS-LSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA  </querySeq>
+      <pattern>                              :. .:... : .. ::. ::.:  :.::: .:. ::: . . ::: ::: ::.:..: :::::: ..:::::.:.:: ::. :. ::.:::::. :.::::.: :::::.:::::::::::.:  :::.:.:::: ::.:: ::. : : .:.::: :::::::::::::::::::::: ::::.:..:: ::.:::::::::::. :::.::: :::::::::::::::::::::::::::::  ::: .::::::::::::  :.::::::  :::::::::::::::::::::::..::::::.:.:: :: ..: :: .:::..:::::.::.:.:: :.:.::::::::::::.::::::::::::::::::::: :.::::.::::.::::::::::::::::::::::::::::: ::::::::..:..:::.:::.:::::::::::   :: ::..:::. ..: .:.::::::::.:::::::::.:: :::.:::::::::::::.:::: :::::::::::::::..::::..  ..:.:::::::.:::.:.    </pattern>
+      <matchSeq start="656" end="1220">RVTYGCTELVNPTQFTQQNLSSMDDVPFFFLFHVLLLATSRDSVAMAALSHDDKFLELKGYVDENEKAVTIAELFAKDPNRFDKYSRSFATPDGPIMFDFSKHRVTDASFEKLIALARSRGVEKMRDAMFSGEPINFTEGRAVLHVALRNRSNTSILVNGEDVMPGVNHVLEHMRTFTNAVIDGSWLGYTGKKITDVVNIGIGGSDLGPYMVTEALRHYQEGPDVHFVSNVDGTHIYEVTRKLNPETTLFIIASKTFTTQETITNAETAKEWFLKTAGDQAAVAKHFVALSTNEKKVVEFGIDPANMFEFWDWVGGRYSLWSAIGLSISLHIGFDNFEQLLAGAHAADLHFKQTPLDQNIPVIMAMLGILYINVYNAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRSGHRVDYATGPIIWGEPGTNGQHAFYQLIHQGTRLIPADFIAAVKTLNPIRNSLQQQILFANFVAQTEALMKGKTREEAEKELRDSGMNEQQIQHIVPHKVFEGNRPTTSIVLPVLTPSTLGSLIAFYEHKIFVQGVIWDINSYDQWGVELGKQLAKIVQPELTAEGVTTGHDASTNGIIAFFKHINKA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="21" database="TR" id="A0A1I7ZWI3" ac="A0A1I7ZWI3" length="726" description="Glucose-6-phosphate isomerase OS=Steinernema glaseri OX=37863 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2796</score>
+      <smithWatermanScore>2796</smithWatermanScore>
+      <initn>2782</initn>
+      <init1>2419</init1>
+      <opt>2796</opt>
+      <zScore>3386.7</zScore>
+      <bits>636.9</bits>
+      <expectation>1.4E-178</expectation>
+      <identity>75.5</identity>
+      <positives>89.2</positives>
+      <overlap>555</overlap>
+      <strand>none/none</strand>
+      <querySeq start="31" end="585">MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>                              : ...::: .:..: .::.  :   :. .. :::..:: :: ::.. . ::::  : ::::: : .. :  :: ::.:: ::. ::::::.:::::::::::::::::.: .  .:.::.:::: :: :: ::::: ...:.:.: ::::.::::::::::::::::::::::.::.::.:::::::::.::::.::: ::..:.:::::::::::::::::::::.:::::::.: : .::::::::::::  :. :::::: :::.::::::::::::::::::::: :::.:.::::.::  .:.:: .:::: :.::::::.::::.:..::::::::::::::::::::::::::::::::::: ::.:::.::::::::::::::::::::::::::::::::::::.::::.:::::::::::::.:::::::::::   :: :: ..::: ...  ::::::::::.::.:::::::.::::::::: ::::::::::.::: :::::::::::::::::: :: .:. :.:::::::::: :.:..  </pattern>
+      <matchSeq start="171" end="724">LNFRRPSALASSNSAFFELRAICKATTLKQSLQSTMSLLSDSAFQKLKELHEQYGKSLKMTELFKNDPERFSKFSKTLQTPDGPVLVDFSKNLIDEKIFAQLMDLARSRKVEQMRNAMFSGEKINFTENRAVLHVALRKREGS-LLLDGQDVMPGVNAVLQHMKEFTEQVIGGAWKGYTGEKITDVVNIGIGGSDLGPLMVTETLKHYQVGPNVHFVSNIDGTHLAEVLKKVKAQTTLFIIASKTFTTQETITNAESAKEWFLAEAKDQSAVAKHFVALSTNGPKVKEFGIDEANMFQFWDWVGGRYSLWSAIGLSIAVFIGFENFEKLLEGAHFMDKHFCETPLEDNVPVILAMLGVLYGNVFGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRSGQKVDYTTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVNTLNPVRGGLHHQILLANFFAQTEALMKGKTPEEAEKELLAAGMSADQVKTILPHKVFEGNRPTNSIVLPVVSPFTLGALIATYEHKIFVQGIVWDINSYDQWGVELGKQLAKVIQKELEGAEPVSSHDASTNGLINFFKTHRQ</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="22" database="TR" id="A0A1I7ZVV5" ac="A0A1I7ZVV5" length="551" description="Glucose-6-phosphate isomerase OS=Steinernema glaseri OX=37863 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2790</score>
+      <smithWatermanScore>2790</smithWatermanScore>
+      <initn>2782</initn>
+      <init1>2419</init1>
+      <opt>2790</opt>
+      <zScore>3382.3</zScore>
+      <bits>635.7</bits>
+      <expectation>2.5E-178</expectation>
+      <identity>76.0</identity>
+      <positives>89.3</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="585">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>                              ::: .:..: .::.  :   :. .. :::..:: :: ::.. . ::::  : ::::: : .. :  :: ::.:: ::. ::::::.:::::::::::::::::.: .  .:.::.:::: :: :: ::::: ...:.:.: ::::.::::::::::::::::::::::.::.::.:::::::::.::::.::: ::..:.:::::::::::::::::::::.:::::::.: : .::::::::::::  :. :::::: :::.::::::::::::::::::::: :::.:.::::.::  .:.:: .:::: :.::::::.::::.:..::::::::::::::::::::::::::::::::::: ::.:::.::::::::::::::::::::::::::::::::::::.::::.:::::::::::::.:::::::::::   :: :: ..::: ...  ::::::::::.::.:::::::.::::::::: ::::::::::.::: :::::::::::::::::: :: .:. :.:::::::::: :.:..  </pattern>
+      <matchSeq start="1" end="549">                              MSLLSDSAFQKLKELHEQYGKSLKMTELFKNDPERFSKFSKTLQTPDGPVLVDFSKNLIDEKIFAQLMDLARSRKVEQMRNAMFSGEKINFTENRAVLHVALRKREGS-LLLDGQDVMPGVNAVLQHMKEFTEQVIGGAWKGYTGEKITDVVNIGIGGSDLGPLMVTETLKHYQVGPNVHFVSNIDGTHLAEVLKKVKAQTTLFIIASKTFTTQETITNAESAKEWFLAEAKDQSAVAKHFVALSTNGPKVKEFGIDEANMFQFWDWVGGRYSLWSAIGLSIAVFIGFENFEKLLEGAHFMDKHFCETPLEDNVPVILAMLGVLYGNVFGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRSGQKVDYTTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVNTLNPVRGGLHHQILLANFFAQTEALMKGKTPEEAEKELLAAGMSADQVKTILPHKVFEGNRPTNSIVLPVVSPFTLGALIATYEHKIFVQGIVWDINSYDQWGVELGKQLAKVIQKELEGAEPVSSHDASTNGLINFFKTHRQ</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="23" database="TR" id="A0A0P6F8V6" ac="A0A0P6F8V6" length="594" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2777</score>
+      <smithWatermanScore>2777</smithWatermanScore>
+      <initn>2775</initn>
+      <init1>2667</init1>
+      <opt>2777</opt>
+      <zScore>3365.8</zScore>
+      <bits>632.8</bits>
+      <expectation>2.1E-177</expectation>
+      <identity>74.4</identity>
+      <positives>91.1</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="45" end="594">LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLLELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="24" database="TR" id="C0L8T2" ac="C0L8T2" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2775</score>
+      <smithWatermanScore>2775</smithWatermanScore>
+      <initn>2773</initn>
+      <init1>2665</init1>
+      <opt>2775</opt>
+      <zScore>3364.0</zScore>
+      <bits>632.3</bits>
+      <expectation>2.6E-177</expectation>
+      <identity>74.4</identity>
+      <positives>91.1</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="7" end="556">                        MDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="25" database="TR" id="A0A0P6DK65" ac="A0A0P6DK65" length="594" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2775</score>
+      <smithWatermanScore>2775</smithWatermanScore>
+      <initn>2773</initn>
+      <init1>2665</init1>
+      <opt>2775</opt>
+      <zScore>3363.3</zScore>
+      <bits>632.3</bits>
+      <expectation>2.8E-177</expectation>
+      <identity>74.4</identity>
+      <positives>91.1</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="45" end="594">LPALPVCRSRRNCARKSRKTSSQKMDGNSFLTEDAAFQNLKKYFEEKGKDLNINQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="26" database="TR" id="A0A0P5I3W1" ac="A0A0P5I3W1" length="594" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2775</score>
+      <smithWatermanScore>2775</smithWatermanScore>
+      <initn>2773</initn>
+      <init1>2665</init1>
+      <opt>2775</opt>
+      <zScore>3363.3</zScore>
+      <bits>632.3</bits>
+      <expectation>2.8E-177</expectation>
+      <identity>74.4</identity>
+      <positives>91.1</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="45" end="594">LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="27" database="TR" id="C0L8T1" ac="C0L8T1" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2774</score>
+      <smithWatermanScore>2774</smithWatermanScore>
+      <initn>2772</initn>
+      <init1>2663</init1>
+      <opt>2774</opt>
+      <zScore>3362.8</zScore>
+      <bits>632.1</bits>
+      <expectation>3.0E-177</expectation>
+      <identity>74.4</identity>
+      <positives>90.9</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...:: .::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="7" end="556">                        MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLXELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="28" database="TR" id="C0L8T0" ac="C0L8T0" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2772</score>
+      <smithWatermanScore>2772</smithWatermanScore>
+      <initn>2770</initn>
+      <init1>2659</init1>
+      <opt>2772</opt>
+      <zScore>3360.4</zScore>
+      <bits>631.7</bits>
+      <expectation>4.2E-177</expectation>
+      <identity>74.4</identity>
+      <positives>90.7</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: : :::.::::. ::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="7" end="556">                        MXGNTFLTEDAAFQNLKKYFEEKGKDLNIXQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVXESRDAMFSGXKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="29" database="TR" id="A0A0P6FUZ6" ac="A0A0P6FUZ6" length="594" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2772</score>
+      <smithWatermanScore>2772</smithWatermanScore>
+      <initn>2770</initn>
+      <init1>2662</init1>
+      <opt>2772</opt>
+      <zScore>3359.7</zScore>
+      <bits>631.6</bits>
+      <expectation>4.5E-177</expectation>
+      <identity>74.4</identity>
+      <positives>91.1</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="45" end="594">LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFGESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="30" database="TR" id="C0L8T5" ac="C0L8T5" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2771</score>
+      <smithWatermanScore>2771</smithWatermanScore>
+      <initn>2769</initn>
+      <init1>2660</init1>
+      <opt>2771</opt>
+      <zScore>3359.2</zScore>
+      <bits>631.4</bits>
+      <expectation>4.9E-177</expectation>
+      <identity>74.4</identity>
+      <positives>90.7</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::. ::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::   :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="7" end="556">                        MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGXKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVXHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="31" database="TR" id="C0L8T6" ac="C0L8T6" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2768</score>
+      <smithWatermanScore>2768</smithWatermanScore>
+      <initn>2766</initn>
+      <init1>2657</init1>
+      <opt>2768</opt>
+      <zScore>3355.5</zScore>
+      <bits>630.8</bits>
+      <expectation>7.7E-177</expectation>
+      <identity>74.2</identity>
+      <positives>90.9</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:... :..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="7" end="556">                        MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKHLVELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="32" database="TR" id="A0A0N8BHM7" ac="A0A0N8BHM7" length="594" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2768</score>
+      <smithWatermanScore>2768</smithWatermanScore>
+      <initn>2766</initn>
+      <init1>2658</init1>
+      <opt>2768</opt>
+      <zScore>3354.8</zScore>
+      <bits>630.7</bits>
+      <expectation>8.5E-177</expectation>
+      <identity>74.2</identity>
+      <positives>91.1</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::.:::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="45" end="594">LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFGESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGDPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="33" database="TR" id="C0L8T3" ac="C0L8T3" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2767</score>
+      <smithWatermanScore>2767</smithWatermanScore>
+      <initn>2765</initn>
+      <init1>2656</init1>
+      <opt>2767</opt>
+      <zScore>3354.3</zScore>
+      <bits>630.6</bits>
+      <expectation>9.1E-177</expectation>
+      <identity>74.4</identity>
+      <positives>90.7</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: : :::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: :  ::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="7" end="556">                        MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVLESRDAMFSGHKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDETAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="34" database="TR" id="C0L8T7" ac="C0L8T7" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2767</score>
+      <smithWatermanScore>2767</smithWatermanScore>
+      <initn>2765</initn>
+      <init1>2667</init1>
+      <opt>2767</opt>
+      <zScore>3354.3</zScore>
+      <bits>630.6</bits>
+      <expectation>9.1E-177</expectation>
+      <identity>74.2</identity>
+      <positives>90.9</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:  ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="7" end="556">                        MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQDAERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLLELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="35" database="TR" id="A0A0P5UIN3" ac="A0A0P5UIN3" length="594" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=APZ42_016392 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2767</score>
+      <smithWatermanScore>2767</smithWatermanScore>
+      <initn>2765</initn>
+      <init1>2667</init1>
+      <opt>2767</opt>
+      <zScore>3353.6</zScore>
+      <bits>630.5</bits>
+      <expectation>9.9E-177</expectation>
+      <identity>74.2</identity>
+      <positives>90.9</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:  ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="45" end="594">LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQDAERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLLELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="36" database="TR" id="C0L8T4" ac="C0L8T4" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2765</score>
+      <smithWatermanScore>2765</smithWatermanScore>
+      <initn>2763</initn>
+      <init1>2664</init1>
+      <opt>2765</opt>
+      <zScore>3351.9</zScore>
+      <bits>630.1</bits>
+      <expectation>1.2E-176</expectation>
+      <identity>74.2</identity>
+      <positives>90.9</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:  ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: :::::::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="7" end="556">                        MDGNXFLTEDAAFXNLKKYFEEKGKDLNIHQLFVQDXERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLLELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFGESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="37" database="TR" id="A0A0P5KY86" ac="A0A0P5KY86" length="595" description="Glucose-6-phosphate isomerase OS=Daphnia magna OX=35525 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2763</score>
+      <smithWatermanScore>2763</smithWatermanScore>
+      <initn>2761</initn>
+      <init1>2653</init1>
+      <opt>2763</opt>
+      <zScore>3348.7</zScore>
+      <bits>629.6</bits>
+      <expectation>1.8E-176</expectation>
+      <identity>74.2</identity>
+      <positives>90.9</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.: .::.. : . :: .. .:: .:: ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::::::: :::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....:::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..:::. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: .   :.:::.:::::: :::.:.</pattern>
+      <matchSeq start="46" end="595">EHGIPVCRSRRNCARKSRKTSSQKMDGNSFLTEDAAFQNLKKYFEEKGKDLNINQLFVQDPERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINFTENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDVVNIGIVGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSGMGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="38" database="TR" id="A0A4V6A5X9" ac="A0A4V6A5X9" length="552" description="Glucose-6-phosphate isomerase OS=Steinernema carpocapsae OX=34508 GN=L596_007259 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2755</score>
+      <smithWatermanScore>2755</smithWatermanScore>
+      <initn>2755</initn>
+      <init1>2755</init1>
+      <opt>2755</opt>
+      <zScore>3339.8</zScore>
+      <bits>627.9</bits>
+      <expectation>5.8E-176</expectation>
+      <identity>74.6</identity>
+      <positives>89.1</positives>
+      <overlap>548</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="583">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>                              :::  : .: :::   :   :  ....::..:: :: ::.... .:::..: ::::: : .. :  :..::.:: ::: :.:::::.::::::::::::::::::.: ::..::.:: :.:: :: ::: : . .::: : ::::.::::::::::::::::::::::.::.::.:::::::::.::::.::: ::..: .::::::::::::::::::::.:: ::::.: . .::.:::::::::  :. :::::: :::.::::::::::::::::::::: :::.:.::::.::  .:.:: .::::.:.::::::.::::.:..:::::::::::::.:::::::::::::::::::.: ::.:::.::::::::::::::::::::::::::::::::::::.:::::: :::::::::::::::::::::::.  :: :: ..::: ... .::::::::::.::.::::: ::::::::::: ::::::.::.:::: :::::::::::::::::: :: . .:...::.:::::: :.:    </pattern>
+      <matchSeq start="1" end="548">                              MSLLADPAFQELKGLYEQYGKTLKMVDLFKNDPDRFSKFSKILDSPDGQILVDFSKNIIDEKIFAQLIKLARSRKVEEMRDAMFSAQKINFTENRAVLHVALRNRSNTPIVLDGEDVTPSVNAVLDHMKSFTESVISGHWKGYTGEKITDVVNIGIGGSDLGPLMVTEALKHYQVGPNVHFVSNIDGTHLAEVLKKVKASSTLFIIASKTFTTQETITNAESAKAWFLAEAKEMSAVTKHFVALSTNGPKVKEFGIDEANMFQFWDWVGGRYSLWSAIGLSIAVFIGFENFEKLLQGAHYMDKHFKETPLENNVPVILAMLGVLYGNLFGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVNRSGQKVDYTTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVSTLNPIRKGLHHQILLANFLAQTEALMKGKTSEKAEKELLGAGMSDDQVKSILPHKVFEGNRPTNSIVLPKVTPFTLGALIATYEHKIFIQGVIWDINSYDQWGVELGKQLAKVIQKELHGPETISAHDSSTNGLINFVKAHRK</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="39" database="TR" id="A0A368F856" ac="A0A368F856" length="688" description="Glucose-6-phosphate isomerase OS=Ancylostoma caninum OX=29170 GN=ANCCAN_25951 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2752</score>
+      <smithWatermanScore>2752</smithWatermanScore>
+      <initn>2752</initn>
+      <init1>2707</init1>
+      <opt>2752</opt>
+      <zScore>3333.9</zScore>
+      <bits>627.1</bits>
+      <expectation>1.2E-175</expectation>
+      <identity>78.6</identity>
+      <positives>91.6</positives>
+      <overlap>513</overlap>
+      <strand>none/none</strand>
+      <querySeq start="36" end="547">FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA                  </querySeq>
+      <pattern>                              ::: .:  : .::  :. .::.  .. : . .:: :: :.:: . :::: .::::::.::.::.:. ::..:.::.::  : :::..:.:::::::::::.:::::.: :: :::::::::::::: :::.::..::.:.:::.:::::::::::::::::::::::.:.:..:::::::::::::::::.:::::::: ::::::::::::::::::::::::::::: :::: .::::::::::::: :: ::::: .::::::::::::::::::::::::::.::::..:::.:: ..:.:::: :::.:.:::.::.::::.:.::::::::::::::.:::::::::::::::::::::.: ::::.::::::::::::::::::::::::::::: :::::.:::::.:.:::::::::::::::::::::::   ::::::...   ..: :::::::::::.::::::::.:.::::: :::.:::::::::.:::: ::::::                                                         </pattern>
+      <matchSeq start="1" end="513">                              MSLCRDDKFQDLKSFVDCHEKEHLSIYEQLLNDPERFTKYTRTIDTPDGPMLFDFSKHRISDETFEKLMEVARSRNVEMMRAAMFGGERINFTENRAVLHIALRNRSNTPICVDGKDVMPDVNRVLEHMKDFCHKIITGAWTGFTGKKITDVVNIGIGGSDLGPLMVSEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNAETAKEWFLKKAGDKSAVAKHFVALSTNVPKAQEFGIDPSNMFEFWDWVGGRYSLWSAIGLSIAVHVGFDNFQKLLEGAHAADQHFVNQPLEQNVPVIMAMLGVLYSNVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTREGYRVDYATGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAEAELKAANTPADKIEKILPHKVFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDINSYDQWGGVVLVVNLPLLMTDNTRRLELTNRPPEGILAAPLDEDNFFEWECLITGPEDTCFANG</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="40" database="TR" id="F1KUW6" ac="F1KUW6" length="575" description="Glucose-6-phosphate isomerase OS=Ascaris suum OX=6253 PE=2 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2746</score>
+      <smithWatermanScore>2746</smithWatermanScore>
+      <initn>2742</initn>
+      <init1>2742</init1>
+      <opt>2746</opt>
+      <zScore>3328.5</zScore>
+      <bits>625.8</bits>
+      <expectation>2.5E-175</expectation>
+      <identity>71.8</identity>
+      <positives>88.4</positives>
+      <overlap>571</overlap>
+      <strand>none/none</strand>
+      <querySeq start="15" end="583">MIFELFRFIFRKKKMLGYLSDLIGTL--FIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA </querySeq>
+      <pattern>              ::..::    .:  .:    .  :::. : .: .:: . ... .. .:.:::.::: :::::.  . : :: .:::.::: : .  .  :. .:.::.::. :.:::..:::::::.:::::.:::: ...:: :::..:  :::.:: ::::::. .:::.: ::::. :::::::::::::::::::.:.:..::.:: ::::::.::::.::. :... :::.::::::::::::::::::.::::::. : : .::::::::::::  :. :::::: :::::::::::::::::::::::::::::::..:::.::  :::::...:::.::::..::.:.:: :..:::::::::::::.::::::::::::::::::::: :.::::::::::::::::::::::::::::::::::::::::::::::::.::::.:::.::::::::::::::.  :. :: .: :: ..:::::::::::::.::.:.:::.:.:.:::::::.::.:::::::.:.: ::::::::::::::::::::: : . .::::.:::::: :::    </pattern>
+      <matchSeq start="1" end="571">              MLSMLSAAAQSLNDIITGRRRCKMSLNADPAFQQLKAYFNSHGRQLKLVELFDKDPKRFEKFSLQLDTADGPILFDYSKNLIDETLLAKLLDVARSRNVEKMRDAMFAGEKINFTEGRAVLHTALRNVSDKPITVDGQNVTADVNKVLNHMKEFCEAVISGKWKGYTGETITDVVNIGIGGSDLGPLMVSEALRHYQVGPRVHFVSNIDGTHMAELLKRVKPETTIFIIASKTFTTQETITNAESAKEWFLSAAKDNAAVAKHFVALSTNGPKVREFGIDEANMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNFHKLLEGASLVDEHFLKAPLEQNIPVLMAMLGILYINLHGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRDGSRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRNGLHHEILLSNFLAQTEALMKGKTSEEARKELVASKMSEDKIAKILPHKVFEGNRPTNSLVLPIVSPLTLGALIALYEQKIFVQGIVWNINSYDQWGVELGKQLAKVIQPELHSDQPITSHDSSTNGLINFIKAHRK</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="41" database="TR" id="A0A0K0G292" ac="A0A0K0G292" length="553" description="Glucose-6-phosphate isomerase OS=Strongyloides venezuelensis OX=75913 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2745</score>
+      <smithWatermanScore>2745</smithWatermanScore>
+      <initn>2745</initn>
+      <init1>2745</init1>
+      <opt>2745</opt>
+      <zScore>3327.7</zScore>
+      <bits>625.6</bits>
+      <expectation>2.8E-175</expectation>
+      <identity>74.7</identity>
+      <positives>88.2</positives>
+      <overlap>549</overlap>
+      <strand>none/none</strand>
+      <querySeq start="37" end="585">RFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :: .: :: .:.   .  . . .:...:..:: ::.::.: ..:::: :: ::::: : .. :. :. ::::::: : :.:::..::::::::::: :..:::. :    .::.::  ::: :: :::.::.:::::::::::::::::::::::::::::::::::.::.::::::::::::.::::.::: ::.::::::::::::::::::::::::.::::::.:::: . :::::::::::. :. ::::::.::: ::::::::::::::::::::: :::::.::::.:.  .:.:: .::::.:::::::..:: : :..: :::::::::::.:::::::::::::::::..:: :..:::.::::::::::::::::::::::::::.::::::::..:::::::::::.:::::::::::::::::::  :  ::.::::  ::: :::::::: ::.::.::.:  .:::::::::: :::::::::.::.: :::::::::::::::::  ::     :..::.:::::: :.:.: </pattern>
+      <matchSeq start="4" end="552">                           MTSSLRNDETFKHLENLYHERKANLNLVNFFKNDPHRFNKFSRSLTTPDGAFLVDFSKNLIDEDIFNSLINLAKSRGVPEMRDAMFKGEKINFTENRAVYHIGLRNKDNNSPHIDGQDVNKDVNDVLKHMKQFCSEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTEALKHYQIGPNVHFVSNIDGTHLAEVLKKINAETTLFIIASKTFTTQETITNAESAKEWFLSKAGDPSHVAKHFVALSTNAPKVKEFGIDESNMFAFWDWVGGRYSLWSAIGLSIAVFIGFDNFEKLLEGGHFMDKHFKETPLENNIPVILAVLGVWYINFFGCETHALLPYDQYLHRFAAYFQQGDMESNGKYITRDGKKVDYNTGPIVWGEPGTNGQHAFYQLIHQGTRIIPADFIAPINTLNPIRGGLHHKILLANFLAQTEALMKGKTANEALEELRSSGMPQESIEKILPHKVFTGNRPTNSILLQKITPFTLGALIAAYEHKIFVQGVIWNINSYDQWGVELGKQLAKVILKELNEPGDVSNHDSSTNGLINFVKKNF</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="42" database="TR" id="E9GCK2" ac="E9GCK2" length="556" description="Glucose-6-phosphate isomerase OS=Daphnia pulex OX=6669 GN=DAPPUDRAFT_302344 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2736</score>
+      <smithWatermanScore>2736</smithWatermanScore>
+      <initn>2734</initn>
+      <init1>2624</init1>
+      <opt>2736</opt>
+      <zScore>3316.7</zScore>
+      <bits>623.6</bits>
+      <expectation>1.1E-174</expectation>
+      <identity>72.7</identity>
+      <positives>90.9</positives>
+      <overlap>550</overlap>
+      <strand>none/none</strand>
+      <querySeq start="38" end="586">FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :..::.:..:... . . :: .. .:: .:: ::.:..  .::: ::..:.::::::.  :.:.::..::::: :.:::.:::..:::::::::::::.:::::..::.:::: ::::::  :: ::::::.:.:::.: ::::: :::::::::::::::::::::.:: :..::::::::::::::.: . .::: ::::::::::::::::::::::.:: ::: :: : ..:::::::::::.::. .:::.::::: ::::::::::::::::::::. :::.:.:::: ::. .:.:: ..:::.:.:::::..::::...::::::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::::::::::::::::::...:.:::  .::..:.::::::::::::::..  :.::: .:::. ... :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::::::::::::.:.::: ..  ..:::.:::::: :::.::</pattern>
+      <matchSeq start="7" end="556">                        MDGNAFLTEDAAFLNLQKYFQEKGKDLNIHQLFVQDPERFKKYSIKLATPQDGEILIDFSKNRVDAETFKLLLELAKSRKVQESRDAMFGGEKINFTENRAVLHTALRNRSGRPVLVDGVDVMPDVRAVLDHMKEFCSEVISGQWKGYTGKAITDVVNIGIGGSDLGPLMVTEALKAYSVGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTFTTQETITNAESAKAWFLEKAKDESTVAKHFVALSTNATKVRDFGINEKNMFGFWDWVGGRYSLWSAIGLSIALSIGFENFEKLLGGAYFMDQHFCESPLEQNVPVILALLGVLYGDFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSSDEAKAELLKSGMGEDDLRKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQWGVELGKQLAKAIEPELEGSGEISSHDSSTNGLINFIKSNA</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="43" database="TR" id="A0A0F6PKB4" ac="A0A0F6PKB4" length="556" description="Glucose-6-phosphate isomerase OS=Ostrinia furnacalis OX=93504 GN=Pgi PE=2 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2729</score>
+      <smithWatermanScore>2729</smithWatermanScore>
+      <initn>2686</initn>
+      <init1>2629</init1>
+      <opt>2729</opt>
+      <zScore>3308.2</zScore>
+      <bits>622.0</bits>
+      <expectation>3.4E-174</expectation>
+      <identity>72.7</identity>
+      <positives>89.5</positives>
+      <overlap>554</overlap>
+      <strand>none/none</strand>
+      <querySeq start="33" end="585">FELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :  ..: .: .: .:..: .:: .  .. .::..: .::.::.    :: ::..:.:.::::: : .: .:. ::::::::..:.::::.:::::::.:::::.::::: ::::::.:::: :::: :::::::: ::.:::.: :::::.::::.::::::::::::::::.:: :    .::::::.::::.::: :.:: ::.:::::::::::::::::: .::.::: .: : .::::::::::::  :.. :::: :::: :::::::::::::::::::....:.::.::::.::  .:.::...::::: :::::..:: :.:.::::::::::::::.:::::::::::::::::.::: :..::::::::::::::::::::::::::::::::: :::::..: ::: ::.::.:::::::::::::::::..  :.:::..:::.::..:::::::::.::.::.:::.  ::::::::.::.::::::.::::::: :.:::::::::::::.:.::: .:. :.:::::::::: :.: : </pattern>
+      <matchSeq start="2" end="555">                             MEPKITLRKDPAFQKLQEHYNANGEKLNIPQLFQQDAGRFNKFSLRVPTPNDGEILLDYSKNRIDDATFAMLLDLAKSRGVEKARDAMFSGEKINFTEDRAVLHIALRNRQNRPILVNGKDVTPDVNAVLAHMKEFSNEVISGQWKGYTGKEITDVINIGIGGSDLGPLMVTEALKPYATRLKVHFVSNIDGTHLAEVLKRLNPETALFIIASKTFTTQETITNATSAKNWFLENAKDPAAVAKHFVALSTNGEKVTAFGIDPKNMFGFWDWVGGRYSLWSAIGLSISLYVGYDNFEKLLEGASFMDNHFTTAPLEKNAPVILALLGVWYSNFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGEQVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPAQTHNPISGGVHHKILLANFLAQTEALMKGKSSEEAKAELEKSGMAPEAVAKILPHKVFKGNRPTNSIVVKKVTPFTLGAMIAMYEHKIFTQGIIWDINSFDQWGVELGKQLAKAIEPELQDASPVSSHDASTNGLINFLKANF</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="44" database="TR" id="A0A016VBP9" ac="A0A016VBP9" length="499" description="Glucose-6-phosphate isomerase OS=Ancylostoma ceylanicum OX=53326 GN=Acey_s0014.g2349 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2725</score>
+      <smithWatermanScore>2725</smithWatermanScore>
+      <initn>2725</initn>
+      <init1>2725</init1>
+      <opt>2725</opt>
+      <zScore>3304.4</zScore>
+      <bits>621.2</bits>
+      <expectation>5.4E-174</expectation>
+      <identity>84.1</identity>
+      <positives>92.9</positives>
+      <overlap>478</overlap>
+      <strand>none/none</strand>
+      <querySeq start="106" end="583">RLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :::: ::: : ::::.:.:::::::::::.:::::.: ::::::::::::::::: :::.::...:.:.:::.::::::::::::::::::::::: :.:..:::::::::::::::::.:::::::: ::::::::::::::::::::::::::::: :::: .::::::::::::: :: ::::: .::::::::::::::::::::::::::.::::..:::.:: ..:.::.  ::..:::::.::.::::.:.::::::::::::::.::::::::::::::::::::: : ::::.::::::::::::::::::::::::::::: :::::::::::.: :::::::::::::::::::::::   ::::::..    : : :::::::::::.:::::::::.::::::.::: :::::::::..::: :::::::::::::::::::::::   .::::::::::: :::   </pattern>
+      <matchSeq start="19" end="496">            MHRRRGGGCRKQVSFGTTAKSRRVEEMRAAMFSGERINFTENRAVLHIALRNRSNTPILVDGKDVMPDVNRVLEHMKDFCHKVITGAWTGFTGKKITDVVNIGIGGSDLGPLMVCEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNAETAKEWFLKKAGDKSAVAKHFVALSTNVPKAQEFGIDPSNMFEFWDWVGGRYSLWSAIGLSIAVHVGFDNFQKLLEGAHAADQHFLREPLDHNIPVIMAMLGVLYTNVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRDGARVDYATGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPVKTLNPVRDGLHHQILLANFLAQTEALMKGKTREEAEAELKAAKTPAERIEKILPHKVFEGNRPTTSIVLPVITPFTLGVLIAVYEHKIFVQGVVWDINSYDQWGVELGKQLAKVIQPELASCGDITSHDASTNGLINFIKQCK</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="45" database="TR" id="A0A016VAV7" ac="A0A016VAV7" length="501" description="Glucose-6-phosphate isomerase OS=Ancylostoma ceylanicum OX=53326 GN=Acey_s0014.g2349 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2725</score>
+      <smithWatermanScore>2725</smithWatermanScore>
+      <initn>2725</initn>
+      <init1>2725</init1>
+      <opt>2725</opt>
+      <zScore>3304.4</zScore>
+      <bits>621.2</bits>
+      <expectation>5.4E-174</expectation>
+      <identity>84.1</identity>
+      <positives>92.9</positives>
+      <overlap>478</overlap>
+      <strand>none/none</strand>
+      <querySeq start="106" end="583">RLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :::: ::: : ::::.:.:::::::::::.:::::.: ::::::::::::::::: :::.::...:.:.:::.::::::::::::::::::::::: :.:..:::::::::::::::::.:::::::: ::::::::::::::::::::::::::::: :::: .::::::::::::: :: ::::: .::::::::::::::::::::::::::.::::..:::.:: ..:.::.  ::..:::::.::.::::.:.::::::::::::::.::::::::::::::::::::: : ::::.::::::::::::::::::::::::::::: :::::::::::.: :::::::::::::::::::::::   ::::::..    : : :::::::::::.:::::::::.::::::.::: :::::::::..::: :::::::::::::::::::::::   .::::::::::: :::   </pattern>
+      <matchSeq start="21" end="498">          MIMHRRRGGGCRKQVSFGTTAKSRRVEEMRAAMFSGERINFTENRAVLHIALRNRSNTPILVDGKDVMPDVNRVLEHMKDFCHKVITGAWTGFTGKKITDVVNIGIGGSDLGPLMVCEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNAETAKEWFLKKAGDKSAVAKHFVALSTNVPKAQEFGIDPSNMFEFWDWVGGRYSLWSAIGLSIAVHVGFDNFQKLLEGAHAADQHFLREPLDHNIPVIMAMLGVLYTNVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRDGARVDYATGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPVKTLNPVRDGLHHQILLANFLAQTEALMKGKTREEAEAELKAAKTPAERIEKILPHKVFEGNRPTTSIVLPVITPFTLGVLIAVYEHKIFVQGVVWDINSYDQWGVELGKQLAKVIQPELASCGDITSHDASTNGLINFIKQCK</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="46" database="TR" id="A0A0N5BIZ5" ac="A0A0N5BIZ5" length="553" description="Glucose-6-phosphate isomerase OS=Strongyloides papillosus OX=174720 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2722</score>
+      <smithWatermanScore>2722</smithWatermanScore>
+      <initn>2722</initn>
+      <init1>2722</init1>
+      <opt>2722</opt>
+      <zScore>3299.7</zScore>
+      <bits>620.4</bits>
+      <expectation>9.9E-174</expectation>
+      <identity>74.0</identity>
+      <positives>88.0</positives>
+      <overlap>549</overlap>
+      <strand>none/none</strand>
+      <querySeq start="37" end="585">RFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :: .: :: .:..  .  . . .:...:..:: ::.::.: ..:::: :: ::::: : .. :. :. ::::::: : :.:::..::::::::::: :..:::: :    .::.::  ::: :: :::.::..::::::::::::::::::::::::::::::::::.::.::.:::::::::.::::.::: ::.::::::::::::::::::::::::.::::::.:::: . :::::::::::. :. :::: :.::: ::::::::::::::::::::: :::::.::::.:.  .:.:: .::::.:::::::..:: : :..: :::::::::::.:::::::::::::::::..:: :..:::.::::::::::::::::::::::::::.::::::::..::::::.::::.::::::::::::::::::   :  ::.::::  ::: :::::::: ::.::.::.:  .:::::::::: :::::::::.::.: :::::::::::::::::  ::     :..::.:::::: :.:.: </pattern>
+      <matchSeq start="4" end="552">                           MTSSLRNDETFKHLEKLYHERKANLNLVNFFKNDPHRFNKFSRSLTTPDGAFLVDFSKNLIDEDIFNSLINLAKSRGVPEMRDAMFKGEKINFTENRAVYHIGLRNRDNNSPHIDGQDVNKDVNDVLKHMKQFCSKIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTEALKHYQVGPNVHFVSNIDGTHLAEVLKKINAETTLFIIASKTFTTQETITNAESAKEWFLSKAGDPSHVAKHFVALSTNAPKVKEFGIHESNMFAFWDWVGGRYSLWSAIGLSIAVFIGFDNFEKLLEGGHFMDKHFKETPLENNIPVILAVLGVWYINFFGCETHALLPYDQYLHRFAAYFQQGDMESNGKYITRDGEKVDYNTGPIVWGEPGTNGQHAFYQLIHQGTRIIPADFIAPINTLNPIRSGLHHKILLANFLAQTEALMKGKTPDEALEELRSSGMPQESIDKILPHKVFTGNRPTNSILLQKITPFTLGALIAAYEHKIFVQGVIWNINSYDQWGVELGKQLAKVILKELNEPGDVSNHDSSTNGLINFVKKNF</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="47" database="TR" id="A0A090L893" ac="A0A090L893" length="556" description="Glucose-6-phosphate isomerase OS=Strongyloides ratti OX=34506 GN=SRAE_2000064600 PE=3 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2706</score>
+      <smithWatermanScore>2706</smithWatermanScore>
+      <initn>2673</initn>
+      <init1>2673</init1>
+      <opt>2706</opt>
+      <zScore>3280.3</zScore>
+      <bits>616.9</bits>
+      <expectation>1.2E-172</expectation>
+      <identity>72.8</identity>
+      <positives>88.4</positives>
+      <overlap>551</overlap>
+      <strand>none/none</strand>
+      <querySeq start="35" end="585">LFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA   </querySeq>
+      <pattern>                              : :: .: .: .: .  :...   ....::..::.::.::.: ..:::: :: ::::: : .: :: :. ::::::: : :.::: .::::::::::: :..:::  :    .::.:.  ::. :: :::.::..::::.::::.::::::::::::::::::::::::.::.::.:::::::::.::::.::: ::.:.::::::::::::::::::::::.::::::.:::. . :::::::::::. :. ::::::.::: ::::::::::::::::::::: ::.::.::::.:.  .:.:: .::::.:::::::..:: : :..: :::::::::::.:::::::::::::::::..::.:..:::.::::::::::::::::::::::::::.::::::::..:::::: ::::.::::::::::::::::::   : .::..:::: ::: :::::::: ::.::.::.:  .:::::::::: :::::::::.::.: :::::::::::::::::  ::  .  :..::.:::.:: :.:.:    </pattern>
+      <matchSeq start="2" end="552">                             MASSLRSDEAFKNLGKLYEGKKMTLDMVKLFQNDPSRFNKFSRTLTTPDGAFLVDFSKNLIDEEIFQGLINLAKSRGVPEMRDAMFRGEKINFTENRAVYHIGLRNVENNSPHIDGQDINKDVSDVLRHMKQFCSDIISGTWTGYSGKKITDVVNIGIGGSDLGPLMVTEALKHYQVGPNVHFVSNIDGTHLAEVLKKVNVETTLFIIASKTFTTQETITNAESAKEWFLSKAGNPSYVAKHFVALSTNAPKVKEFGIDESNMFAFWDWVGGRYSLWSAIGLSIAVFIGYDNFEKLLEGGHFMDKHFKETPLENNIPVILAVLGVWYINFFGCETHALLPYDQYLHRFAAYFQQGDMESNGKYITRNGHKVDYNTGPIVWGEPGTNGQHAFYQLIHQGTRIIPADFIAPINTLNPIRDGLHHKILLANFLAQTEALMKGKTDKEALVELQASGMSEESIQKILPHKVFTGNRPTNSILLQKITPFTLGALIAAYEHKIFVQGVIWNINSYDQWGVELGKQLAKVILKELNETGDVSNHDSSTNNLINFVKKNFSTI</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="48" database="TR" id="H6TMR9" ac="H6TMR9" length="556" description="Glucose-6-phosphate isomerase OS=Hyphantria cunea OX=39466 GN=pgi PE=2 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2697</score>
+      <smithWatermanScore>2697</smithWatermanScore>
+      <initn>2695</initn>
+      <init1>2599</init1>
+      <opt>2697</opt>
+      <zScore>3269.4</zScore>
+      <bits>614.8</bits>
+      <expectation>4.9E-172</expectation>
+      <identity>72.2</identity>
+      <positives>89.2</positives>
+      <overlap>554</overlap>
+      <strand>none/none</strand>
+      <querySeq start="33" end="585">FELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :  ..:.:: ..::...  .::    .. .::. :  ::.::.  . :: :::.:.:.:::::.:. ..::. :::::.::..:.::::.:::::::.:::::.::::: ::::::.:::: :::: :::::::: ....::.: ::::: ::::.::::::::::::::::.:: :    .::::::.::::.::: :.:: ::.:::::::::::::::::: .:: :::  : : .::::::::::::. :.. :::: :::: :::::::::::::::::::...::..:.::::.::  .:.:....::::: :::::..:: :.:.::::::::::::::.:::::::::::::::::.::: :..::::::::::::::::::::::::::::::::: :::::..: ::: ::.::.:::::::::::::::::::  :.:::..:::.::..::::::::: ::.::.:::.  :::::::::::.::::::.::.:::: :.:::::::::::::.:.::: ... :::::.:::::: :.: : </pattern>
+      <matchSeq start="2" end="555">                             MEPKVNLKQDPAYVEIQKFYDANGAKINIQQLFKLDTDRFNKFSLRIPTPADGDILLDYSKNRINDDLWKLLLNLAKSRNVEKARDAMFSGEKINFTEDRAVLHIALRNRQNRPILVNGKDVTPDVNAVLAHMKEFTGQVVSGQWKGYTGKAITDVINIGIGGSDLGPLMVTEALKPYANHLKVHFVSNIDGTHLAEVLKRLNPETALFIIASKTFTTQETITNATSAKTWFLEAAKDPSAVAKHFVALSTNAEKVTAFGIDPKNMFGFWDWVGGRYSLWSAIGLSISLYIGYENFEKLLEGASFMDNHYTTAPLEKNAPVILALLGVWYSNFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGSQVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPAQTHNPISGGVHHKILLANFLAQTEALMKGKTADEAKAELEQSGMAPEAVAKILPHKVFLGNRPTNSIVVKKVTPFTLGALIALYEHKIFTQGVIWDINSFDQWGVELGKQLAKAIEPELQDSSPVTSHDGSTNGLINFLKANF</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="49" database="TR" id="A0A3Q8VPM4" ac="A0A3Q8VPM4" length="556" description="Glucose-6-phosphate isomerase OS=Heortia vitessoides OX=1557813 PE=2 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2695</score>
+      <smithWatermanScore>2695</smithWatermanScore>
+      <initn>2661</initn>
+      <init1>2598</init1>
+      <opt>2695</opt>
+      <zScore>3266.9</zScore>
+      <bits>614.4</bits>
+      <expectation>6.7E-172</expectation>
+      <identity>72.2</identity>
+      <positives>89.4</positives>
+      <overlap>554</overlap>
+      <strand>none/none</strand>
+      <querySeq start="33" end="585">FELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :  ..:..: .: .:... .::    .. .::..: .:::::.  . :: ::..:.:.::::: :  :. :. ::.:::::..:.::::.:::::::.::::::::::: :::.::.::::::::: :::::::: .:.:::.: :::::.::::.::::::::::::::::.:: :    .::::::.::::.::: :::: ::.:::::::::::::::::: .:: ::: .: : .::::::::::::  :.. :::: :::: :::::::::::::::::::....:.::.::::.::  .:.::...::::: :::::..:: :.:.::::::::::::::.:::::::::::::::::.::: :...:::::::::::::::::::::::::::::::: :::::..: ::. :: ::.::::::::::::::::::.  :.:::..:::. ...:::::::::.::.::.:::.  :::::::::::.::::::.::..::: :.:::::::::::::.:.::::.  .::::::::::::.:.: : </pattern>
+      <matchSeq start="2" end="555">                             MEPKVNLKKDPAFQKLQEYYHANGDKINIPQLFQQDAGRFEKFSLRIPTPNDGEILLDYSKNRIDDAVFSQLLDLARSRGVEKARDAMFSGEKINFTEDRAVLHVALRNRQNRPVLVSGKDVMPDVNAVLAHMKEFSSEVISGQWKGYTGKSITDVINIGIGGSDLGPLMVTEALKPYANHLKVHFVSNIDGTHLAEVLKKLNPETSLFIIASKTFTTQETITNATSAKTWFLEHAKDPAAVAKHFVALSTNGEKVTAFGIDAKNMFGFWDWVGGRYSLWSAIGLSISLYVGYDNFEKLLEGANFMDQHFTTAPLEKNAPVILALLGVWYSNFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRGGDQADYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPAQTHNPVAGGAHHKILLANFLAQTEALMKGKTSDEAKAELEKSGMAADAVAKILPHKVFKGNRPTNSIVVKKVTPFTLGALIAMYEHKIFAQGVMWDINSFDQWGVELGKQLAKAIEPELAAPGAVTSHDASTNGLIGFLKANF</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+   <hit number="50" database="TR" id="H6TMR8" ac="H6TMR8" length="556" description="Glucose-6-phosphate isomerase OS=Hyphantria cunea OX=39466 GN=pgi PE=2 SV=1">
+    <alignments total="1">
+     <alignment number="1">
+      <score>2692</score>
+      <smithWatermanScore>2692</smithWatermanScore>
+      <initn>2690</initn>
+      <init1>2594</init1>
+      <opt>2692</opt>
+      <zScore>3263.3</zScore>
+      <bits>613.7</bits>
+      <expectation>1.1E-171</expectation>
+      <identity>72.2</identity>
+      <positives>89.0</positives>
+      <overlap>554</overlap>
+      <strand>none/none</strand>
+      <querySeq start="33" end="585">FELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA</querySeq>
+      <pattern>                              :  ..:.:: ..::...  .::    .. .::. :  ::.::.  . :: :::.:.:.:::::.:. ..::. :::::.::..:.::::.:::::::.:::::.::::: ::::::.:::: :::: :::::::: ....::.: ::::: ::::.::::::::::::::::.:: :    .::::::.::::.::: :.:: ::.:::::::::::::::::: .:: :::  : : .::::::::::::. :.. :::: :::: :::::::::::::::::::...::..:.::::.::  .:.:....::::: :::::..:: :.:.::::::::::::::.:::::::::::::::::.::: :..::::::::::::::::::::::::::::::::: :::::..: ::: ::.::.:::::::::::::::::::  :.:::..:::.::..::::::::: ::.::.:::.  :::::::::::.::::::.::.:::: :.:::::::::::::.:.::: ..  :::::.:::::: :.: : </pattern>
+      <matchSeq start="2" end="555">                             MEPKVNLKQDPAYVEIQKFYDANGAKINIQQLFKLDTDRFNKFSLRIPTPADGDILLDYSKNRINDDLWKLLLNLAKSRNVEKARDAMFSGEKINFTEDRAVLHIALRNRQNRPILVNGKDVTPDVNAVLAHMKEFTGQVVSGQWKGYTGKAITDVINIGIGGSDLGPLMVTEALKPYANHLKVHFVSNIDGTHLAEVLKRLNPETALFIIASKTFTTQETITNATSAKTWFLEAAKDPSAVAKHFVALSTNAEKVTAFGIDPKNMFGFWDWVGGRYSLWSAIGLSISLYIGYENFEKLLEGASFMDNHYTTAPLEKNAPVILALLGVWYSNFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGSQVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIPCDFIAPAQTHNPISGGVHHKILLANFLAQTEALMKGKTADEAKAELEQSGMAPEAVAKILPHKVFLGNRPTNSIVVKKVTPFTLGALIALYEHKIFTQGVIWDINSFDQWGVELGKQLAKAIEPELQGSWPVTSHDGSTNGLINFLKANF</matchSeq>
+     </alignment>
+    </alignments>
+   </hit>
+  </hits>
+ </SequenceSimilaritySearchResult></EBIApplicationResult>

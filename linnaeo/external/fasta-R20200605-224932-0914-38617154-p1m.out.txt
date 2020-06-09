@@ -1,0 +1,3330 @@
+# /nfs/public/ro/es/appbin/linux-x86_64/fasta-36.3.8h/fasta36 -l /nfs/public/ro/es/newdata/prod/fastacfg/fasta3db -L -T 32 -p -F 0.0 -b 50 -d 50 -m "F9B fasta-R20200605-224932-0914-38617154-p1m.m9" -z 1 @:1- +uniprotkb+
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.8h Aug, 2019
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: @
+  1>>>EMBOSS_001 - 586 aa
+Library: UniProtKB
+  61141413123 residues in 181292975 sequences
+
+Statistics:  Expectation_n fit: rho(ln(x))= 8.4777+/-0.000149; mu= 5.4080+/- 0.008
+ mean_var=67.9120+/-13.591, 0's: 324 Z-trim(113.1): 710  B-trim: 1813 in 1/63
+ Lambda= 0.155633
+ statistics sampled from 60000 (91812) to 17438893 sequences
+Algorithm: FASTA (3.8 Nov 2011) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 2, E-join: 1 (0.374), E-opt: 0.2 (0.0965), width:  16
+ Scan time: 4256.480
+
+The best scores are:                                      opt bits E(181292976)
+TR:Q7K707 Q7K707_CAEEL Glucose-6-phosphate isomera ( 586) 3831 869.4       0
+TR:Q9U1Q2 Q9U1Q2_CAEEL Glucose-6-phosphate isomera ( 551) 3609 819.6       0
+TR:E3M911 E3M911_CAERE Glucose-6-phosphate isomera ( 572) 3550 806.3       0
+TR:A0A2G5VRZ0 A0A2G5VRZ0_9PELO Glucose-6-phosphate ( 573) 3525 800.7       0
+TR:A0A2G5VRU3 A0A2G5VRU3_9PELO Glucose-6-phosphate ( 579) 3503 795.8       0
+TR:G0NZR3 G0NZR3_CAEBE Glucose-6-phosphate isomera ( 573) 3495 794.0       0
+TR:G0NFU3 G0NFU3_CAEBE Glucose-6-phosphate isomera ( 573) 3491 793.1       0
+TR:A8X5M7 A8X5M7_CAEBR Glucose-6-phosphate isomera ( 552) 3413 775.6       0
+TR:A0A1I7UZU5 A0A1I7UZU5_9PELO Glucose-6-phosphate ( 552) 3370 765.9       0
+TR:A0A2H2ILB8 A0A2H2ILB8_CAEJA Glucose-6-phosphate ( 575) 3338 758.7 2.4e-215
+TR:A0A2P4WU57 A0A2P4WU57_CAERE Glucose-6-phosphate ( 476) 2997 682.3 2.1e-192
+TR:A0A0C2FEI8 A0A0C2FEI8_9BILA Glucose-6-phosphate ( 551) 2953 672.3 2.4e-189
+TR:A0A3P8AVX7 A0A3P8AVX7_HELPZ Glucose-6-phosphate ( 551) 2905 661.5 4.2e-186
+TR:A0A0K0DI98 A0A0K0DI98_ANGCA Glucose-6-phosphate ( 553) 2860 651.4 4.7e-183
+TR:A0A0R3PKD0 A0A0R3PKD0_ANGCS Glucose-6-phosphate ( 551) 2858 651.0 6.3e-183
+TR:H3FL09 H3FL09_PRIPA Glucose-6-phosphate isomera (1080) 2855 650.0 2.5e-182
+TR:A0A2A6CCS4 A0A2A6CCS4_PRIPA Glucose-6-phosphate (1080) 2855 650.0 2.5e-182
+TR:A0A0D8XZ53 A0A0D8XZ53_DICVI Glucose-6-phosphate ( 544) 2840 647.0  1e-181
+TR:A0A2A2JRH0 A0A2A2JRH0_9BILA Glucose-6-phosphate ( 554) 2826 643.8 9.3e-181
+TR:A0A2A2JF40 A0A2A2JF40_9BILA Glucose-6-phosphate (1224) 2818 641.6 9.2e-180
+TR:A0A1I7ZWI3 A0A1I7ZWI3_9BILA Glucose-6-phosphate ( 726) 2796 636.9 1.4e-178
+TR:A0A1I7ZVV5 A0A1I7ZVV5_9BILA Glucose-6-phosphate ( 551) 2790 635.7 2.5e-178
+TR:A0A0P6F8V6 A0A0P6F8V6_9CRUS Glucose-6-phosphate ( 594) 2777 632.8 2.1e-177
+TR:C0L8T2 C0L8T2_9CRUS Glucose-6-phosphate isomera ( 556) 2775 632.3 2.6e-177
+TR:A0A0P6DK65 A0A0P6DK65_9CRUS Glucose-6-phosphate ( 594) 2775 632.3 2.8e-177
+TR:A0A0P5I3W1 A0A0P5I3W1_9CRUS Glucose-6-phosphate ( 594) 2775 632.3 2.8e-177
+TR:C0L8T1 C0L8T1_9CRUS Glucose-6-phosphate isomera ( 556) 2774 632.1  3e-177
+TR:C0L8T0 C0L8T0_9CRUS Glucose-6-phosphate isomera ( 556) 2772 631.7 4.2e-177
+TR:A0A0P6FUZ6 A0A0P6FUZ6_9CRUS Glucose-6-phosphate ( 594) 2772 631.6 4.5e-177
+TR:C0L8T5 C0L8T5_9CRUS Glucose-6-phosphate isomera ( 556) 2771 631.4 4.9e-177
+TR:C0L8T6 C0L8T6_9CRUS Glucose-6-phosphate isomera ( 556) 2768 630.8 7.7e-177
+TR:A0A0N8BHM7 A0A0N8BHM7_9CRUS Glucose-6-phosphate ( 594) 2768 630.7 8.5e-177
+TR:C0L8T3 C0L8T3_9CRUS Glucose-6-phosphate isomera ( 556) 2767 630.6 9.1e-177
+TR:C0L8T7 C0L8T7_9CRUS Glucose-6-phosphate isomera ( 556) 2767 630.6 9.1e-177
+TR:A0A0P5UIN3 A0A0P5UIN3_9CRUS Glucose-6-phosphate ( 594) 2767 630.5 9.9e-177
+TR:C0L8T4 C0L8T4_9CRUS Glucose-6-phosphate isomera ( 556) 2765 630.1 1.2e-176
+TR:A0A0P5KY86 A0A0P5KY86_9CRUS Glucose-6-phosphate ( 595) 2763 629.6 1.8e-176
+TR:A0A4V6A5X9 A0A4V6A5X9_STECR Glucose-6-phosphate ( 552) 2755 627.9 5.8e-176
+TR:A0A368F856 A0A368F856_ANCCA Glucose-6-phosphate ( 688) 2752 627.1 1.2e-175
+TR:F1KUW6 F1KUW6_ASCSU Glucose-6-phosphate isomera ( 575) 2746 625.8 2.5e-175
+TR:A0A0K0G292 A0A0K0G292_STRVS Glucose-6-phosphate ( 553) 2745 625.6 2.8e-175
+TR:E9GCK2 E9GCK2_DAPPU Glucose-6-phosphate isomera ( 556) 2736 623.6 1.1e-174
+TR:A0A0F6PKB4 A0A0F6PKB4_OSTFU Glucose-6-phosphate ( 556) 2729 622.0 3.4e-174
+TR:A0A016VBP9 A0A016VBP9_9BILA Glucose-6-phosphate ( 499) 2725 621.2 5.4e-174
+TR:A0A016VAV7 A0A016VAV7_9BILA Glucose-6-phosphate ( 501) 2725 621.2 5.4e-174
+TR:A0A0N5BIZ5 A0A0N5BIZ5_STREA Glucose-6-phosphate ( 553) 2722 620.4 9.9e-174
+TR:A0A090L893 A0A090L893_STRRB Glucose-6-phosphate ( 556) 2706 616.9 1.2e-172
+TR:H6TMR9 H6TMR9_HYPCU Glucose-6-phosphate isomera ( 556) 2697 614.8 4.9e-172
+TR:A0A3Q8VPM4 A0A3Q8VPM4_9NEOP Glucose-6-phosphate ( 556) 2695 614.4 6.7e-172
+TR:H6TMR8 H6TMR8_HYPCU Glucose-6-phosphate isomera ( 556) 2692 613.7 1.1e-171
+
+>>TR:Q7K707 Q7K707_CAEEL Glucose-6-phosphate isomerase
+OS=Caenorhabditis elegans OX=6239 GN=gpi-1 PE=1 SV=1 (586 aa)
+ initn: 3831 init1: 3831 opt: 3831  Z-score: 4644.9  bits: 869.4 E(181292976):    0
+Smith-Waterman score: 3831; 100.0% identity (100.0% similar) in 586 aa overlap (1-586:1-586)
+
+               10        20        30        40        50        60
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQL
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQL
+               10        20        30        40        50        60
+
+               70        80        90       100       110       120
+EMBOSS LELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFS
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K LELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFS
+               70        80        90       100       110       120
+
+              130       140       150       160       170       180
+EMBOSS AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+              130       140       150       160       170       180
+
+              190       200       210       220       230       240
+EMBOSS KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+              190       200       210       220       230       240
+
+              250       260       270       280       290       300
+EMBOSS IASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFW
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K IASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFW
+              250       260       270       280       290       300
+
+              310       320       330       340       350       360
+EMBOSS DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLY
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLY
+              310       320       330       340       350       360
+
+              370       380       390       400       410       420
+EMBOSS NNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNG
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K NNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNG
+              370       380       390       400       410       420
+
+              430       440       450       460       470       480
+EMBOSS QHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEA
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K QHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEA
+              430       440       450       460       470       480
+
+              490       500       510       520       530       540
+EMBOSS ELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDI
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K ELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDI
+              490       500       510       520       530       540
+
+              550       560       570       580      
+EMBOSS CSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q7K CSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+              550       560       570       580      
+
+>>TR:Q9U1Q2 Q9U1Q2_CAEEL Glucose-6-phosphate isomerase
+OS=Caenorhabditis elegans OX=6239 GN=gpi-1 PE=1 SV=1 (551 aa)
+ initn: 3609 init1: 3609 opt: 3609  Z-score: 4376.1  bits: 819.6 E(181292976):    0
+Smith-Waterman score: 3609; 100.0% identity (100.0% similar) in 551 aa overlap (36-586:1-551)
+
+          10        20        30        40        50        60     
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFE
+                                     ::::::::::::::::::::::::::::::
+TR:Q9U                               MSLSQDATFVELKRHVEANEKDAQLLELFE
+                                             10        20        30
+
+          70        80        90       100       110       120     
+EMBOSS KDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKIN
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q9U KDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKIN
+               40        50        60        70        80        90
+
+         130       140       150       160       170       180     
+EMBOSS FTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITD
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q9U FTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITD
+              100       110       120       130       140       150
+
+         190       200       210       220       230       240     
+EMBOSS VVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKT
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q9U VVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKT
+              160       170       180       190       200       210
+
+         250       260       270       280       290       300     
+EMBOSS FTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGG
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q9U FTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGG
+              220       230       240       250       260       270
+
+         310       320       330       340       350       360     
+EMBOSS RYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYG
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q9U RYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYG
+              280       290       300       310       320       330
+
+         370       380       390       400       410       420     
+EMBOSS AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFY
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q9U AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFY
+              340       350       360       370       380       390
+
+         430       440       450       460       470       480     
+EMBOSS QLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSS
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q9U QLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSS
+              400       410       420       430       440       450
+
+         490       500       510       520       530       540     
+EMBOSS GMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQ
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:Q9U GMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQ
+              460       470       480       490       500       510
+
+         550       560       570       580      
+EMBOSS WGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :::::::::::::::::::::::::::::::::::::::::
+TR:Q9U WGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+              520       530       540       550 
+
+>>TR:E3M911 E3M911_CAERE Glucose-6-phosphate isomerase
+OS=Caenorhabditis remanei OX=31234 GN=Cre-gpi-1 PE=3 SV=1 (572 aa)
+ initn: 3550 init1: 3550 opt: 3550  Z-score: 4304.1  bits: 806.3 E(181292976):    0
+Smith-Waterman score: 3550; 93.4% identity (97.9% similar) in 572 aa overlap (15-586:1-572)
+
+               10        20        30        40        50        60
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQL
+                     :.::::::...::.::: . ::::.:::.:::::::::::::..::
+TR:E3M               MIGYLSDLMSSLFVGDSKNGAMSLTQDAAFVELKRHVEANEKSVQL
+                             10        20        30        40      
+
+               70        80        90       100       110       120
+EMBOSS LELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFS
+       :: :::::.::::::: : :::::::::::::::::..::::: :::::::::::.::::
+TR:E3M LEWFEKDPTRFEKFTRHFKTPDGDFLFDFSKNRITDDTFQLLMNLAKSRGVEESRDAMFS
+         50        60        70        80        90       100      
+
+              130       140       150       160       170       180
+EMBOSS AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:E3M AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+        110       120       130       140       150       160      
+
+              190       200       210       220       230       240
+EMBOSS KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+       :::::::::::::::::::::::::::::.::::::::::::::::::::::::::::::
+TR:E3M KKITDVVNIGIGGSDLGPLMVTESLKNYQVGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+        170       180       190       200       210       220      
+
+              250       260       270       280       290       300
+EMBOSS IASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFW
+       :::::::::::::::::::::::.:::::.::::::::::::: ::::::::::::::::
+TR:E3M IASKTFTTQETITNAETAKEWFLSKAGDASAVAKHFVALSTNVPKAVEFGIDEKNMFEFW
+        230       240       250       260       270       280      
+
+              310       320       330       340       350       360
+EMBOSS DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLY
+       ::::::::::::::::::::::::::::::::::.:::::::.:::.:::::::::::::
+TR:E3M DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHFVNSPLEQNIPVILAMIGVLY
+        290       300       310       320       330       340      
+
+              370       380       390       400       410       420
+EMBOSS NNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNG
+       ::.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:E3M NNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNG
+        350       360       370       380       390       400      
+
+              430       440       450       460       470       480
+EMBOSS QHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEA
+       :::::::::::::::::::::::::::::: ::::::::::::::.::::::::: ::: 
+TR:E3M QHAFYQLIHQGTRLIPADFIAPVKTLNPIRDGLHHQILLANFLAQSEALMKGKTAEVAEQ
+        410       420       430       440       450       460      
+
+              490       500       510       520       530       540
+EMBOSS ELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDI
+       :::::::: ::::::::::::::::::::::::::::::::.::::::::::::::::::
+TR:E3M ELKSSGMSAESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIIWDI
+        470       480       490       500       510       520      
+
+              550       560       570       580      
+EMBOSS CSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::.::::::::::::::::::::::: .:.::::::::::::::::
+TR:E3M CSFDQWGVELGKQLAKVIQPELASADKITTHDASTNGLIAFIKNNA
+        530       540       550       560       570  
+
+>>TR:A0A2G5VRZ0 A0A2G5VRZ0_9PELO Glucose-6-phosphate isomerase
+OS=Caenorhabditis nigoni OX=1611254 GN=Cni-gpi-1 PE=3 SV=1 (573 aa)
+ initn: 3525 init1: 3525 opt: 3525  Z-score: 4273.8  bits: 800.7 E(181292976):    0
+Smith-Waterman score: 3525; 92.8% identity (98.2% similar) in 571 aa overlap (15-585:1-571)
+
+               10        20        30        40        50        60
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQL
+                     ::.:::::...::.::: ..::::.:::.::::::::::.:::.::
+TR:A0A               MLNYLSDLMSALFVGDSKNSAMSLTQDAAFVELKRHVEASEKDVQL
+                             10        20        30        40      
+
+               70        80        90       100       110       120
+EMBOSS LELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFS
+       :. :.:::.::::::: : ::::::::::::::::::::::::.:::::::::::.::::
+TR:A0A LDWFQKDPSRFEKFTRHFKTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRDAMFS
+         50        60        70        80        90       100      
+
+              130       140       150       160       170       180
+EMBOSS AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+       :::::::::::::::::::::::::::::::::::::::::::::::::::::.::::::
+TR:A0A AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGQWTGYTG
+        110       120       130       140       150       160      
+
+              190       200       210       220       230       240
+EMBOSS KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:A0A KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+        170       180       190       200       210       220      
+
+              250       260       270       280       290       300
+EMBOSS IASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFW
+       :::::::::::::::::::::::.:::: .::::::::::::: ::::::::::::::::
+TR:A0A IASKTFTTQETITNAETAKEWFLSKAGDPAAVAKHFVALSTNVPKAVEFGIDEKNMFEFW
+        230       240       250       260       270       280      
+
+              310       320       330       340       350       360
+EMBOSS DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLY
+       :::::::::::::::::::::::.::::::::::.:::::::::::.:::::::::::::
+TR:A0A DWVGGRYSLWSAIGLSIAVHIGFENYEKLLDGAFAVDEHFVNTPLEQNIPVILAMIGVLY
+        290       300       310       320       330       340      
+
+              370       380       390       400       410       420
+EMBOSS NNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNG
+       ::.:::::::::::::::::::::::::::::::::::::: ::::::::::::::::::
+TR:A0A NNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNG
+        350       360       370       380       390       400      
+
+              430       440       450       460       470       480
+EMBOSS QHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEA
+       :::::::::::::::::::::::.::::::.::::::::::::::.::::::::::::: 
+TR:A0A QHAFYQLIHQGTRLIPADFIAPVRTLNPIRNGLHHQILLANFLAQSEALMKGKTAAVAEE
+        410       420       430       440       450       460      
+
+              490       500       510       520       530       540
+EMBOSS ELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDI
+       :::.:::: ::::::::::::::::::::::::.:::::::.::::::::::::::::::
+TR:A0A ELKASGMSAESIAKILPHKVFEGNKPTTSIVLPIVTPFTLGSLIAFYEHKIFVQGIIWDI
+        470       480       490       500       510       520      
+
+              550       560       570       580       
+EMBOSS CSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       ::.::::::::::::::::::::::: ::.:::::::::::::::  
+TR:A0A CSFDQWGVELGKQLAKVIQPELASADKVTTHDASTNGLIAFIKNNNA
+        530       540       550       560       570   
+
+>>TR:A0A2G5VRU3 A0A2G5VRU3_9PELO Glucose-6-phosphate isomerase
+OS=Caenorhabditis nigoni OX=1611254 GN=Cni-gpi-1 PE=3 SV=1 (579 aa)
+ initn: 3511 init1: 2016 opt: 3503  Z-score: 4247.0  bits: 795.8 E(181292976):    0
+Smith-Waterman score: 3503; 91.9% identity (97.2% similar) in 577 aa overlap (15-585:1-577)
+
+               10        20        30        40        50        60
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQL
+                     ::.:::::...::.::: ..::::.:::.::::::::::.:::.::
+TR:A0A               MLNYLSDLMSALFVGDSKNSAMSLTQDAAFVELKRHVEASEKDVQL
+                             10        20        30        40      
+
+               70        80        90       100       110       120
+EMBOSS LELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFS
+       :. :.:::.::::::: : ::::::::::::::::::::::::.:::::::::::.::::
+TR:A0A LDWFQKDPSRFEKFTRHFKTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRDAMFS
+         50        60        70        80        90       100      
+
+              130       140       150       160       170       180
+EMBOSS AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+       :::::::::::::::::::::::::::::::::::::::::::::::::::::.::::::
+TR:A0A AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGQWTGYTG
+        110       120       130       140       150       160      
+
+              190       200       210       220       230       240
+EMBOSS KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:A0A KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+        170       180       190       200       210       220      
+
+              250       260       270       280       290       300
+EMBOSS IASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFW
+       :::::::::::::::::::::::.:::: .::::::::::::: ::::::::::::::::
+TR:A0A IASKTFTTQETITNAETAKEWFLSKAGDPAAVAKHFVALSTNVPKAVEFGIDEKNMFEFW
+        230       240       250       260       270       280      
+
+              310       320       330       340             350    
+EMBOSS DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKN------IPVILA
+       :::::::::::::::::::::::.::::::::::.:::::::::::.:      ::::::
+TR:A0A DWVGGRYSLWSAIGLSIAVHIGFENYEKLLDGAFAVDEHFVNTPLEQNQNVFLQIPVILA
+        290       300       310       320       330       340      
+
+          360       370       380       390       400       410    
+EMBOSS MIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWG
+       ::::::::.:::::::::::::::::::::::::::::::::::::: ::::::::::::
+TR:A0A MIGVLYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWG
+        350       360       370       380       390       400      
+
+          420       430       440       450       460       470    
+EMBOSS EPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKT
+       :::::::::::::::::::::::::::::.::::::.::::::::::::::.::::::::
+TR:A0A EPGTNGQHAFYQLIHQGTRLIPADFIAPVRTLNPIRNGLHHQILLANFLAQSEALMKGKT
+        410       420       430       440       450       460      
+
+          480       490       500       510       520       530    
+EMBOSS AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQ
+       ::::: :::.:::: ::::::::::::::::::::::::.:::::::.::::::::::::
+TR:A0A AAVAEEELKASGMSAESIAKILPHKVFEGNKPTTSIVLPIVTPFTLGSLIAFYEHKIFVQ
+        470       480       490       500       510       520      
+
+          540       550       560       570       580       
+EMBOSS GIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       ::::::::.::::::::::::::::::::::: ::.:::::::::::::::  
+TR:A0A GIIWDICSFDQWGVELGKQLAKVIQPELASADKVTTHDASTNGLIAFIKNNNA
+        530       540       550       560       570         
+
+>>TR:G0NZR3 G0NZR3_CAEBE Glucose-6-phosphate isomerase
+OS=Caenorhabditis brenneri OX=135651 GN=CAEBREN_28971 PE=3
+SV=1 (573 aa)
+ initn: 3486 init1: 3486 opt: 3495  Z-score: 4237.4  bits: 794.0 E(181292976):    0
+Smith-Waterman score: 3495; 91.9% identity (97.9% similar) in 571 aa overlap (15-585:1-571)
+
+               10        20        30        40        50        60
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQL
+                     :.:::::....::::.: ..:: :..: .:.::::::::::::.::
+TR:G0N               MIGYLSDVLSNLFIGESKNEAMFLTKDDAFIELKRHVEANEKDVQL
+                             10        20        30        40      
+
+               70        80        90       100       110       120
+EMBOSS LELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFS
+       :: :::::.::::::: :.::::::::::::::::::::::::.::::::::::::::::
+TR:G0N LEWFEKDPTRFEKFTRHFSTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRNAMFS
+         50        60        70        80        90       100      
+
+              130       140       150       160       170       180
+EMBOSS AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+       ::::::::::::::.:::::::::: ::::::::::::::::::::::::::::::::::
+TR:G0N AEKINFTENRAVLHIALRNRANRPIHVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+        110       120       130       140       150       160      
+
+              190       200       210       220       230       240
+EMBOSS KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+       ::::::::::::::::::::::::::.:::::::::::::::::::::::::::::::::
+TR:G0N KKITDVVNIGIGGSDLGPLMVTESLKHYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+        170       180       190       200       210       220      
+
+              250       260       270       280       290       300
+EMBOSS IASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFW
+       :::::::::::::::::::::::.::::..::::::::::::: ::::::::::::::::
+TR:G0N IASKTFTTQETITNAETAKEWFLSKAGDSSAVAKHFVALSTNVPKAVEFGIDEKNMFEFW
+        230       240       250       260       270       280      
+
+              310       320       330       340       350       360
+EMBOSS DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLY
+       ::::::::::::::::::::::::::::::::::.:::::::.:::::::::::::::::
+TR:G0N DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHFVNAPLEKNIPVILAMIGVLY
+        290       300       310       320       330       340      
+
+              370       380       390       400       410       420
+EMBOSS NNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNG
+       ::.:::::::::::::::::::::::::::::::::::::: ::::::::::::::::::
+TR:G0N NNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNG
+        350       360       370       380       390       400      
+
+              430       440       450       460       470       480
+EMBOSS QHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEA
+       ::::::::::::::::::::::::::::::.::::::::::::::.::::::::  :::.
+TR:G0N QHAFYQLIHQGTRLIPADFIAPVKTLNPIRNGLHHQILLANFLAQSEALMKGKTKQVAES
+        410       420       430       440       450       460      
+
+              490       500       510       520       530       540
+EMBOSS ELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDI
+       :::..::: ::: ::::::::::::::::::::::::::::.::::::::::::::::::
+TR:G0N ELKAAGMSSESIEKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIIWDI
+        470       480       490       500       510       520      
+
+              550       560       570       580       
+EMBOSS CSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       ::.:::::::::::::::::::::.:.::::::::::::::::.:  
+TR:G0N CSFDQWGVELGKQLAKVIQPELASSDNVTSHDASTNGLIAFIKKNNA
+        530       540       550       560       570   
+
+>>TR:G0NFU3 G0NFU3_CAEBE Glucose-6-phosphate isomerase
+OS=Caenorhabditis brenneri OX=135651 GN=CAEBREN_20371 PE=3
+SV=1 (573 aa)
+ initn: 3482 init1: 3482 opt: 3491  Z-score: 4232.5  bits: 793.1 E(181292976):    0
+Smith-Waterman score: 3491; 91.9% identity (97.5% similar) in 571 aa overlap (15-585:1-571)
+
+               10        20        30        40        50        60
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQL
+                     :.:::::....::::.: ..::::..: .:.::::::::::::.::
+TR:G0N               MIGYLSDVLSNLFIGESKNEAMSLTKDDAFIELKRHVEANEKDVQL
+                             10        20        30        40      
+
+               70        80        90       100       110       120
+EMBOSS LELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFS
+       :: :::::.::::::: : ::::::::::::::::::::::::.::::::::::::::::
+TR:G0N LEWFEKDPTRFEKFTRHFPTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRNAMFS
+         50        60        70        80        90       100      
+
+              130       140       150       160       170       180
+EMBOSS AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+       ::::::::::::::.:::::::::: ::::::::::::::::::::::::::::::::::
+TR:G0N AEKINFTENRAVLHIALRNRANRPIHVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+        110       120       130       140       150       160      
+
+              190       200       210       220       230       240
+EMBOSS KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+       ::::::::::::::::::::::::::.:: ::::::::::::::::::::::::::::::
+TR:G0N KKITDVVNIGIGGSDLGPLMVTESLKHYQNGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+        170       180       190       200       210       220      
+
+              250       260       270       280       290       300
+EMBOSS IASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFW
+       :::::::::::::::::::::::.:::: .::::::::::::: ::::::::::::::::
+TR:G0N IASKTFTTQETITNAETAKEWFLSKAGDPSAVAKHFVALSTNVPKAVEFGIDEKNMFEFW
+        230       240       250       260       270       280      
+
+              310       320       330       340       350       360
+EMBOSS DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLY
+       ::::::::::::::::::::::::::::::::::.:::::::.:::::::::::::::::
+TR:G0N DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHFVNAPLEKNIPVILAMIGVLY
+        290       300       310       320       330       340      
+
+              370       380       390       400       410       420
+EMBOSS NNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNG
+       ::.:::::::::::::::::::::::::::::::::::::: ::::::::::::::::::
+TR:G0N NNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNG
+        350       360       370       380       390       400      
+
+              430       440       450       460       470       480
+EMBOSS QHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEA
+       ::::::::::::::::::::::::::::::.::::::::::::::.::::::::  :::.
+TR:G0N QHAFYQLIHQGTRLIPADFIAPVKTLNPIRNGLHHQILLANFLAQSEALMKGKTKEVAES
+        410       420       430       440       450       460      
+
+              490       500       510       520       530       540
+EMBOSS ELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDI
+       :::..::: ::: ::::::::::::::::::::::::::::.::::::::::::::::::
+TR:G0N ELKAAGMSSESIEKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIIWDI
+        470       480       490       500       510       520      
+
+              550       560       570       580       
+EMBOSS CSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       ::.:::::::::::::::::::::.:.::::::::::::::::.:  
+TR:G0N CSFDQWGVELGKQLAKVIQPELASSDNVTSHDASTNGLIAFIKKNNA
+        530       540       550       560       570   
+
+>>TR:A8X5M7 A8X5M7_CAEBR Glucose-6-phosphate isomerase
+OS=Caenorhabditis briggsae OX=6238 GN=gpi-1 PE=3 SV=1 (552 aa)
+ initn: 3413 init1: 3413 opt: 3413  Z-score: 4138.3  bits: 775.6 E(181292976):    0
+Smith-Waterman score: 3413; 93.5% identity (98.0% similar) in 550 aa overlap (36-585:1-550)
+
+          10        20        30        40        50        60     
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFE
+                                     :::.:::.::.:: .:::::::.:::. :.
+TR:A8X                               MSLTQDAAFVDLKNYVEANEKDVQLLDWFQ
+                                             10        20        30
+
+          70        80        90       100       110       120     
+EMBOSS KDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKIN
+       :: .::::::: : ::::::::::::::::::::::::.:::::::::::.:::::::::
+TR:A8X KDQSRFEKFTRHFKTPDGDFLFDFSKNRITDESFQLLMKLAKSRGVEESRDAMFSAEKIN
+               40        50        60        70        80        90
+
+         130       140       150       160       170       180     
+EMBOSS FTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITD
+       ::::::::::::::::::::::::::::::::::::::::::::::::.:::::::::::
+TR:A8X FTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGQWTGYTGKKITD
+              100       110       120       130       140       150
+
+         190       200       210       220       230       240     
+EMBOSS VVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKT
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:A8X VVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKT
+              160       170       180       190       200       210
+
+         250       260       270       280       290       300     
+EMBOSS FTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGG
+       ::::::::::::::::::.:::: .::::::::::::: :::::::::::::::::::::
+TR:A8X FTTQETITNAETAKEWFLSKAGDPAAVAKHFVALSTNVLKAVEFGIDEKNMFEFWDWVGG
+              220       230       240       250       260       270
+
+         310       320       330       340       350       360     
+EMBOSS RYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYG
+       ::::::::::::::::::.::::::::::.:::::::::::.:::::::::::::::.::
+TR:A8X RYSLWSAIGLSIAVHIGFENYEKLLDGAFAVDEHFVNTPLEQNIPVILAMIGVLYNNVYG
+              280       290       300       310       320       330
+
+         370       380       390       400       410       420     
+EMBOSS AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFY
+       :::::::::::::::::::::::::::::::::::: :::::::::::::::::::::::
+TR:A8X AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFY
+              340       350       360       370       380       390
+
+         430       440       450       460       470       480     
+EMBOSS QLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSS
+       ::::::::::::::::::.::::::.::::::::::::::.::::::::::::: :::.:
+TR:A8X QLIHQGTRLIPADFIAPVRTLNPIRNGLHHQILLANFLAQSEALMKGKTAAVAEEELKAS
+              400       410       420       430       440       450
+
+         490       500       510       520       530       540     
+EMBOSS GMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQ
+       ::: ::::::::::::::::::::::::.:::::::.::::::::::::::::::::.::
+TR:A8X GMSAESIAKILPHKVFEGNKPTTSIVLPIVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQ
+              460       470       480       490       500       510
+
+         550       560       570       580       
+EMBOSS WGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       ::::::::::::::::::::: ::.:::::::::::::::  
+TR:A8X WGVELGKQLAKVIQPELASADKVTTHDASTNGLIAFIKNNNA
+              520       530       540       550  
+
+>>TR:A0A1I7UZU5 A0A1I7UZU5_9PELO Glucose-6-phosphate isomerase
+OS=Caenorhabditis tropicalis OX=1561998 PE=3 SV=1 (552 aa)
+ initn: 3370 init1: 3370 opt: 3370  Z-score: 4086.1  bits: 765.9 E(181292976):    0
+Smith-Waterman score: 3370; 91.5% identity (97.8% similar) in 550 aa overlap (36-585:1-550)
+
+          10        20        30        40        50        60     
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFE
+                                     :::..: .:.::: :::::::..:::. ::
+TR:A0A                               MSLTKDDAFIELKNHVEANEKSVQLLKWFE
+                                             10        20        30
+
+          70        80        90       100       110       120     
+EMBOSS KDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKIN
+       .::.::::::: ::::::::::::::::::.:::::::.:::::::::::::::::::::
+TR:A0A QDPSRFEKFTRHFATPDGDFLFDFSKNRITEESFQLLMKLAKSRGVEESRNAMFSAEKIN
+               40        50        60        70        80        90
+
+         130       140       150       160       170       180     
+EMBOSS FTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITD
+       :::::::::.:::::.:::::::::::::::::::.::::::::::::.:::::::::::
+TR:A0A FTENRAVLHIALRNRSNRPILVDGKDVMPDVNRVLGHMKEFCNEIISGQWTGYTGKKITD
+              100       110       120       130       140       150
+
+         190       200       210       220       230       240     
+EMBOSS VVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKT
+       :::::::::::::::::::::.:::::::::::::::::::::::::.::::::::::::
+TR:A0A VVNIGIGGSDLGPLMVTESLKHYQIGPNVHFVSNVDGTHVAEVTKKLDAETTLFIIASKT
+              160       170       180       190       200       210
+
+         250       260       270       280       290       300     
+EMBOSS FTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGG
+       ::::::::::::::::::.:::. .::::::::::::: :::::::::::::::::::::
+TR:A0A FTTQETITNAETAKEWFLSKAGNPSAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGG
+              220       230       240       250       260       270
+
+         310       320       330       340       350       360     
+EMBOSS RYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYG
+       :::::::::::::::::::::::::::::.:::::::.:::.:::::::::::::::.::
+TR:A0A RYSLWSAIGLSIAVHIGFDNYEKLLDGAFAVDEHFVNAPLEQNIPVILAMIGVLYNNVYG
+              280       290       300       310       320       330
+
+         370       380       390       400       410       420     
+EMBOSS AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFY
+       :::::::::::::::::::::::::::::::::::: :::::::::::::::::::::::
+TR:A0A AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGTNGQHAFY
+              340       350       360       370       380       390
+
+         430       440       450       460       470       480     
+EMBOSS QLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSS
+       ::::::::::::::::::::::::::::::::::::::::.::::::::: ::: :::.:
+TR:A0A QLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQSEALMKGKTAEVAEKELKAS
+              400       410       420       430       440       450
+
+         490       500       510       520       530       540     
+EMBOSS GMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQ
+       ::.  ::::::::::::::::::::::::::::::::::::::::::::::.:::::.::
+TR:A0A GMDEASIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIVWDICSFDQ
+              460       470       480       490       500       510
+
+         550       560       570       580       
+EMBOSS WGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       :::::::::::.:::::.: :..:::::::::::::.:.:  
+TR:A0A WGVELGKQLAKAIQPELSSPDVITSHDASTNGLIAFVKKNNA
+              520       530       540       550  
+
+>>TR:A0A2H2ILB8 A0A2H2ILB8_CAEJA Glucose-6-phosphate isomerase
+OS=Caenorhabditis japonica OX=281687 PE=3 SV=1 (575 aa)
+ initn: 3338 init1: 1972 opt: 3338  Z-score: 4046.8  bits: 758.7 E(181292976): 2.4e-215
+Smith-Waterman score: 3338; 86.9% identity (96.0% similar) in 574 aa overlap (15-586:1-574)
+
+               10        20         30        40        50         
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIG-DSTEKAMSLSQDATFVELKRHVEANEKDAQ
+                     :::::::....:::: .:  . :::.:: .:.:::  ::::::..:
+TR:A0A               MLGYLSDVLSALFIGPNSKSRDMSLTQDPVFLELKSFVEANEKNTQ
+                             10        20        30        40      
+
+      60        70        80        90       100       110         
+EMBOSS LLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMF
+       ::. :..::.::.:::: ::::::.:::::::::::: .:.::..:::::::::::::::
+TR:A0A LLDWFRQDPGRFQKFTRHFATPDGQFLFDFSKNRITDATFELLIKLAKSRGVEESRNAMF
+         50        60        70        80        90       100      
+
+     120       130       140       150       160       170         
+EMBOSS SAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYT
+       .:.::::::::::::.::::::::::::::::::::::::::::::::.:::::::::::
+TR:A0A AADKINFTENRAVLHIALRNRANRPILVDGKDVMPDVNRVLAHMKEFCTEIISGSWTGYT
+        110       120       130       140       150       160      
+
+     180       190       200       210       220       230         
+EMBOSS GKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLF
+       ::::::::::::::::::::::::.::.::.:::::::::::::::::.:..:: :::::
+TR:A0A GKKITDVVNIGIGGSDLGPLMVTEALKHYQVGPNVHFVSNVDGTHVAEITSRLNPETTLF
+        170       180       190       200       210       220      
+
+     240       250       260        270       280       290        
+EMBOSS IIASKTFTTQETITNAETAKEWFLAK-AGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFE
+       ::::::::::::::::::::::::.: .:: .::::::::::::: :::::::: :::::
+TR:A0A IIASKTFTTQETITNAETAKEWFLSKNGGDKAAVAKHFVALSTNVPKAVEFGIDAKNMFE
+        230       240       250       260       270       280      
+
+      300       310       320       330       340       350        
+EMBOSS FWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGV
+       :::::::::::::::::::::::::.:.::::::::.:::::::::::.:::::::::::
+TR:A0A FWDWVGGRYSLWSAIGLSIAVHIGFENFEKLLDGAFAVDEHFVNTPLEQNIPVILAMIGV
+        290       300       310       320       330       340      
+
+      360       370       380       390       400       410        
+EMBOSS LYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGT
+       ::::.:::::::::::::::::::::::::::::::::::::: ::::::::::::::::
+TR:A0A LYNNVYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGTRVDYSTGPIVWGEPGT
+        350       360       370       380       390       400      
+
+      420       430       440       450       460       470        
+EMBOSS NGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVA
+       :::::::::::::::::::::::::::::::: ::::::::::::::::::::::. . :
+TR:A0A NGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRQGLHHQILLANFLAQTEALMKGKSPSEA
+        410       420       430       440       450       460      
+
+      480       490       500       510       520       530        
+EMBOSS EAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIW
+       :::::.::..  .. ::::::::::::::::::::::::::::.::::::::::::::.:
+TR:A0A EAELKASGLAEAQLQKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIVW
+        470       480       490       500       510       520      
+
+      540       550       560       570       580       
+EMBOSS DICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       ::::.::::::::::::::::::::: ::::.:::::::::::::.:. 
+TR:A0A DICSFDQWGVELGKQLAKVIQPELASKDTVTTHDASTNGLIAFIKQNSA
+        530       540       550       560       570     
+
+>>TR:A0A2P4WU57 A0A2P4WU57_CAERE Glucose-6-phosphate isomerase
+OS=Caenorhabditis remanei OX=31234 GN=FL81_11206 PE=3 SV=1 (476 aa)
+ initn: 1524 init1: 1524 opt: 2997  Z-score: 3635.0  bits: 682.3 E(181292976): 2.1e-192
+Smith-Waterman score: 2997; 94.2% identity (96.9% similar) in 484 aa overlap (103-586:1-476)
+
+             80        90       100       110       120       130  
+EMBOSS KFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAV
+                                     : :::::::::::.::::::::::::::::
+TR:A0A                               MNLAKSRGVEESRDAMFSAEKINFTENRAV
+                                             10        20        30
+
+            140       150       160       170       180       190  
+EMBOSS LHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIG
+       :::::::::::::::::::::::::::::::::::.::::::::::::::::::::::::
+TR:A0A LHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCKEIISGSWTGYTGKKITDVVNIGIG
+               40        50        60        70        80        90
+
+            200       210       220       230       240       250  
+EMBOSS GSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETI
+       :::::::::::::::::.:::::::::::::::.::::::::::::::::::::::::::
+TR:A0A GSDLGPLMVTESLKNYQVGPNVHFVSNVDGTHVTEVTKKLNAETTLFIIASKTFTTQETI
+              100       110       120       130       140       150
+
+            260       270       280       290       300       310  
+EMBOSS TNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSA
+       :::::::::::.:::::.::::::::::::: ::::::::::::::::::::::::::::
+TR:A0A TNAETAKEWFLSKAGDASAVAKHFVALSTNVPKAVEFGIDEKNMFEFWDWVGGRYSLWSA
+              160       170       180       190       200       210
+
+            320       330       340       350       360       370  
+EMBOSS IGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALL
+       ::::::::::::::::::::::.:::::        ::::::::::::::.:::::::::
+TR:A0A IGLSIAVHIGFDNYEKLLDGAFAVDEHF--------IPVILAMIGVLYNNVYGAETHALL
+              220       230               240       250       260  
+
+            380       390       400       410       420       430  
+EMBOSS PYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGT
+       ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+TR:A0A PYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGT
+            270       280       290       300       310       320  
+
+            440       450       460       470       480       490  
+EMBOSS RLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESI
+       :::::::::::::::::: ::::::::::::::.::::::::: ::: :::::::: :::
+TR:A0A RLIPADFIAPVKTLNPIRDGLHHQILLANFLAQSEALMKGKTAEVAEQELKSSGMSAESI
+            330       340       350       360       370       380  
+
+            500       510       520       530       540       550  
+EMBOSS AKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGK
+       :::::::::::::::::::::::::::::.::::::::::::::::::::.:::::::::
+TR:A0A AKILPHKVFEGNKPTTSIVLPVVTPFTLGSLIAFYEHKIFVQGIIWDICSFDQWGVELGK
+            390       400       410       420       430       440  
+
+            560       570       580      
+EMBOSS QLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :::::::::::::: .:.::::::::::::::::
+TR:A0A QLAKVIQPELASADKITTHDASTNGLIAFIKNNA
+            450       460       470      
+
+>>TR:A0A0C2FEI8 A0A0C2FEI8_9BILA Glucose-6-phosphate isomerase
+OS=Ancylostoma duodenale OX=51022 GN=ANCDUO_24865 PE=3 SV=1 (551 aa)
+ initn: 2949 init1: 2902 opt: 2953  Z-score: 3580.1  bits: 672.3 E(181292976): 2.4e-189
+Smith-Waterman score: 2953; 79.6% identity (91.6% similar) in 550 aa overlap (36-584:1-550)
+
+          10        20        30        40        50         60    
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELF
+                                     ::: .:. : .::  :. .::.  .. : .
+TR:A0A                               MSLCRDTRFQDLKSFVDCHEKEQLSIYEQL
+                                             10        20        30
+
+           70        80        90       100       110       120    
+EMBOSS EKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKI
+        .:: ::.:.::.. :::: .::::::.:::::.:  ::..:.::.::  : :::..:.:
+TR:A0A LNDPDRFNKYTRVIDTPDGPMLFDFSKHRITDETFAKLMEVARSRNVEMMRAAMFGGERI
+               40        50        60        70        80        90
+
+          130       140       150       160       170       180    
+EMBOSS NFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKIT
+       ::::::::::.:::::.: :: :::::::::::::: ::::::..::.:.::::::::::
+TR:A0A NFTENRAVLHIALRNRSNTPICVDGKDVMPDVNRVLEHMKEFCHKIITGAWTGYTGKKIT
+              100       110       120       130       140       150
+
+          190       200       210       220       230       240    
+EMBOSS DVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASK
+       ::::::::::::::::: :.:..:::::::::::::::::.:::::::: ::::::::::
+TR:A0A DVVNIGIGGSDLGPLMVCEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASK
+              160       170       180       190       200       210
+
+          250       260       270       280       290       300    
+EMBOSS TFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVG
+       ::::::::::::::::::: :::: .::::::::::::: :: ::::: .::::::::::
+TR:A0A TFTTQETITNAETAKEWFLKKAGDKSAVAKHFVALSTNVPKAQEFGIDPSNMFEFWDWVG
+              220       230       240       250       260       270
+
+          310       320       330       340       350       360    
+EMBOSS GRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIY
+       ::::::::::::::::.::::..:::.:: ..:.:::: :::.:.:::.::.::::.:.:
+TR:A0A GRYSLWSAIGLSIAVHVGFDNFQKLLEGAHAADQHFVNQPLEQNVPVIMAMLGVLYSNVY
+              280       290       300       310       320       330
+
+          370       380       390       400       410       420    
+EMBOSS GAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAF
+       :::::::::::::.:::::::::::::::::::::.:.::::::::::::::::::::::
+TR:A0A GAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTREGNRVDYSTGPIVWGEPGTNGQHAF
+              340       350       360       370       380       390
+
+          430       440       450       460       470       480    
+EMBOSS YQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKS
+       :::::::::::: :::::.:::::.:.:::::::::::::::::::::::   ::::::.
+TR:A0A YQLIHQGTRLIPCDFIAPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAEAELKA
+              400       410       420       430       440       450
+
+          490       500       510       520       530       540    
+EMBOSS SGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYD
+       .    ..: :::::::::::.::::::::.:.::::: :::.:::::::::.:::: :::
+TR:A0A AKTPEDKIEKILPHKVFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDINSYD
+              460       470       480       490       500       510
+
+          550       560       570       580      
+EMBOSS QWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :::::::::::::::::::: : : :::.:::::: :::.  
+TR:A0A QWGVELGKQLAKVIQPELASKDPVISHDVSTNGLINFIKSL 
+              520       530       540       550  
+
+>>TR:A0A3P8AVX7 A0A3P8AVX7_HELPZ Glucose-6-phosphate isomerase
+OS=Heligmosomoides polygyrus OX=6339 GN=HPBE_LOCUS20202
+PE=3 SV=1 (551 aa)
+ initn: 2905 init1: 2853 opt: 2905  Z-score: 3521.8  bits: 661.5 E(181292976): 4.2e-186
+Smith-Waterman score: 2905; 78.2% identity (90.7% similar) in 550 aa overlap (36-584:1-550)
+
+          10        20        30        40        50         60    
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELF
+                                     ::: .:  : .:: .:: .::.  .. . .
+TR:A0A                               MSLCRDPKFQDLKAYVECHEKEQLSIYQQL
+                                             10        20        30
+
+           70        80        90       100       110       120    
+EMBOSS EKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKI
+        .:: ::.:.::.. ::::. ::::::.::.: .:. :: .:.::.::  : ::::.:.:
+TR:A0A LNDPERFNKYTRFIDTPDGSVLFDFSKHRISDVTFDKLMDVARSRNVEAMRAAMFSGERI
+               40        50        60        70        80        90
+
+          130       140       150       160       170       180    
+EMBOSS NFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKIT
+       ::::::::::.:::::.: ::::::::::::::::: :::.: ..::::.::::::.:: 
+TR:A0A NFTENRAVLHIALRNRSNTPILVDGKDVMPDVNRVLDHMKDFSDKIISGAWTGYTGQKIE
+              100       110       120       130       140       150
+
+          190       200       210       220       230       240    
+EMBOSS DVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASK
+       ::::::::::::::::: :.:..:::::::::::::::::.:::::::: ::::::::::
+TR:A0A DVVNIGIGGSDLGPLMVCEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASK
+              160       170       180       190       200       210
+
+          250       260       270       280       290       300    
+EMBOSS TFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVG
+       ::::::::::::::::::: :::: :::::::::::::: :: .::::. ::::::::::
+TR:A0A TFTTQETITNAETAKEWFLKKAGDKGAVAKHFVALSTNVPKAEQFGIDRTNMFEFWDWVG
+              220       230       240       250       260       270
+
+          310       320       330       340       350       360    
+EMBOSS GRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIY
+       ::::::::::::::::.::::...::.:: ..: :::: ::..:.:.:.::.::::.:::
+TR:A0A GRYSLWSAIGLSIAVHVGFDNFKQLLEGAHAADTHFVNEPLDRNVPIIMAMLGVLYSNIY
+              280       290       300       310       320       330
+
+          370       380       390       400       410       420    
+EMBOSS GAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAF
+       :::::::::::::.:::::::::::::::::::::.: ::::::::::::::::::::::
+TR:A0A GAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTREGGRVDYSTGPIVWGEPGTNGQHAF
+              340       350       360       370       380       390
+
+          430       440       450       460       470       480    
+EMBOSS YQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKS
+       :::::::::::: :::::.:::::.:.:::::::::::::::::::::::   :: ::..
+TR:A0A YQLIHQGTRLIPCDFIAPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAEDELRA
+              400       410       420       430       440       450
+
+          490       500       510       520       530       540    
+EMBOSS SGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYD
+       .    . : :::::::::::.::::::::::.::::: :::.:::::::::.:::: :::
+TR:A0A AKTPEDRIKKILPHKVFEGNRPTTSIVLPVVSPFTLGLLIALYEHKIFVQGVIWDINSYD
+              460       470       480       490       500       510
+
+          550       560       570       580      
+EMBOSS QWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::::::::::::  ...:::.:::::: :::.  
+TR:A0A QWGVELGKQLAKVIQPELASKGNISSHDVSTNGLINFIKSL 
+              520       530       540       550  
+
+>>TR:A0A0K0DI98 A0A0K0DI98_ANGCA Glucose-6-phosphate isomerase
+OS=Angiostrongylus cantonensis OX=6313 PE=3 SV=2 (553 aa)
+ initn: 2814 init1: 2664 opt: 2860  Z-score: 3467.2  bits: 651.4 E(181292976): 4.7e-183
+Smith-Waterman score: 2860; 77.0% identity (90.4% similar) in 552 aa overlap (36-584:1-552)
+
+          10        20        30        40        50         60    
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELF
+                                     :.: .:. : ::: .:. .::.  .. . .
+TR:A0A                               MALCRDTKFQELKCYVDCHEKEQLSIYKEL
+                                             10        20        30
+
+           70        80        90       100         110       120  
+EMBOSS EKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRL--AKSRGVEESRNAMFSAE
+        .:: :: ::::.. ::::  ::::::.:::. .:. :. .  :.::.::  :.:::..:
+TR:A0A LNDPDRFAKFTRVIETPDGPVLFDFSKHRITETTFEKLVCIFQARSRNVEAMRTAMFAGE
+               40        50        60        70        80        90
+
+            130       140       150       160       170       180  
+EMBOSS KINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKK
+       .:::::::::::::::::.: ::.::::.::::::. : :::.::..::::.::::::::
+TR:A0A RINFTENRAVLHVALRNRSNTPIFVDGKNVMPDVNHELEHMKDFCDKIISGAWTGYTGKK
+              100       110       120       130       140       150
+
+            190       200       210       220       230       240  
+EMBOSS ITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIA
+       .::::::::::::::::::.:.:..:::::::::::::::::.:::::::. ::::::::
+TR:A0A VTDVVNIGIGGSDLGPLMVSEALRHYQIGPNVHFVSNVDGTHIAEVTKKLDPETTLFIIA
+              160       170       180       190       200       210
+
+            250       260       270       280       290       300  
+EMBOSS SKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDW
+       :::::::::::::::::::::  : : .::::::::::.::  :. ::::  ::::::::
+TR:A0A SKTFTTQETITNAETAKEWFLNTAQDKSAVAKHFVALSSNVPMATAFGIDPMNMFEFWDW
+              220       230       240       250       260       270
+
+            310       320       330       340       350       360  
+EMBOSS VGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNN
+       :::::::::.:::::::::::::.::::::: ..:.:::. :::::.:::.::.:.:: :
+TR:A0A VGGRYSLWSVIGLSIAVHIGFDNFEKLLDGAHAADQHFVTQPLEKNVPVIMAMLGILYIN
+              280       290       300       310       320       330
+
+            370       380       390       400       410       420  
+EMBOSS IYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQH
+       .::::::::::::::.::::::::::::::::::::: : ::::::::::::::::::::
+TR:A0A VYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRDGARVDYSTGPIVWGEPGTNGQH
+              340       350       360       370       380       390
+
+            430       440       450       460       470       480  
+EMBOSS AFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAEL
+       :::::::::::::: :::.:.:::::.:.:::::::::::::::::::::::   ::.::
+TR:A0A AFYQLIHQGTRLIPCDFIVPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAETEL
+              400       410       420       430       440       450
+
+            490       500       510       520       530       540  
+EMBOSS KSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICS
+       :.::.  :.: ::::::.::::.::::::::.:.::::: :::.:::::::::.:::: :
+TR:A0A KASGVHAEKIEKILPHKIFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDINS
+              460       470       480       490       500       510
+
+            550       560       570       580      
+EMBOSS YDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :::::::::::::::::::: .  .:::::.:::::: :::.  
+TR:A0A YDQWGVELGKQLAKVIQPELKTPGNVTSHDVSTNGLINFIKSL 
+              520       530       540       550    
+
+>>TR:A0A0R3PKD0 A0A0R3PKD0_ANGCS Glucose-6-phosphate isomerase
+OS=Angiostrongylus costaricensis OX=334426
+GN=ACOC_LOCUS5034 PE=3 SV=1 (551 aa)
+ initn: 2813 init1: 2813 opt: 2858  Z-score: 3464.8  bits: 651.0 E(181292976): 6.3e-183
+Smith-Waterman score: 2858; 76.9% identity (90.5% similar) in 550 aa overlap (36-584:1-550)
+
+          10        20        30        40        50         60    
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELF
+                                     :.: .:. : ::: .:. .::.  .. . .
+TR:A0A                               MALCRDTKFQELKCYVDCHEKEQLSIYKEL
+                                             10        20        30
+
+           70        80        90       100       110       120    
+EMBOSS EKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKI
+        .:: :: ::.:.. ::::  ::::::.:::. .:. :...:.::..:  : :::..:.:
+TR:A0A LNDPDRFAKFSRIIDTPDGPVLFDFSKHRITETTFEKLLEVARSRNMEAMRAAMFAGERI
+               40        50        60        70        80        90
+
+          130       140       150       160       170       180    
+EMBOSS NFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKIT
+       ::::::::::::::::.:  :.:.:.:::::::. : :::.::..::::.::::::::::
+TR:A0A NFTENRAVLHVALRNRSNTAIFVNGQDVMPDVNHELEHMKDFCDKIISGAWTGYTGKKIT
+              100       110       120       130       140       150
+
+          190       200       210       220       230       240    
+EMBOSS DVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASK
+       :::::::::::::::::.:.:..:::::::::::::::::.:::::::. ::::::::::
+TR:A0A DVVNIGIGGSDLGPLMVSEALRHYQIGPNVHFVSNVDGTHIAEVTKKLDPETTLFIIASK
+              160       170       180       190       200       210
+
+          250       260       270       280       290       300    
+EMBOSS TFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVG
+       :::::::::::::::::::  : : .::::::::::.::  :. ::::  ::::::::::
+TR:A0A TFTTQETITNAETAKEWFLKTAEDKSAVAKHFVALSSNVPVATAFGIDPMNMFEFWDWVG
+              220       230       240       250       260       270
+
+          310       320       330       340       350       360    
+EMBOSS GRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIY
+       :::::::.:::::::::::::.::::::: ..:.:::. :::::.:::.::.:::: :.:
+TR:A0A GRYSLWSVIGLSIAVHIGFDNFEKLLDGAHAADQHFVTQPLEKNVPVIMAMLGVLYINVY
+              280       290       300       310       320       330
+
+          370       380       390       400       410       420    
+EMBOSS GAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAF
+       :::::::::::::.::::::::::::::::::::: : ::::::::::::::::::::::
+TR:A0A GAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRDGTRVDYSTGPIVWGEPGTNGQHAF
+              340       350       360       370       380       390
+
+          430       440       450       460       470       480    
+EMBOSS YQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKS
+       :::::::::::: :::.:.:::::.:.:::::::::::::::::::::::   ::.:::.
+TR:A0A YQLIHQGTRLIPCDFIVPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAETELKA
+              400       410       420       430       440       450
+
+          490       500       510       520       530       540    
+EMBOSS SGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYD
+       ::.  :.: ::::::.::::.::::::::.:.::::: :::.:::::::::.:::. :::
+TR:A0A SGVPAEKIEKILPHKIFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDVNSYD
+              460       470       480       490       500       510
+
+          550       560       570       580      
+EMBOSS QWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :::::::::::::::::: :  .:::::.:::::: :::.  
+TR:A0A QWGVELGKQLAKVIQPELKSPGNVTSHDVSTNGLINFIKSL 
+              520       530       540       550  
+
+>>TR:H3FL09 H3FL09_PRIPA Glucose-6-phosphate isomerase
+OS=Pristionchus pacificus OX=54126 GN=WBGene00112519 PE=3
+SV=2 (1080 aa)
+ initn: 2383 init1: 2319 opt: 2855  Z-score: 3454.3  bits: 650.0 E(181292976): 2.5e-182
+Smith-Waterman score: 2855; 77.1% identity (91.3% similar) in 554 aa overlap (31-583:324-869)
+
+               10        20        30        40        50          
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-Q
+                                     :. ..:.:. ::.: .:  ::::.::   :
+TR:H3F LRRERIVHKQRLFEIDFKERVSARRHLPRSSSPSTMTLTADAAFQKLVAHVEAGEKTQLQ
+           300       310       320       330       340       350   
+
+      60        70        80        90       100       110         
+EMBOSS LLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMF
+       . . : ::::::.::.: . ::.: .::::::.:::. ...::. .:.:::::. :.:::
+TR:H3F IKDEFAKDPARFDKFSRTLPTPSGPMLFDFSKHRITQTTLDLLIDVARSRGVEQMRTAMF
+           360       370       380       390       400       410   
+
+     120       130       140       150       160       170         
+EMBOSS SAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYT
+       ...::::::.:::::.::::::: ::::.:::::::::::::::::::. ::::.:::::
+TR:H3F AGDKINFTEDRAVLHIALRNRANTPILVEGKDVMPDVNRVLAHMKEFCGAIISGQWTGYT
+           420       430       440       450       460       470   
+
+     180       190       200       210       220       230         
+EMBOSS GKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLF
+       ::::::::::::::::::::::::.:..:::::::::::::::::.::::..:.::::::
+TR:H3F GKKITDVVNIGIGGSDLGPLMVTEALRHYQIGPNVHFVSNVDGTHIAEVTRRLSAETTLF
+           480       490       500       510       520       530   
+
+     240       250       260       270       280       290         
+EMBOSS IIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEF
+       :.::::::::::::::::::::::.:...:. :::::::::::: ::.:::::  :::::
+TR:H3F IVASKTFTTQETITNAETAKEWFLSKGASAADVAKHFVALSTNVPKATEFGIDPANMFEF
+           540       550       560       570       580       590   
+
+     300       310       320       330       340       350         
+EMBOSS WDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVL
+       :::::::::::::::::::::.:.::.:::: ::  .:.::..:::::::::..::.:::
+TR:H3F WDWVGGRYSLWSAIGLSIAVHVGYDNFEKLLAGAHLADRHFAETPLEKNIPVLMAMLGVL
+           600       610       620       630       640       650   
+
+     360       370       380       390       400       410         
+EMBOSS YNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTN
+       :.:.::::::::::::::.::::::::::::::::::.:: : ::.:.::::::::::::
+TR:H3F YGNVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFITRSGARVNYATGPIVWGEPGTN
+           660       670       680       690       700       710   
+
+     420       430       440       450       460       470         
+EMBOSS GQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAE
+       :::::::::::::::::::::::.:::::::.::::.:::::::::::::: :::  ...
+TR:H3F GQHAFYQLIHQGTRLIPADFIAPAKTLNPIRNGLHHEILLANFLAQTEALMTGKTIDAVR
+           720       730       740       750       760       770   
+
+     480       490       500       510       520       530         
+EMBOSS AELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWD
+        :       ::.::   ::::::::.::::::::.: :.:::::.:.:::::::::. ::
+TR:H3F KE-----NVPEKIA---PHKVFEGNRPTTSIVLPLVDPLTLGALLALYEHKIFVQGVCWD
+                780          790       800       810       820     
+
+     540       550       560       570       580                   
+EMBOSS ICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA             
+       . ::::::::::::::::::::::.   ::.:::::::::::::                
+TR:H3F VNSYDQWGVELGKQLAKVIQPELAGPAPVTTHDASTNGLIAFIKAHRAMLSSRSFTCEVV
+         830       840       850       860       870       880     
+
+TR:H3F HFTICLALVSYQTITPQHRAPIPTSMAGYALKRLMTEYKELTLRPPEGVLASPVDEDNFF
+         890       900       910       920       930       940     
+
+>>TR:A0A2A6CCS4 A0A2A6CCS4_PRIPA Glucose-6-phosphate isomerase
+OS=Pristionchus pacificus OX=54126 GN=PRIPAC_40222 PE=3
+SV=1 (1080 aa)
+ initn: 2383 init1: 2319 opt: 2855  Z-score: 3454.3  bits: 650.0 E(181292976): 2.5e-182
+Smith-Waterman score: 2855; 77.1% identity (91.3% similar) in 554 aa overlap (31-583:324-869)
+
+               10        20        30        40        50          
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-Q
+                                     :. ..:.:. ::.: .:  ::::.::   :
+TR:A0A LRRERIVHKQRLFEIDFKERVSARRHLPRSSSPSTMTLTADAAFQKLVAHVEAGEKTQLQ
+           300       310       320       330       340       350   
+
+      60        70        80        90       100       110         
+EMBOSS LLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMF
+       . . : ::::::.::.: . ::.: .::::::.:::. ...::. .:.:::::. :.:::
+TR:A0A IKDEFAKDPARFDKFSRTLPTPSGPMLFDFSKHRITQTTLDLLIDVARSRGVEQMRTAMF
+           360       370       380       390       400       410   
+
+     120       130       140       150       160       170         
+EMBOSS SAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYT
+       ...::::::.:::::.::::::: ::::.:::::::::::::::::::. ::::.:::::
+TR:A0A AGDKINFTEDRAVLHIALRNRANTPILVEGKDVMPDVNRVLAHMKEFCGAIISGQWTGYT
+           420       430       440       450       460       470   
+
+     180       190       200       210       220       230         
+EMBOSS GKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLF
+       ::::::::::::::::::::::::.:..:::::::::::::::::.::::..:.::::::
+TR:A0A GKKITDVVNIGIGGSDLGPLMVTEALRHYQIGPNVHFVSNVDGTHIAEVTRRLSAETTLF
+           480       490       500       510       520       530   
+
+     240       250       260       270       280       290         
+EMBOSS IIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEF
+       :.::::::::::::::::::::::.:...:. :::::::::::: ::.:::::  :::::
+TR:A0A IVASKTFTTQETITNAETAKEWFLSKGASAADVAKHFVALSTNVPKATEFGIDPANMFEF
+           540       550       560       570       580       590   
+
+     300       310       320       330       340       350         
+EMBOSS WDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVL
+       :::::::::::::::::::::.:.::.:::: ::  .:.::..:::::::::..::.:::
+TR:A0A WDWVGGRYSLWSAIGLSIAVHVGYDNFEKLLAGAHLADRHFAETPLEKNIPVLMAMLGVL
+           600       610       620       630       640       650   
+
+     360       370       380       390       400       410         
+EMBOSS YNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTN
+       :.:.::::::::::::::.::::::::::::::::::.:: : ::.:.::::::::::::
+TR:A0A YGNVYGAETHALLPYDQYLHRFAAYFQQGDMESNGKFITRSGARVNYATGPIVWGEPGTN
+           660       670       680       690       700       710   
+
+     420       430       440       450       460       470         
+EMBOSS GQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAE
+       :::::::::::::::::::::::.:::::::.::::.:::::::::::::: :::  ...
+TR:A0A GQHAFYQLIHQGTRLIPADFIAPAKTLNPIRNGLHHEILLANFLAQTEALMTGKTIDAVR
+           720       730       740       750       760       770   
+
+     480       490       500       510       520       530         
+EMBOSS AELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWD
+        :       ::.::   ::::::::.::::::::.: :.:::::.:.:::::::::. ::
+TR:A0A KE-----NVPEKIA---PHKVFEGNRPTTSIVLPLVDPLTLGALLALYEHKIFVQGVCWD
+                780          790       800       810       820     
+
+     540       550       560       570       580                   
+EMBOSS ICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA             
+       . ::::::::::::::::::::::.   ::.:::::::::::::                
+TR:A0A VNSYDQWGVELGKQLAKVIQPELAGPAPVTTHDASTNGLIAFIKAHRAMLSSRSFTCEVV
+         830       840       850       860       870       880     
+
+TR:A0A HFTICLALVSYQTITPQHRAPIPTSMAGYALKRLMTEYKELTLRPPEGVLASPVDEDNFF
+         890       900       910       920       930       940     
+
+>>TR:A0A0D8XZ53 A0A0D8XZ53_DICVI Glucose-6-phosphate isomerase
+OS=Dictyocaulus viviparus OX=29172 GN=DICVIV_03958 PE=3
+SV=1 (544 aa)
+ initn: 2845 init1: 1820 opt: 2840  Z-score: 3443.1  bits: 647.0 E(181292976): 1e-181
+Smith-Waterman score: 2840; 79.0% identity (90.1% similar) in 538 aa overlap (48-584:10-543)
+
+        20        30        40        50         60        70      
+EMBOSS YLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELFEKDPARFEKFTR
+                                     :  :. .::.  .. . . .:: ::.::::
+TR:A0A                      MMMRSSKISKCFVDCHEKEQLSIYKELLNDPERFNKFTR
+                                    10        20        30         
+
+         80        90       100       110       120       130      
+EMBOSS LFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHVA
+        . ::::  ::::::.:::: .:. :...:.:: ::. : :::..:.:::::::::::.:
+TR:A0A YIETPDGAVLFDFSKHRITDTTFEKLIEVARSRDVEKMRAAMFDGERINFTENRAVLHIA
+      40        50        60        70        80        90         
+
+        140       150       160       170       180       190      
+EMBOSS LRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSDL
+       ::::.: ::.:::::::::::. : :::.:::.::.: ::::::::::::::::::::::
+TR:A0A LRNRSNTPIFVDGKDVMPDVNHELEHMKDFCNKIINGIWTGYTGKKITDVVNIGIGGSDL
+     100       110       120       130       140       150         
+
+        200       210       220       230       240       250      
+EMBOSS GPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNAE
+       ::::: :.:. :::::::::::::::::.:::::::: ::::::::::::::::::::::
+TR:A0A GPLMVCEALRYYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNAE
+     160       170       180       190       200       210         
+
+        260       270       280       290       300       310      
+EMBOSS TAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGLS
+       ::::::: :::. .::::::::::::: ::. ::::  :.:::::::::::::::.::::
+TR:A0A TAKEWFLKKAGNKSAVAKHFVALSTNVPKATAFGIDPMNLFEFWDWVGGRYSLWSVIGLS
+     220       230       240       250       260       270         
+
+        320       330       340       350       360       370      
+EMBOSS IAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYDQ
+       :::::::::.::::::: ..:::::. :::.:::::.::.:.:: :.:::::.:::::::
+TR:A0A IAVHIGFDNFEKLLDGAHAADEHFVSQPLEQNIPVIMAMLGILYINVYGAETQALLPYDQ
+     280       290       300       310       320       330         
+
+        380       390       400       410       420       430      
+EMBOSS YMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIP
+       :.::::::::::::::::::::    ::::::::::::::::::::::::::::::::::
+TR:A0A YLHRFAAYFQQGDMESNGKFVT----RVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLIP
+     340       350       360           370       380       390     
+
+        440       450       460       470       480       490      
+EMBOSS ADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKIL
+        :::.:.:::::::::::::::::::::::::::::::   :::::..:::  :.: :::
+TR:A0A CDFIVPAKTLNPIRGGLHHQILLANFLAQTEALMKGKTHDEAEAELRGSGMPSEKIEKIL
+         400       410       420       430       440       450     
+
+        500       510       520       530       540       550      
+EMBOSS PHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLAK
+       :::.::::.::::::::.:.::::: :::.:::::::::.:::: :::::::::::::::
+TR:A0A PHKIFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDINSYDQWGVELGKQLAK
+         460       470       480       490       500       510     
+
+        560       570       580      
+EMBOSS VIQPELASADTVTSHDASTNGLIAFIKNNA
+       :::::: :   .:::: :::::: :::.  
+TR:A0A VIQPELKSPGDITSHDISTNGLINFIKSF 
+         520       530       540     
+
+>>TR:A0A2A2JRH0 A0A2A2JRH0_9BILA Glucose-6-phosphate isomerase
+OS=Diploscapter pachys OX=2018661 GN=WR25_20482 PE=3 SV=1 (554 aa)
+ initn: 2825 init1: 2825 opt: 2826  Z-score: 3425.9  bits: 643.8 E(181292976): 9.3e-181
+Smith-Waterman score: 2826; 76.5% identity (90.3% similar) in 548 aa overlap (37-584:3-550)
+
+         10        20        30        40        50        60      
+EMBOSS RFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEK
+                                     .::.:  :.::: .:. ::: . . ::: :
+TR:A0A                             MAALSHDDKFLELKGYVDENEKAVTIAELFAK
+                                           10        20        30  
+
+         70        80        90       100       110       120      
+EMBOSS DPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       :: ::.:..: :::::: ..:::::.:::: ::. :. ::.:::::. :.::::.: :::
+TR:A0A DPNRFDKYSRSFATPDGPIMFDFSKHRITDASFEKLIALARSRGVEKMRDAMFSGEPINF
+             40        50        60        70        80        90  
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::.:::::::::::.:  :::.:.:::: ::.:: ::. : : .:.::: ::::::::::
+TR:A0A TEGRAVLHVALRNRSNTSILVNGEDVMPGVNHVLEHMRTFTNAVIDGSWLGYTGKKITDV
+            100       110       120       130       140       150  
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::: ::::.:..:: ::.:::::::::::. :::.::: ::::::::::::
+TR:A0A VNIGIGGSDLGPYMVTEALRHYQEGPDVHFVSNVDGTHIYEVTRKLNPETTLFIIASKTF
+            160       170       180       190       200       210  
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       :::::::::::::::::  :::  ::::::::::::  :.::::::  ::::::::::::
+TR:A0A TTQETITNAETAKEWFLKTAGDQTAVAKHFVALSTNEKKVVEFGIDPANMFEFWDWVGGR
+            220       230       240       250       260       270  
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       :::::::::::..::::::.:.:: :: :.: :: .:::..:::::.::.:.:: :.:.:
+TR:A0A YSLWSAIGLSISLHIGFDNFEQLLAGAHSADLHFKQTPLDQNIPVIMAMLGILYINVYNA
+            280       290       300       310       320       330  
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.::::::::::::::::::::: :.:::::::::.::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRSGHRVDYSTGPIIWGEPGTNGQHAFYQ
+            340       350       360       370       380       390  
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::: ::::::::..:..:::.:::.:::::::::::   :: ::..::
+TR:A0A LIHQGTRLIPADFIAAVKTLNPIRNSLQQQILFANFVAQTEALMKGKTREEAEKELRDSG
+            400       410       420       430       440       450  
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. ..: .:.::::::::.:::::::::.:: :::.:::::::::::::.:::: :::::
+TR:A0A MNEQQIQHIVPHKVFEGNRPTTSIVLPVLTPSTLGSLIAFYEHKIFVQGVIWDINSYDQW
+            460       470       480       490       500       510  
+
+        550       560       570       580        
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA  
+       ::::::::::..::::..  ..:::::::::.:::.:.    
+TR:A0A GVELGKQLAKIVQPELTAEGVTTSHDASTNGIIAFFKHINKA
+            520       530       540       550    
+
+>>TR:A0A2A2JF40 A0A2A2JF40_9BILA Glucose-6-phosphate isomerase
+OS=Diploscapter pachys OX=2018661 GN=WR25_25319 PE=3 SV=1 (1224 aa)
+ initn: 2813 init1: 2813 opt: 2818  Z-score: 3408.1  bits: 641.6 E(181292976): 9.2e-180
+Smith-Waterman score: 2818; 74.3% identity (89.9% similar) in 565 aa overlap (22-584:656-1220)
+
+                        10        20        30          40         
+EMBOSS          MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEK-AMS-LSQDATFVELKR
+                                     :. .:... : .. ::. ::.:  :.::: 
+TR:A0A RVTYGCTELVNPTQFTQQNLSSMDDVPFFFLFHVLLLATSRDSVAMAALSHDDKFLELKG
+         630       640       650       660       670       680     
+
+      50        60        70        80        90       100         
+EMBOSS HVEANEKDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSR
+       .:. ::: . . ::: ::: ::.:..: :::::: ..:::::.:.:: ::. :. ::.::
+TR:A0A YVDENEKAVTIAELFAKDPNRFDKYSRSFATPDGPIMFDFSKHRVTDASFEKLIALARSR
+         690       700       710       720       730       740     
+
+     110       120       130       140       150       160         
+EMBOSS GVEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNE
+       :::. :.::::.: :::::.:::::::::::.:  :::.:.:::: ::.:: ::. : : 
+TR:A0A GVEKMRDAMFSGEPINFTEGRAVLHVALRNRSNTSILVNGEDVMPGVNHVLEHMRTFTNA
+         750       760       770       780       790       800     
+
+     170       180       190       200       210       220         
+EMBOSS IISGSWTGYTGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVT
+       .:.::: :::::::::::::::::::::: ::::.:..:: ::.:::::::::::. :::
+TR:A0A VIDGSWLGYTGKKITDVVNIGIGGSDLGPYMVTEALRHYQEGPDVHFVSNVDGTHIYEVT
+         810       820       830       840       850       860     
+
+     230       240       250       260       270       280         
+EMBOSS KKLNAETTLFIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEF
+       .::: :::::::::::::::::::::::::::::  ::: .::::::::::::  :.:::
+TR:A0A RKLNPETTLFIIASKTFTTQETITNAETAKEWFLKTAGDQAAVAKHFVALSTNEKKVVEF
+         870       880       890       900       910       920     
+
+     290       300       310       320       330       340         
+EMBOSS GIDEKNMFEFWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNI
+       :::  :::::::::::::::::::::::..::::::.:.:: :: ..: :: .:::..::
+TR:A0A GIDPANMFEFWDWVGGRYSLWSAIGLSISLHIGFDNFEQLLAGAHAADLHFKQTPLDQNI
+         930       940       950       960       970       980     
+
+     350       360       370       380       390       400         
+EMBOSS PVILAMIGVLYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTG
+       :::.::.:.:: :.:.::::::::::::.::::::::::::::::::::: :.::::.::
+TR:A0A PVIMAMLGILYINVYNAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRSGHRVDYATG
+         990      1000      1010      1020      1030      1040     
+
+     410       420       430       440       450       460         
+EMBOSS PIVWGEPGTNGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEAL
+       ::.::::::::::::::::::::::::::::: ::::::::..:..:::.:::.::::::
+TR:A0A PIIWGEPGTNGQHAFYQLIHQGTRLIPADFIAAVKTLNPIRNSLQQQILFANFVAQTEAL
+        1050      1060      1070      1080      1090      1100     
+
+     470       480       490       500       510       520         
+EMBOSS MKGKTAAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH
+       :::::   :: ::..:::. ..: .:.::::::::.:::::::::.:: :::.:::::::
+TR:A0A MKGKTREEAEKELRDSGMNEQQIQHIVPHKVFEGNRPTTSIVLPVLTPSTLGSLIAFYEH
+        1110      1120      1130      1140      1150      1160     
+
+     530       540       550       560       570       580        
+EMBOSS KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA  
+       ::::::.:::: :::::::::::::::..::::..  ..:.:::::::.:::.:.    
+TR:A0A KIFVQGVIWDINSYDQWGVELGKQLAKIVQPELTAEGVTTGHDASTNGIIAFFKHINKA
+        1170      1180      1190      1200      1210      1220    
+
+>>TR:A0A1I7ZWI3 A0A1I7ZWI3_9BILA Glucose-6-phosphate isomerase
+OS=Steinernema glaseri OX=37863 PE=3 SV=1 (726 aa)
+ initn: 2782 init1: 2419 opt: 2796  Z-score: 3386.7  bits: 636.9 E(181292976): 1.4e-178
+Smith-Waterman score: 2796; 75.5% identity (89.2% similar) in 555 aa overlap (31-585:171-724)
+
+               10        20        30        40        50        60
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQL
+                                     : ...::: .:..: .::.  :   :. ..
+TR:A0A LNFRRPSALASSNSAFFELRAICKATTLKQSLQSTMSLLSDSAFQKLKELHEQYGKSLKM
+              150       160       170       180       190       200
+
+               70        80        90       100       110       120
+EMBOSS LELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFS
+        :::..:: :: ::.. . ::::  : ::::: : .. :  :: ::.:: ::. ::::::
+TR:A0A TELFKNDPERFSKFSKTLQTPDGPVLVDFSKNLIDEKIFAQLMDLARSRKVEQMRNAMFS
+              210       220       230       240       250       260
+
+              130       140       150       160       170       180
+EMBOSS AEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTG
+       .:::::::::::::::::.: .  .:.::.:::: :: :: ::::: ...:.:.: ::::
+TR:A0A GEKINFTENRAVLHVALRKREGS-LLLDGQDVMPGVNAVLQHMKEFTEQVIGGAWKGYTG
+              270       280        290       300       310         
+
+              190       200       210       220       230       240
+EMBOSS KKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFI
+       .::::::::::::::::::::::.::.::.:::::::::.::::.::: ::..:.:::::
+TR:A0A EKITDVVNIGIGGSDLGPLMVTETLKHYQVGPNVHFVSNIDGTHLAEVLKKVKAQTTLFI
+     320       330       340       350       360       370         
+
+              250       260       270       280       290       300
+EMBOSS IASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFW
+       ::::::::::::::::.:::::::.: : .::::::::::::  :. :::::: :::.::
+TR:A0A IASKTFTTQETITNAESAKEWFLAEAKDQSAVAKHFVALSTNGPKVKEFGIDEANMFQFW
+     380       390       400       410       420       430         
+
+              310       320       330       340       350       360
+EMBOSS DWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLY
+       ::::::::::::::::::: :::.:.::::.::  .:.:: .:::: :.::::::.::::
+TR:A0A DWVGGRYSLWSAIGLSIAVFIGFENFEKLLEGAHFMDKHFCETPLEDNVPVILAMLGVLY
+     440       450       460       470       480       490         
+
+              370       380       390       400       410       420
+EMBOSS NNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNG
+       .:..::::::::::::::::::::::::::::::::::: ::.:::.:::::::::::::
+TR:A0A GNVFGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRSGQKVDYTTGPIVWGEPGTNG
+     500       510       520       530       540       550         
+
+              430       440       450       460       470       480
+EMBOSS QHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEA
+       :::::::::::::::::::::::.::::.:::::::::::::.:::::::::::   :: 
+TR:A0A QHAFYQLIHQGTRLIPADFIAPVNTLNPVRGGLHHQILLANFFAQTEALMKGKTPEEAEK
+     560       570       580       590       600       610         
+
+              490       500       510       520       530       540
+EMBOSS ELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDI
+       :: ..::: ...  ::::::::::.::.:::::::.::::::::: ::::::::::.:::
+TR:A0A ELLAAGMSADQVKTILPHKVFEGNRPTNSIVLPVVSPFTLGALIATYEHKIFVQGIVWDI
+     620       630       640       650       660       670         
+
+              550       560       570       580       
+EMBOSS CSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+        :::::::::::::::::: :: .:. :.:::::::::: :.:..  
+TR:A0A NSYDQWGVELGKQLAKVIQKELEGAEPVSSHDASTNGLINFFKTHRQ
+     680       690       700       710       720      
+
+>>TR:A0A1I7ZVV5 A0A1I7ZVV5_9BILA Glucose-6-phosphate isomerase
+OS=Steinernema glaseri OX=37863 PE=3 SV=1 (551 aa)
+ initn: 2782 init1: 2419 opt: 2790  Z-score: 3382.3  bits: 635.7 E(181292976): 2.5e-178
+Smith-Waterman score: 2790; 76.0% identity (89.3% similar) in 550 aa overlap (36-585:1-549)
+
+          10        20        30        40        50        60     
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFE
+                                     ::: .:..: .::.  :   :. .. :::.
+TR:A0A                               MSLLSDSAFQKLKELHEQYGKSLKMTELFK
+                                             10        20        30
+
+          70        80        90       100       110       120     
+EMBOSS KDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKIN
+       .:: :: ::.. . ::::  : ::::: : .. :  :: ::.:: ::. ::::::.::::
+TR:A0A NDPERFSKFSKTLQTPDGPVLVDFSKNLIDEKIFAQLMDLARSRKVEQMRNAMFSGEKIN
+               40        50        60        70        80        90
+
+         130       140       150       160       170       180     
+EMBOSS FTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITD
+       :::::::::::::.: .  .:.::.:::: :: :: ::::: ...:.:.: ::::.::::
+TR:A0A FTENRAVLHVALRKREGS-LLLDGQDVMPGVNAVLQHMKEFTEQVIGGAWKGYTGEKITD
+              100        110       120       130       140         
+
+         190       200       210       220       230       240     
+EMBOSS VVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKT
+       ::::::::::::::::::.::.::.:::::::::.::::.::: ::..:.::::::::::
+TR:A0A VVNIGIGGSDLGPLMVTETLKHYQVGPNVHFVSNIDGTHLAEVLKKVKAQTTLFIIASKT
+     150       160       170       180       190       200         
+
+         250       260       270       280       290       300     
+EMBOSS FTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGG
+       :::::::::::.:::::::.: : .::::::::::::  :. :::::: :::.:::::::
+TR:A0A FTTQETITNAESAKEWFLAEAKDQSAVAKHFVALSTNGPKVKEFGIDEANMFQFWDWVGG
+     210       220       230       240       250       260         
+
+         310       320       330       340       350       360     
+EMBOSS RYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYG
+       :::::::::::::: :::.:.::::.::  .:.:: .:::: :.::::::.::::.:..:
+TR:A0A RYSLWSAIGLSIAVFIGFENFEKLLEGAHFMDKHFCETPLEDNVPVILAMLGVLYGNVFG
+     270       280       290       300       310       320         
+
+         370       380       390       400       410       420     
+EMBOSS AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFY
+       :::::::::::::::::::::::::::::::::: ::.:::.::::::::::::::::::
+TR:A0A AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRSGQKVDYTTGPIVWGEPGTNGQHAFY
+     330       340       350       360       370       380         
+
+         430       440       450       460       470       480     
+EMBOSS QLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSS
+       ::::::::::::::::::.::::.:::::::::::::.:::::::::::   :: :: ..
+TR:A0A QLIHQGTRLIPADFIAPVNTLNPVRGGLHHQILLANFFAQTEALMKGKTPEEAEKELLAA
+     390       400       410       420       430       440         
+
+         490       500       510       520       530       540     
+EMBOSS GMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQ
+       ::: ...  ::::::::::.::.:::::::.::::::::: ::::::::::.::: ::::
+TR:A0A GMSADQVKTILPHKVFEGNRPTNSIVLPVVSPFTLGALIATYEHKIFVQGIVWDINSYDQ
+     450       460       470       480       490       500         
+
+         550       560       570       580       
+EMBOSS WGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       :::::::::::::: :: .:. :.:::::::::: :.:..  
+TR:A0A WGVELGKQLAKVIQKELEGAEPVSSHDASTNGLINFFKTHRQ
+     510       520       530       540       550 
+
+>>TR:A0A0P6F8V6 A0A0P6F8V6_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 PE=3 SV=1 (594 aa)
+ initn: 2775 init1: 2667 opt: 2777  Z-score: 3365.8  bits: 632.8 E(181292976): 2.1e-177
+Smith-Waterman score: 2777; 74.4% identity (91.1% similar) in 550 aa overlap (38-586:45-594)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:A0A LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQD
+           20        30        40        50        60        70    
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:A0A PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLLELAKSRKVQESRDAMFSGQKINF
+           80        90       100       110       120       130    
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:A0A TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+          140       150       160       170       180       190    
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:A0A VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+          200       210       220       230       240       250    
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:A0A TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+          260       270       280       290       300       310    
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:A0A YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+          320       330       340       350       360       370    
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+          380       390       400       410       420       430    
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:A0A LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+          440       450       460       470       480       490    
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:A0A MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+          500       510       520       530       540       550    
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:A0A GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+          560       570       580       590    
+
+>>TR:C0L8T2 C0L8T2_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1 (556 aa)
+ initn: 2773 init1: 2665 opt: 2775  Z-score: 3364.0  bits: 632.3 E(181292976): 2.6e-177
+Smith-Waterman score: 2775; 74.4% identity (91.1% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:C0L                         MDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:C0L PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:C0L TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:C0L VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:C0L TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:C0L YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:C0L ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:C0L LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:C0L MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:C0L GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+        520       530       540       550      
+
+>>TR:A0A0P6DK65 A0A0P6DK65_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 PE=3 SV=1 (594 aa)
+ initn: 2773 init1: 2665 opt: 2775  Z-score: 3363.3  bits: 632.3 E(181292976): 2.8e-177
+Smith-Waterman score: 2775; 74.4% identity (91.1% similar) in 550 aa overlap (38-586:45-594)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:A0A LPALPVCRSRRNCARKSRKTSSQKMDGNSFLTEDAAFQNLKKYFEEKGKDLNINQLFVQD
+           20        30        40        50        60        70    
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:A0A PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINF
+           80        90       100       110       120       130    
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:A0A TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+          140       150       160       170       180       190    
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:A0A VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+          200       210       220       230       240       250    
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:A0A TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+          260       270       280       290       300       310    
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:A0A YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+          320       330       340       350       360       370    
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+          380       390       400       410       420       430    
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:A0A LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+          440       450       460       470       480       490    
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:A0A MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+          500       510       520       530       540       550    
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:A0A GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+          560       570       580       590    
+
+>>TR:A0A0P5I3W1 A0A0P5I3W1_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 PE=3 SV=1 (594 aa)
+ initn: 2773 init1: 2665 opt: 2775  Z-score: 3363.3  bits: 632.3 E(181292976): 2.8e-177
+Smith-Waterman score: 2775; 74.4% identity (91.1% similar) in 550 aa overlap (38-586:45-594)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:A0A LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQD
+           20        30        40        50        60        70    
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:A0A PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINF
+           80        90       100       110       120       130    
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:A0A TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+          140       150       160       170       180       190    
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:A0A VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+          200       210       220       230       240       250    
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:A0A TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+          260       270       280       290       300       310    
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:A0A YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+          320       330       340       350       360       370    
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+          380       390       400       410       420       430    
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:A0A LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+          440       450       460       470       480       490    
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:A0A MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+          500       510       520       530       540       550    
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:A0A GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+          560       570       580       590    
+
+>>TR:C0L8T1 C0L8T1_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1 (556 aa)
+ initn: 2772 init1: 2663 opt: 2774  Z-score: 3362.8  bits: 632.1 E(181292976): 3e-177
+Smith-Waterman score: 2774; 74.4% identity (90.9% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:C0L                         MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...:: .::::: :.:::.::::..::::
+TR:C0L PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLXELAKSRKVQESRDAMFSGQKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:C0L TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:C0L VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:C0L TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:C0L YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:C0L ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:C0L LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:C0L MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:C0L GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+        520       530       540       550      
+
+>>TR:C0L8T0 C0L8T0_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1 (556 aa)
+ initn: 2770 init1: 2659 opt: 2772  Z-score: 3360.4  bits: 631.7 E(181292976): 4.2e-177
+Smith-Waterman score: 2772; 74.4% identity (90.7% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:C0L                         MXGNTFLTEDAAFQNLKKYFEEKGKDLNIXQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: : :::.::::. ::::
+TR:C0L PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVXESRDAMFSGXKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:C0L TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:C0L VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:C0L TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:C0L YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:C0L ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:C0L LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:C0L MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:C0L GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+        520       530       540       550      
+
+>>TR:A0A0P6FUZ6 A0A0P6FUZ6_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 PE=3 SV=1 (594 aa)
+ initn: 2770 init1: 2662 opt: 2772  Z-score: 3359.7  bits: 631.6 E(181292976): 4.5e-177
+Smith-Waterman score: 2772; 74.4% identity (91.1% similar) in 550 aa overlap (38-586:45-594)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:A0A LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQD
+           20        30        40        50        60        70    
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:A0A PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINF
+           80        90       100       110       120       130    
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:A0A TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+          140       150       160       170       180       190    
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:A0A VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+          200       210       220       230       240       250    
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:A0A TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+          260       270       280       290       300       310    
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:A0A YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFGESPLEQNVPVILAMLGVLYGDFFGA
+          320       330       340       350       360       370    
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+          380       390       400       410       420       430    
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:A0A LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+          440       450       460       470       480       490    
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:A0A MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+          500       510       520       530       540       550    
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:A0A GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+          560       570       580       590    
+
+>>TR:C0L8T5 C0L8T5_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1 (556 aa)
+ initn: 2769 init1: 2660 opt: 2771  Z-score: 3359.2  bits: 631.4 E(181292976): 4.9e-177
+Smith-Waterman score: 2771; 74.4% identity (90.7% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:C0L                         MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::. ::::
+TR:C0L PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGXKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:C0L TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:C0L VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:C0L TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:C0L YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:C0L ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:C0L LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::   :::: ::::::.:: ::::::::::: :.:::
+TR:C0L MGEDELNKILPHKVFEGNRPTNSIVXHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:C0L GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+        520       530       540       550      
+
+>>TR:C0L8T6 C0L8T6_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1 (556 aa)
+ initn: 2766 init1: 2657 opt: 2768  Z-score: 3355.5  bits: 630.8 E(181292976): 7.7e-177
+Smith-Waterman score: 2768; 74.2% identity (90.9% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:C0L                         MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:... :..::::: :.:::.::::..::::
+TR:C0L PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKHLVELAKSRKVQESRDAMFSGQKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:C0L TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:C0L VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:C0L TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:C0L YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:C0L ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:C0L LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:C0L MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:C0L GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+        520       530       540       550      
+
+>>TR:A0A0N8BHM7 A0A0N8BHM7_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 PE=3 SV=1 (594 aa)
+ initn: 2766 init1: 2658 opt: 2768  Z-score: 3354.8  bits: 630.7 E(181292976): 8.5e-177
+Smith-Waterman score: 2768; 74.2% identity (91.1% similar) in 550 aa overlap (38-586:45-594)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:A0A LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNINQLFVQD
+           20        30        40        50        60        70    
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:A0A PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINF
+           80        90       100       110       120       130    
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:A0A TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+          140       150       160       170       180       190    
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:A0A VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+          200       210       220       230       240       250    
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:A0A TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+          260       270       280       290       300       310    
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:A0A YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFGESPLEQNVPVILAMLGVLYGDFFGA
+          320       330       340       350       360       370    
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::.:::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGDPGTNGQHAFYQ
+          380       390       400       410       420       430    
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:A0A LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+          440       450       460       470       480       490    
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:A0A MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+          500       510       520       530       540       550    
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:A0A GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+          560       570       580       590    
+
+>>TR:C0L8T3 C0L8T3_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1 (556 aa)
+ initn: 2765 init1: 2656 opt: 2767  Z-score: 3354.3  bits: 630.6 E(181292976): 9.1e-177
+Smith-Waterman score: 2767; 74.4% identity (90.7% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:C0L                         MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: : :::.::::..::::
+TR:C0L PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVLESRDAMFSGHKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:C0L TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:C0L VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: :  ::::::::::::.::. :::: ::::: ::::::::
+TR:C0L TTQETITNAESAKSWFLEKAKDETAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:C0L YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:C0L ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:C0L LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:C0L MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:C0L GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+        520       530       540       550      
+
+>>TR:C0L8T7 C0L8T7_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1 (556 aa)
+ initn: 2765 init1: 2667 opt: 2767  Z-score: 3354.3  bits: 630.6 E(181292976): 9.1e-177
+Smith-Waterman score: 2767; 74.2% identity (90.9% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:C0L                         MDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+         ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:C0L AERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLLELAKSRKVQESRDAMFSGQKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:C0L TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:C0L VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:C0L TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:C0L YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:C0L ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:C0L LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:C0L MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:C0L GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+        520       530       540       550      
+
+>>TR:A0A0P5UIN3 A0A0P5UIN3_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=APZ42_016392 PE=3 SV=1 (594 aa)
+ initn: 2765 init1: 2667 opt: 2767  Z-score: 3353.6  bits: 630.5 E(181292976): 9.9e-177
+Smith-Waterman score: 2767; 74.2% identity (90.9% similar) in 550 aa overlap (38-586:45-594)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:A0A LPALPVCRSRRNCARKSRKTSSQKMDGNTFLTEDAAFQNLKKYFEEKGKDLNIHQLFVQD
+           20        30        40        50        60        70    
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+         ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:A0A AERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLLELAKSRKVQESRDAMFSGQKINF
+           80        90       100       110       120       130    
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:A0A TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+          140       150       160       170       180       190    
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:A0A VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+          200       210       220       230       240       250    
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:A0A TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+          260       270       280       290       300       310    
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:A0A YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+          320       330       340       350       360       370    
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+          380       390       400       410       420       430    
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:A0A LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+          440       450       460       470       480       490    
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:A0A MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+          500       510       520       530       540       550    
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:A0A GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+          560       570       580       590    
+
+>>TR:C0L8T4 C0L8T4_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 GN=Pgi PE=3 SV=1 (556 aa)
+ initn: 2763 init1: 2664 opt: 2765  Z-score: 3351.9  bits: 630.1 E(181292976): 1.2e-176
+Smith-Waterman score: 2765; 74.2% identity (90.9% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:C0L                         MDGNXFLTEDAAFXNLKKYFEEKGKDLNIHQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+         ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:C0L XERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLLELAKSRKVQESRDAMFSGQKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:C0L TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:C0L VNIGIGGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:C0L TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:C0L YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFGESPLEQNVPVILAMLGVLYGDFFGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:C0L ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:C0L LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:C0L MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:C0L GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+        520       530       540       550      
+
+>>TR:A0A0P5KY86 A0A0P5KY86_9CRUS Glucose-6-phosphate isomerase
+OS=Daphnia magna OX=35525 PE=3 SV=1 (595 aa)
+ initn: 2761 init1: 2653 opt: 2763  Z-score: 3348.7  bits: 629.6 E(181292976): 1.8e-176
+Smith-Waterman score: 2763; 74.2% identity (90.9% similar) in 550 aa overlap (38-586:46-595)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.: .::.. : . :: .. .:: .:
+TR:A0A EHGIPVCRSRRNCARKSRKTSSQKMDGNSFLTEDAAFQNLKKYFEEKGKDLNINQLFVQD
+          20        30        40        50        60        70     
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  ..:: :::.:.:.::::. .:...::..::::: :.:::.::::..::::
+TR:A0A PERFNKYSIKLSTPADGDILIDYSKNRVDEETLKLLVELAKSRKVQESRDAMFSGQKINF
+          80        90       100       110       120       130     
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::.:::.:::: ::::::: ::::::::: :.:::.: ::::: ::::
+TR:A0A TENRAVLHTALRNRSNRPVLVDGVDVMPDVNAVLAHMKEFCAEVISGQWKGYTGKAITDV
+         140       150       160       170       180       190     
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       ::::: :::::::::::.:: :.:::::::::::::::.: . .::: ::::::::::::
+TR:A0A VNIGIVGSDLGPLMVTEALKAYSIGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+         200       210       220       230       240       250     
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : .::::::::::::.::. :::: ::::: ::::::::
+TR:A0A TTQETITNAESAKSWFLEKAKDESAVAKHFVALSTNATKVREFGILEKNMFGFWDWVGGR
+         260       270       280       290       300       310     
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::::::. .:.:: ..:::.:.::::::.::::....::
+TR:A0A YSLWSAIGLSIALSIGFQNFEKLLDGAYFMDQHFCESPLEQNVPVILAMLGVLYGDFFGA
+         320       330       340       350       360       370     
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+         380       390       400       410       420       430     
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::.: ::.:::..::
+TR:A0A LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSADVAKAELQKSG
+         440       450       460       470       480       490     
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. . . :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:A0A MGEDELNKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+         500       510       520       530       540       550     
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: .   :.:::.:::::: :::.:.
+TR:A0A GVELGKQLAKAIEPELEGPGEVSSHDSSTNGLINFIKSNS
+         560       570       580       590     
+
+>>TR:A0A4V6A5X9 A0A4V6A5X9_STECR Glucose-6-phosphate isomerase
+OS=Steinernema carpocapsae OX=34508 GN=L596_007259 PE=3
+SV=1 (552 aa)
+ initn: 2755 init1: 2755 opt: 2755  Z-score: 3339.8  bits: 627.9 E(181292976): 5.8e-176
+Smith-Waterman score: 2755; 74.6% identity (89.1% similar) in 548 aa overlap (36-583:1-548)
+
+          10        20        30        40        50        60     
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFE
+                                     :::  : .: :::   :   :  ....::.
+TR:A0A                               MSLLADPAFQELKGLYEQYGKTLKMVDLFK
+                                             10        20        30
+
+          70        80        90       100       110       120     
+EMBOSS KDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKIN
+       .:: :: ::.... .:::..: ::::: : .. :  :..::.:: ::: :.:::::.:::
+TR:A0A NDPDRFSKFSKILDSPDGQILVDFSKNIIDEKIFAQLIKLARSRKVEEMRDAMFSAQKIN
+               40        50        60        70        80        90
+
+         130       140       150       160       170       180     
+EMBOSS FTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITD
+       :::::::::::::::.: ::..::.:: :.:: :: ::: : . .::: : ::::.::::
+TR:A0A FTENRAVLHVALRNRSNTPIVLDGEDVTPSVNAVLDHMKSFTESVISGHWKGYTGEKITD
+              100       110       120       130       140       150
+
+         190       200       210       220       230       240     
+EMBOSS VVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKT
+       ::::::::::::::::::.::.::.:::::::::.::::.::: ::..: .:::::::::
+TR:A0A VVNIGIGGSDLGPLMVTEALKHYQVGPNVHFVSNIDGTHLAEVLKKVKASSTLFIIASKT
+              160       170       180       190       200       210
+
+         250       260       270       280       290       300     
+EMBOSS FTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGG
+       :::::::::::.:: ::::.: . .::.:::::::::  :. :::::: :::.:::::::
+TR:A0A FTTQETITNAESAKAWFLAEAKEMSAVTKHFVALSTNGPKVKEFGIDEANMFQFWDWVGG
+              220       230       240       250       260       270
+
+         310       320       330       340       350       360     
+EMBOSS RYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYG
+       :::::::::::::: :::.:.::::.::  .:.:: .::::.:.::::::.::::.:..:
+TR:A0A RYSLWSAIGLSIAVFIGFENFEKLLQGAHYMDKHFKETPLENNVPVILAMLGVLYGNLFG
+              280       290       300       310       320       330
+
+         370       380       390       400       410       420     
+EMBOSS AETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFY
+       ::::::::::::.:::::::::::::::::::.: ::.:::.::::::::::::::::::
+TR:A0A AETHALLPYDQYLHRFAAYFQQGDMESNGKFVNRSGQKVDYTTGPIVWGEPGTNGQHAFY
+              340       350       360       370       380       390
+
+         430       440       450       460       470       480     
+EMBOSS QLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSS
+       ::::::::::::::::::.:::::: :::::::::::::::::::::::.  :: :: ..
+TR:A0A QLIHQGTRLIPADFIAPVSTLNPIRKGLHHQILLANFLAQTEALMKGKTSEKAEKELLGA
+              400       410       420       430       440       450
+
+         490       500       510       520       530       540     
+EMBOSS GMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQ
+       ::: ... .::::::::::.::.::::: ::::::::::: ::::::.::.:::: ::::
+TR:A0A GMSDDQVKSILPHKVFEGNRPTNSIVLPKVTPFTLGALIATYEHKIFIQGVIWDINSYDQ
+              460       470       480       490       500       510
+
+         550       560       570       580       
+EMBOSS WGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       :::::::::::::: :: . .:...::.:::::: :.:    
+TR:A0A WGVELGKQLAKVIQKELHGPETISAHDSSTNGLINFVKAHRK
+              520       530       540       550  
+
+>>TR:A0A368F856 A0A368F856_ANCCA Glucose-6-phosphate isomerase
+OS=Ancylostoma caninum OX=29170 GN=ANCCAN_25951 PE=3 SV=1 (688 aa)
+ initn: 2752 init1: 2707 opt: 2752  Z-score: 3333.9  bits: 627.1 E(181292976): 1.2e-175
+Smith-Waterman score: 2752; 78.6% identity (91.6% similar) in 513 aa overlap (36-547:1-513)
+
+          10        20        30        40        50         60    
+EMBOSS FRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDA-QLLELF
+                                     ::: .:  : .::  :. .::.  .. : .
+TR:A0A                               MSLCRDDKFQDLKSFVDCHEKEHLSIYEQL
+                                             10        20        30
+
+           70        80        90       100       110       120    
+EMBOSS EKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKI
+        .:: :: :.:: . :::: .::::::.::.::.:. ::..:.::.::  : :::..:.:
+TR:A0A LNDPERFTKYTRTIDTPDGPMLFDFSKHRISDETFEKLMEVARSRNVEMMRAAMFGGERI
+               40        50        60        70        80        90
+
+          130       140       150       160       170       180    
+EMBOSS NFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKIT
+       ::::::::::.:::::.: :: :::::::::::::: :::.::..::.:.:::.::::::
+TR:A0A NFTENRAVLHIALRNRSNTPICVDGKDVMPDVNRVLEHMKDFCHKIITGAWTGFTGKKIT
+              100       110       120       130       140       150
+
+          190       200       210       220       230       240    
+EMBOSS DVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASK
+       :::::::::::::::::.:.:..:::::::::::::::::.:::::::: ::::::::::
+TR:A0A DVVNIGIGGSDLGPLMVSEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASK
+              160       170       180       190       200       210
+
+          250       260       270       280       290       300    
+EMBOSS TFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVG
+       ::::::::::::::::::: :::: .::::::::::::: :: ::::: .::::::::::
+TR:A0A TFTTQETITNAETAKEWFLKKAGDKSAVAKHFVALSTNVPKAQEFGIDPSNMFEFWDWVG
+              220       230       240       250       260       270
+
+          310       320       330       340       350       360    
+EMBOSS GRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIY
+       ::::::::::::::::.::::..:::.:: ..:.:::: :::.:.:::.::.::::.:.:
+TR:A0A GRYSLWSAIGLSIAVHVGFDNFQKLLEGAHAADQHFVNQPLEQNVPVIMAMLGVLYSNVY
+              280       290       300       310       320       330
+
+          370       380       390       400       410       420    
+EMBOSS GAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAF
+       :::::::::::::.:::::::::::::::::::::.: ::::.:::::::::::::::::
+TR:A0A GAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTREGYRVDYATGPIVWGEPGTNGQHAF
+              340       350       360       370       380       390
+
+          430       440       450       460       470       480    
+EMBOSS YQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKS
+       :::::::::::: :::::.:::::.:.:::::::::::::::::::::::   ::::::.
+TR:A0A YQLIHQGTRLIPCDFIAPAKTLNPVRNGLHHQILLANFLAQTEALMKGKTREEAEAELKA
+              400       410       420       430       440       450
+
+          490       500       510       520       530       540    
+EMBOSS SGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYD
+       ..   ..: :::::::::::.::::::::.:.::::: :::.:::::::::.:::: :::
+TR:A0A ANTPADKIEKILPHKVFEGNRPTTSIVLPIVSPFTLGLLIALYEHKIFVQGVIWDINSYD
+              460       470       480       490       500       510
+
+          550       560       570       580                        
+EMBOSS QWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA                  
+       :::                                                         
+TR:A0A QWGGVVLVVNLPLLMTDNTRRLELTNRPPEGILAAPLDEDNFFEWECLITGPEDTCFANG
+              520       530       540       550       560       570
+
+>>TR:F1KUW6 F1KUW6_ASCSU Glucose-6-phosphate isomerase
+OS=Ascaris suum OX=6253 PE=2 SV=1 (575 aa)
+ initn: 2742 init1: 2742 opt: 2746  Z-score: 3328.5  bits: 625.8 E(181292976): 2.5e-175
+Smith-Waterman score: 2746; 71.8% identity (88.4% similar) in 571 aa overlap (15-583:1-571)
+
+               10        20          30        40        50        
+EMBOSS MIFELFRFIFRKKKMLGYLSDLIGTL--FIGDSTEKAMSLSQDATFVELKRHVEANEKDA
+                     ::..::    .:  .:    .  :::. : .: .:: . ... .. 
+TR:F1K               MLSMLSAAAQSLNDIITGRRRCKMSLNADPAFQQLKAYFNSHGRQL
+                             10        20        30        40      
+
+       60        70        80        90       100       110        
+EMBOSS QLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAM
+       .:.:::.::: :::::.  . : :: .:::.::: : .  .  :. .:.::.::. :.::
+TR:F1K KLVELFDKDPKRFEKFSLQLDTADGPILFDYSKNLIDETLLAKLLDVARSRNVEKMRDAM
+         50        60        70        80        90       100      
+
+      120       130       140       150       160       170        
+EMBOSS FSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGY
+       :..:::::::.:::::.:::: ...:: :::..:  :::.:: ::::::. .:::.: ::
+TR:F1K FAGEKINFTEGRAVLHTALRNVSDKPITVDGQNVTADVNKVLNHMKEFCEAVISGKWKGY
+        110       120       130       140       150       160      
+
+      180       190       200       210       220       230        
+EMBOSS TGKKITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTL
+       ::. :::::::::::::::::::.:.:..::.:: ::::::.::::.::. :... :::.
+TR:F1K TGETITDVVNIGIGGSDLGPLMVSEALRHYQVGPRVHFVSNIDGTHMAELLKRVKPETTI
+        170       180       190       200       210       220      
+
+      240       250       260       270       280       290        
+EMBOSS FIIASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFE
+       ::::::::::::::::::.::::::. : : .::::::::::::  :. :::::: ::::
+TR:F1K FIIASKTFTTQETITNAESAKEWFLSAAKDNAAVAKHFVALSTNGPKVREFGIDEANMFE
+        230       240       250       260       270       280      
+
+      300       310       320       330       340       350        
+EMBOSS FWDWVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGV
+       :::::::::::::::::::::::::::..:::.::  :::::...:::.::::..::.:.
+TR:F1K FWDWVGGRYSLWSAIGLSIAVHIGFDNFHKLLEGASLVDEHFLKAPLEQNIPVLMAMLGI
+        290       300       310       320       330       340      
+
+      360       370       380       390       400       410        
+EMBOSS LYNNIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGT
+       :: :..:::::::::::::.::::::::::::::::::::: :.::::::::::::::::
+TR:F1K LYINLHGAETHALLPYDQYLHRFAAYFQQGDMESNGKFVTRDGSRVDYSTGPIVWGEPGT
+        350       360       370       380       390       400      
+
+      420       430       440       450       460       470        
+EMBOSS NGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVA
+       ::::::::::::::::::::::::::::::::.::::.:::.::::::::::::::.  :
+TR:F1K NGQHAFYQLIHQGTRLIPADFIAPVKTLNPIRNGLHHEILLSNFLAQTEALMKGKTSEEA
+        410       420       430       440       450       460      
+
+      480       490       500       510       520       530        
+EMBOSS EAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIW
+       . :: .: :: ..:::::::::::::.::.:.:::.:.:.:::::::.::.:::::::.:
+TR:F1K RKELVASKMSEDKIAKILPHKVFEGNRPTNSLVLPIVSPLTLGALIALYEQKIFVQGIVW
+        470       480       490       500       510       520      
+
+      540       550       560       570       580       
+EMBOSS DICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA 
+       .: ::::::::::::::::::::: : . .::::.:::::: :::    
+TR:F1K NINSYDQWGVELGKQLAKVIQPELHSDQPITSHDSSTNGLINFIKAHRK
+        530       540       550       560       570     
+
+>>TR:A0A0K0G292 A0A0K0G292_STRVS Glucose-6-phosphate isomerase
+OS=Strongyloides venezuelensis OX=75913 PE=3 SV=1 (553 aa)
+ initn: 2745 init1: 2745 opt: 2745  Z-score: 3327.7  bits: 625.6 E(181292976): 2.8e-175
+Smith-Waterman score: 2745; 74.7% identity (88.2% similar) in 549 aa overlap (37-585:4-552)
+
+         10        20        30        40        50        60      
+EMBOSS RFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEK
+                                     :: .: :: .:.   .  . . .:...:..
+TR:A0A                            MTSSLRNDETFKHLENLYHERKANLNLVNFFKN
+                                          10        20        30   
+
+         70        80        90       100       110       120      
+EMBOSS DPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       :: ::.::.: ..:::: :: ::::: : .. :. :. ::::::: : :.:::..:::::
+TR:A0A DPHRFNKFSRSLTTPDGAFLVDFSKNLIDEDIFNSLINLAKSRGVPEMRDAMFKGEKINF
+            40        50        60        70        80        90   
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       :::::: :..:::. :    .::.::  ::: :: :::.::.::::::::::::::::::
+TR:A0A TENRAVYHIGLRNKDNNSPHIDGQDVNKDVNDVLKHMKQFCSEIISGSWTGYTGKKITDV
+           100       110       120       130       140       150   
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.::.::::::::::::.::::.::: ::.::::::::::::::
+TR:A0A VNIGIGGSDLGPLMVTEALKHYQIGPNVHFVSNIDGTHLAEVLKKINAETTLFIIASKTF
+           160       170       180       190       200       210   
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.::::::.:::: . :::::::::::. :. ::::::.::: ::::::::
+TR:A0A TTQETITNAESAKEWFLSKAGDPSHVAKHFVALSTNAPKVKEFGIDESNMFAFWDWVGGR
+           220       230       240       250       260       270   
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::: :::::.::::.:.  .:.:: .::::.:::::::..:: : :..: 
+TR:A0A YSLWSAIGLSIAVFIGFDNFEKLLEGGHFMDKHFKETPLENNIPVILAVLGVWYINFFGC
+           280       290       300       310       320       330   
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::..:: :..:::.:::::::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYITRDGKKVDYNTGPIVWGEPGTNGQHAFYQ
+           340       350       360       370       380       390   
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       :::::::.::::::::..:::::::::::.:::::::::::::::::::  :  ::.:::
+TR:A0A LIHQGTRIIPADFIAPINTLNPIRGGLHHKILLANFLAQTEALMKGKTANEALEELRSSG
+           400       410       420       430       440       450   
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :  ::: :::::::: ::.::.::.:  .:::::::::: :::::::::.::.: :::::
+TR:A0A MPQESIEKILPHKVFTGNRPTNSILLQKITPFTLGALIAAYEHKIFVQGVIWNINSYDQW
+           460       470       480       490       500       510   
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::::  ::     :..::.:::::: :.:.: 
+TR:A0A GVELGKQLAKVILKELNEPGDVSNHDSSTNGLINFVKKNF
+           520       530       540       550   
+
+>>TR:E9GCK2 E9GCK2_DAPPU Glucose-6-phosphate isomerase
+OS=Daphnia pulex OX=6669 GN=DAPPUDRAFT_302344 PE=3 SV=1 (556 aa)
+ initn: 2734 init1: 2624 opt: 2736  Z-score: 3316.7  bits: 623.6 E(181292976): 1.1e-174
+Smith-Waterman score: 2736; 72.7% identity (90.9% similar) in 550 aa overlap (38-586:7-556)
+
+        10        20        30        40        50        60       
+EMBOSS FIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEKD
+                                     :..::.:..:... . . :: .. .:: .:
+TR:E9G                         MDGNAFLTEDAAFLNLQKYFQEKGKDLNIHQLFVQD
+                                       10        20        30      
+
+        70        80         90       100       110       120      
+EMBOSS PARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       : ::.:..  .::: ::..:.::::::.  :.:.::..::::: :.:::.:::..:::::
+TR:E9G PERFKKYSIKLATPQDGEILIDFSKNRVDAETFKLLLELAKSRKVQESRDAMFGGEKINF
+         40        50        60        70        80        90      
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       ::::::::.:::::..::.:::: ::::::  :: ::::::.:.:::.: ::::: ::::
+TR:E9G TENRAVLHTALRNRSGRPVLVDGVDVMPDVRAVLDHMKEFCSEVISGQWKGYTGKAITDV
+        100       110       120       130       140       150      
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.:: :..::::::::::::::.: . .::: ::::::::::::
+TR:E9G VNIGIGGSDLGPLMVTEALKAYSVGPNVHFVSNVDGTHIAVTLQKLNPETTLFIIASKTF
+        160       170       180       190       200       210      
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.:: ::: :: : ..:::::::::::.::. .:::.::::: ::::::::
+TR:E9G TTQETITNAESAKAWFLEKAKDESTVAKHFVALSTNATKVRDFGINEKNMFGFWDWVGGR
+        220       230       240       250       260       270      
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::. :::.:.:::: ::. .:.:: ..:::.:.:::::..::::...:::
+TR:E9G YSLWSAIGLSIALSIGFENFEKLLGGAYFMDQHFCESPLEQNVPVILALLGVLYGDFYGA
+        280       290       300       310       320       330      
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::.::: :.::.:.:::.:::::::::::::::
+TR:E9G ETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGRRVEYATGPVVWGEPGTNGQHAFYQ
+        340       350       360       370       380       390      
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       ::::::::::::::::...:.:::  .::..:.::::::::::::::..  :.::: .::
+TR:E9G LIHQGTRLIPADFIAPAQSLHPIRDKIHHKLLMANFLAQTEALMKGKSSDEAKAELLKSG
+        400       410       420       430       440       450      
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :. ... :::::::::::.::.:::.  :::: ::::::.:: ::::::::::: :.:::
+TR:E9G MGEDDLRKILPHKVFEGNRPTNSIVVHKVTPFILGALIAMYEMKIFVQGIIWDINSFDQW
+        460       470       480       490       500       510      
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::.:.::: ..  ..:::.:::::: :::.::
+TR:E9G GVELGKQLAKAIEPELEGSGEISSHDSSTNGLINFIKSNA
+        520       530       540       550      
+
+>>TR:A0A0F6PKB4 A0A0F6PKB4_OSTFU Glucose-6-phosphate isomerase
+OS=Ostrinia furnacalis OX=93504 GN=Pgi PE=2 SV=1 (556 aa)
+ initn: 2686 init1: 2629 opt: 2729  Z-score: 3308.2  bits: 622.0 E(181292976): 3.4e-174
+Smith-Waterman score: 2729; 72.7% identity (89.5% similar) in 554 aa overlap (33-585:2-555)
+
+             10        20        30        40        50        60  
+EMBOSS FELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLE
+                                     :  ..: .: .: .:..: .:: .  .. .
+TR:A0A                              MEPKITLRKDPAFQKLQEHYNANGEKLNIPQ
+                                            10        20        30 
+
+             70        80         90       100       110       120 
+EMBOSS LFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSA
+       ::..: .::.::.    :: ::..:.:.::::: : .: .:. ::::::::..:.::::.
+TR:A0A LFQQDAGRFNKFSLRVPTPNDGEILLDYSKNRIDDATFAMLLDLAKSRGVEKARDAMFSG
+              40        50        60        70        80        90 
+
+             130       140       150       160       170       180 
+EMBOSS EKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGK
+       :::::::.:::::.::::: ::::::.:::: :::: :::::::: ::.:::.: :::::
+TR:A0A EKINFTEDRAVLHIALRNRQNRPILVNGKDVTPDVNAVLAHMKEFSNEVISGQWKGYTGK
+             100       110       120       130       140       150 
+
+             190       200       210       220       230       240 
+EMBOSS KITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFII
+       .::::.::::::::::::::::.:: :    .::::::.::::.::: :.:: ::.::::
+TR:A0A EITDVINIGIGGSDLGPLMVTEALKPYATRLKVHFVSNIDGTHLAEVLKRLNPETALFII
+             160       170       180       190       200       210 
+
+             250       260       270       280       290       300 
+EMBOSS ASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWD
+       :::::::::::::: .::.::: .: : .::::::::::::  :.. :::: :::: :::
+TR:A0A ASKTFTTQETITNATSAKNWFLENAKDPAAVAKHFVALSTNGEKVTAFGIDPKNMFGFWD
+             220       230       240       250       260       270 
+
+             310       320       330       340       350       360 
+EMBOSS WVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYN
+       ::::::::::::::::....:.::.::::.::  .:.::...::::: :::::..:: :.
+TR:A0A WVGGRYSLWSAIGLSISLYVGYDNFEKLLEGASFMDNHFTTAPLEKNAPVILALLGVWYS
+             280       290       300       310       320       330 
+
+             370       380       390       400       410       420 
+EMBOSS NIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQ
+       :.::::::::::::::.:::::::::::::::::.::: :..::::::::::::::::::
+TR:A0A NFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGEQVDYSTGPIVWGEPGTNGQ
+             340       350       360       370       380       390 
+
+             430       440       450       460       470       480 
+EMBOSS HAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAE
+       ::::::::::::::: :::::..: ::: ::.::.:::::::::::::::::..  :.::
+TR:A0A HAFYQLIHQGTRLIPCDFIAPAQTHNPISGGVHHKILLANFLAQTEALMKGKSSEEAKAE
+             400       410       420       430       440       450 
+
+             490       500       510       520       530       540 
+EMBOSS LKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDIC
+       :..:::.::..:::::::::.::.::.:::.  ::::::::.::.::::::.::::::: 
+TR:A0A LEKSGMAPEAVAKILPHKVFKGNRPTNSIVVKKVTPFTLGAMIAMYEHKIFTQGIIWDIN
+             460       470       480       490       500       510 
+
+             550       560       570       580      
+EMBOSS SYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :.:::::::::::::.:.::: .:. :.:::::::::: :.: : 
+TR:A0A SFDQWGVELGKQLAKAIEPELQDASPVSSHDASTNGLINFLKANF
+             520       530       540       550      
+
+>>TR:A0A016VBP9 A0A016VBP9_9BILA Glucose-6-phosphate isomerase
+OS=Ancylostoma ceylanicum OX=53326 GN=Acey_s0014.g2349 PE=3
+SV=1 (499 aa)
+ initn: 2725 init1: 2725 opt: 2725  Z-score: 3304.4  bits: 621.2 E(181292976): 5.4e-174
+Smith-Waterman score: 2725; 84.1% identity (92.9% similar) in 478 aa overlap (106-583:19-496)
+
+          80        90       100       110       120       130     
+EMBOSS RLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHV
+                                     :::: ::: : ::::.:.:::::::::::.
+TR:A0A             MHRRRGGGCRKQVSFGTTAKSRRVEEMRAAMFSGERINFTENRAVLHI
+                           10        20        30        40        
+
+         140       150       160       170       180       190     
+EMBOSS ALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSD
+       :::::.: ::::::::::::::::: :::.::...:.:.:::.:::::::::::::::::
+TR:A0A ALRNRSNTPILVDGKDVMPDVNRVLEHMKDFCHKVITGAWTGFTGKKITDVVNIGIGGSD
+       50        60        70        80        90       100        
+
+         200       210       220       230       240       250     
+EMBOSS LGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNA
+       :::::: :.:..:::::::::::::::::.:::::::: :::::::::::::::::::::
+TR:A0A LGPLMVCEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNA
+      110       120       130       140       150       160        
+
+         260       270       280       290       300       310     
+EMBOSS ETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGL
+       :::::::: :::: .::::::::::::: :: ::::: .:::::::::::::::::::::
+TR:A0A ETAKEWFLKKAGDKSAVAKHFVALSTNVPKAQEFGIDPSNMFEFWDWVGGRYSLWSAIGL
+      170       180       190       200       210       220        
+
+         320       330       340       350       360       370     
+EMBOSS SIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYD
+       :::::.::::..:::.:: ..:.::.  ::..:::::.::.::::.:.::::::::::::
+TR:A0A SIAVHVGFDNFQKLLEGAHAADQHFLREPLDHNIPVIMAMLGVLYTNVYGAETHALLPYD
+      230       240       250       260       270       280        
+
+         380       390       400       410       420       430     
+EMBOSS QYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLI
+       ::.::::::::::::::::::::: : ::::.::::::::::::::::::::::::::::
+TR:A0A QYLHRFAAYFQQGDMESNGKFVTRDGARVDYATGPIVWGEPGTNGQHAFYQLIHQGTRLI
+      290       300       310       320       330       340        
+
+         440       450       460       470       480       490     
+EMBOSS PADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKI
+       : :::::::::::.: :::::::::::::::::::::::   ::::::..    : : ::
+TR:A0A PCDFIAPVKTLNPVRDGLHHQILLANFLAQTEALMKGKTREEAEAELKAAKTPAERIEKI
+      350       360       370       380       390       400        
+
+         500       510       520       530       540       550     
+EMBOSS LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLA
+       :::::::::.:::::::::.::::::.::: :::::::::..::: ::::::::::::::
+TR:A0A LPHKVFEGNRPTTSIVLPVITPFTLGVLIAVYEHKIFVQGVVWDINSYDQWGVELGKQLA
+      410       420       430       440       450       460        
+
+         560       570       580      
+EMBOSS KVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :::::::::   .::::::::::: :::   
+TR:A0A KVIQPELASCGDITSHDASTNGLINFIKQCK
+      470       480       490         
+
+>>TR:A0A016VAV7 A0A016VAV7_9BILA Glucose-6-phosphate isomerase
+OS=Ancylostoma ceylanicum OX=53326 GN=Acey_s0014.g2349 PE=3
+SV=1 (501 aa)
+ initn: 2725 init1: 2725 opt: 2725  Z-score: 3304.4  bits: 621.2 E(181292976): 5.4e-174
+Smith-Waterman score: 2725; 84.1% identity (92.9% similar) in 478 aa overlap (106-583:21-498)
+
+          80        90       100       110       120       130     
+EMBOSS RLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINFTENRAVLHV
+                                     :::: ::: : ::::.:.:::::::::::.
+TR:A0A           MIMHRRRGGGCRKQVSFGTTAKSRRVEEMRAAMFSGERINFTENRAVLHI
+                         10        20        30        40        50
+
+         140       150       160       170       180       190     
+EMBOSS ALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDVVNIGIGGSD
+       :::::.: ::::::::::::::::: :::.::...:.:.:::.:::::::::::::::::
+TR:A0A ALRNRSNTPILVDGKDVMPDVNRVLEHMKDFCHKVITGAWTGFTGKKITDVVNIGIGGSD
+               60        70        80        90       100       110
+
+         200       210       220       230       240       250     
+EMBOSS LGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTFTTQETITNA
+       :::::: :.:..:::::::::::::::::.:::::::: :::::::::::::::::::::
+TR:A0A LGPLMVCEALRHYQIGPNVHFVSNVDGTHIAEVTKKLNPETTLFIIASKTFTTQETITNA
+              120       130       140       150       160       170
+
+         260       270       280       290       300       310     
+EMBOSS ETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGRYSLWSAIGL
+       :::::::: :::: .::::::::::::: :: ::::: .:::::::::::::::::::::
+TR:A0A ETAKEWFLKKAGDKSAVAKHFVALSTNVPKAQEFGIDPSNMFEFWDWVGGRYSLWSAIGL
+              180       190       200       210       220       230
+
+         320       330       340       350       360       370     
+EMBOSS SIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGAETHALLPYD
+       :::::.::::..:::.:: ..:.::.  ::..:::::.::.::::.:.::::::::::::
+TR:A0A SIAVHVGFDNFQKLLEGAHAADQHFLREPLDHNIPVIMAMLGVLYTNVYGAETHALLPYD
+              240       250       260       270       280       290
+
+         380       390       400       410       420       430     
+EMBOSS QYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQLIHQGTRLI
+       ::.::::::::::::::::::::: : ::::.::::::::::::::::::::::::::::
+TR:A0A QYLHRFAAYFQQGDMESNGKFVTRDGARVDYATGPIVWGEPGTNGQHAFYQLIHQGTRLI
+              300       310       320       330       340       350
+
+         440       450       460       470       480       490     
+EMBOSS PADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSGMSPESIAKI
+       : :::::::::::.: :::::::::::::::::::::::   ::::::..    : : ::
+TR:A0A PCDFIAPVKTLNPVRDGLHHQILLANFLAQTEALMKGKTREEAEAELKAAKTPAERIEKI
+              360       370       380       390       400       410
+
+         500       510       520       530       540       550     
+EMBOSS LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVELGKQLA
+       :::::::::.:::::::::.::::::.::: :::::::::..::: ::::::::::::::
+TR:A0A LPHKVFEGNRPTTSIVLPVITPFTLGVLIAVYEHKIFVQGVVWDINSYDQWGVELGKQLA
+              420       430       440       450       460       470
+
+         560       570       580      
+EMBOSS KVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :::::::::   .::::::::::: :::   
+TR:A0A KVIQPELASCGDITSHDASTNGLINFIKQCK
+              480       490       500 
+
+>>TR:A0A0N5BIZ5 A0A0N5BIZ5_STREA Glucose-6-phosphate isomerase
+OS=Strongyloides papillosus OX=174720 PE=3 SV=1 (553 aa)
+ initn: 2722 init1: 2722 opt: 2722  Z-score: 3299.7  bits: 620.4 E(181292976): 9.9e-174
+Smith-Waterman score: 2722; 74.0% identity (88.0% similar) in 549 aa overlap (37-585:4-552)
+
+         10        20        30        40        50        60      
+EMBOSS RFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELFEK
+                                     :: .: :: .:..  .  . . .:...:..
+TR:A0A                            MTSSLRNDETFKHLEKLYHERKANLNLVNFFKN
+                                          10        20        30   
+
+         70        80        90       100       110       120      
+EMBOSS DPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKINF
+       :: ::.::.: ..:::: :: ::::: : .. :. :. ::::::: : :.:::..:::::
+TR:A0A DPHRFNKFSRSLTTPDGAFLVDFSKNLIDEDIFNSLINLAKSRGVPEMRDAMFKGEKINF
+            40        50        60        70        80        90   
+
+        130       140       150       160       170       180      
+EMBOSS TENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKITDV
+       :::::: :..:::: :    .::.::  ::: :: :::.::..:::::::::::::::::
+TR:A0A TENRAVYHIGLRNRDNNSPHIDGQDVNKDVNDVLKHMKQFCSKIISGSWTGYTGKKITDV
+           100       110       120       130       140       150   
+
+        190       200       210       220       230       240      
+EMBOSS VNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASKTF
+       :::::::::::::::::.::.::.:::::::::.::::.::: ::.::::::::::::::
+TR:A0A VNIGIGGSDLGPLMVTEALKHYQVGPNVHFVSNIDGTHLAEVLKKINAETTLFIIASKTF
+           160       170       180       190       200       210   
+
+        250       260       270       280       290       300      
+EMBOSS TTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVGGR
+       ::::::::::.::::::.:::: . :::::::::::. :. :::: :.::: ::::::::
+TR:A0A TTQETITNAESAKEWFLSKAGDPSHVAKHFVALSTNAPKVKEFGIHESNMFAFWDWVGGR
+           220       230       240       250       260       270   
+
+        310       320       330       340       350       360      
+EMBOSS YSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIYGA
+       ::::::::::::: :::::.::::.:.  .:.:: .::::.:::::::..:: : :..: 
+TR:A0A YSLWSAIGLSIAVFIGFDNFEKLLEGGHFMDKHFKETPLENNIPVILAVLGVWYINFFGC
+           280       290       300       310       320       330   
+
+        370       380       390       400       410       420      
+EMBOSS ETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAFYQ
+       :::::::::::.:::::::::::::::::..:: :..:::.:::::::::::::::::::
+TR:A0A ETHALLPYDQYLHRFAAYFQQGDMESNGKYITRDGEKVDYNTGPIVWGEPGTNGQHAFYQ
+           340       350       360       370       380       390   
+
+        430       440       450       460       470       480      
+EMBOSS LIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKSSG
+       :::::::.::::::::..::::::.::::.::::::::::::::::::   :  ::.:::
+TR:A0A LIHQGTRIIPADFIAPINTLNPIRSGLHHKILLANFLAQTEALMKGKTPDEALEELRSSG
+           400       410       420       430       440       450   
+
+        490       500       510       520       530       540      
+EMBOSS MSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQW
+       :  ::: :::::::: ::.::.::.:  .:::::::::: :::::::::.::.: :::::
+TR:A0A MPQESIDKILPHKVFTGNRPTNSILLQKITPFTLGALIAAYEHKIFVQGVIWNINSYDQW
+           460       470       480       490       500       510   
+
+        550       560       570       580      
+EMBOSS GVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       ::::::::::::  ::     :..::.:::::: :.:.: 
+TR:A0A GVELGKQLAKVILKELNEPGDVSNHDSSTNGLINFVKKNF
+           520       530       540       550   
+
+>>TR:A0A090L893 A0A090L893_STRRB Glucose-6-phosphate isomerase
+OS=Strongyloides ratti OX=34506 GN=SRAE_2000064600 PE=3
+SV=1 (556 aa)
+ initn: 2673 init1: 2673 opt: 2706  Z-score: 3280.3  bits: 616.9 E(181292976): 1.2e-172
+Smith-Waterman score: 2706; 72.8% identity (88.4% similar) in 551 aa overlap (35-585:2-552)
+
+           10        20        30        40        50        60    
+EMBOSS LFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLELF
+                                     : :: .: .: .: .  :...   ....::
+TR:A0A                              MASSLRSDEAFKNLGKLYEGKKMTLDMVKLF
+                                            10        20        30 
+
+           70        80        90       100       110       120    
+EMBOSS EKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSAEKI
+       ..::.::.::.: ..:::: :: ::::: : .: :: :. ::::::: : :.::: .:::
+TR:A0A QNDPSRFNKFSRTLTTPDGAFLVDFSKNLIDEEIFQGLINLAKSRGVPEMRDAMFRGEKI
+              40        50        60        70        80        90 
+
+          130       140       150       160       170       180    
+EMBOSS NFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGKKIT
+       :::::::: :..:::  :    .::.:.  ::. :: :::.::..::::.::::.:::::
+TR:A0A NFTENRAVYHIGLRNVENNSPHIDGQDINKDVSDVLRHMKQFCSDIISGTWTGYSGKKIT
+             100       110       120       130       140       150 
+
+          190       200       210       220       230       240    
+EMBOSS DVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFIIASK
+       :::::::::::::::::::.::.::.:::::::::.::::.::: ::.:.::::::::::
+TR:A0A DVVNIGIGGSDLGPLMVTEALKHYQVGPNVHFVSNIDGTHLAEVLKKVNVETTLFIIASK
+             160       170       180       190       200       210 
+
+          250       260       270       280       290       300    
+EMBOSS TFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWDWVG
+       ::::::::::::.::::::.:::. . :::::::::::. :. ::::::.::: ::::::
+TR:A0A TFTTQETITNAESAKEWFLSKAGNPSYVAKHFVALSTNAPKVKEFGIDESNMFAFWDWVG
+             220       230       240       250       260       270 
+
+          310       320       330       340       350       360    
+EMBOSS GRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYNNIY
+       ::::::::::::::: ::.::.::::.:.  .:.:: .::::.:::::::..:: : :..
+TR:A0A GRYSLWSAIGLSIAVFIGYDNFEKLLEGGHFMDKHFKETPLENNIPVILAVLGVWYINFF
+             280       290       300       310       320       330 
+
+          370       380       390       400       410       420    
+EMBOSS GAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQHAF
+       : :::::::::::.:::::::::::::::::..::.:..:::.:::::::::::::::::
+TR:A0A GCETHALLPYDQYLHRFAAYFQQGDMESNGKYITRNGHKVDYNTGPIVWGEPGTNGQHAF
+             340       350       360       370       380       390 
+
+          430       440       450       460       470       480    
+EMBOSS YQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAELKS
+       :::::::::.::::::::..:::::: ::::.::::::::::::::::::   : .::..
+TR:A0A YQLIHQGTRIIPADFIAPINTLNPIRDGLHHKILLANFLAQTEALMKGKTDKEALVELQA
+             400       410       420       430       440       450 
+
+          490       500       510       520       530       540    
+EMBOSS SGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYD
+       :::: ::: :::::::: ::.::.::.:  .:::::::::: :::::::::.::.: :::
+TR:A0A SGMSEESIQKILPHKVFTGNRPTNSILLQKITPFTLGALIAAYEHKIFVQGVIWNINSYD
+             460       470       480       490       500       510 
+
+          550       560       570       580         
+EMBOSS QWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA   
+       ::::::::::::::  ::  .  :..::.:::.:: :.:.:    
+TR:A0A QWGVELGKQLAKVILKELNETGDVSNHDSSTNNLINFVKKNFSTI
+             520       530       540       550      
+
+>>TR:H6TMR9 H6TMR9_HYPCU Glucose-6-phosphate isomerase
+OS=Hyphantria cunea OX=39466 GN=pgi PE=2 SV=1 (556 aa)
+ initn: 2695 init1: 2599 opt: 2697  Z-score: 3269.4  bits: 614.8 E(181292976): 4.9e-172
+Smith-Waterman score: 2697; 72.2% identity (89.2% similar) in 554 aa overlap (33-585:2-555)
+
+             10        20        30        40        50        60  
+EMBOSS FELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLE
+                                     :  ..:.:: ..::...  .::    .. .
+TR:H6T                              MEPKVNLKQDPAYVEIQKFYDANGAKINIQQ
+                                            10        20        30 
+
+             70        80         90       100       110       120 
+EMBOSS LFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSA
+       ::. :  ::.::.  . :: :::.:.:.:::::.:. ..::. :::::.::..:.::::.
+TR:H6T LFKLDTDRFNKFSLRIPTPADGDILLDYSKNRINDDLWKLLLNLAKSRNVEKARDAMFSG
+              40        50        60        70        80        90 
+
+             130       140       150       160       170       180 
+EMBOSS EKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGK
+       :::::::.:::::.::::: ::::::.:::: :::: :::::::: ....::.: :::::
+TR:H6T EKINFTEDRAVLHIALRNRQNRPILVNGKDVTPDVNAVLAHMKEFTGQVVSGQWKGYTGK
+             100       110       120       130       140       150 
+
+             190       200       210       220       230       240 
+EMBOSS KITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFII
+        ::::.::::::::::::::::.:: :    .::::::.::::.::: :.:: ::.::::
+TR:H6T AITDVINIGIGGSDLGPLMVTEALKPYANHLKVHFVSNIDGTHLAEVLKRLNPETALFII
+             160       170       180       190       200       210 
+
+             250       260       270       280       290       300 
+EMBOSS ASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWD
+       :::::::::::::: .:: :::  : : .::::::::::::. :.. :::: :::: :::
+TR:H6T ASKTFTTQETITNATSAKTWFLEAAKDPSAVAKHFVALSTNAEKVTAFGIDPKNMFGFWD
+             220       230       240       250       260       270 
+
+             310       320       330       340       350       360 
+EMBOSS WVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYN
+       ::::::::::::::::...::..:.::::.::  .:.:....::::: :::::..:: :.
+TR:H6T WVGGRYSLWSAIGLSISLYIGYENFEKLLEGASFMDNHYTTAPLEKNAPVILALLGVWYS
+             280       290       300       310       320       330 
+
+             370       380       390       400       410       420 
+EMBOSS NIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQ
+       :.::::::::::::::.:::::::::::::::::.::: :..::::::::::::::::::
+TR:H6T NFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGSQVDYSTGPIVWGEPGTNGQ
+             340       350       360       370       380       390 
+
+             430       440       450       460       470       480 
+EMBOSS HAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAE
+       ::::::::::::::: :::::..: ::: ::.::.:::::::::::::::::::  :.::
+TR:H6T HAFYQLIHQGTRLIPCDFIAPAQTHNPISGGVHHKILLANFLAQTEALMKGKTADEAKAE
+             400       410       420       430       440       450 
+
+             490       500       510       520       530       540 
+EMBOSS LKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDIC
+       :..:::.::..::::::::: ::.::.:::.  :::::::::::.::::::.::.:::: 
+TR:H6T LEQSGMAPEAVAKILPHKVFLGNRPTNSIVVKKVTPFTLGALIALYEHKIFTQGVIWDIN
+             460       470       480       490       500       510 
+
+             550       560       570       580      
+EMBOSS SYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :.:::::::::::::.:.::: ... :::::.:::::: :.: : 
+TR:H6T SFDQWGVELGKQLAKAIEPELQDSSPVTSHDGSTNGLINFLKANF
+             520       530       540       550      
+
+>>TR:A0A3Q8VPM4 A0A3Q8VPM4_9NEOP Glucose-6-phosphate isomerase
+OS=Heortia vitessoides OX=1557813 PE=2 SV=1 (556 aa)
+ initn: 2661 init1: 2598 opt: 2695  Z-score: 3266.9  bits: 614.4 E(181292976): 6.7e-172
+Smith-Waterman score: 2695; 72.2% identity (89.4% similar) in 554 aa overlap (33-585:2-555)
+
+             10        20        30        40        50        60  
+EMBOSS FELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLE
+                                     :  ..:..: .: .:... .::    .. .
+TR:A0A                              MEPKVNLKKDPAFQKLQEYYHANGDKINIPQ
+                                            10        20        30 
+
+             70        80         90       100       110       120 
+EMBOSS LFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSA
+       ::..: .:::::.  . :: ::..:.:.::::: :  :. :. ::.:::::..:.::::.
+TR:A0A LFQQDAGRFEKFSLRIPTPNDGEILLDYSKNRIDDAVFSQLLDLARSRGVEKARDAMFSG
+              40        50        60        70        80        90 
+
+             130       140       150       160       170       180 
+EMBOSS EKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGK
+       :::::::.::::::::::: :::.::.::::::::: :::::::: .:.:::.: :::::
+TR:A0A EKINFTEDRAVLHVALRNRQNRPVLVSGKDVMPDVNAVLAHMKEFSSEVISGQWKGYTGK
+             100       110       120       130       140       150 
+
+             190       200       210       220       230       240 
+EMBOSS KITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFII
+       .::::.::::::::::::::::.:: :    .::::::.::::.::: :::: ::.::::
+TR:A0A SITDVINIGIGGSDLGPLMVTEALKPYANHLKVHFVSNIDGTHLAEVLKKLNPETSLFII
+             160       170       180       190       200       210 
+
+             250       260       270       280       290       300 
+EMBOSS ASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWD
+       :::::::::::::: .:: ::: .: : .::::::::::::  :.. :::: :::: :::
+TR:A0A ASKTFTTQETITNATSAKTWFLEHAKDPAAVAKHFVALSTNGEKVTAFGIDAKNMFGFWD
+             220       230       240       250       260       270 
+
+             310       320       330       340       350       360 
+EMBOSS WVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYN
+       ::::::::::::::::....:.::.::::.::  .:.::...::::: :::::..:: :.
+TR:A0A WVGGRYSLWSAIGLSISLYVGYDNFEKLLEGANFMDQHFTTAPLEKNAPVILALLGVWYS
+             280       290       300       310       320       330 
+
+             370       380       390       400       410       420 
+EMBOSS NIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQ
+       :.::::::::::::::.:::::::::::::::::.::: :...:::::::::::::::::
+TR:A0A NFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRGGDQADYSTGPIVWGEPGTNGQ
+             340       350       360       370       380       390 
+
+             430       440       450       460       470       480 
+EMBOSS HAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAE
+       ::::::::::::::: :::::..: ::. :: ::.::::::::::::::::::.  :.::
+TR:A0A HAFYQLIHQGTRLIPCDFIAPAQTHNPVAGGAHHKILLANFLAQTEALMKGKTSDEAKAE
+             400       410       420       430       440       450 
+
+             490       500       510       520       530       540 
+EMBOSS LKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDIC
+       :..:::. ...:::::::::.::.::.:::.  :::::::::::.::::::.::..::: 
+TR:A0A LEKSGMAADAVAKILPHKVFKGNRPTNSIVVKKVTPFTLGALIAMYEHKIFAQGVMWDIN
+             460       470       480       490       500       510 
+
+             550       560       570       580      
+EMBOSS SYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :.:::::::::::::.:.::::.  .::::::::::::.:.: : 
+TR:A0A SFDQWGVELGKQLAKAIEPELAAPGAVTSHDASTNGLIGFLKANF
+             520       530       540       550      
+
+>>TR:H6TMR8 H6TMR8_HYPCU Glucose-6-phosphate isomerase
+OS=Hyphantria cunea OX=39466 GN=pgi PE=2 SV=1 (556 aa)
+ initn: 2690 init1: 2594 opt: 2692  Z-score: 3263.3  bits: 613.7 E(181292976): 1.1e-171
+Smith-Waterman score: 2692; 72.2% identity (89.0% similar) in 554 aa overlap (33-585:2-555)
+
+             10        20        30        40        50        60  
+EMBOSS FELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANEKDAQLLE
+                                     :  ..:.:: ..::...  .::    .. .
+TR:H6T                              MEPKVNLKQDPAYVEIQKFYDANGAKINIQQ
+                                            10        20        30 
+
+             70        80         90       100       110       120 
+EMBOSS LFEKDPARFEKFTRLFATP-DGDFLFDFSKNRITDESFQLLMRLAKSRGVEESRNAMFSA
+       ::. :  ::.::.  . :: :::.:.:.:::::.:. ..::. :::::.::..:.::::.
+TR:H6T LFKLDTDRFNKFSLRIPTPADGDILLDYSKNRINDDLWKLLLNLAKSRNVEKARDAMFSG
+              40        50        60        70        80        90 
+
+             130       140       150       160       170       180 
+EMBOSS EKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKEFCNEIISGSWTGYTGK
+       :::::::.:::::.::::: ::::::.:::: :::: :::::::: ....::.: :::::
+TR:H6T EKINFTEDRAVLHIALRNRQNRPILVNGKDVTPDVNAVLAHMKEFTGQVVSGQWKGYTGK
+             100       110       120       130       140       150 
+
+             190       200       210       220       230       240 
+EMBOSS KITDVVNIGIGGSDLGPLMVTESLKNYQIGPNVHFVSNVDGTHVAEVTKKLNAETTLFII
+        ::::.::::::::::::::::.:: :    .::::::.::::.::: :.:: ::.::::
+TR:H6T AITDVINIGIGGSDLGPLMVTEALKPYANHLKVHFVSNIDGTHLAEVLKRLNPETALFII
+             160       170       180       190       200       210 
+
+             250       260       270       280       290       300 
+EMBOSS ASKTFTTQETITNAETAKEWFLAKAGDAGAVAKHFVALSTNVTKAVEFGIDEKNMFEFWD
+       :::::::::::::: .:: :::  : : .::::::::::::. :.. :::: :::: :::
+TR:H6T ASKTFTTQETITNATSAKTWFLEAAKDPSAVAKHFVALSTNAEKVTAFGIDPKNMFGFWD
+             220       230       240       250       260       270 
+
+             310       320       330       340       350       360 
+EMBOSS WVGGRYSLWSAIGLSIAVHIGFDNYEKLLDGAFSVDEHFVNTPLEKNIPVILAMIGVLYN
+       ::::::::::::::::...::..:.::::.::  .:.:....::::: :::::..:: :.
+TR:H6T WVGGRYSLWSAIGLSISLYIGYENFEKLLEGASFMDNHYTTAPLEKNAPVILALLGVWYS
+             280       290       300       310       320       330 
+
+             370       380       390       400       410       420 
+EMBOSS NIYGAETHALLPYDQYMHRFAAYFQQGDMESNGKFVTRHGQRVDYSTGPIVWGEPGTNGQ
+       :.::::::::::::::.:::::::::::::::::.::: :..::::::::::::::::::
+TR:H6T NFYGAETHALLPYDQYLHRFAAYFQQGDMESNGKYVTRSGSQVDYSTGPIVWGEPGTNGQ
+             340       350       360       370       380       390 
+
+             430       440       450       460       470       480 
+EMBOSS HAFYQLIHQGTRLIPADFIAPVKTLNPIRGGLHHQILLANFLAQTEALMKGKTAAVAEAE
+       ::::::::::::::: :::::..: ::: ::.::.:::::::::::::::::::  :.::
+TR:H6T HAFYQLIHQGTRLIPCDFIAPAQTHNPISGGVHHKILLANFLAQTEALMKGKTADEAKAE
+             400       410       420       430       440       450 
+
+             490       500       510       520       530       540 
+EMBOSS LKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDIC
+       :..:::.::..::::::::: ::.::.:::.  :::::::::::.::::::.::.:::: 
+TR:H6T LEQSGMAPEAVAKILPHKVFLGNRPTNSIVVKKVTPFTLGALIALYEHKIFTQGVIWDIN
+             460       470       480       490       500       510 
+
+             550       560       570       580      
+EMBOSS SYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA
+       :.:::::::::::::.:.::: ..  :::::.:::::: :.: : 
+TR:H6T SFDQWGVELGKQLAKAIEPELQGSWPVTSHDGSTNGLINFLKANF
+             520       530       540       550      
+
+
+
+586 residues in 1 query   sequences
+61141413123 residues in 181292975 library sequences
+ Tcomplib [36.3.8h Aug, 2019] (32 proc in memory [15G])
+ start: Fri Jun  5 22:48:05 2020 done: Fri Jun  5 22:53:20 2020
+ Total Scan time: 4256.480 Total Display time:  0.400
+
+Function used was FASTA [36.3.8h Aug, 2019]

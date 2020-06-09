@@ -1,0 +1,83 @@
+<execution>
+  <commandLine>cat fasta-R20200605-224932-0914-38617154-p1m.sequence | /nfs/public/ro/es/appbin/linux-x86_64/fasta-36.3.8h/fasta36 -l $DATA_CURRENT/fastacfg/fasta3db -L -T 32  -p -F 0.0 -b 50 -d 50 -m &quot;F9B fasta-R20200605-224932-0914-38617154-p1m.m9&quot; -z 1 \@:1- +uniprotkb+</commandLine>
+  <userParameters class="linked-hash-map">
+    <entry>
+      <string>program</string>
+      <string>fasta</string>
+    </entry>
+    <entry>
+      <string>stype</string>
+      <string>protein</string>
+    </entry>
+    <entry>
+      <string>hsps</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>explowlim</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>hist</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>scores</string>
+      <int>50</int>
+    </entry>
+    <entry>
+      <string>alignments</string>
+      <int>50</int>
+    </entry>
+    <entry>
+      <string>scoreformat</string>
+      <string>default</string>
+    </entry>
+    <entry>
+      <string>stats</string>
+      <string>1</string>
+    </entry>
+    <entry>
+      <string>annotfeats</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>seqrange</string>
+      <string>START-END</string>
+    </entry>
+    <entry>
+      <string>filter</string>
+      <string>none</string>
+    </entry>
+    <entry>
+      <string>transltable</string>
+      <int>1</int>
+    </entry>
+    <entry>
+      <string>sequence</string>
+      <string>/nfs/public/rw/es/projects/wp-jdispatcher/sources/prod/jobs/fasta/rest/20200605/2248/fasta-R20200605-224932-0914-38617154-p1m.sequence</string>
+    </entry>
+    <entry>
+      <string>database</string>
+      <string-array>
+        <string>uniprotkb</string>
+      </string-array>
+    </entry>
+  </userParameters>
+  <outputLocation>file:/nfs/public/rw/es/projects/wp-jdispatcher/sources/prod/jobs/fasta/rest/20200605/2248//fasta-R20200605-224932-0914-38617154-p1m.output</outputLocation>
+  <errorLocation>file:/nfs/public/rw/es/projects/wp-jdispatcher/sources/prod/jobs/fasta/rest/20200605/2248//fasta-R20200605-224932-0914-38617154-p1m.error</errorLocation>
+  <toolId>fasta</toolId>
+  <jobId>fasta-R20200605-224932-0914-38617154-p1m</jobId>
+  <email>wolfe.aarond@gmail.com</email>
+  <emailNotification>false</emailNotification>
+  <clientId>73.219.40.221</clientId>
+  <executionContext>rest</executionContext>
+  <additionalProperties class="uk.ac.ebi.properties.commonsconfiguration.CommonsConfigurationPropertiesContainer">
+    <property key="postprocessor.class">uk.ac.ebi.jdispatcher.execution.domain.service.AdditionalExecutionPostProcessor</property>
+    <property key="postprocessor.properties.input_suffix">m6</property>
+    <property key="postprocessor.properties.output_suffix">html</property>
+    <property key="postprocessor.properties.additional_command">/nfs/public/ro/es/appbin/linux-x86_64/fasta-36.3.8h/scripts/ebi_rewrite_m6.pl input</property>
+    <property key="command">sh /nfs/public/rw/es/projects/wp-jdispatcher/sources/prod/resources/management/scripts/remoteExecution.sh &quot;prod&quot; /nfs/public/rw/es/projects/wp-jdispatcher/sources/prod/resources/services-hh-wp-prod.properties ${tool.id} ${job.id} ${host.id} /nfs/public/rw/es/projects/wp-jdispatcher/sources/prod/lib/jdispatcher-execution-1.0-SNAPSHOT-jar-with-dependencies.jar</property>
+    <property key="parameter.excludes">sequence, upfile, asequence, aupfile, bsequence, bupfile, program, version</property>
+  </additionalProperties>
+</execution>
