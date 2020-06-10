@@ -1,4 +1,5 @@
 import logging
+import re
 import sys
 import traceback
 from io import StringIO
@@ -78,22 +79,25 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
     for line in range(lines):
         start = n * chars
         end = start + len(seqs[0][start:]) if line == lines - 1 else n * chars + chars
-        gap = (n * chars + chars) - end
         if rulers:
-            html.append(str(buildRuler(chars, gap, start, end))+"\n")
+            # If there is a horizontal ruler, build the ruler and thread it in.
+            html.append(str(buildRuler(chars, start, end))+"\n")
         for i in range(len(seqs)):
             if colors:
-                html.append("".join([x[0] for x in seqs[i][start:end]]))#+"\n")
+                # The whole thing has the HTML color as well
+                html.append("".join([x[0] for x in seqs[i][start:end]]))
             else:
-                html.append("".join([x[0][-8] for x in seqs[i][start:end]]))# + "\n")
+                # Only use the residue, not the color HTML part.
+                html.append("".join([x[0][-8] for x in seqs[i][start:end]]))
             if line == lines-1:
+                # If last line, append the final residue ID number.
                 label = str(seqs[i][end - 1][1])
                 if label == "0":
                     for y in range(chars):
                         label = str(seqs[i][end - 1 - y][1])
                         if label != "0":
                             break
-                html.append(" "*2 + label + "\n")
+                html.append(" "*2 + label + "&nbsp;"*(chars-(end-start)-(len(label)+2))+"\n")
             else:
                 html.append("\n")
         if line < lines -1:
@@ -101,6 +105,61 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
         n += 1
     html.append("</pre>")
     return "".join(html)
+
+
+def buildRuler(chars, start, end):
+    ruler = None
+    if start != end:
+        interval = chars
+        if 25 <= chars <= 50:
+            interval = int(chars / 2)
+        elif 50 < chars < 100:
+            interval = int(chars / 3)
+        elif 100 <= chars < 150:
+            interval = int(chars / 4)
+        elif 150 <= chars:
+            interval = int(chars / 5)
+        labels = list(numpy.arange(start, end, interval))
+        if len(labels) == 1:
+            #    print(labels[0])
+            if labels[0] <= (start + 1):
+                #        print("removed ", labels[0])
+                labels.pop(0)
+            elif labels[0] - (start + 1) < len(str(labels[-1])) * 2 + 2:
+                #        print("removed ", labels[0])
+                labels.pop(0)
+        if len(labels) > 1:
+            rm = []
+            for x in range(2):
+                #        print(labels[x])
+                if labels[x] - (start + 1) < len(str(labels[-1])) * 2 + 2:
+                    #            print("Removed ",labels[x])
+                    rm.append(labels[x])
+                    if len(labels) <= 1:
+                        break
+                if end - labels[-x] < len(str(labels[-1])) * 2 + 2:
+                    #            print("Removed ",labels[-x])
+                    rm.append(labels[-x])
+            [labels.remove(x) for x in rm]
+        labels.insert(0, start + 1)
+        if end - (start + 1) >= len(str(start + 1)) + len(str(end)) + 2:
+            labels.append(end)
+        # print(labels)
+        rulel = ['<u>' + str(labels[0])[0] + '</u>' + str(labels[0])[1:]]
+        for x in labels[1:]:
+            prevx = labels[labels.index(x) - 1]
+            xlab = len(str(x))
+            if labels.index(x) == 1 and len(str(prevx)) > 1:
+                # Different for first space because I left align the first number.
+                xlab = len(str(x)) + len(str(prevx)) - 1
+            spacer = x - prevx - xlab
+            #   print("Spacer is (%s-%s)-%s=%s " % (x, prevx, xlab, spacer))
+            rulel.append("&nbsp;" * spacer)
+            rulel.append(str(x)[:-1] + '<u>' + str(x)[-1:] + '</u>')
+        count = list(re.findall(r'(&nbsp;)|[0-9]',"".join(rulel)))
+        rulel.append("&nbsp;"*(chars-len(count)))
+        ruler = "".join(rulel)
+    return ruler
 
 
 def checkName(name, titles, layer=0):
@@ -166,7 +225,8 @@ def nodeSelector(tree, model):
     return indices, seqs
 
 
-def buildRuler(chars,gap,start,end,interval=False):
+
+def buildRuler2(chars,gap,start,end,interval=False):
     # TODO: Consider putting numbers at left and right, as in normal alignments. Particularly if also showing SS.
     """ This version uses even spacing of the numbers (either 10 or 20 depending on screen width) but looks messy. """
     ruler = None
@@ -234,22 +294,20 @@ def buildRuler(chars,gap,start,end,interval=False):
             # My hacky way to add more numbers as the screen increases in size.
             # Spacing is the distance between numbers of the rulers.
             # Not all numbers are divisible by 2, 3, etc so there are uneven spaces, which I account for badly below.
-            # TODO: Consider changing this to floor?
-            if chars < 20:
-                pass
-            elif 20 <= chars < 60:
-                spacing = int(chars/2)
-            elif 60 <= chars < 100:
-                spacing = int(chars/3)
+            if 25 <= chars <= 50:
+                spacing = floor(chars/2)
+            elif 50 < chars < 100:
+                spacing = floor(chars/3)
             elif 100 <= chars < 150:
-                spacing = int(chars/4)
+                spacing = floor(chars/4)
             elif 150 <= chars:
-                spacing = int(chars/5)
+                spacing = floor(chars/5)
             n = 0
             speclabels = []
             rulerlist = []
             # spec labels are the numbers that are actually used based on the spacing.
-            while n < chars:
+
+            """while n < chars:
                 speclabels.append(labels[n])
                 n+=spacing
             if labels[-1] not in speclabels:
@@ -282,7 +340,7 @@ def buildRuler(chars,gap,start,end,interval=False):
                 ruler = str(start + 1) + " " * (chars - len(str(start + 1)) - len(str(end))) + str(end)
             else:
                 # Just show a single number.
-                ruler = str(start+1)
+                ruler = str(start+1)"""
     return ruler
 
 

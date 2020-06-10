@@ -305,7 +305,8 @@ class AlignPane(QTextEdit):
 
     def getSeqPos(self, pos, row_pos):
         seqsperline = (len(self.seqs) + int(self.parentWidget().parentWidget().showRuler) + 1)
-        cutoff = (self.lines-1)*seqsperline*(self.chars+1)
+        #cutoff = (self.lines-1)*seqsperline*(self.chars+1)
+        cutoff = 1000000000
         # Have to do special stuff if it's on the last line, since there are no blank characters to keep the pattern.
         # Probably should have put them in to make my life easier, but whatever, I already figured it out.
         if pos <= cutoff:

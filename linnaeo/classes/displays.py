@@ -187,11 +187,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             width = self.alignPane.size().width()
             print(width)
             char_count = int(width / charpx - 40 / charpx)
-            print("CHAR_COUNT:", char_count)
+            #print("CHAR_COUNT:", char_count)
             if self.rulerPane.verticalScrollBar().isVisible():
                 self.rulerPane.resize(int(4 * charpx + 3 + (self.rulerPane.verticalScrollBar().size().width())),
                                       self.rulerPane.size().height())
-                print("RULER", self.rulerPane.size().width())
+                #print("RULER", self.rulerPane.size().width())
                 # char_count = int(width / charpx - 20 / charpx - \
                 #                 self.alignPane.verticalScrollBar().size().width() / charpx)
                 # This is for saving the scroll position
@@ -214,7 +214,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (
                 self.font().family(), self.font().pointSize())
             self.alignPane.setHtml(style + worker.html)
-            # RULER CALCULATION
+            # RULER CALCULATION --> SIDE PANEL.
             self.rulerPane.clear()
             rulerHtml = ["<pre style=\"font-family:%s; font-size:%spt; text-align: left;\">" %
                          (self.font().family(),self.font().pointSize())]
