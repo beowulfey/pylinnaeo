@@ -283,7 +283,7 @@ class Slots:
             indices, seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
             for i in range(len(seqs)):
                 worker = utilities.GetPDBThread(seqs[i].id, parent=self)
-                worker.finished.connect(self.blastdone)
+                worker.finished.connect(self.pdbSearchDone)
                 worker.start()
                 """seq = seqs[i].format('fasta')
                 worker = utilities.BlastThread(seq, self)
@@ -291,12 +291,20 @@ class Slots:
                 self.actionUniPROT.setDisabled(True)
                 worker.start()"""
 
-    def blastdone(self, result):
+    def pdbSearchDone(self, result):
         print("BLAST IS FINISHED!!!!!")
-        print(result)
+        if result:
+            print(result)
+        worker = utilities.DSSPThread(result, parent=self)
+        worker.finished.connect(self.ssDone)
+        worker.start()
         #self.actionUniPROT.setEnabled(True)
         #with open("/home/wolfey/devel/python/linnaeo/data/DNA28M6B014-Alignment.xml",'r') as xml:
         #    blast = xml
+        
+    def ssDone(self, result):
+        print("DSSP FINISHED")
+        print(result)
         """
         E_VALUE_THRESH = 1e-20
         print(blast)

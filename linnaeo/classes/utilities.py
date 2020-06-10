@@ -12,7 +12,7 @@ import numpy
 from Bio import PDB
 from bioservices import UniProt
 from Bio.Blast import NCBIWWW, NCBIXML
-from Bio.PDB import FastMMCIFParser, DSSP, PDBIO
+from Bio.PDB import Structure, FastMMCIFParser, DSSP, PDBIO
 from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryDir, QTemporaryFile
 import clustalo
 
@@ -353,7 +353,7 @@ def buildRuler2(chars,gap,start,end,interval=False):
 
 
 class GetPDBThread(QThread):
-    finished = pyqtSignal(str)
+    finished = pyqtSignal(Structure.Structure)
 
     def __init__(self, pid, parent=None):
         QThread.__init__(self, parent)
@@ -385,12 +385,16 @@ class GetPDBThread(QThread):
                         print("FOUND STRUCTURE")
         if coordinates:
             parser = PDB.PDBParser()
+            tmp = QTemporaryFile()
             with urllib.request.urlopen(coordinates) as url:
                 myfile = url.read()
-                struct = parser.get_structure(ids[1], myfile)
-                print("STRUCTURE PARSED")
-                print(struct)
-        self.finished.emit(uniID)
+                if tmp.open():
+                    tmp.write(myfile)
+                    print(tmp.fileName())
+                    struct = parser.get_structure(ids[1], tmp.fileName())
+                    print("STRUCTURE PARSED")
+                    print(struct, type(struct))
+        self.finished.emit(struct)
 
 
 
@@ -415,7 +419,7 @@ class DSSPThread(QThread):
     """ Uses a stored PDB to calculate the secondary structure of a sequence using DSSP """
     finished = pyqtSignal(dict)
 
-    def __init__(self, args, parent=None):
+    def __init__(self, *args, parent=None):
         QThread.__init__(self, parent)
         self.args = args
         self.struct = self.args[0]
