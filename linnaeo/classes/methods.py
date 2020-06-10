@@ -282,18 +282,22 @@ class Slots:
         if self.lastClickedTree == self.bioTree:
             indices, seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
             for i in range(len(seqs)):
-                seq = seqs[i].format('fasta')
+                worker = utilities.GetPDBThread(seqs[i].id, parent=self)
+                worker.finished.connect(self.blastdone)
+                worker.start()
+                """seq = seqs[i].format('fasta')
                 worker = utilities.BlastThread(seq, self)
                 worker.finished.connect(self.blastdone)
                 self.actionUniPROT.setDisabled(True)
-                worker.start()
+                worker.start()"""
 
-    def blastdone(self, blast):
+    def blastdone(self, result):
         print("BLAST IS FINISHED!!!!!")
-        self.actionUniPROT.setEnabled(True)
+        print(result)
+        #self.actionUniPROT.setEnabled(True)
         #with open("/home/wolfey/devel/python/linnaeo/data/DNA28M6B014-Alignment.xml",'r') as xml:
         #    blast = xml
-
+        """
         E_VALUE_THRESH = 1e-20
         print(blast)
         for record in NCBIXML.parse(blast):
@@ -306,6 +310,7 @@ class Slots:
                         if hsp.expect < E_VALUE_THRESH:
                             print("match: %s " % align.title[:100])
 
+        """
 
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:

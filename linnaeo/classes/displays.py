@@ -174,27 +174,18 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         """
         try:
             self.last = None
-
             if not self.showColors:
                 color = False
             if not self.showRuler:
                 rulers = False
-            # Calculate font and window metrics
-
             charpx = self.fmF.averageCharWidth()
-            #self.rulerPane.resize(4 * charpx + 3, self.rulerPane.size().height())
             self.rulerPane.size().setWidth(4 * charpx + 3)
             width = self.alignPane.size().width()
             print(width)
             char_count = int(width / charpx - 40 / charpx)
-            #print("CHAR_COUNT:", char_count)
             if self.rulerPane.verticalScrollBar().isVisible():
                 self.rulerPane.resize(int(4 * charpx + 3 + (self.rulerPane.verticalScrollBar().size().width())),
                                       self.rulerPane.size().height())
-                #print("RULER", self.rulerPane.size().width())
-                # char_count = int(width / charpx - 20 / charpx - \
-                #                 self.alignPane.verticalScrollBar().size().width() / charpx)
-                # This is for saving the scroll position
                 sb = self.rulerPane.verticalScrollBar()
                 self.last = self.rulerPane.verticalScrollBar().sliderPosition() / (
                             self.rulerPane.verticalScrollBar().maximum() -
@@ -234,10 +225,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     rulerHtml.append(label + "\n")
             rulerHtml.append('</pre>')
             self.rulerPane.setHtml(style + "".join(rulerHtml))
-
             if self.rulerPane.verticalScrollBar().isVisible():
                 if self.last:
-                    #print("RETURNING TO POSITION")
                     self.rulerPane.verticalScrollBar().setSliderPosition(int(round(((self.rulerPane.verticalScrollBar().maximum() -
                                                                             self.rulerPane.verticalScrollBar().minimum()) *
                                                                            self.last))))
@@ -344,8 +333,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         name = self.splitNames[target[0]]
         resi = self.splitSeqs[target[0]][target[2]]
         self.comments[target[2]] = "COMMENT"
-
-        print(self.comments)
         self.seqInit()
         self.seqArrange()
         self.commentPane.lineEdit.setText(str(name) + " " + str(resi))

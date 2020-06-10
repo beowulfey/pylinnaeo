@@ -1,12 +1,16 @@
+import json
 import logging
 import re
 import sys
 import traceback
+import urllib
 from io import StringIO
 from math import floor, trunc
 from typing import TextIO
 
 import numpy
+from Bio import PDB
+from bioservices import UniProt
 from Bio.Blast import NCBIWWW, NCBIXML
 from Bio.PDB import FastMMCIFParser, DSSP, PDBIO
 from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryDir, QTemporaryFile
@@ -54,7 +58,7 @@ def redrawBasic(seqs, chars, lines, rulers=False):
         if line == lines - 1:
             end = start + len(seqs[0][start:])
         for i in range(len(seqs)):
-            html.append("".join([x[0][-8] for x in seqs[i][start:end]]))#+"\n")
+            html.append("".join([x[0][-8] for x in seqs[i][start:end]]))
             if line == lines-1:
                 label = str(seqs[i][end - 1][1])
                 if label == "0":
@@ -73,7 +77,10 @@ def redrawBasic(seqs, chars, lines, rulers=False):
 
 
 def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
-    """ Fancy like the name implies. Called at the end of resize events. Keeps your opinion on colors and rulers. """
+    """
+    Fancy like the name implies. Called at the end of resize events. Keeps your opinion on colors and rulers.
+    Keeps a lot of whitespace because the tooltip and calculation of the residue ID depends on certain whitespace.
+    """
     html = ["<pre>"]
     n = 0
     for line in range(lines):
@@ -100,7 +107,7 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
                 html.append(" "*2 + label + "&nbsp;"*(chars-(end-start)-(len(label)+2))+"\n")
             else:
                 html.append("\n")
-        if line < lines -1:
+        if line < lines - 1:
             html.append(" "*chars+"\n")
         n += 1
     html.append("</pre>")
@@ -224,11 +231,11 @@ def nodeSelector(tree, model):
                 seqs.append(seqr)
     return indices, seqs
 
-
-
+"""
 def buildRuler2(chars,gap,start,end,interval=False):
+    Kept this for legacy reasons but I don't like the effect 
     # TODO: Consider putting numbers at left and right, as in normal alignments. Particularly if also showing SS.
-    """ This version uses even spacing of the numbers (either 10 or 20 depending on screen width) but looks messy. """
+    This version uses even spacing of the numbers (either 10 or 20 depending on screen width) but looks messy. 
     ruler = None
     if interval:
         if start != end:
@@ -274,11 +281,11 @@ def buildRuler2(chars,gap,start,end,interval=False):
             ruler = "".join(rulel)
     else:
         # TODO: THIS IS BUGGY. ADD UNDERLINES. HAVE ALL ALIGNED (NOT ALL BUT LAST LINE)
-        """
-        This version is cleaner but the numbers end up with random numbers. Calculates the spacing
-        and labeling based on the width of the screen. Pretty computationally intensive,
-        so I make a point to hide it (and the colors) when resizing.
-        """
+        
+        #This version is cleaner but the numbers end up with random numbers. Calculates the spacing
+        #and labeling based on the width of the screen. Pretty computationally intensive,
+        #so I make a point to hide it (and the colors) when resizing.
+        
         if start != end:
             if gap != 0 and chars != end-start:
                 # Have to adjust the spacing for the last line
@@ -307,7 +314,7 @@ def buildRuler2(chars,gap,start,end,interval=False):
             rulerlist = []
             # spec labels are the numbers that are actually used based on the spacing.
 
-            """while n < chars:
+            while n < chars:
                 speclabels.append(labels[n])
                 n+=spacing
             if labels[-1] not in speclabels:
@@ -340,8 +347,51 @@ def buildRuler2(chars,gap,start,end,interval=False):
                 ruler = str(start + 1) + " " * (chars - len(str(start + 1)) - len(str(end))) + str(end)
             else:
                 # Just show a single number.
-                ruler = str(start+1)"""
+                ruler = str(start+1)
     return ruler
+"""
+
+
+class GetPDBThread(QThread):
+    finished = pyqtSignal(str)
+
+    def __init__(self, pid, parent=None):
+        QThread.__init__(self, parent)
+        self.pid = pid
+        self.u = UniProt(verbose=True)
+
+    def run(self):
+        # TODO: parse JSON, pull down PDB. Use that to run DSSP.
+        # TODO: Should pop up modal if not confident in the structure results!
+        print("Trying with ID",self.pid)
+        uniID = self.u.search(self.pid, columns="id, genes, organism, protein names")
+        result = uniID.split("\n")
+        ids = []
+        for line in result[1:]:
+            ids.append(line.split("\t")[0])
+        structurl = "https://swissmodel.expasy.org/repository/uniprot/%s.json" % ids[1]
+        with urllib.request.urlopen(structurl) as url:
+            data = json.loads(url.read().decode())
+        print(data)
+        coordinates = None
+        if data['result']:
+            result = data['result']
+            if result['structures']:
+                structs = result['structures']
+                if structs[0]:
+                    struct0 = structs[0]
+                    if struct0['coordinates']:
+                        coordinates = struct0['coordinates']
+                        print("FOUND STRUCTURE")
+        if coordinates:
+            parser = PDB.PDBParser()
+            with urllib.request.urlopen(coordinates) as url:
+                myfile = url.read()
+                struct = parser.get_structure(ids[1], myfile)
+                print("STRUCTURE PARSED")
+                print(struct)
+        self.finished.emit(uniID)
+
 
 
 class BlastThread(QThread):
@@ -353,7 +403,6 @@ class BlastThread(QThread):
         self.result = None
 
     def run(self):
-
         print("BLASTING SEQUENCE: ", self.seq.format('fasta'))
         blast = NCBIWWW.qblast('blastp', 'refseq_protein', str(self.seq.format('fasta')))
         print("BLAST COMPLETE")
@@ -361,21 +410,30 @@ class BlastThread(QThread):
         print(type(blast))
         self.finished.emit(blast)
 
-        '''struct = self.args[0]
-        tmp = QTemporaryFile()
-        run = {}
-        if tmp.open():
-            io = PDBIO()
-            io.set_structure(struct)
-            io.save(tmp.fileName())
-            dssp = DSSP(struct[0], tmp.fileName(), dssp='mkdssp')
-            for key in dssp.keys():
-                run[dssp[key][0]] = dssp[key][2]
-            self.sstruct = run'''
 
 class DSSPThread(QThread):
+    """ Uses a stored PDB to calculate the secondary structure of a sequence using DSSP """
+    finished = pyqtSignal(dict)
+
     def __init__(self, args, parent=None):
         QThread.__init__(self, parent)
+        self.args = args
+        self.struct = self.args[0]
+        self.result = {}
+
+    def run(self):
+        tmp = QTemporaryFile()
+        result = {}
+        if tmp.open():
+            io = PDBIO()
+            io.set_structure(self.struct)
+            io.save(tmp.fileName())
+            dssp = DSSP(self.struct[0], tmp.fileName(), dssp='mkdssp')
+            for key in dssp.keys():
+                result[dssp[key][0]] = dssp[key][2]
+            self.result = result
+        self.finished.emit(result)
+
 
 class AlignThread(QThread):
     """
