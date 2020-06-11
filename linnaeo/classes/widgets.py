@@ -102,6 +102,9 @@ class MDISubWindow(QMdiSubWindow):
     def widget(self):
         return self._widget
 
+    def addStructure(self, dssp, seq):
+        self._widget.addStructure(dssp, seq)
+
     def show(self):
         self._widget.show()
         super(MDISubWindow, self).show()

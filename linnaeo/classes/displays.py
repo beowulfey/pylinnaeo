@@ -37,7 +37,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     nameChange = pyqtSignal((str, str))
     lineChange = pyqtSignal(int)
 
-    def __init__(self, seqs, params):
+    def __init__(self, seqs, params, dssps):
         super(self.__class__, self).__init__()
         self.done = False
         # Construct the window
@@ -59,6 +59,11 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.maxname = 0
         self.lines = 0
         self.comments = {}
+        self.dssps = []
+        self.showRuler = False
+        self.showColors = False
+        self.consvColors = False
+        self.showDSSP = True
 
         # Draw the window
         self.setupUi(self)
@@ -74,8 +79,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.commentAdded.connect(self.showCommentWindow)
 
         # Initialize settings
-        self.theme = self.convertTheme('Default')
+        self.theme = self.lookupTheme('Default')
         self.params = {}
+        self.dssps = dssps
         self.setParams(params)
 
         self.done = True
@@ -95,6 +101,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.alignPane.setFrameShadow(QFrame.Plain)
         self.rulerPane.setFrameShape(QFrame.NoFrame)
         self.namePane.setFrameShape(QFrame.NoFrame)
+        self.rulerPane.setCursorWidth(0)
         #self.namePane.setLineWidth(0)
         #self.alignPane.setLineWidth(0)
         #self.rulerPane.setLineWidth(0)
@@ -113,7 +120,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         First layer is SEQUENCE
         Second layer is SEQUENCE POSITION
         Third layer is RESIDUE and COLOR
-        so self.seq = [SEQ = [Position = [HTML Char/Color, ResID], ... ], ... ]
+        so self.seq = [SEQ = [Position = [HTML Char/Color, ResID, Dssp], ... ], ... ]
         """
         self.splitSeqs = []
         self.splitNames = []
@@ -135,6 +142,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 if char not in ["-", " "]:
                     count += 1
                     tcount = count
+                    dssp = None
                     color = self.theme[char]
                     if self.theme == themes.Comments().theme:
                         if i in self.comments.keys():
@@ -143,10 +151,16 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
                     char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (
                         color.name(), tcolor, char)
+                    try:
+                        dssp = self.dssps[i][tcount]
+                    except KeyError:
+                        dssp = '-'
+
                 else:
                     char = '<span style=\"background-color:#FFFFFF;\">' + seq[i] + "</span>"
                     tcount = 0
-                local.append([char, tcount])
+                    dssp = "-"
+                local.append([char, tcount, dssp])
             self.splitSeqs.append(local)
         self.alignPane.seqs = self.splitSeqs
 
@@ -235,7 +249,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     # UTILITY FUNCTIONS
     def setTheme(self, theme):
-        self.theme = self.convertTheme(theme)
+        self.theme = self.lookupTheme(theme)
         self.params['theme'] = theme
         self.seqInit()
         self.seqArrange()
@@ -302,31 +316,31 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.setFontSize(self.params['fontsize'])
         if self.font() != self.params['font']:
             self.setFont(self.params['font'])
-        newtheme = self.convertTheme(self.params['theme'])
+        newtheme = self.lookupTheme(self.params['theme'])
         if self.theme != newtheme:
             self.theme = newtheme
             if self.done:
                 self.seqInit()
                 self.seqArrange()
 
-    def convertTheme(self, theme):
+    def lookupTheme(self, theme):
         """ Converts the stored theme name into a class """
-        converted = themes.PaleByType().theme
+        match = themes.PaleByType().theme
         if theme == 'Default':
-            converted = themes.PaleByType().theme
+            match = themes.PaleByType().theme
         elif theme == 'Bold':
-            converted = themes.Bold().theme
+            match = themes.Bold().theme
         elif theme == 'Monochrome':
-            converted = themes.Mono().theme
+            match = themes.Mono().theme
         elif theme == 'ColorSafe':
-            converted = themes.ColorSafe().theme
+            match = themes.ColorSafe().theme
         elif theme == 'Rainbow':
-            converted = themes.Rainbow().theme
+            match = themes.Rainbow().theme
         elif theme == 'Grayscale':
-            converted = themes.Grayscale().theme
+            match = themes.Grayscale().theme
         elif theme == 'Annotations':
-            converted = themes.Comments().theme
-        return converted
+            match = themes.Comments().theme
+        return match
 
     def showCommentWindow(self, target):
         # TODO: shows for ALL rows!
@@ -338,6 +352,23 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.commentPane.lineEdit.setText(str(name) + " " + str(resi))
         # self.gridLayout.addWidget(self.commentButton,1,0)
         self.gridLayout.addWidget(self.commentPane, 1, 1)
+
+    def addStructure(self, dssp, seq):
+        """ Adds DSSP data to the SplitSeqs array. """
+        seqs = list(self._seqs.values())
+        if str(seq.seq) in seqs:
+            index = seqs.index(str(seq.seq))
+            for res in self.splitSeqs[index]:
+                if not res[2]:
+                    try:
+                        res[2] = dssp[res[1]]
+                    except KeyError:
+                        res[2] = "-"
+                else:
+                    print("Weird, got a duplicate at %s " % res[1])
+            print(self.splitSeqs[index])
+
+
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):

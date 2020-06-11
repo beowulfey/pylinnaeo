@@ -7,13 +7,16 @@ import urllib
 from io import StringIO
 from math import floor, trunc
 from typing import TextIO
+from urllib.error import HTTPError
 
 import numpy
 from Bio import PDB
+from Bio.SeqRecord import SeqRecord
+from PyQt5.QtGui import QStandardItem
 from bioservices import UniProt
 from Bio.Blast import NCBIWWW, NCBIXML
 from Bio.PDB import Structure, FastMMCIFParser, DSSP, PDBIO
-from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryDir, QTemporaryFile
+from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryDir, QTemporaryFile, QModelIndex
 import clustalo
 
 """
@@ -120,12 +123,14 @@ def buildRuler(chars, start, end):
         interval = chars
         if 25 <= chars <= 50:
             interval = int(chars / 2)
-        elif 50 < chars < 100:
+        elif 50 < chars <= 100:
             interval = int(chars / 3)
-        elif 100 <= chars < 150:
+        elif 100 < chars <= 150:
             interval = int(chars / 4)
-        elif 150 <= chars:
+        elif 150 < chars <= 250:
             interval = int(chars / 5)
+        elif 250 < chars:
+            interval = int(chars/6)
         labels = list(numpy.arange(start, end, interval))
         if len(labels) == 1:
             #    print(labels[0])
@@ -353,49 +358,103 @@ def buildRuler2(chars,gap,start,end,interval=False):
 
 
 class GetPDBThread(QThread):
-    finished = pyqtSignal(Structure.Structure)
+    """
+    Input is a tuple of [SeqRs],Indices. To keep it compatible, if this is being called from a different
+    method other than the button (like from , it will ignore the fact that
+    """
+    #finished = pyqtSignal((Structure.Structure, SeqRecord, QModelIndex))
+    finished = pyqtSignal(list)
 
-    def __init__(self, pid, parent=None):
+    def __init__(self, input, parent=None):
         QThread.__init__(self, parent)
-        self.pid = pid
-        self.u = UniProt(verbose=True)
+        self.seqs = input[0]
+        self.nodes = None if not input[1] else input[1]
+        self.u = UniProt(verbose=False)
+        self.PDBLogger = logging.getLogger("PDBSearch")
 
     def run(self):
-        # TODO: parse JSON, pull down PDB. Use that to run DSSP.
+        returned = []
         # TODO: Should pop up modal if not confident in the structure results!
-        print("Trying with ID",self.pid)
-        uniID = self.u.search(self.pid, columns="id, genes, organism, protein names")
-        result = uniID.split("\n")
-        ids = []
-        for line in result[1:]:
-            ids.append(line.split("\t")[0])
-        structurl = "https://swissmodel.expasy.org/repository/uniprot/%s.json" % ids[1]
-        with urllib.request.urlopen(structurl) as url:
-            data = json.loads(url.read().decode())
-        print(data)
-        coordinates = None
-        if data['result']:
-            result = data['result']
-            if result['structures']:
-                structs = result['structures']
-                if structs[0]:
-                    struct0 = structs[0]
-                    if struct0['coordinates']:
-                        coordinates = struct0['coordinates']
-                        print("FOUND STRUCTURE")
-        if coordinates:
-            parser = PDB.PDBParser()
-            tmp = QTemporaryFile()
-            with urllib.request.urlopen(coordinates) as url:
-                myfile = url.read()
-                if tmp.open():
-                    tmp.write(myfile)
-                    print(tmp.fileName())
-                    struct = parser.get_structure(ids[1], tmp.fileName())
-                    print("STRUCTURE PARSED")
-                    print(struct, type(struct))
-        self.finished.emit(struct)
+        index = None
+        for seq in self.seqs:
+            if self.nodes:
+                index = self.nodes[self.seqs.index(seq)]
+            pid = seq.id
+            struct = None
+            structseq = None
+            self.PDBLogger.info("Searching with ID %s" % pid)
+            uniID = self.u.search(pid, columns="id, genes, organism, protein names")
+            if uniID:
+                self.PDBLogger.info('Results!\n\n%s' % uniID)
+                result = uniID.split("\n")
+                ids = []
+                for line in result[1:]:
+                    ids.append(line.split("\t"))
+                coordinates = None
+                i = 0
+                while coordinates == None:
+                    self.PDBLogger.info('Attempting search with %s from %s' %  (ids[i][1], ids[i][2]) )
+                    structurl = "https://swissmodel.expasy.org/repository/uniprot/%s.json" % ids[i][0]
+                    self.PDBLogger.debug('Searching SwissModel repository: %s' % structurl)
+                    try:
+                        with urllib.request.urlopen(structurl) as url:
+                            data = json.loads(url.read().decode())
+                        if data['result']:
+                            #print("Data found")
+                            result = data['result']
+                            if result['structures']:
+                                #print("structures found")
+                                structs = result['structures']
+                                structseq = result['sequence']
+                                if structs[0]:
+                                    #print("accessing first model")
+                                    struct0 = structs[0]
+                                    if struct0['coordinates']:
+                                        coordinates = struct0['coordinates']
+                                        print("MODEL ACQUIRED")
+                                    else:
+                                        i += 1
+                                        continue
+                                else:
+                                    i += 1
+                                    continue
+                            else:
+                                i += 1
+                                continue
+                        elif i == len(ids):
+                            print("Sorry, no models found")
+                            break
+                        else:
+                            i += 1
+                            continue
+                    except HTTPError:
+                        break
 
+                if coordinates:
+                    offset = 0
+                    start = structseq[:7]
+                    print(start)
+                    for x in range(len(seq)):
+                        end = x + 7
+                        if str(seq.seq)[x:end] == start:
+                            print("Sequence offset is %s residues" % x)
+                            offset = x
+                    parser = PDB.PDBParser()
+                    tmp = QTemporaryFile()
+                    with urllib.request.urlopen(coordinates) as url:
+                        myfile = url.read()
+                        if tmp.open():
+                            tmp.write(myfile)
+                            struct = parser.get_structure(ids[1], tmp.fileName())
+                            print("STRUCTURE PARSED")
+                            #print(struct, type(struct))
+                            returned.append([struct, seq, index, offset])
+
+                else:
+                    print("Sorry, no models found!!!")
+            else:
+                print("NO STRUCTURE FOUND")
+            self.finished.emit(returned)
 
 
 class BlastThread(QThread):
@@ -417,12 +476,15 @@ class BlastThread(QThread):
 
 class DSSPThread(QThread):
     """ Uses a stored PDB to calculate the secondary structure of a sequence using DSSP """
-    finished = pyqtSignal(dict)
+    finished = pyqtSignal(list)
 
     def __init__(self, *args, parent=None):
         QThread.__init__(self, parent)
         self.args = args
-        self.struct = self.args[0]
+        self.struct = self.args[0][0]
+        self.seq = self.args[0][1]
+        self.node = self.args[0][2]
+        self.offset = self.args[0][3]
         self.result = {}
 
     def run(self):
@@ -434,9 +496,8 @@ class DSSPThread(QThread):
             io.save(tmp.fileName())
             dssp = DSSP(self.struct[0], tmp.fileName(), dssp='mkdssp')
             for key in dssp.keys():
-                result[dssp[key][0]] = dssp[key][2]
-            self.result = result
-        self.finished.emit(result)
+                result[dssp[key][0]+self.offset] = dssp[key][2]
+        self.finished.emit([result, self.seq, self.node])
 
 
 class AlignThread(QThread):

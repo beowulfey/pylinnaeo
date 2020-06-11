@@ -55,6 +55,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.localtime = 0
         self.SequenceRole = Qt.UserRole + 2
         self.WindowRole = Qt.UserRole + 3
+        self.StructureRole = Qt.UserRole + 4
         self.lastClickedTree = None
         self.lastAlignment = None
         self.windows = None  # Windows stored as { windex : MDISubWindow }
@@ -259,8 +260,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         node.setData([seqr], self.SequenceRole)
         node.setData(node.data(role=self.SequenceRole)[0].name)
         node.setData(wid, self.WindowRole)
-        #node.setData(copy.deepcopy(self.params.copy()), self.AlignDisplayRole)
+        node.setData({node.data(role=self.SequenceRole)[0].name:str(seqr.seq)},role=self.AlignRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
+        worker = utilities.GetPDBThread([seqr, [node.index()]], parent=self)
+        worker.finished.connect(self.pdbSearchDone)
+        worker.start()
         if not folder:
             self.bioModel.appendRow(node)
         else:
@@ -298,7 +302,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 items[seqr.name] = str(seqr.seq)
                 combo.append(seqr)
         else:
-            self.mainStatus.showMessage("Please selected sequences",msecs=3000)
+            self.mainStatus.showMessage("Please select sequences",msecs=3000)
         combo.sort()
         aligned = self.callAlign(items)
         if items:
@@ -538,7 +542,7 @@ class LinnaeoApp(QApplication):
         self.fonts = QFontDatabase()
         print(os.path)
         print(os.get_exec_path())
-        self.defFontId = self.fonts.addApplicationFont(':/fonts/noto-default.ttf')
+        self.defFontId = self.fonts.addApplicationFont(':/fonts/Default.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
         print("Fonts loaded: ",self.defFontId,self.defFontId2)
         self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)

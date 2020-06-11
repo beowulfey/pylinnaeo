@@ -135,9 +135,11 @@ class Slots:
         if afilter == "*.fasta":
             stype = 'fasta'
         for filename in filenames:
+            print(filename)
             try:
                 with open(filename, 'r'):
-                    seq = SeqIO.read(filename, type)
+                    seq = SeqIO.read(filename, stype)
+                    print(seq)
                     seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
                     print([seqr.seq])
                     if [seqr.seq] not in self.sequences.values():
@@ -281,44 +283,34 @@ class Slots:
     def get_UniprotId(self):
         if self.lastClickedTree == self.bioTree:
             indices, seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
-            for i in range(len(seqs)):
-                worker = utilities.GetPDBThread(seqs[i].id, parent=self)
-                worker.finished.connect(self.pdbSearchDone)
-                worker.start()
-                """seq = seqs[i].format('fasta')
-                worker = utilities.BlastThread(seq, self)
-                worker.finished.connect(self.blastdone)
-                self.actionUniPROT.setDisabled(True)
-                worker.start()"""
+
+            print("Calling UNIPROT search")
+            worker = utilities.GetPDBThread([seqs, indices], parent=self)
+            worker.finished.connect(self.pdbSearchDone)
+            worker.start()
+
 
     def pdbSearchDone(self, result):
-        print("BLAST IS FINISHED!!!!!")
         if result:
-            print(result)
-        worker = utilities.DSSPThread(result, parent=self)
-        worker.finished.connect(self.ssDone)
-        worker.start()
-        #self.actionUniPROT.setEnabled(True)
-        #with open("/home/wolfey/devel/python/linnaeo/data/DNA28M6B014-Alignment.xml",'r') as xml:
-        #    blast = xml
+            self.mainLogger.info('Successfully collected PDB from SwissModel repository')
+            for match in result:
+                worker = utilities.DSSPThread(match, parent=self)
+                worker.finished.connect(self.ssDone)
+                self.mainLogger.debug('Fowarding structure to DSSP')
+                worker.start()
+        else:
+            self.mainStatus.showMessage('Sorry, no models found for that query! Please manually edit the \
+            search by right clicking the node! ', msecs=5000)
         
     def ssDone(self, result):
         print("DSSP FINISHED")
-        print(result)
-        """
-        E_VALUE_THRESH = 1e-20
-        print(blast)
-        for record in NCBIXML.parse(blast):
-            print(record)
-            if record.alignments:
-                print("\n")
-                print("query: %s" % record.query[:100])
-                for align in record.alignments:
-                    for hsp in align.hsps:
-                        if hsp.expect < E_VALUE_THRESH:
-                            print("match: %s " % align.title[:100])
+        if result[2]:
+            node = self.bioModel.itemFromIndex(result[2])
+            node.setData(result[0], role=self.StructureRole)
+            if node.data(role=self.WindowRole):
+                sub = self.windows[node.data(role=self.WindowRole)]
+                sub.addStructure(result[0], result[1])
 
-        """
 
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:
@@ -366,7 +358,7 @@ class Slots:
                             bars.append(index)
                     if len(bars) > 0:
                         sid = nline[bars[0] + 1:bars[1]]
-                        self.mainLogger.debug("Extracted ID for sequence: ", sid)
+                        self.mainLogger.debug("Extracted ID for sequence: %s" % sid)
                         desc = nline[bars[1] + 1:]
                     elif not sid:
                         sid = nline[1:9]
@@ -469,8 +461,8 @@ class Debug:
                  'AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH' +
                  'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1A = MutableSeq(test1[1], generic_protein)
-        gpi1a = models.SeqR(seq_GPI1A, id=test1[0], name=test1[0])
-        gpi1a.id = test1[0]
+        gpi1a = models.SeqR(seq_GPI1A, id='Q7K707', name=test1[0])
+        #gpi1a.id = test1[0]
         test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE' +
                  'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG' +
                  'VEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKE' +
@@ -483,7 +475,7 @@ class Debug:
                  'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL' +
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = MutableSeq(test2[1], generic_protein)
-        gpi1b = models.SeqR(seq_GPI1B, id=test2[0], name=test2[0])
+        gpi1b = models.SeqR(seq_GPI1B, id='Q9U1Q2', name=test2[0])
         test = [gpi1a, gpi1b]
         for i in test:
             self.seqInit(i)
