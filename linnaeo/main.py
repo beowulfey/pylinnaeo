@@ -260,11 +260,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         node.setData([seqr], self.SequenceRole)
         node.setData(node.data(role=self.SequenceRole)[0].name)
         node.setData(wid, self.WindowRole)
-        node.setData({node.data(role=self.SequenceRole)[0].name:str(seqr.seq)},role=self.AlignRole)
         node.setFlags(node.flags() ^ Qt.ItemIsDropEnabled)
-        worker = utilities.GetPDBThread([seqr, [node.index()]], parent=self)
-        worker.finished.connect(self.pdbSearchDone)
-        worker.start()
         if not folder:
             self.bioModel.appendRow(node)
         else:

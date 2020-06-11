@@ -308,8 +308,11 @@ class Slots:
             node = self.bioModel.itemFromIndex(result[2])
             node.setData(result[0], role=self.StructureRole)
             if node.data(role=self.WindowRole):
-                sub = self.windows[node.data(role=self.WindowRole)]
-                sub.addStructure(result[0], result[1])
+                try:
+                    sub = self.windows[node.data(role=self.WindowRole)]
+                    sub.addStructure(result[0], result[1])
+                except KeyError:
+                    self.mainStatus.showMessage("Please open the sequence first!", msecs=3000)
 
 
     def copyOut(self):

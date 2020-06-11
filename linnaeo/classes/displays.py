@@ -37,7 +37,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     nameChange = pyqtSignal((str, str))
     lineChange = pyqtSignal(int)
 
-    def __init__(self, seqs, params, dssps):
+    def __init__(self, seqs, params):
         super(self.__class__, self).__init__()
         self.done = False
         # Construct the window
@@ -50,6 +50,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # Init functional variables
         self.fmF = None
         self._seqs = seqs
+        self.dssps = {}
         self.splitNames = []
         self.splitSeqs = []
         self.userIsResizing = False
@@ -59,7 +60,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.maxname = 0
         self.lines = 0
         self.comments = {}
-        self.dssps = []
         self.showRuler = False
         self.showColors = False
         self.consvColors = False
@@ -81,7 +81,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # Initialize settings
         self.theme = self.lookupTheme('Default')
         self.params = {}
-        self.dssps = dssps
         self.setParams(params)
 
         self.done = True
@@ -151,11 +150,15 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
                     char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (
                         color.name(), tcolor, char)
-                    try:
-                        dssp = self.dssps[i][tcount]
-                    except KeyError:
-                        dssp = '-'
-
+                    if self.dssps:
+                        index = list(self._seqs.values()).index(seq)
+                        try:
+                            print("adding dssp")
+                            dssp = self.dssps[index][tcount]
+                        except KeyError:
+                            dssp = '-'
+                    else:
+                        dssp = None
                 else:
                     char = '<span style=\"background-color:#FFFFFF;\">' + seq[i] + "</span>"
                     tcount = 0
@@ -358,6 +361,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         seqs = list(self._seqs.values())
         if str(seq.seq) in seqs:
             index = seqs.index(str(seq.seq))
+            self.dssps[index]=dssp
             for res in self.splitSeqs[index]:
                 if not res[2]:
                     try:
