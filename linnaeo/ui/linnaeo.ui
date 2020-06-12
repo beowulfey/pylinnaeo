@@ -185,7 +185,7 @@
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
    <addaction name="actionSave_Image"/>
-   <addaction name="actionUniPROT"/>
+   <addaction name="actionDSSP"/>
   </widget>
   <action name="actionAlign">
    <property name="text">
@@ -389,9 +389,15 @@
     <string>Open window settings pane</string>
    </property>
   </action>
-  <action name="actionUniPROT">
+  <action name="actionDSSP">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>UniPROT</string>
+    <string>Run DSSP</string>
+   </property>
+   <property name="toolTip">
+    <string>Get secondary structure for selected sequence. </string>
    </property>
   </action>
  </widget>

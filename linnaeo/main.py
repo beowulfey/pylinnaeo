@@ -235,7 +235,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
         self.mdiArea.subWindowActivated.connect(self.refreshParams)
-        self.actionUniPROT.triggered.connect(self.get_UniprotId)
+        self.actionDSSP.triggered.connect(self.get_UniprotId)
         #self.actionBigger.triggered.connect(self.increaseTextSize)
         #self.actionSmaller.triggered.connect(self.decreaseTextSize)
 
@@ -373,7 +373,16 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             else:
                 seqrs = []
                 for key, value in ali.items():
-                    seqr = models.SeqR(Seq(value, generic_protein), name=key, id=key)
+                    for stored_seq in self.sequences.values():
+                        if str(value).strip('-') == str(stored_seq[0].seq):
+                            print("USING ORIGINAL ID", stored_seq[0].id)
+                            sid = stored_seq[0].id
+                            break
+                        else:
+                            print("USING NAME", key)
+                            sid = key
+                    print("Adding sequence to alignment: ", key, sid)
+                    seqr = models.SeqR(Seq(value, generic_protein), name=key, id=sid)
                     seqrs.append(seqr)
                 aliR = MultipleSeqAlignment(seqrs)
                 node = QStandardItem(sub.windowTitle())
@@ -474,14 +483,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     def deselectProject(self):
         """Function to unselect the opposite tree when clicked. Prevents confusion when pasting"""
         self.projectTree.clearSelection()
-        self.actionUniPROT.setEnabled(True)
+        #self.actionDSSP.setEnabled(True)
         # TODO: Add more to clarify features here!
         self.lastClickedTree = self.bioTree
 
     def deselectSeqs(self):
         """Function to unselect the opposite tree when clicked. Prevents confusion when pasting"""
         self.bioTree.clearSelection()
-        self.actionUniPROT.setDisabled(True)
+        #self.actionDSSP.setDisabled(True)
         self.lastClickedTree = self.projectTree
 
     def preNameChange(self):

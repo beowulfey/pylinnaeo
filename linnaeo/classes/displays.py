@@ -306,6 +306,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.nameArrange(self.lines)
 
     def setFont(self, font):
+        # TODO: Turn off secondary structure if the font size is too different from default font.
         # Choosing a new font has a built in size, which is annoying
 
         if font.family() != self.font().family() and font.pointSize() != self.font().pointSize():

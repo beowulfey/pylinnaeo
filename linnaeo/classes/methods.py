@@ -32,10 +32,11 @@ class Slots:
 
     def setCurrentWindow(self):
         self._currentWindow = self.mdiArea.activeSubWindow()
-        if self._currentWindow.widget().dssps:
-            self.optionsPane.structureActivate(True)
-        elif not self._currentWindow.widget().dssps:
-            self.optionsPane.structureActivate(False)
+        if self._currentWindow:
+            if self._currentWindow.widget().dssps:
+                self.optionsPane.structureActivate(True)
+            elif not self._currentWindow.widget().dssps:
+                self.optionsPane.structureActivate(False)
 
     def showAbout(self):
         qDialog = AboutDialog(self)
@@ -292,13 +293,36 @@ class Slots:
             return False
 
     def get_UniprotId(self):
-        if self.lastClickedTree == self.bioTree:
-            indices, seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
+        if self._currentWindow:
+            found = False
+            wid = self._currentWindow.wid
+            for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
+                if node.data(self.WindowRole) == wid:
+                    print("Calling UNIPROT search")
+                    worker = utilities.GetPDBThread([node.data(role=self.SequenceRole), [node.index()]], parent=self)
+                    worker.finished.connect(self.pdbSearchDone)
+                    worker.start()
+                    found = True
+            if not found:
+                for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
+                    if node.data(self.WindowRole) == wid:
+                        print("Calling UNIPROT search")
+                        seqs = []
+                        # ONLY RUN ON THE TOP SEQUENCE FOR NOW
+                        for x in node.data(role=self.SequenceRole):
+                            seqs.append(x)
+                        worker = utilities.GetPDBThread([[seqs[0]], [node.index()]],
+                                                        parent=self)
+                        worker.finished.connect(self.pdbSearchDone)
+                        worker.start()
 
-            print("Calling UNIPROT search")
-            worker = utilities.GetPDBThread([seqs, indices], parent=self)
-            worker.finished.connect(self.pdbSearchDone)
-            worker.start()
+        #if self.lastClickedTree == self.bioTree:
+        #    indices, seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
+
+
+            #worker = utilities.GetPDBThread([seqs, indices], parent=self)
+            #worker.finished.connect(self.pdbSearchDone)
+            #worker.start()
 
 
     def pdbSearchDone(self, result):
@@ -317,6 +341,8 @@ class Slots:
         print("DSSP FINISHED")
         if result[2]:
             node = self.bioModel.itemFromIndex(result[2])
+            if not node:
+                node = self.projectModel.itemFromIndex(result[2])
             node.setData(result[0], role=self.StructureRole)
             if node.data(role=self.WindowRole):
                 try:
