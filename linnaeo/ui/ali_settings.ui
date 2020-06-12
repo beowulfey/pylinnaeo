@@ -42,6 +42,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="checkRuler">
+     <property name="toolTip">
+      <string>Show horizontal ruler</string>
+     </property>
      <property name="text">
       <string>Show ruler</string>
      </property>
@@ -49,8 +52,27 @@
    </item>
    <item>
     <widget class="QCheckBox" name="checkColors">
+     <property name="toolTip">
+      <string>Show alignment colors</string>
+     </property>
      <property name="text">
       <string>Show colors</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkStructure">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+     <property name="toolTip">
+      <string>Show structure information calculated by DSSP</string>
+     </property>
+     <property name="text">
+      <string>Show structure</string>
      </property>
     </widget>
    </item>
@@ -76,6 +98,9 @@
    </item>
    <item>
     <widget class="QComboBox" name="comboTheme">
+     <property name="toolTip">
+      <string>Choose color theme for alignment</string>
+     </property>
      <property name="currentText">
       <string>Default</string>
      </property>
@@ -121,6 +146,9 @@
      <property name="enabled">
       <bool>false</bool>
      </property>
+     <property name="toolTip">
+      <string>Color only conserved residues</string>
+     </property>
      <property name="text">
       <string>By conservation</string>
      </property>
@@ -130,6 +158,9 @@
     <widget class="QCheckBox" name="checkColorDesc">
      <property name="enabled">
       <bool>false</bool>
+     </property>
+     <property name="toolTip">
+      <string>Display color explanation</string>
      </property>
      <property name="text">
       <string>Color meanings</string>
@@ -150,6 +181,9 @@
        <family>Liberation Mono</family>
       </font>
      </property>
+     <property name="toolTip">
+      <string>Choose font for the alignment window</string>
+     </property>
      <property name="writingSystem">
       <enum>QFontDatabase::Latin</enum>
      </property>
@@ -166,7 +200,11 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QSpinBox" name="spinFontSize"/>
+      <widget class="QSpinBox" name="spinFontSize">
+       <property name="toolTip">
+        <string>Choose font size for the alignment window</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_4">
@@ -204,6 +242,11 @@
     </spacer>
    </item>
   </layout>
+  <action name="actionRunDSSP">
+   <property name="text">
+    <string>Run DSSP</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

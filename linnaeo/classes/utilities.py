@@ -40,11 +40,12 @@ class SeqThread(QThread):
         self.lines = args[2]
         self.rulers = args[3]
         self.colors = args[4]
+        self.dssp = args[5]
         self.fancy = fancy
 
     def run(self):
         if self.fancy:
-            self.html = redrawFancy(self.seqs, self.chars, self.lines, self.rulers, self.colors)
+            self.html = redrawFancy(self.seqs, self.chars, self.lines, self.rulers, self.colors, self.dssp)
         else:
             self.html = redrawBasic(self.seqs, self.chars, self.lines, self.rulers)
 
@@ -79,7 +80,7 @@ def redrawBasic(seqs, chars, lines, rulers=False):
     return "".join(html)
 
 
-def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
+def redrawFancy(seqs, chars, lines, rulers=True, colors=True, dssp=True):
     """
     Fancy like the name implies. Called at the end of resize events. Keeps your opinion on colors and rulers.
     Keeps a lot of whitespace because the tooltip and calculation of the residue ID depends on certain whitespace.
@@ -93,6 +94,12 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
             # If there is a horizontal ruler, build the ruler and thread it in.
             html.append(str(buildRuler(chars, start, end))+"\n")
         for i in range(len(seqs)):
+            if dssp and i == 0:
+                # TODO Make this show the nicer symbols.
+                html.append("".join([x[2] if x[2] else "&nbsp;" for x in seqs[i][start:end]]))
+                if line == lines-1:
+                    html.append("&nbsp;"*(chars-(end-start)))
+                html.append("\n")
             if colors:
                 # The whole thing has the HTML color as well
                 html.append("".join([x[0] for x in seqs[i][start:end]]))
@@ -107,7 +114,7 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True):
                         label = str(seqs[i][end - 1 - y][1])
                         if label != "0":
                             break
-                html.append(" "*2 + label + "&nbsp;"*(chars-(end-start)-(len(label)+2))+"\n")
+                html.append("&nbsp;"*2 + label + "&nbsp;"*(chars-(end-start)-(len(label)+2))+"\n")
             else:
                 html.append("\n")
         if line < lines - 1:

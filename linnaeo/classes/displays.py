@@ -183,7 +183,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         names.append("</pre>")
         self.namePane.setHtml("".join(names))
 
-    def seqArrange(self, color=True, rulers=True):
+    def seqArrange(self, color=True, rulers=True, dssp=True):
         """
         The bread and butter. This fires upon creation and any resizing event. Computing the resize is done
         in a separate thread to help with smoothness; showing color and rulers is still very slow though. Resize events
@@ -195,6 +195,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 color = False
             if not self.showRuler:
                 rulers = False
+            if not self.showDSSP:
+                dssp = False
             charpx = self.fmF.averageCharWidth()
             self.rulerPane.size().setWidth(4 * charpx + 3)
             width = self.alignPane.size().width()
@@ -216,7 +218,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.alignPane.names = self.splitNames
             self.alignPane.clear()
             fancy = False if self.userIsResizing else True
-            worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, fancy=fancy, parent=self, )
+            worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, dssp, fancy=fancy, parent=self, )
             worker.start()
             worker.wait()
             style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (
@@ -227,7 +229,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             rulerHtml = ["<pre style=\"font-family:%s; font-size:%spt; text-align: left;\">" %
                          (self.font().family(),self.font().pointSize())]
             for x in range(self.lines):
-                exline = "\n\n" if self.showRuler else "\n"
+                if self.showRuler and self.showDSSP:
+                    exline = "\n\n\n"
+                elif self.showRuler or self.showDSSP:
+                    exline = "\n\n"
+                else:
+                    exline = "\n"
+                #exline = "\n\n" if self.showRuler else "\n"
                 rulerHtml.append(exline)
                 for i in range(len(self.splitSeqs)):
                     try:

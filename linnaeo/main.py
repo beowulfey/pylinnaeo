@@ -233,6 +233,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)
         #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
+        self.mdiArea.subWindowActivated.connect(self.refreshParams)
         self.actionUniPROT.triggered.connect(self.get_UniprotId)
         #self.actionBigger.triggered.connect(self.increaseTextSize)
         #self.actionSmaller.triggered.connect(self.decreaseTextSize)

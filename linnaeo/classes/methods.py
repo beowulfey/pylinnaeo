@@ -72,13 +72,10 @@ class Slots:
         #    print("Skipping font set")
 
     def changeFontSize(self, size):
-        print(size)
         self._currentWindow.widget().setFontSize(size)
 
-    #def refreshParams(self, window):
-    #    print("SUBWINDOW CHANGED")
-    #    print(self.optionsPane.params)
-    #    window.widget().setParams(self.optionsPane.params)
+    def refreshParams(self, window):
+        window.widget().setParams(self.optionsPane.params)
 
     def newWorkspace(self):
         result = self.maybeClose()
