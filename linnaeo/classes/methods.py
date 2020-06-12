@@ -32,30 +32,43 @@ class Slots:
 
     def setCurrentWindow(self):
         self._currentWindow = self.mdiArea.activeSubWindow()
+        if self._currentWindow.widget().dssps:
+            self.optionsPane.structureActivate(True)
+        elif not self._currentWindow.widget().dssps:
+            self.optionsPane.structureActivate(False)
 
     def showAbout(self):
         qDialog = AboutDialog(self)
         qDialog.exec()
 
     def saveImage(self):
-        self._currentWindow.widget().grab()  # TODO The first time this runs it redraws the window, but never after...
-        w = self._currentWindow.widget().alignPane.size().width()
-        sw = self._currentWindow.widget().alignPane.verticalScrollBar().size().width()
-        self._currentWindow.widget().alignPane.verticalScrollBar().hide()
-        self._currentWindow.widget().alignPane.size().setWidth(int(w - sw))
-        file = QFileDialog.getSaveFileName(self, "Save as...", "name",
-                                           "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)")
-        self._currentWindow.widget().grab().save(file[0] + file[1][-5:-1])
-        self._currentWindow.widget().alignPane.verticalScrollBar().show()
+        if self._currentWindow:
+            self._currentWindow.widget().grab()  # TODO The first time this runs it redraws the window, but never after...
+            w = self._currentWindow.widget().alignPane.size().width()
+            sw = self._currentWindow.widget().alignPane.verticalScrollBar().size().width()
+            self._currentWindow.widget().alignPane.verticalScrollBar().hide()
+            self._currentWindow.widget().alignPane.size().setWidth(int(w - sw))
+            file = QFileDialog.getSaveFileName(self, "Save as...", "name",
+                                               "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)")
+            self._currentWindow.widget().grab().save(file[0] + file[1][-5:-1])
+            self._currentWindow.widget().alignPane.verticalScrollBar().show()
 
     def toggleOptionsPane(self, state):
         self.optionsPane.show() if state else self.optionsPane.hide()
 
     def toggleRuler(self, state):
-        self._currentWindow.widget().toggleRuler(state)
+        if self._currentWindow:
+            self._currentWindow.widget().toggleRuler(state)
 
     def toggleColors(self, state):
-        self._currentWindow.widget().toggleColors(state)
+        if self._currentWindow:
+            self._currentWindow.widget().toggleColors(state)
+
+    def toggleStructure(self, state):
+        print('Structure toggled, sending to window')
+        if self._currentWindow:
+            print("UPDATING STRUCTURE OF WINDOW", state)
+            self._currentWindow.widget().toggleStructure(bool(state))
 
     def changeTheme(self):
         #try
@@ -72,7 +85,8 @@ class Slots:
         #    print("Skipping font set")
 
     def changeFontSize(self, size):
-        self._currentWindow.widget().setFontSize(size)
+        if self._currentWindow:
+            self._currentWindow.widget().setFontSize(size)
 
     def refreshParams(self, window):
         window.widget().setParams(self.optionsPane.params)
@@ -308,6 +322,9 @@ class Slots:
                 try:
                     sub = self.windows[node.data(role=self.WindowRole)]
                     sub.addStructure(result[0], result[1])
+                    if sub == self._currentWindow:
+
+                        self.optionsPane.structureActivate(True)
                 except KeyError:
                     self.mainStatus.showMessage("Please open the sequence first!", msecs=3000)
 

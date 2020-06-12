@@ -107,7 +107,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.default_params = {'ruler': True, 'colors': True, 'fontsize': 10,
                        'theme': 'Default', 'font': qApp.instance().defFont,
                        'byconsv': False, 'tabbed': False,
-                       'darkmode': False,
+                       'darkmode': False, 'dssp': False,
                        }
         self.params = self.default_params.copy()
         print(self.params['font'].family())
@@ -229,6 +229,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.optionsPane.comboTheme.currentIndexChanged.connect(self.changeTheme)
         self.optionsPane.comboFont.currentFontChanged.connect(self.changeFont)
         self.optionsPane.spinFontSize.valueChanged.connect(self.changeFontSize)
+        self.optionsPane.checkStructure.toggled.connect(self.toggleStructure)
         #self.mdiArea.refreshParams.connect(self.refreshParams)
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)
         #self.activeResize.connect(self.drawSimple)

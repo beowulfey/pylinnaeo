@@ -87,7 +87,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.seqInit()
 
     def setupCustomUi(self):
-        #self.rulerPane.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        # self.rulerPane.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.rulerPane.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.namePane.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding))
@@ -101,9 +101,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.rulerPane.setFrameShape(QFrame.NoFrame)
         self.namePane.setFrameShape(QFrame.NoFrame)
         self.rulerPane.setCursorWidth(0)
-        #self.namePane.setLineWidth(0)
-        #self.alignPane.setLineWidth(0)
-        #self.rulerPane.setLineWidth(0)
+        # self.namePane.setLineWidth(0)
+        # self.alignPane.setLineWidth(0)
+        # self.rulerPane.setLineWidth(0)
         self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; background-color: \
                                              rgb(255,255,255)}")
         self.namePane.setStyleSheet("QTextEdit {padding-top:1px;background-color:\
@@ -145,7 +145,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     color = self.theme[char]
                     if self.theme == themes.Comments().theme:
                         if i in self.comments.keys():
-                            print(self.comments[i])
+                            # print(self.comments[i])
                             color = QColor(Qt.yellow)
                     tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
                     char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (
@@ -153,7 +153,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     if self.dssps:
                         index = list(self._seqs.values()).index(seq)
                         try:
-                            print("adding dssp")
+                            # print("adding dssp")
                             dssp = self.dssps[index][tcount]
                         except KeyError:
                             dssp = '-'
@@ -177,6 +177,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         for line in range(lines):
             if self.showRuler:
                 names.append("\n")
+            if self.showDSSP:
+                names.append("\n")
             for i in range(len(self.splitNames)):
                 names.append(self.splitNames[i] + "\n")
             names.append("\n")
@@ -196,19 +198,19 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             if not self.showRuler:
                 rulers = False
             if not self.showDSSP:
+                print("Drawing with no DSSP")
                 dssp = False
             charpx = self.fmF.averageCharWidth()
             self.rulerPane.size().setWidth(4 * charpx + 3)
             width = self.alignPane.size().width()
-            print(width)
             char_count = int(width / charpx - 40 / charpx)
             if self.rulerPane.verticalScrollBar().isVisible():
                 self.rulerPane.resize(int(4 * charpx + 3 + (self.rulerPane.verticalScrollBar().size().width())),
                                       self.rulerPane.size().height())
                 sb = self.rulerPane.verticalScrollBar()
                 self.last = self.rulerPane.verticalScrollBar().sliderPosition() / (
-                            self.rulerPane.verticalScrollBar().maximum() -
-                            self.rulerPane.verticalScrollBar().minimum())
+                        self.rulerPane.verticalScrollBar().maximum() -
+                        self.rulerPane.verticalScrollBar().minimum())
             lines = int(self.maxlen / char_count) + 1
             if lines != self.lines:
                 self.lineChange.emit(lines)
@@ -218,7 +220,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.alignPane.names = self.splitNames
             self.alignPane.clear()
             fancy = False if self.userIsResizing else True
-            worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, dssp, fancy=fancy, parent=self, )
+            print("Sending seq with dssp:", dssp)
+            worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, dssp, fancy=fancy,
+                                         parent=self, )
             worker.start()
             worker.wait()
             style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (
@@ -227,7 +231,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             # RULER CALCULATION --> SIDE PANEL.
             self.rulerPane.clear()
             rulerHtml = ["<pre style=\"font-family:%s; font-size:%spt; text-align: left;\">" %
-                         (self.font().family(),self.font().pointSize())]
+                         (self.font().family(), self.font().pointSize())]
             for x in range(self.lines):
                 if self.showRuler and self.showDSSP:
                     exline = "\n\n\n"
@@ -235,7 +239,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     exline = "\n\n"
                 else:
                     exline = "\n"
-                #exline = "\n\n" if self.showRuler else "\n"
+                # exline = "\n\n" if self.showRuler else "\n"
                 rulerHtml.append(exline)
                 for i in range(len(self.splitSeqs)):
                     try:
@@ -252,9 +256,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.rulerPane.setHtml(style + "".join(rulerHtml))
             if self.rulerPane.verticalScrollBar().isVisible():
                 if self.last:
-                    self.rulerPane.verticalScrollBar().setSliderPosition(int(round(((self.rulerPane.verticalScrollBar().maximum() -
-                                                                            self.rulerPane.verticalScrollBar().minimum()) *
-                                                                           self.last))))
+                    self.rulerPane.verticalScrollBar().setSliderPosition(
+                        int(round(((self.rulerPane.verticalScrollBar().maximum() -
+                                    self.rulerPane.verticalScrollBar().minimum()) *
+                                   self.last))))
         except ZeroDivisionError:
             self.alignLogger.info("Font returned zero char width. Please choose a different font")
 
@@ -274,6 +279,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def toggleColors(self, state):
         self.showColors = state
         self.params['colors'] = state
+        self.seqArrange()
+
+    def toggleStructure(self, state):
+        print("In alignment", state)
+        self.params['dssp'] = state
+        self.showDSSP = state
+        self.nameArrange(self.lines)
         self.seqArrange()
 
     def seqs(self):
@@ -316,12 +328,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.setFont(font)
 
     def setParams(self, params):
-        # print("UPDATING VALUES")
-        self.params = params
+        print("UPDATING VALUES")
+        self.params = params.copy()
         # print(self.params)
         self.showRuler = self.params['ruler']
         self.showColors = self.params['colors']
         self.consvColors = self.params['byconsv']
+        self.showDSSP = self.params['dssp']
         if self.font().pointSize() != self.params['fontsize']:
             # print("Changing font size")
             self.setFontSize(self.params['fontsize'])
@@ -369,7 +382,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         seqs = list(self._seqs.values())
         if str(seq.seq) in seqs:
             index = seqs.index(str(seq.seq))
-            self.dssps[index]=dssp
+            self.dssps[index] = dssp
             for res in self.splitSeqs[index]:
                 if not res[2]:
                     try:
@@ -379,8 +392,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 else:
                     print("Weird, got a duplicate at %s " % res[1])
             print(self.splitSeqs[index])
-
-
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
@@ -393,6 +404,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
         self.params = {}
         self.themeIndices = {}
         self.initPane()
+        self.lastStruct = False
 
     def initPane(self):
         for index in range(0, self.comboTheme.model().rowCount()):
@@ -403,25 +415,40 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
         self.comboTheme.currentIndexChanged.connect(self.changeTheme)
         self.comboFont.currentFontChanged.connect(self.changeFont)
         self.spinFontSize.valueChanged.connect(self.changeFontSize)
+        self.checkStructure.toggled.connect(self.structureToggle)
 
     def setParams(self, params):
         """ These are set by the preferences pane --> default for every new window """
+        print("SETTING PARAMS")
         self.params = params.copy()
-        #print(params["font"].family(),
-         #     self.params["font"].family())  # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
+        # print(params["font"].family(),
+        #     self.params["font"].family())  # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
         self.checkRuler.setChecked(self.params['ruler'])
         self.checkColors.setChecked(self.params['colors'])
         self.checkConsv.setChecked(self.params['byconsv'])
+        self.checkStructure.setChecked(self.params['dssp'])
         self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
         self.spinFontSize.setValue(self.params['fontsize'])
         self.comboFont.setCurrentFont(self.params['font'])
-        #print(self.params['font'].family())
+        # print(self.params['font'].family())
 
     def rulerToggle(self):
         self.params['ruler'] = self.checkRuler.isChecked()
 
     def colorToggle(self):
         self.params['colors'] = self.checkColors.isChecked()
+
+    def structureToggle(self):
+        print("Toggled structure")
+        self.params['dssp'] = self.checkStructure.isChecked()
+        """print("Toggled structure")
+        if self.checkStructure.isEnabled():
+            print("Setting to %s" % self.checkStructure.isChecked())
+            self.params['dssp'] = self.checkStructure.isChecked()
+            print("1",self.params['dssp'])
+        else:
+            print("DISABLED")
+            print("2",self.params['dssp'])"""
 
     def changeTheme(self):
         self.params['theme'] = self.comboTheme.currentText()
@@ -434,6 +461,17 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
 
     def showColorDesc(self):
         self.params['colordesc'] = self.checkColorDesc.isChecked()
+
+    def structureActivate(self, state):
+        self.checkStructure.setEnabled(state)
+        if state:
+            print("Recalling setting of %s " % self.lastStruct)
+            self.checkStructure.setChecked(self.lastStruct)
+        if not state:
+            self.lastStruct = self.params['dssp']
+            print("Deactivating, but keep setting of %s " % self.lastStruct)
+            self.checkStructure.setChecked(False)
+            print("3",self.params['dssp'])
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):

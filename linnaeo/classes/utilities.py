@@ -47,15 +47,17 @@ class SeqThread(QThread):
         if self.fancy:
             self.html = redrawFancy(self.seqs, self.chars, self.lines, self.rulers, self.colors, self.dssp)
         else:
-            self.html = redrawBasic(self.seqs, self.chars, self.lines, self.rulers)
+            self.html = redrawBasic(self.seqs, self.chars, self.lines, self.rulers, self.dssp)
 
 
-def redrawBasic(seqs, chars, lines, rulers=False):
+def redrawBasic(seqs, chars, lines, rulers=False, dssp=False):
     """ Black and white only; keeps space for ruler but does not calculate the ruler, which helps with speed."""
     html = ["<pre>\n"]
     n = 0
     for line in range(lines):
         if rulers:
+            html.append("\n")
+        if dssp:
             html.append("\n")
         start = n * chars
         end = n * chars + chars
@@ -80,13 +82,22 @@ def redrawBasic(seqs, chars, lines, rulers=False):
     return "".join(html)
 
 
-def redrawFancy(seqs, chars, lines, rulers=True, colors=True, dssp=True):
+def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
     """
     Fancy like the name implies. Called at the end of resize events. Keeps your opinion on colors and rulers.
     Keeps a lot of whitespace because the tooltip and calculation of the residue ID depends on certain whitespace.
     """
+    '''lookup = {'H': '&#x27B0;', 'G': '&nbsp;', 'I': '&nbsp;',
+              '>': '&#x27B2;', 'E': '&#x27B1;', 'B': '&nbsp;',
+              'T': '&#x27B3;', 'S': '&#x27B3;',
+              '-': '&nbsp;', 'C': '&nbsp;'}'''
+    lookup = {'H': '&#x27B0;', 'G': '&#x27B0;', 'I': '&#x27B0;',
+              '>': '&#x27B2;', 'E': '&#x27B1;', 'B': '&nbsp;',
+              'T': '&nbsp;', 'S': '&nbsp;',
+              '-': '&nbsp;', 'C': '&nbsp;'}
     html = ["<pre>"]
     n = 0
+    print("Redraw Fancy: DSSP",dssp)
     for line in range(lines):
         start = n * chars
         end = start + len(seqs[0][start:]) if line == lines - 1 else n * chars + chars
@@ -96,7 +107,23 @@ def redrawFancy(seqs, chars, lines, rulers=True, colors=True, dssp=True):
         for i in range(len(seqs)):
             if dssp and i == 0:
                 # TODO Make this show the nicer symbols.
-                html.append("".join([x[2] if x[2] else "&nbsp;" for x in seqs[i][start:end]]))
+                ss = ['<span style=\"font-family:Default;font-size:inherit;\">']
+                for index, x in enumerate(seqs[i][start:end]):
+                    #print(index+start, x[2])
+                    if x[2]:
+                        if x[2] == "E":
+                            #print(x[2],index+start,"Next residue:", seqs[i][index+start+1][2], index+start+1)
+                            if seqs[i][index+start+1][2] != 'E':
+                                ss.append(lookup['>'])
+                            #    print('using arrowhead')
+                            else:
+                            #    print("using rectangle")
+                                ss.append(lookup[x[2]])
+                        else:
+                            ss.append(lookup[x[2]])
+                ss.append("</span>")
+                html.append("".join(ss))
+                #html.append("".join([x[2] if x[2] else "&nbsp;" for x in seqs[i][start:end]]))
                 if line == lines-1:
                     html.append("&nbsp;"*(chars-(end-start)))
                 html.append("\n")

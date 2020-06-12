@@ -124,7 +124,7 @@ class MDIArea(QMdiArea):
     due to how the closing was happening. I've subclassed it to make things easy in finding bugs.
     This works well and should be more customizable if needed.
     """
-    refreshParams = pyqtSignal(MDISubWindow)
+    #refreshParams = pyqtSignal(MDISubWindow)
 
     def __init__(self, parent):
         super(MDIArea, self).__init__(parent)
@@ -307,19 +307,22 @@ class AlignPane(QTextEdit):
         self.lastchars = len(self.seqs[0])-self.chars*(self.lines-1)
 
     def getSeqPos(self, pos, row_pos):
-        seqsperline = (len(self.seqs) + int(self.parentWidget().parentWidget().showRuler) + 1)
+        seqsperline = (len(self.seqs) + int(self.parentWidget().parentWidget().showRuler) + \
+                       int(self.parentWidget().parentWidget().showDSSP) + 1)
         #cutoff = (self.lines-1)*seqsperline*(self.chars+1)
+        # TODO: Can delete the cutoff stuff
         cutoff = 1000000000
         # Have to do special stuff if it's on the last line, since there are no blank characters to keep the pattern.
         # Probably should have put them in to make my life easier, but whatever, I already figured it out.
-        if pos <= cutoff:
-            line = floor(pos/(self.chars+1))
-        else:
-            line = ((self.lines-1)*seqsperline)+floor((pos-cutoff-2)/(self.lastchars+1))
+        #if pos <= cutoff:
+        line = floor(pos/(self.chars+1))
+        #else:
+        #line = ((self.lines-1)*seqsperline)+floor((pos-cutoff-2)/(self.lastchars+1))
         seqi = 0
         tline = 0
         for stack in range(self.lines):
-            i = line - stack * seqsperline - int(self.parentWidget().parentWidget().showRuler)
+            i = line - stack * seqsperline - int(self.parentWidget().parentWidget().showRuler) -\
+                int(self.parentWidget().parentWidget().showDSSP)
             if i in list(range(len(self.seqs))):
                 seqi = i
                 tline = stack
