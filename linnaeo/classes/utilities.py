@@ -543,9 +543,9 @@ class DSSPThread(QThread):
             dssp = DSSP(self.struct[0], tmp.fileName(), dssp='mkdssp')
             prevChain = next(iter(dssp.keys()))[0]
             for key in dssp.keys():
-                print(key[0])
+                #print(key[0])
                 if key[0] ==prevChain:
-                    print(key)
+                    #print(key)
                 # I THINK I'M DOING THIS PART WRONG
                     result[dssp[key][0]+self.offset] = dssp[key][2]
         self.finished.emit([result, self.seq, self.node])

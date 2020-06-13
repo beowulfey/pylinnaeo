@@ -32,11 +32,11 @@ class Slots:
 
     def setCurrentWindow(self):
         self._currentWindow = self.mdiArea.activeSubWindow()
-        if self._currentWindow:
+        if self._currentWindow and not self.optionsPane.checkStructure.isEnabled():
             if self._currentWindow.widget().dssps:
                 self.optionsPane.structureActivate(True)
-            elif not self._currentWindow.widget().dssps:
-                self.optionsPane.structureActivate(False)
+        elif self._currentWindow and not self._currentWindow.widget().dssps:
+            self.optionsPane.structureActivate(False)
 
     def showAbout(self):
         qDialog = AboutDialog(self)

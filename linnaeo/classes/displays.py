@@ -385,16 +385,16 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         test = str(seq.seq).replace('-','')
         if test in seqs:
             index = seqs.index(test)
-            print("Matched sequence to index %s" % index)
+            #print("Matched sequence to index %s" % index)
             self.dssps[index] = dssp
             for res in self.splitSeqs[index]:
-                print(res[1], res[2])
+                #print(res[1], res[2])
                 if not res[2]:
                     try:
                         res[2] = dssp[res[1]]
-                        print("Adding structure info %s" % res[2])
+                        #print("Adding structure info %s" % res[2])
                     except KeyError:
-                        print("skipping!")
+                        #print("skipping!")
                         res[2] = "-"
                 else:
                     print("Weird, got a duplicate at %s " % res[1])
