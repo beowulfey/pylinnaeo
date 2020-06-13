@@ -9,7 +9,7 @@ from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq, Seq
 from Bio.Blast import NCBIWWW, NCBIXML
 from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QTimer
-from PyQt5.QtGui import QStandardItem
+from PyQt5.QtGui import QStandardItem, QFontMetricsF, QFont
 from PyQt5.QtWidgets import QFileDialog, QApplication
 from bioservices import NCBIblast
 
@@ -66,23 +66,35 @@ class Slots:
             self._currentWindow.widget().toggleColors(state)
 
     def toggleStructure(self, state):
-        print('Structure toggled, sending to window')
+        #print('Structure toggled, sending to window')
         if self._currentWindow:
-            print("UPDATING STRUCTURE OF WINDOW", state)
+        #    print("UPDATING STRUCTURE OF WINDOW", state)
             self._currentWindow.widget().toggleStructure(bool(state))
 
     def changeTheme(self):
-        #try
+        # try
         if self._currentWindow:
             self._currentWindow.widget().setTheme(self.optionsPane.comboTheme.currentText())
-        #except:
+        # except:
         #    print("Skipping theme set")
 
     def changeFont(self, font):
-        #try:
+        # try:
         if self._currentWindow:
             self._currentWindow.widget().setFont(font)
-        #except:
+            # font_copy = QFont(font.family(), self._currentWindow.widget().params['fontsize'])
+            fmF = QFontMetricsF(font)
+            #print(" Comparing %s vs %s " % (fmF.averageCharWidth(), self._currentWindow.widget().ssFontWidth))
+            if not fmF.averageCharWidth() - 0.5 <= self._currentWindow.widget().ssFontWidth <= \
+                   fmF.averageCharWidth() + 0.5:
+                self.mainLogger.debug("Font size is too different from symbol font; disabling structure!")
+                self.mainStatus.showMessage("Font incompatible with structure symbols; please choose another!",
+                                            msecs=6000)
+                self.optionsPane.structureActivate(False)
+            elif self._currentWindow.widget().dssps and not self.optionsPane.checkStructure.isEnabled():
+                self.optionsPane.structureActivate(True)
+
+        # except:
         #    print("Skipping font set")
 
     def changeFontSize(self, size):
@@ -90,7 +102,8 @@ class Slots:
             self._currentWindow.widget().setFontSize(size)
 
     def refreshParams(self, window):
-        window.widget().setParams(self.optionsPane.params)
+        if window:
+            window.widget().setParams(self.optionsPane.params)
 
     def newWorkspace(self):
         result = self.maybeClose()
@@ -134,20 +147,20 @@ class Slots:
             self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
 
     def importSequence(self):
-        #diag = QFileDialog(self)
-        #diag.setDirectory(QDir.homePath())
-        #diag.setFileMode(QFileDialog.ExistingFiles)
-        #diag.setNameFilter("Fasta File (*.fa *.fasta);;Any (*)")
+        # diag = QFileDialog(self)
+        # diag.setDirectory(QDir.homePath())
+        # diag.setFileMode(QFileDialog.ExistingFiles)
+        # diag.setNameFilter("Fasta File (*.fa *.fasta);;Any (*)")
         sel = QFileDialog.getOpenFileNames(parent=self, caption="Load a Single Sequence", directory=QDir.homePath(),
                                            filter="Fasta File (*.fa *.fasta)")
-        print(sel)
+        #print(sel)
         filenames = sel[0]
         afilter = sel[1][-8:-1]
         stype = None
         if afilter == "*.fasta":
             stype = 'fasta'
         for filename in filenames:
-            print(filename)
+            #print(filename)
             try:
                 with open(filename, 'r'):
                     seq = SeqIO.read(filename, stype)
@@ -160,7 +173,8 @@ class Slots:
                         self.mainStatus.showMessage("You've already loaded that sequence!", msecs=4000)
             except:
                 if stype == 'fasta':
-                    self.mainStatus.showMessage("ERROR -- Please check file. Could this have been an alignment?", msecs=4000)
+                    self.mainStatus.showMessage("ERROR -- Please check file. Could this have been an alignment?",
+                                                msecs=4000)
                 else:
                     self.mainStatus.showMessage("ERROR -- Please check file", msecs=3000)
 
@@ -191,7 +205,7 @@ class Slots:
                     items[seqr_clean.name] = str(seqr.seq)
                     combo.append(seqr_clean)
                     if seqr_clean not in self.sequences.values():
-                        num = "" if count == 0 else " "+str(count+1)
+                        num = "" if count == 0 else " " + str(count + 1)
                         self.seqInit(seqr_clean, folder='Import%s' % num)
                 combo.sort()
                 if combo not in self.sequences.values():
@@ -219,9 +233,9 @@ class Slots:
                 atype = None
                 if afilter == "*.fasta":
                     atype = 'fasta'
-                filename = sel[0]# + '.' + atype
+                filename = sel[0]  # + '.' + atype
                 seqR = self.bioModel.itemFromIndex(index[0]).data(role=self.SequenceRole)[0]
-                print(seqR)
+                #print(seqR)
                 with open(filename, 'w'):
                     SeqIO.write(seqR, filename, atype)
                     print(seqR)
@@ -240,7 +254,7 @@ class Slots:
                     atype = 'fasta'
                 elif afilter == "clustal":
                     atype = 'clustal'
-                filename = sel[0]# + '.' + atype if sel[0][-1 * len(atype):] != atype else sel[0]
+                filename = sel[0]  # + '.' + atype if sel[0][-1 * len(atype):] != atype else sel[0]
                 aliR = self.projectModel.itemFromIndex(index[0]).data(role=self.SequenceRole)
                 with open(filename, 'w'):
                     AlignIO.write(aliR, filename, atype)
@@ -316,14 +330,12 @@ class Slots:
                         worker.finished.connect(self.pdbSearchDone)
                         worker.start()
 
-        #if self.lastClickedTree == self.bioTree:
+        # if self.lastClickedTree == self.bioTree:
         #    indices, seqs = utilities.nodeSelector(self.bioTree, self.bioModel)
 
-
-            #worker = utilities.GetPDBThread([seqs, indices], parent=self)
-            #worker.finished.connect(self.pdbSearchDone)
-            #worker.start()
-
+        # worker = utilities.GetPDBThread([seqs, indices], parent=self)
+        # worker.finished.connect(self.pdbSearchDone)
+        # worker.start()
 
     def pdbSearchDone(self, result):
         if result:
@@ -336,24 +348,26 @@ class Slots:
         else:
             self.mainStatus.showMessage('Sorry, no models found for that query! Please manually edit the \
             search by right clicking the node! ', msecs=5000)
-        
+
     def ssDone(self, result):
         print("DSSP FINISHED")
         if result[2]:
+            #print(result[2])
             node = self.bioModel.itemFromIndex(result[2])
             if not node:
                 node = self.projectModel.itemFromIndex(result[2])
             node.setData(result[0], role=self.StructureRole)
             if node.data(role=self.WindowRole):
+                #print("Window acquired")
                 try:
                     sub = self.windows[node.data(role=self.WindowRole)]
+                    print("Adding DSSP to subwindow")
+                    self.mainStatus.showMessage("DSSP found; adding to window %s" % node.text(), msecs=4000)
                     sub.addStructure(result[0], result[1])
                     if sub == self._currentWindow:
-
                         self.optionsPane.structureActivate(True)
                 except KeyError:
                     self.mainStatus.showMessage("Please open the sequence first!", msecs=3000)
-
 
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:
@@ -505,7 +519,7 @@ class Debug:
                  'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1A = MutableSeq(test1[1], generic_protein)
         gpi1a = models.SeqR(seq_GPI1A, id='Q9U1Q2', name=test1[0])
-        #gpi1a.id = test1[0]
+        # gpi1a.id = test1[0]
         test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE' +
                  'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG' +
                  'VEESRNAMFSAEKINFTENRAVLHVALRNRANRPILVDGKDVMPDVNRVLAHMKE' +

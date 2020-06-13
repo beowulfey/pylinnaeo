@@ -110,7 +110,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                        'darkmode': False, 'dssp': False,
                        }
         self.params = self.default_params.copy()
-        print(self.params['font'].family())
+        #print(self.params['font'].family())
         self.optionsPane.setParams(self.params)
 
         # This is fired upon loading a saved workspace.
@@ -547,11 +547,11 @@ class LinnaeoApp(QApplication):
     def __init__(self, *args):
         super().__init__(*args)
         self.fonts = QFontDatabase()
-        print(os.path)
-        print(os.get_exec_path())
-        self.defFontId = self.fonts.addApplicationFont(':/fonts/Default.ttf')
+        #print(os.path)
+        #print(os.get_exec_path())
+        self.defFontId = self.fonts.addApplicationFont(':/fonts/Default-Noto.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
-        print("Fonts loaded: ",self.defFontId,self.defFontId2)
+        #print("Fonts loaded: ",self.defFontId,self.defFontId2)
         self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
 
     """

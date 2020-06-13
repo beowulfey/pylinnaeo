@@ -98,7 +98,7 @@ def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
               '-': '&nbsp;', 'C': '&nbsp;'}
     html = ["<pre>"]
     n = 0
-    print("Redraw Fancy: DSSP",dssp)
+    #print("Redraw Fancy: DSSP",dssp)
     for line in range(lines):
         start = n * chars
         end = start + len(seqs[0][start:]) if line == lines - 1 else n * chars + chars
@@ -107,7 +107,7 @@ def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
             html.append(str(buildRuler(chars, start, end))+"\n")
         for i in range(len(seqs)):
             if dssp and i == 0:
-                ss = ['<span style=\"font-family:Default;font-size:inherit;\">']
+                ss = ['<span style=\"font-family:Default-Noto;font-size:inherit;\">']
                 # TODO: THIS DOES NOT WORK FOR ALIGNMENTS; NEED TO LOOK AT THE TRUE INDEX NOT RAW INDEX NUMBER?!
                 for index, x in enumerate(seqs[i][start:end]):
                     #print(index+start, x[2])
@@ -478,7 +478,7 @@ class GetPDBThread(QThread):
                 if coordinates:
                     offset = 0
                     start = structseq[:7]
-                    print(start)
+                    #print(start)
                     for x in range(len(seq)):
                         end = x + 7
                         if str(seq.seq)[x:end] == start:

@@ -2,7 +2,7 @@ import logging
 from math import floor
 
 from PyQt5.QtCore import pyqtSignal, Qt, QUrl
-from PyQt5.QtGui import QFontMetricsF, QColor
+from PyQt5.QtGui import QFontMetricsF, QColor, QFont
 # from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, QMainWindow, QTextEdit, QFrame, QSizePolicy
 
@@ -64,6 +64,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.showColors = False
         self.consvColors = False
         self.showDSSP = True
+        self.ssFontWidth = None
 
         # Draw the window
         self.setupUi(self)
@@ -82,6 +83,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.theme = self.lookupTheme('Default')
         self.params = {}
         self.setParams(params)
+        self.ssFontWidth = QFontMetricsF(QFont("Default-Noto", self.params['fontsize'])).averageCharWidth()
+        #print("Setting ssFONT Width to %s" % self.ssFontWidth)
 
         self.done = True
         self.seqInit()
@@ -198,7 +201,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             if not self.showRuler:
                 rulers = False
             if not self.showDSSP:
-                print("Drawing with no DSSP")
+                #print("Drawing with no DSSP")
                 dssp = False
             charpx = self.fmF.averageCharWidth()
             self.rulerPane.size().setWidth(4 * charpx + 3)
@@ -220,7 +223,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.alignPane.names = self.splitNames
             self.alignPane.clear()
             fancy = False if self.userIsResizing else True
-            print("Sending seq with dssp:", dssp)
+            #print("Sending seq with dssp:", dssp)
             worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, dssp, fancy=fancy,
                                          parent=self, )
             worker.start()
@@ -282,7 +285,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.seqArrange()
 
     def toggleStructure(self, state):
-        print("In alignment", state)
+        #print("In alignment", state)
         self.params['dssp'] = state
         self.showDSSP = state
         self.nameArrange(self.lines)
@@ -325,11 +328,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def setFontSize(self, size):
         font = self.font()
         font.setPointSize(size)
+        self.ssFontWidth = QFontMetricsF(QFont("Default-Noto", size)).averageCharWidth()
+        #print("Setting ssFONT Width to %s" % self.ssFontWidth)
         # print("FONT",font.pointSize(), self.font().pointSize())
         self.setFont(font)
 
     def setParams(self, params):
-        print("UPDATING VALUES")
+        #print("UPDATING VALUES")
         self.params = params.copy()
         # print(self.params)
         self.showRuler = self.params['ruler']
@@ -381,8 +386,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def addStructure(self, dssp, seq):
         """ Adds DSSP data to the SplitSeqs array. """
         # TODO: THIS DOES NOT WORK FOR ALIGNMENTS; NEED TO LOOK AT THE TRUE INDEX NOT RAW INDEX NUMBER?!
-        seqs = list(self._seqs.values())
+        seqs = [x.replace('-','') for x in self._seqs.values()]
         test = str(seq.seq).replace('-','')
+        #print("Query:\n%s" % test)
+        #print(seqs)
         if test in seqs:
             index = seqs.index(test)
             #print("Matched sequence to index %s" % index)
@@ -398,7 +405,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                         res[2] = "-"
                 else:
                     print("Weird, got a duplicate at %s " % res[1])
-            print(self.splitSeqs[index])
+            #print(self.splitSeqs[index])
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
@@ -426,7 +433,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
 
     def setParams(self, params):
         """ These are set by the preferences pane --> default for every new window """
-        print("SETTING PARAMS")
+        #print("SETTING PARAMS")
         self.params = params.copy()
         # print(params["font"].family(),
         #     self.params["font"].family())  # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
@@ -446,7 +453,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
         self.params['colors'] = self.checkColors.isChecked()
 
     def structureToggle(self):
-        print("Toggled structure")
+        #print("Toggled structure")
         self.params['dssp'] = self.checkStructure.isChecked()
         """print("Toggled structure")
         if self.checkStructure.isEnabled():
@@ -472,13 +479,13 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
     def structureActivate(self, state):
         self.checkStructure.setEnabled(state)
         if state:
-            print("Recalling setting of %s " % self.lastStruct)
+           # print("Recalling setting of %s " % self.lastStruct)
             self.checkStructure.setChecked(self.lastStruct)
         if not state:
             self.lastStruct = self.params['dssp']
-            print("Deactivating, but keep setting of %s " % self.lastStruct)
+            #print("Deactivating, but keep setting of %s " % self.lastStruct)
             self.checkStructure.setChecked(False)
-            print("3",self.params['dssp'])
+            #print("3",self.params['dssp'])
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):
