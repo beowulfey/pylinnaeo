@@ -552,7 +552,7 @@ class LinnaeoApp(QApplication):
         self.defFontId = self.fonts.addApplicationFont(':/fonts/Default-Noto.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
         #print("Fonts loaded: ",self.defFontId,self.defFontId2)
-        self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
+        self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId)[1], 10)
 
     """
      def event(self, event):
