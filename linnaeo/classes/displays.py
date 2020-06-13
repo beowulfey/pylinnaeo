@@ -380,15 +380,21 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def addStructure(self, dssp, seq):
         """ Adds DSSP data to the SplitSeqs array. """
+        # TODO: THIS DOES NOT WORK FOR ALIGNMENTS; NEED TO LOOK AT THE TRUE INDEX NOT RAW INDEX NUMBER?!
         seqs = list(self._seqs.values())
-        if str(seq.seq) in seqs:
-            index = seqs.index(str(seq.seq))
+        test = str(seq.seq).replace('-','')
+        if test in seqs:
+            index = seqs.index(test)
+            print("Matched sequence to index %s" % index)
             self.dssps[index] = dssp
             for res in self.splitSeqs[index]:
+                print(res[1], res[2])
                 if not res[2]:
                     try:
                         res[2] = dssp[res[1]]
+                        print("Adding structure info %s" % res[2])
                     except KeyError:
+                        print("skipping!")
                         res[2] = "-"
                 else:
                     print("Weird, got a duplicate at %s " % res[1])

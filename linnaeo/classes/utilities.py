@@ -91,7 +91,8 @@ def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
               '>': '&#x27B2;', 'E': '&#x27B1;', 'B': '&nbsp;',
               'T': '&#x27B3;', 'S': '&#x27B3;',
               '-': '&nbsp;', 'C': '&nbsp;'}'''
-    lookup = {'H': '&#x27B0;', 'G': '&#x27B0;', 'I': '&#x27B0;',
+    # Only shows SS for classic helices and beta-strands for cleanliness
+    lookup = {'H': '&#x27B0;', 'G': '&nbsp;', 'I': '&nbsp;',
               '>': '&#x27B2;', 'E': '&#x27B1;', 'B': '&nbsp;',
               'T': '&nbsp;', 'S': '&nbsp;',
               '-': '&nbsp;', 'C': '&nbsp;'}
@@ -106,8 +107,8 @@ def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
             html.append(str(buildRuler(chars, start, end))+"\n")
         for i in range(len(seqs)):
             if dssp and i == 0:
-                # TODO Make this show the nicer symbols.
                 ss = ['<span style=\"font-family:Default;font-size:inherit;\">']
+                # TODO: THIS DOES NOT WORK FOR ALIGNMENTS; NEED TO LOOK AT THE TRUE INDEX NOT RAW INDEX NUMBER?!
                 for index, x in enumerate(seqs[i][start:end]):
                     #print(index+start, x[2])
                     if x[2]:
@@ -418,6 +419,7 @@ class GetPDBThread(QThread):
             structseq = None
             self.PDBLogger.info("Searching with ID %s" % pid)
             uniID = self.u.search(pid, columns="id, genes, organism, protein names")
+            alignoff = 0
             if uniID:
                 self.PDBLogger.info('Results!\n\n%s' % uniID)
                 result = uniID.split("\n")
@@ -440,16 +442,25 @@ class GetPDBThread(QThread):
                                 #print("structures found")
                                 structs = result['structures']
                                 structseq = result['sequence']
-                                if structs[0]:
-                                    #print("accessing first model")
-                                    struct0 = structs[0]
-                                    if struct0['coordinates']:
-                                        coordinates = struct0['coordinates']
-                                        print("MODEL ACQUIRED")
+                                print("QUERY: \n%s" % str(seq.seq).replace("-",""))
+                                print("RESULT: \n%s" % structseq)
+                                if str(seq.seq).replace("-", "") == structseq:
+                                    # They should match, else keep looking
+                                    if structs[0]:
+                                        # print("accessing first model")
+                                        struct0 = structs[0]
+                                        if struct0['coordinates']:
+                                            coordinates = struct0['coordinates']
+                                            alignoff = int(struct0['chains']['A'][0]['uniprot']['from']) - 1
+                                            print("MODEL ACQUIRED")
+                                        else:
+                                            i += 1
+                                            continue
                                     else:
                                         i += 1
                                         continue
                                 else:
+                                    print("Seq didn't match, trying with next model")
                                     i += 1
                                     continue
                             else:
@@ -472,7 +483,8 @@ class GetPDBThread(QThread):
                         end = x + 7
                         if str(seq.seq)[x:end] == start:
                             print("Sequence offset is %s residues" % x)
-                            offset = x
+                            offset = x + alignoff
+                            print("Alignment offset is %s residues" % offset)
                     parser = PDB.PDBParser()
                     tmp = QTemporaryFile()
                     with urllib.request.urlopen(coordinates) as url:
@@ -529,8 +541,13 @@ class DSSPThread(QThread):
             io.set_structure(self.struct)
             io.save(tmp.fileName())
             dssp = DSSP(self.struct[0], tmp.fileName(), dssp='mkdssp')
+            prevChain = next(iter(dssp.keys()))[0]
             for key in dssp.keys():
-                result[dssp[key][0]+self.offset] = dssp[key][2]
+                print(key[0])
+                if key[0] ==prevChain:
+                    print(key)
+                # I THINK I'M DOING THIS PART WRONG
+                    result[dssp[key][0]+self.offset] = dssp[key][2]
         self.finished.emit([result, self.seq, self.node])
 
 

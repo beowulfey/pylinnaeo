@@ -374,7 +374,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 seqrs = []
                 for key, value in ali.items():
                     for stored_seq in self.sequences.values():
-                        if str(value).strip('-') == str(stored_seq[0].seq):
+                        if str(value).replace('-',"") == str(stored_seq[0].seq):
                             print("USING ORIGINAL ID", stored_seq[0].id)
                             sid = stored_seq[0].id
                             break

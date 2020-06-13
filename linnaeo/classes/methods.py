@@ -504,7 +504,7 @@ class Debug:
                  'AAVAEAELKSSGMSPESIAKILPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEH' +
                  'KIFVQGIIWDICSYDQWGVELGKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1A = MutableSeq(test1[1], generic_protein)
-        gpi1a = models.SeqR(seq_GPI1A, id='Q7K707', name=test1[0])
+        gpi1a = models.SeqR(seq_GPI1A, id='Q9U1Q2', name=test1[0])
         #gpi1a.id = test1[0]
         test2 = ['GPI1B', 'MIFELFRFIFRKKKMLGYLSDLIGTLFIGDSTEKAMSLSQDATFVELKRHVEANE' +
                  'KDAQLLELFEKDPARFEKFTRLFATPDGDFLFDFSKNRITDESFQLLMRLAKSRG' +
@@ -518,7 +518,7 @@ class Debug:
                  'LPHKVFEGNKPTTSIVLPVVTPFTLGALIAFYEHKIFVQGIIWDICSYDQWGVEL' +
                  'GKQLAKVIQPELASADTVTSHDASTNGLIAFIKNNA']
         seq_GPI1B = MutableSeq(test2[1], generic_protein)
-        gpi1b = models.SeqR(seq_GPI1B, id='Q9U1Q2', name=test2[0])
+        gpi1b = models.SeqR(seq_GPI1B, id='Q7K707', name=test2[0])
         test = [gpi1a, gpi1b]
         for i in test:
             self.seqInit(i)
