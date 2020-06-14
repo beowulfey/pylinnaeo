@@ -77,7 +77,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.namePane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
         self.nameChange.connect(self.updateName)
         self.lineChange.connect(self.nameArrange)
-        self.alignPane.commentAdded.connect(self.showCommentWindow)
+        #self.alignPane.commentAdded.connect(self.showCommentWindow)
 
         # Initialize settings
         self.theme = self.lookupTheme('Default')
@@ -385,7 +385,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.comments[target[2]] = "COMMENT"
         self.seqInit()
         self.seqArrange()
-        self.commentPane.lineEdit.setText(str(name) + " " + str(resi))
+        #self.commentPane.lineEdit.setText(str(name) + " " + str(resi))
         # self.gridLayout.addWidget(self.commentButton,1,0)
         self.gridLayout.addWidget(self.commentPane, 1, 1)
 
@@ -416,11 +416,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def setReference(self, name):
         if name in self.splitNames:
             self.refseq = self.splitNames.index(name)
+            print("refseq set to ", self.refseq)
             if self.done:
                 self.seqInit()
                 self.seqArrange()
         elif name == "Select ref...":
             self.refseq = None
+
             if self.done:
                 self.seqInit()
                 self.seqArrange()

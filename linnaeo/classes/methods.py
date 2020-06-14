@@ -32,9 +32,11 @@ class Slots:
 
     def setCurrentWindow(self):
         self._currentWindow = self.mdiArea.activeSubWindow()
+        refseq = self._currentWindow.widget().refseq
         self.optionsPane.comboReference.clear()
         self.optionsPane.comboReference.addItem("Select ref...")
         self.optionsPane.comboReference.setCurrentIndex(0)
+        self._currentWindow.widget().refseq = refseq
         if self._currentWindow:
             for name in self._currentWindow.widget().splitNames:
                 self.optionsPane.comboReference.addItem(name)

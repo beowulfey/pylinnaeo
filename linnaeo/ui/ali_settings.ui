@@ -170,11 +170,6 @@
        <string>Rainbow</string>
       </property>
      </item>
-     <item>
-      <property name="text">
-       <string>Annotations</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item>
