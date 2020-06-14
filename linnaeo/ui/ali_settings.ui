@@ -77,6 +77,42 @@
     </widget>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>30</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonStructure">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Get structure</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
@@ -134,11 +170,6 @@
        <string>Rainbow</string>
       </property>
      </item>
-     <item>
-      <property name="text">
-       <string>Annotations</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item>
@@ -181,11 +212,11 @@
         <string>Choose color theme for alignment</string>
        </property>
        <property name="currentText">
-        <string>Select Reference...</string>
+        <string>Select ref...</string>
        </property>
        <item>
         <property name="text">
-         <string>Select Reference...</string>
+         <string>Select ref...</string>
         </property>
        </item>
       </widget>
