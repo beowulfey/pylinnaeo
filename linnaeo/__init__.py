@@ -1,3 +1,4 @@
+__version__ = 'v0.2.0'
 import logging
 import sys
 import time

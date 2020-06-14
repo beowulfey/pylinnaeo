@@ -6,6 +6,7 @@ from PyQt5.QtGui import QFontMetricsF, QColor, QFont
 # from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, QMainWindow, QTextEdit, QFrame, QSizePolicy
 
+from linnaeo import __version__
 from linnaeo.classes import widgets, utilities, themes
 from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui, comments_ui
 
@@ -540,6 +541,7 @@ class AboutDialog(QDialog, about_ui.Ui_Dialog):
         self.setupUi(self)
         self.setWindowTitle("Thanks for reading this!")
         self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.ok)
+        self.versionLabel.setText(__version__)
 
     def ok(self):
         self.done(1)
