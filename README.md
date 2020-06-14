@@ -27,7 +27,13 @@ Here is a screenshot as of Jun 3, 2020:
 
 
 #### What's the latest? 
-Here's a basic feature list so far (v0.1.6): 
+New additions for v0.2.0:
+* Can now load multiple sequences and alignments at once. 
+* Secondary structure search and display thanks to DSSP
+* Reference sequence selection for only highlighting residues that are the same. 
+* Lots of other small improvements. 
+
+Previous additions for v0.1.6: 
 * Import/export of protein sequences and alignments
 * Save/Load workspaces to keep your work
 * Combine sequences as needed to make new alignments using ClustalO
@@ -45,11 +51,9 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 * Currently only supports the Clustal Omega algorithm, and calls it even for just two sequences
 * Alignment order is not captured from ClustalO --> it just returns the input order, which is deceiving and confusing if you are used to the ClustalO website behavior
 * I want to add better drag-and-drop functionality, such as dragging a new sequence onto an alignment window, deleting sequences from an alignment, or rerranging the order (the former 2 would be non-destructive)
-* I need to make a preferences panel, with default preferences stored upon loading the app
 * I want to add more color themes
 * I want to make a dark theme for the app itself
-* I want to incorporate a PDB viewer
-* I want to show secondary structure within the alignment window.
+* I want to incorporate a PDB viewer (long shot -- most likely difficult)
 * Residue annotations for marking comments and observations. 
 
 #### How do I get set up? ####
