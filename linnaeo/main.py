@@ -68,6 +68,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.projectRoot = None
         self.projectModel = None
         self._currentWindow = None
+        self.runningDSSP = []
 
         # MDI Window
         self.mdiArea = widgets.MDIArea(self)
@@ -231,12 +232,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.optionsPane.comboFont.currentFontChanged.connect(self.changeFont)
         self.optionsPane.spinFontSize.valueChanged.connect(self.changeFontSize)
         self.optionsPane.checkStructure.toggled.connect(self.toggleStructure)
+        self.optionsPane.comboReference.currentIndexChanged.connect(self.selectReference)
         #self.mdiArea.refreshParams.connect(self.refreshParams)
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)
         #self.activeResize.connect(self.drawSimple)
         self.mdiArea.subWindowActivated.connect(self.setCurrentWindow)
         self.mdiArea.subWindowActivated.connect(self.refreshParams)
-        self.actionDSSP.triggered.connect(self.get_UniprotId)
+        #self.actionDSSP.triggered.connect(self.get_UniprotId)
+        self.optionsPane.buttonStructure.clicked.connect(self.get_UniprotId)
         #self.actionBigger.triggered.connect(self.increaseTextSize)
         #self.actionSmaller.triggered.connect(self.decreaseTextSize)
 

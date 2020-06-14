@@ -32,11 +32,28 @@ class Slots:
 
     def setCurrentWindow(self):
         self._currentWindow = self.mdiArea.activeSubWindow()
-        if self._currentWindow and not self.optionsPane.checkStructure.isEnabled():
-            if self._currentWindow.widget().dssps:
-                self.optionsPane.structureActivate(True)
-        elif self._currentWindow and not self._currentWindow.widget().dssps:
+        self.optionsPane.comboReference.clear()
+        self.optionsPane.comboReference.addItem("Select ref...")
+        self.optionsPane.comboReference.setCurrentIndex(0)
+        if self._currentWindow:
+            for name in self._currentWindow.widget().splitNames:
+                self.optionsPane.comboReference.addItem(name)
+            if self._currentWindow.widget().refseq is not None:
+                for x in range(self.optionsPane.comboReference.count()):
+                    if self.optionsPane.comboReference.itemText(x) == self._currentWindow.widget().splitNames[
+                            self._currentWindow.widget().refseq]:
+                        self.optionsPane.comboReference.setCurrentIndex(x)
+            if not self.optionsPane.checkStructure.isEnabled():
+                if self._currentWindow.widget().dssps:
+                    self.optionsPane.structureActivate(True)
+                else:
+                    if not self.optionsPane.buttonStructure.isEnabled() and self._currentWindow not in self.runningDSSP:
+                        self.optionsPane.buttonStructure.setEnabled(True)
+            elif not self._currentWindow.widget().dssps:
+                self.optionsPane.structureActivate(False)
+        else:
             self.optionsPane.structureActivate(False)
+            self.optionsPane.buttonStructure.setEnabled(False)
 
     def showAbout(self):
         qDialog = AboutDialog(self)
@@ -70,6 +87,9 @@ class Slots:
         if self._currentWindow:
         #    print("UPDATING STRUCTURE OF WINDOW", state)
             self._currentWindow.widget().toggleStructure(bool(state))
+
+    def selectReference(self, index):
+        self._currentWindow.widget().setReference(self.optionsPane.comboReference.itemText(index))
 
     def changeTheme(self):
         # try
@@ -308,11 +328,13 @@ class Slots:
 
     def get_UniprotId(self):
         if self._currentWindow:
+            self.runningDSSP.append(self._currentWindow)
+            self.optionsPane.buttonStructure.setEnabled(False)
             found = False
             wid = self._currentWindow.wid
             for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
                 if node.data(self.WindowRole) == wid:
-                    print("Calling UNIPROT search")
+                    self.mainLogger.info("Running UNIPROT search with the sequence")
                     worker = utilities.GetPDBThread([node.data(role=self.SequenceRole), [node.index()]], parent=self)
                     worker.finished.connect(self.pdbSearchDone)
                     worker.start()
@@ -320,7 +342,7 @@ class Slots:
             if not found:
                 for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
                     if node.data(self.WindowRole) == wid:
-                        print("Calling UNIPROT search")
+                        self.mainLogger.info("Running UNIPROT search with first sequence of the alignment")
                         seqs = []
                         # ONLY RUN ON THE TOP SEQUENCE FOR NOW
                         for x in node.data(role=self.SequenceRole):
@@ -346,6 +368,7 @@ class Slots:
                 self.mainLogger.debug('Fowarding structure to DSSP')
                 worker.start()
         else:
+            self.optionsPane.buttonStructure.setEnabled(True)
             #self.mainStatus.setStyleSheet("background-color: rgb(255, 0, 0);")
             self.mainStatus.showMessage('Sorry, no models found for that query! Please import the top sequence with the correct sequence ID to run DSSP!', msecs=5000)
             #self.mainStatus.setStyleSheet("background-color: initial;")
@@ -364,6 +387,9 @@ class Slots:
                     print("Adding DSSP to subwindow")
                     self.mainStatus.showMessage("DSSP found; adding to window %s" % node.text(), msecs=4000)
                     sub.addStructure(result[0], result[1])
+                    if sub in self.runningDSSP:
+                        print("Removing subwindow from running list")
+                        self.runningDSSP.remove(sub)
                     if sub == self._currentWindow:
                         self.optionsPane.structureActivate(True)
                 except KeyError:
