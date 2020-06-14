@@ -105,7 +105,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Load default options for windows (from parameters file if saved)
         # if PARAMETERS FILE:
         #   params = FROMFILE
-        print(qApp.instance().defFont.family())
+        #print(qApp.instance().defFont.family())
         self.default_params = {'ruler': True, 'colors': True, 'fontsize': 10,
                        'theme': 'Default', 'font': qApp.instance().defFont,
                        'byconsv': False, 'tabbed': False,
@@ -379,13 +379,13 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 for key, value in ali.items():
                     for stored_seq in self.sequences.values():
                         if str(value).replace('-',"") == str(stored_seq[0].seq):
-                            print("USING ORIGINAL ID", stored_seq[0].id)
+                            #print("USING ORIGINAL ID", stored_seq[0].id)
                             sid = stored_seq[0].id
                             break
                         else:
-                            print("USING NAME", key)
+                            #print("USING NAME", key)
                             sid = key
-                    print("Adding sequence to alignment: ", key, sid)
+                    #print("Adding sequence to alignment: ", key, sid)
                     seqr = models.SeqR(Seq(value, generic_protein), name=key, id=sid)
                     seqrs.append(seqr)
                 aliR = MultipleSeqAlignment(seqrs)
@@ -414,17 +414,19 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         """
         found = False
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-            if node.data(self.StructureRole):
-                print(node.data(self.SequenceRole))
-                sub.widget().addStructure(node.data(self.StructureRole), node.data(self.SequenceRole)[0])
-                found = True
+            if node.data(self.WindowRole) == sub.wid:
+                if node.data(self.StructureRole):
+                    print(node.data(self.SequenceRole))
+                    sub.widget().addStructure(node.data(self.StructureRole), node.data(self.SequenceRole)[0])
+                    found = True
         if not found:
             seq = None
             for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
-                if node.data(self.StructureRole):
-                    seq = node.data(self.SequenceRole)[0]
-                    sub.widget().addStructure(node.data(self.StructureRole), seq)
-                    found = True
+                if node.data(self.WindowRole) == sub.wid:
+                    if node.data(self.StructureRole):
+                        seq = node.data(self.SequenceRole)[0]
+                        sub.widget().addStructure(node.data(self.StructureRole), seq)
+                        found = True
 
         sub.widget().setParams(self.optionsPane.params)
         if sub.mdiArea() != self.mdiArea:
@@ -569,7 +571,7 @@ class LinnaeoApp(QApplication):
         #print(os.get_exec_path())
         self.defFontId = self.fonts.addApplicationFont(':/fonts/Default-Noto.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
-        print(self.defFontId, self.defFontId2)
+        #print(self.defFontId, self.defFontId2)
         #print("Fonts loaded: ",self.defFontId,self.defFontId2)
         self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId2)[0], 10) \
             if sys.platform == 'win32' else QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)

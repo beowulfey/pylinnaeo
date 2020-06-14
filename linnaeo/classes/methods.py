@@ -375,8 +375,8 @@ class Slots:
             self.mainStatus.showMessage('Sorry, no models found for that query! Please import the top sequence with the correct sequence ID to run DSSP!', msecs=5000)
             #self.mainStatus.setStyleSheet("background-color: initial;")
     def ssDone(self, result):
-        print("DSSP FINISHED")
         if result[2]:
+            self.mainLogger.info("DSSP run completed successfully")
             #print(result[2])
             node = self.bioModel.itemFromIndex(result[2])
             if not node:
@@ -386,16 +386,18 @@ class Slots:
                 #print("Window acquired")
                 try:
                     sub = self.windows[node.data(role=self.WindowRole)]
-                    print("Adding DSSP to subwindow")
+                    self.mainLogger.info("Adding DSSP to subwindow")
                     self.mainStatus.showMessage("DSSP found; adding to window %s" % node.text(), msecs=4000)
                     sub.addStructure(result[0], result[1])
                     if sub in self.runningDSSP:
-                        print("Removing subwindow from running list")
+                        #print("Removing subwindow from running list")
                         self.runningDSSP.remove(sub)
                     if sub == self._currentWindow:
                         self.optionsPane.structureActivate(True)
                 except KeyError:
                     self.mainStatus.showMessage("Please open the sequence first!", msecs=3000)
+        else:
+              self.mainLogger.info("DSSP failed -- please check your sequence ID.")
 
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:

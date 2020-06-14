@@ -410,13 +410,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                         # print("skipping!")
                         res[2] = "-"
                 else:
-                    print("Weird, got a duplicate at %s " % res[1])
+                    pass
+                    #print("Weird, got a duplicate at %s " % res[1])
             # print(self.splitSeqs[index])
 
     def setReference(self, name):
         if name in self.splitNames:
             self.refseq = self.splitNames.index(name)
-            print("refseq set to ", self.refseq)
+            #print("refseq set to ", self.refseq)
             if self.done:
                 self.seqInit()
                 self.seqArrange()
@@ -427,7 +428,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 self.seqInit()
                 self.seqArrange()
         else:
-            print("ERROR -- SEQUENCE NOT FOUND")
+            pass
+            #print("ERROR -- SEQUENCE NOT FOUND")
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):

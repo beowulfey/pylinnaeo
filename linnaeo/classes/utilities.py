@@ -271,133 +271,12 @@ def nodeSelector(tree, model):
                 seqs.append(seqr)
     return indices, seqs
 
-"""
-def buildRuler2(chars,gap,start,end,interval=False):
-    Kept this for legacy reasons but I don't like the effect 
-    # TODO: Consider putting numbers at left and right, as in normal alignments. Particularly if also showing SS.
-    This version uses even spacing of the numbers (either 10 or 20 depending on screen width) but looks messy. 
-    ruler = None
-    if interval:
-        if start != end:
-            interval = 10 if chars < 100 else 20
-            labels = list(numpy.arange(round(start, -1), round(end, -1), interval))
-            #print(start + 1, end, labels)
-            if len(labels) == 1:
-            #    print(labels[0])
-                if labels[0] <= (start + 1):
-            #        print("removed ", labels[0])
-                    labels.pop(0)
-                elif labels[0] - (start+1) < len(str(labels[-1]))*2+2:
-            #        print("removed ", labels[0])
-                    labels.pop(0)
-            if len(labels) > 1:
-                rm = []
-                for x in range(2):
-            #        print(labels[x])
-                    if labels[x] - (start+1) < len(str(labels[-1]))*2+2:
-            #            print("Removed ",labels[x])
-                        rm.append(labels[x])
-                        if len(labels) <= 1:
-                            break
-                    if end - labels[-x] < len(str(labels[-1]))*2+2:
-            #            print("Removed ",labels[-x])
-                        rm.append(labels[-x])
-                [labels.remove(x) for x in rm]
-            labels.insert(0, start + 1)
-            if end-(start+1) >= len(str(start+1)) + len(str(end)) + 2:
-                labels.append(end)
-            #print(labels)
-            rulel = ['<u>' + str(labels[0])[0] + '</u>' + str(labels[0])[1:]]
-            for x in labels[1:]:
-                prevx = labels[labels.index(x) - 1]
-                xlab = len(str(x))
-                if labels.index(x) == 1 and len(str(prevx)) > 1:
-                    # Different for first space because I left align the first number.
-                    xlab = len(str(x)) + len(str(prevx)) - 1
-                spacer = x - prevx - xlab
-             #   print("Spacer is (%s-%s)-%s=%s " % (x, prevx, xlab, spacer))
-                rulel.append("&nbsp;" * spacer)
-                rulel.append(str(x)[:-1] + '<u>' + str(x)[-1:] + '</u>')
-            ruler = "".join(rulel)
-    else:
-        # TODO: THIS IS BUGGY. ADD UNDERLINES. HAVE ALL ALIGNED (NOT ALL BUT LAST LINE)
-        
-        #This version is cleaner but the numbers end up with random numbers. Calculates the spacing
-        #and labeling based on the width of the screen. Pretty computationally intensive,
-        #so I make a point to hide it (and the colors) when resizing.
-        
-        if start != end:
-            if gap != 0 and chars != end-start:
-                # Have to adjust the spacing for the last line
-                # Don't go below 8 chars so the numbers don't merge.
-                # May want to extend to 10... rare but some seqs are >1000
-                if end - start > 8:
-                    chars = (end - start)
-                else:
-                    chars = 8
-            # labels is all the possible numbers between the start and end
-            labels = list(range(start+1, end+1))
-            spacing = chars
-            # My hacky way to add more numbers as the screen increases in size.
-            # Spacing is the distance between numbers of the rulers.
-            # Not all numbers are divisible by 2, 3, etc so there are uneven spaces, which I account for badly below.
-            if 25 <= chars <= 50:
-                spacing = floor(chars/2)
-            elif 50 < chars < 100:
-                spacing = floor(chars/3)
-            elif 100 <= chars < 150:
-                spacing = floor(chars/4)
-            elif 150 <= chars:
-                spacing = floor(chars/5)
-            n = 0
-            speclabels = []
-            rulerlist = []
-            # spec labels are the numbers that are actually used based on the spacing.
-
-            while n < chars:
-                speclabels.append(labels[n])
-                n+=spacing
-            if labels[-1] not in speclabels:
-                # a little hack because sometimes the end doesn't  get added
-                speclabels.append(labels[-1])
-            for n in range(1,4):
-                # another little hack for when math makes it so there are two labels right next to each other at the end
-                if labels[-1]-n in speclabels:
-                    speclabels.remove(labels[-1]-n)
-            if len(speclabels)>2:
-                # more complicated logic for when there are multiple labels
-                # builds a list (compressed to a string) of the labels and spacing, accounting for the length of the numbers
-                count = range(1,len(speclabels))
-                for x in count:
-                    if x == count[-1]:
-                        #rulerlist.append('<u>'+str(speclabels[x - 1])+'</u>')
-                        rulerlist.append(str(speclabels[x - 1]))
-                        rulerlist.append(" "*(chars - len(str("".join(rulerlist)))-len(str(speclabels[x]))))
-                        rulerlist.append(str(speclabels[x]))
-                    else:
-                        rulerlist.append(str(speclabels[x-1]))
-                        first = 0
-                        if x == count[0]:
-                            first = len(str(speclabels[x-1]))
-                        next = len(str(speclabels[x]))
-                        rulerlist.append(" "*(spacing - next - first))
-                ruler = "".join(rulerlist)
-            elif len(speclabels)==2:
-                # Ah! so easy.
-                ruler = str(start + 1) + " " * (chars - len(str(start + 1)) - len(str(end))) + str(end)
-            else:
-                # Just show a single number.
-                ruler = str(start+1)
-    return ruler
-"""
-
 
 class GetPDBThread(QThread):
     """
     Input is a tuple of [SeqRs],Indices. To keep it compatible, if this is being called from a different
     method other than the button (like from , it will ignore the fact that
     """
-    #finished = pyqtSignal((Structure.Structure, SeqRecord, QModelIndex))
     finished = pyqtSignal(list)
 
     def __init__(self, input, parent=None):
@@ -442,8 +321,8 @@ class GetPDBThread(QThread):
                                 #print("structures found")
                                 structs = result['structures']
                                 structseq = result['sequence']
-                                print("QUERY: \n%s" % str(seq.seq).replace("-",""))
-                                print("RESULT: \n%s" % structseq)
+                                self.PDBLogger.info("QUERY: \n%s" % str(seq.seq).replace("-",""))
+                                self.PDBLogger.info("RESULT: \n%s" % structseq)
                                 if str(seq.seq).replace("-", "") == structseq:
                                     # They should match, else keep looking
                                     if structs[0]:
@@ -452,7 +331,7 @@ class GetPDBThread(QThread):
                                         if struct0['coordinates']:
                                             coordinates = struct0['coordinates']
                                             alignoff = int(struct0['chains']['A'][0]['uniprot']['from']) - 1
-                                            print("MODEL ACQUIRED")
+                                            self.PDBLogger.debug("MODEL ACQUIRED")
                                         else:
                                             i += 1
                                             continue
@@ -460,14 +339,14 @@ class GetPDBThread(QThread):
                                         i += 1
                                         continue
                                 else:
-                                    print("Seq didn't match, trying with next model")
+                                    self.PDBLogger.debug("Seq didn't match, trying with next model")
                                     i += 1
                                     continue
                             else:
                                 i += 1
                                 continue
                         elif i == len(ids):
-                            print("Sorry, no models found")
+                            self.PDBLogger.info("Sorry, no models found")
                             break
                         else:
                             i += 1
@@ -482,9 +361,9 @@ class GetPDBThread(QThread):
                     for x in range(len(seq)):
                         end = x + 7
                         if str(seq.seq)[x:end] == start:
-                            print("Sequence offset is %s residues" % x)
+                            self.PDBLogger.debug("Sequence offset is %s residues" % x)
                             offset = x + alignoff
-                            print("Alignment offset is %s residues" % offset)
+                            self.PDBLogger.info("Alignment offset is %s residues" % offset)
                     parser = PDB.PDBParser()
                     tmp = QTemporaryFile()
                     with urllib.request.urlopen(coordinates) as url:
@@ -492,14 +371,14 @@ class GetPDBThread(QThread):
                         if tmp.open():
                             tmp.write(myfile)
                             struct = parser.get_structure(ids[1], tmp.fileName())
-                            print("STRUCTURE PARSED")
+                            self.PDBLogger.debug("STRUCTURE PARSED")
                             #print(struct, type(struct))
                             returned.append([struct, seq, index, offset])
 
                 else:
-                    print("Sorry, no models found!!!")
+                    self.PDBLogger.debug("Sorry, no models found!!!")
             else:
-                print("NO STRUCTURE FOUND")
+                self.PDBLogger.info("NO STRUCTURE FOUND")
             self.finished.emit(returned)
 
 
