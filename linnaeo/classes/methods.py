@@ -346,9 +346,9 @@ class Slots:
                 self.mainLogger.debug('Fowarding structure to DSSP')
                 worker.start()
         else:
-            self.mainStatus.showMessage('Sorry, no models found for that query! Please manually edit the \
-            search by right clicking the node! ', msecs=5000)
-
+            #self.mainStatus.setStyleSheet("background-color: rgb(255, 0, 0);")
+            self.mainStatus.showMessage('Sorry, no models found for that query! Please import the top sequence with the correct sequence ID to run DSSP!', msecs=5000)
+            #self.mainStatus.setStyleSheet("background-color: initial;")
     def ssDone(self, result):
         print("DSSP FINISHED")
         if result[2]:
