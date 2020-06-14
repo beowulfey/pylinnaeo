@@ -551,8 +551,9 @@ class LinnaeoApp(QApplication):
         #print(os.get_exec_path())
         self.defFontId = self.fonts.addApplicationFont(':/fonts/Default-Noto.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
+        print(self.defFontId, self.defFontId2)
         #print("Fonts loaded: ",self.defFontId,self.defFontId2)
-        self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
+        self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId2)[0], 10) if sys.platform == 'win32' else QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
 
     """
      def event(self, event):
