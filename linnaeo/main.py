@@ -15,6 +15,8 @@ from PyQt5.QtCore import Qt, QThreadPool
 from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, qApp, QWidget, QSizePolicy
 
+from pympler import tracker
+
 import linnaeo
 from linnaeo.resources import linnaeo_rc
 from linnaeo.classes import widgets, utilities, methods, models, displays
@@ -34,6 +36,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         self.start = linnaeo.start_time
+        self.tr = tracker.SummaryTracker()
 
         # Initialize UI
         self.setAttribute(Qt.WA_QuitOnClose)
@@ -516,6 +519,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown """
+        self.tr.print_diff()
         mem = self.mainProcess.memory_full_info().uss / 1000000
         cpu = self.mainProcess.cpu_percent()
         self.memLabel.setText("CPU: " + str(cpu) + " % | RAM: " + str(round(mem, 2)) + " MB")

@@ -487,7 +487,7 @@ class ProcTimerThread(QThread):
     def __init__(self, parent=None):
         QThread.__init__(self, parent)
         self.processTimer = QTimer()
-        self.processTimer.setInterval(1000)
+        self.processTimer.setInterval(5000)
         self.processTimer.timeout.connect(self.timerDone)
         self.processTimer.start()
 
