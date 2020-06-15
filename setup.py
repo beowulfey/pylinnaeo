@@ -1,7 +1,7 @@
 import setuptools
 import sys
 
-reqs = ['pyqt5>=5.9','psutil','biopython','clustalo']
+reqs = ['pyqt5>=5.9','psutil','biopython','clustalo','bioservices',]
 deps = []
 if sys.platform == 'darwin':
     deps.append('install/clustalo-0.1.2-cp37-cp37m-macosx_10_14_x86_64.whl')

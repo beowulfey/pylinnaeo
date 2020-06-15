@@ -21,7 +21,7 @@ That's a basic idea. Most likely those criteria will change.
 
 #### Nice. What's it look like? 
 
-Here is a screenshot as of Jun 3, 2020:
+Here is a screenshot as of Jun 14, 2020:
 
 ![screenshot](linnaeo/resources/images/tt-example.png "Title")
 
@@ -93,6 +93,8 @@ python3 setup.py build install
 python3 -c 'import linnaeo; linnaeo.main()
 ```
 
+Note that if you want to use the DSSP feature, you'll also have to build and install a DSSP binary to your PATH! Unfortunately I don't think DSSP is included in Homebrew anymore. However, the binaries I uploaded should have a working binary and don't need anything externally. 
+
 ###### Linux
 Instructions are similar. You can try using the prebuilt wheel I have in the INSTALL folder, but they seem to have issues with compilation (the Python 3.8 version works better, so try using a venv with Py3.8). I haven't debugged this but it stopped working after I updated to Ubuntu 20.04. You can try yourself with your own compiled version of clustalo -- I'll try and update this soon with more information.
 
@@ -101,6 +103,7 @@ Install Anaconda3 and create a new environment:
 
 ```
 conda create env --name linnaeo python=3.7
+conda install -c speleo3 dssp
 cd C:\Users\<You>\devel\ 	# or where ever you want it to live
 git clone https://github.com/beowulfey/linnaeo.git
 cd linnaeo

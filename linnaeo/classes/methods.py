@@ -329,7 +329,7 @@ class Slots:
             return False
 
     def statuslogger(self, status):
-        self.mainStatus.showMessage(status,msec=5000)
+        self.mainStatus.showMessage(status,msecs=5000)
 
     def get_UniprotId(self):
         if self._currentWindow:
