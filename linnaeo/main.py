@@ -437,38 +437,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
 
-    def rebuildTrees(self):
-        """
-        Run upon loading a saved file.
-        At this point, the sequences and the alignments both have Window IDs applied -- but the windows
-        no longer exist. This rebuilds the windows using the saved window IDs and updates the respective models.
-        """
-        for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
-            if node.data(role=self.SequenceRole):
-                self.mainLogger.info("Loading sequence: "+node.data())
-                ali = {}  # empty dict needed to send to open window
-                wid = node.data(role=self.WindowRole)
-                seqr = node.data(role=self.SequenceRole)[0]
-                ali[seqr.name] = str(seqr.seq)
-                self.makeNewWindow(wid, ali, nonode=True)
-
-        for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
-            if node.data(role=self.SequenceRole):
-                self.mainLogger.info("Loading alignment: "+node.data())
-                seqs = {}
-                wid = node.data(role=self.WindowRole)
-                seqr = node.data(role=self.SequenceRole)
-                for seq in seqr:
-                    seqs[seq.name] = str(seq.seq)
-                worker = utilities.AlignThread(self, seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
-                worker.start()
-                worker.wait()
-                ali = worker.aligned
-                self.makeNewWindow(wid, ali, nonode=True)
-        self.bioModel.updateWindows(self.windows)
-        self.projectModel.updateWindows(self.windows)
-        self.mainLogger.debug("Regenerating windows took took %f seconds" % float(time.perf_counter() - self.start))
-
     def maybeClose(self):
         """
         Simple confirmation upon making a new workspace or closing the program.
@@ -500,14 +468,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     def deselectProject(self):
         """Function to unselect the opposite tree when clicked. Prevents confusion when pasting"""
         self.projectTree.clearSelection()
-        #self.actionDSSP.setEnabled(True)
-        # TODO: Add more to clarify features here!
         self.lastClickedTree = self.bioTree
 
     def deselectSeqs(self):
         """Function to unselect the opposite tree when clicked. Prevents confusion when pasting"""
         self.bioTree.clearSelection()
-        #self.actionDSSP.setDisabled(True)
         self.lastClickedTree = self.projectTree
 
     def preNameChange(self):
@@ -532,10 +497,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         #            if seqr.name
 
     def pruneNames(self):
-        """
-        CONNECTS TO SIGNAL
-        This checks which names are in "TITLES" and deletes if they were not.
-        """
+        """ This checks which names are in "TITLES" and deletes if they were not. """
         names = []
         pruned = []
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
@@ -564,20 +526,9 @@ class LinnaeoApp(QApplication):
     def __init__(self, *args):
         super().__init__(*args)
         self.fonts = QFontDatabase()
-        #print(os.path)
-        #print(os.get_exec_path())
         self.defFontId = self.fonts.addApplicationFont(':/fonts/Default-Noto.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
-        #print(self.defFontId, self.defFontId2)
-        #print("Fonts loaded: ",self.defFontId,self.defFontId2)
-        self.defFont= QFont(self.fonts.applicationFontFamilies(self.defFontId2)[0], 10) \
-            if sys.platform == 'win32' else QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
 
-
-    """
-     def event(self, event):
-         if event.type() in [2,3]:
-             print("EVENT FROM QAPP")
-         #print(event, event.type())
-         return super().event(event)
-     """
+        # For some reason, Noto does not work on Mac or Windows. But does for SS display???
+        self.defFont = QFont(self.fonts.applicationFontFamilies(self.defFontId2)[0], 10) \
+            if sys.platform in ['win32','macos'] else QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)

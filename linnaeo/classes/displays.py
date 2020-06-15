@@ -372,7 +372,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def addStructure(self, dssp, seq):
         """ Adds DSSP data to the SplitSeqs array. """
-        # TODO: THIS DOES NOT WORK FOR ALIGNMENTS; NEED TO LOOK AT THE TRUE INDEX NOT RAW INDEX NUMBER?!
         seqs = [x.replace('-', '') for x in self._seqs.values()]
         test = str(seq.seq).replace('-', '')
         # print("Query:\n%s" % test)
