@@ -176,6 +176,7 @@ class Slots:
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
             if node.data(role=self.SequenceRole):
                 self.mainLogger.info("Loading sequence: "+node.data())
+                self.mainStatus.showMessage("Loading sequence: %s" % node.data(), msecs=3000)
                 ali = {}  # empty dict needed to send to open window
                 wid = node.data(role=self.WindowRole)
                 seqr = node.data(role=self.SequenceRole)[0]
@@ -185,6 +186,7 @@ class Slots:
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             if node.data(role=self.SequenceRole):
                 self.mainLogger.info("Loading alignment: "+node.data())
+                self.mainStatus.showMessage("Loading alignment: %s" % node.data(), msecs=3000)
                 seqs = {}
                 wid = node.data(role=self.WindowRole)
                 seqr = node.data(role=self.SequenceRole)
@@ -200,6 +202,7 @@ class Slots:
                 self.makeNewWindow(wid, ali, nonode=True)
         self.bioModel.updateWindows(self.windows)
         self.projectModel.updateWindows(self.windows)
+        self.mainStatus.showMessage(f"Loading complete! took {float(time.perf_counter()-self.start):.2f} seconds", msecs=4000)
         self.mainLogger.debug("Regenerating windows took took %f seconds" % float(time.perf_counter() - self.start))
         del node
 
