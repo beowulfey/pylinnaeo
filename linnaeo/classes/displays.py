@@ -131,8 +131,16 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     dssp = None
                     color = self.theme[char]
                     if self.refseq is not None:
-                        if char != list(self._seqs.values())[self.refseq][i]:
-                            color = QColor(Qt.white)
+                        if self.theme == themes.Properties().theme:
+                            pass
+                        else:
+                            ref = list(self._seqs.values())[self.refseq][i]
+                            compare = utilities.checkConservation(char, ref)
+                            #print("Comparison: %s vs %s gave %s " % (char, ref, compare))
+                            if compare is not None and compare > 10:
+                                color = QColor(Qt.white)
+                            if compare is None:
+                                color = QColor(Qt.white)
                     if self.theme == themes.Comments().theme:
                         if i in self.comments.keys():
                             # print(self.comments[i])
@@ -286,7 +294,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.seqArrange()
 
     def updateName(self, old, new):
-        self.alignLogger.debug("Received name change alert")
+        self.alignLogger.debug("Received name change alert: %s to %s" % (old, new))
         seq = self._seqs[old]
         self._seqs[new] = seq
         self._seqs.pop(old)
@@ -296,28 +304,26 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.nameArrange(self.lines)
 
     def setFont(self, font):
-        # TODO: Turn off secondary structure if the font size is too different from default font.
-        # Choosing a new font has a built in size, which is annoying
-
+        """
+        Sets the current font. Structure symbols are always the default font, because I hand-made those symbols.
+        Therefore, when changing the font, the main Linnaeo app determines whether the new font is compatible with the
+        default font and disables the symbols if it is not.
+        """
+        # Selected font has a baked-in size, so have to account for when changing the font.
         if font.family() != self.font().family() and font.pointSize() != self.font().pointSize():
-            # print("IGNORING")
             font.setPointSize(self.font().pointSize())
-        # print(font.pointSize())
         super().setFont(font)
-        # print("FINAL", self.font().pointSize())
         self.fmF = QFontMetricsF(self.font())
         if self.done:
-            # print("REDRAWING")
             self.seqInit()
             self.seqArrange()
             self.nameArrange(self.lines)
 
     def setFontSize(self, size):
+        """ Updates the symbol font size too -- make sure it matches. """
         font = self.font()
         font.setPointSize(size)
         self.ssFontWidth = QFontMetricsF(QFont("Default-Noto", size)).averageCharWidth()
-        # print("Setting ssFONT Width to %s" % self.ssFontWidth)
-        # print("FONT",font.pointSize(), self.font().pointSize())
         self.setFont(font)
 
     def setParams(self, params):

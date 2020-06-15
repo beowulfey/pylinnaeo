@@ -4,54 +4,46 @@ import re
 import sys
 import traceback
 import urllib
-from io import StringIO
-from math import floor, trunc
-from typing import TextIO
 from urllib.error import HTTPError
 
+import clustalo
 import numpy
 from Bio import PDB
-from Bio.SeqRecord import SeqRecord
-from PyQt5.QtGui import QStandardItem
+from Bio.PDB import DSSP, PDBIO
+from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryFile
 from bioservices import UniProt
-from Bio.Blast import NCBIWWW, NCBIXML
-from Bio.PDB import Structure, FastMMCIFParser, DSSP, PDBIO
-from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryDir, QTemporaryFile, QModelIndex
-import clustalo
 
 """
 Additional classes and functions that are used within Linnaeo, but are not responsible for viewing data.
 """
 
-
-class SeqThread(QThread):
-    """
-     Determines which type of redraw should occur based on the values of rulers, colors, and "fancy", then
-     does this in a separate thread.
-     """
-    finished = pyqtSignal()
-
-    def __init__(self, *args, fancy=True, parent=None):
-        QThread.__init__(self, parent)
-        self.seqLogger = logging.getLogger("SEQDRAW")
-        self.html = None
-        self.seqs = args[0]
-        self.chars = args[1]
-        self.lines = args[2]
-        self.rulers = args[3]
-        self.colors = args[4]
-        self.dssp = args[5]
-        self.fancy = fancy
-
-    def run(self):
-        if self.fancy:
-            self.html = redrawFancy(self.seqs, self.chars, self.lines, self.rulers, self.colors, self.dssp)
+def checkConservation(res, ref):
+    """ Reads in a residue and checks whether it falls within a conserved category relative to the reference. """
+    conserved = {
+        # Adapted from http://www.imgt.org/IMGTeducation/Aide-memoire/_UK/aminoacids/IMGTclasses.html
+        # Original paper: https://pubmed.ncbi.nlm.nih.gov/14872534/
+        # Direct conserved first --> exact category
+        0: ['A','I','L','V','M'], 1: ['R', 'H', 'K'], 2: ['S', 'T'],
+        3: ['D', 'E'], 4: ['N','Q'], 5: ['C'], 6: ['G'], 7: ['P'], 8: ['W'],
+        9: ['Y'], 10: ['F'],
+        # Very similar; mostly compatible swaps
+        11: ['A', 'S'], 12: ['I', 'L', 'V', 'M', 'F'], 13: ['D', 'N'], 14: ['E', 'Q'],
+        15: ['F', 'W', 'Y'], 16: ['A', 'T'], 17: ['H', 'Q']
+    }
+    for key, value in conserved.items():
+        #print("VALUE: %s vs %s, %s" % (value, res, ref))
+        if res in value and ref in value:
+            return key
         else:
-            self.html = redrawBasic(self.seqs, self.chars, self.lines, self.rulers, self.dssp)
+            continue
+    return None
 
 
 def redrawBasic(seqs, chars, lines, rulers=False, dssp=False):
-    """ Black and white only; keeps space for ruler but does not calculate the ruler, which helps with speed."""
+    """
+    Black and white only; keeps space for ruler but does not calculate the ruler or DSSP stuff,
+    which helps with speed during window size changes.
+    """
     html = ["<pre>\n"]
     n = 0
     for line in range(lines):
@@ -87,6 +79,7 @@ def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
     Fancy like the name implies. Called at the end of resize events. Keeps your opinion on colors and rulers.
     Keeps a lot of whitespace because the tooltip and calculation of the residue ID depends on certain whitespace.
     """
+    # All the possible symbols from DSSP. The unicode values were drawn by me in my modified default font.
     '''lookup = {'H': '&#x27B0;', 'G': '&nbsp;', 'I': '&nbsp;',
               '>': '&#x27B2;', 'E': '&#x27B1;', 'B': '&nbsp;',
               'T': '&#x27B3;', 'S': '&#x27B3;',
@@ -153,6 +146,7 @@ def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
 
 
 def buildRuler(chars, start, end):
+    """ Semi-complicated function for building the horizontal ruler. Divides the screen width into even intervals. """
     ruler = None
     if start != end:
         interval = chars
@@ -270,6 +264,32 @@ def nodeSelector(tree, model):
                 seqr = node.data(role=Qt.UserRole + 2)[0]
                 seqs.append(seqr)
     return indices, seqs
+
+
+class SeqThread(QThread):
+    """
+     Determines which type of redraw should occur based on the values of rulers, colors, and "fancy", then
+     does this in a separate thread. See redraw functions above.
+     """
+    finished = pyqtSignal()
+
+    def __init__(self, *args, fancy=True, parent=None):
+        QThread.__init__(self, parent)
+        self.seqLogger = logging.getLogger("SEQDRAW")
+        self.html = None
+        self.seqs = args[0]
+        self.chars = args[1]
+        self.lines = args[2]
+        self.rulers = args[3]
+        self.colors = args[4]
+        self.dssp = args[5]
+        self.fancy = fancy
+
+    def run(self):
+        if self.fancy:
+            self.html = redrawFancy(self.seqs, self.chars, self.lines, self.rulers, self.colors, self.dssp)
+        else:
+            self.html = redrawBasic(self.seqs, self.chars, self.lines, self.rulers, self.dssp)
 
 
 class GetPDBThread(QThread):
@@ -391,23 +411,6 @@ class GetPDBThread(QThread):
             self.finished.emit(returned)
 
 
-class BlastThread(QThread):
-    finished = pyqtSignal(StringIO)
-
-    def __init__(self, seq, parent=None):
-        QThread.__init__(self, parent)
-        self.seq = seq
-        self.result = None
-
-    def run(self):
-        print("BLASTING SEQUENCE: ", self.seq.format('fasta'))
-        blast = NCBIWWW.qblast('blastp', 'refseq_protein', str(self.seq.format('fasta')))
-        print("BLAST COMPLETE")
-        #blast = "yay"
-        print(type(blast))
-        self.finished.emit(blast)
-
-
 class DSSPThread(QThread):
     """ Uses a stored PDB to calculate the secondary structure of a sequence using DSSP """
     finished = pyqtSignal(list)
@@ -486,27 +489,6 @@ class ProcTimerThread(QThread):
 
     def timerDone(self):
         self.timeout.emit()
-'''
-class ResizeTimerThread(QThread):
-    """
-    Thread for the timer, because Windows complains like hell otherwise.
-    Also used for resizing with a super short countdown
-    """
-    timeout = pyqtSignal()
-
-    def __init__(self):
-        QThread.__init__(self)
-        self.processTimer = QTimer()
-        #self.processTimer.setSingleShot(True)
-        self.processTimer.setInterval(500)
-        self.processTimer.timeout.connect(self.timerDone)
-
-    def timerDone(self):
-        self.timeout.emit()
-
-    def run(self):
-        self.processTimer.start()
-'''
 
 
 

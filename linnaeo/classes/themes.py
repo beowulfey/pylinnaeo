@@ -148,7 +148,7 @@ class PaleByType(AbstractTheme):
     neg = QColor('#E190E2')
     aro = QColor('#A0EDD8')
     ala = QColor('#F7EDEC')
-    gly = QColor('#EAE9E9')
+    gly = QColor('#E8E8E8')  #'#EAE9E9'
     pro = QColor('#F6DECC')
     cys = QColor('#F4F2BA')
 
@@ -221,6 +221,8 @@ class Grayscale(AbstractTheme):
     pos = QColor(64, 64, 64)
     neg = QColor(32, 32, 32)"""
 
+class Properties(AbstractTheme):
+    pass
 
 class FirstTheme(AbstractTheme):
     """ My first attempt. Not recommended. Kept for historical purposes """

@@ -409,11 +409,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         """
+        self.localtime = time.perf_counter()
         found = False
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
             if node.data(self.WindowRole) == sub.wid:
                 if node.data(self.StructureRole):
-                    print(node.data(self.SequenceRole))
                     sub.widget().addStructure(node.data(self.StructureRole), node.data(self.SequenceRole)[0])
                     found = True
         if not found:

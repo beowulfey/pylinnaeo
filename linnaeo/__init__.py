@@ -29,7 +29,7 @@ def main():
     window = Linnaeo()
     app._window = window
     window.show()
-    appLogger.info("Startup took %f seconds" % float(time.perf_counter()-start_time))
+    appLogger.info("~~~~STARTUP COMPLETE!~~~~ Took %f seconds" % float(time.perf_counter()-start_time))
 
     sys.exit(app.exec_())
 
