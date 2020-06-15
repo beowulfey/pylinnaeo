@@ -278,7 +278,8 @@ class GetPDBThread(QThread):
     method other than the button (like from , it will ignore the fact that
     """
     finished = pyqtSignal(list)
-
+    logger = pyqtSignal(str)
+    
     def __init__(self, input, parent=None):
         QThread.__init__(self, parent)
         self.seqs = input[0]
@@ -297,10 +298,12 @@ class GetPDBThread(QThread):
             struct = None
             structseq = None
             self.PDBLogger.info("Searching with ID %s" % pid)
+            self.logger.emit("Searching with ID %s" % pid)
             uniID = self.u.search(pid, columns="id, genes, organism, protein names")
             alignoff = 0
             if uniID:
                 self.PDBLogger.info('Results!\n\n%s' % uniID)
+                self.logger.emit('Results collected for search: %s' % uniID)
                 result = uniID.split("\n")
                 ids = []
                 for line in result[1:]:
@@ -309,8 +312,10 @@ class GetPDBThread(QThread):
                 i = 0
                 while coordinates == None:
                     self.PDBLogger.info('Attempting search with %s from %s' %  (ids[i][1], ids[i][2]) )
+                    self.logger.emit('Attempting search with %s from %s' %  (ids[i][1], ids[i][2]) )
                     structurl = "https://swissmodel.expasy.org/repository/uniprot/%s.json" % ids[i][0]
                     self.PDBLogger.debug('Searching SwissModel repository: %s' % structurl)
+                    self.logger.emit('Searching SwissModel for structure')
                     try:
                         with urllib.request.urlopen(structurl) as url:
                             data = json.loads(url.read().decode())
@@ -332,6 +337,7 @@ class GetPDBThread(QThread):
                                             coordinates = struct0['coordinates']
                                             alignoff = int(struct0['chains']['A'][0]['uniprot']['from']) - 1
                                             self.PDBLogger.debug("MODEL ACQUIRED")
+                                            self.logger.emit('MODEL ACQUIRED!')
                                         else:
                                             i += 1
                                             continue
@@ -364,6 +370,7 @@ class GetPDBThread(QThread):
                             self.PDBLogger.debug("Sequence offset is %s residues" % x)
                             offset = x + alignoff
                             self.PDBLogger.info("Alignment offset is %s residues" % offset)
+                            self.logger.emit("Alignment offset is %s residues" % offset)
                     parser = PDB.PDBParser()
                     tmp = QTemporaryFile()
                     with urllib.request.urlopen(coordinates) as url:
@@ -372,6 +379,7 @@ class GetPDBThread(QThread):
                             tmp.write(myfile)
                             struct = parser.get_structure(ids[1], tmp.fileName())
                             self.PDBLogger.debug("STRUCTURE PARSED")
+                            self.logger.emit("STRUCTURE PARSED")
                             #print(struct, type(struct))
                             returned.append([struct, seq, index, offset])
 
@@ -379,6 +387,7 @@ class GetPDBThread(QThread):
                     self.PDBLogger.debug("Sorry, no models found!!!")
             else:
                 self.PDBLogger.info("NO STRUCTURE FOUND")
+                self.logger.emit("No structure found, sorry!")
             self.finished.emit(returned)
 
 

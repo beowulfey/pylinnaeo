@@ -328,16 +328,21 @@ class Slots:
             self.mainLogger.debug("No filename chosen; canceling")
             return False
 
+    def statuslogger(self, status):
+        self.mainStatus.showMessage(status,msec=5000)
+
     def get_UniprotId(self):
         if self._currentWindow:
             self.runningDSSP.append(self._currentWindow)
             self.optionsPane.buttonStructure.setEnabled(False)
+            print("Disabling button, is now  %s" % self.optionsPane.buttonStructure.isEnabled())
             found = False
             wid = self._currentWindow.wid
             for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
                 if node.data(self.WindowRole) == wid:
                     self.mainLogger.info("Running UNIPROT search with the sequence")
                     worker = utilities.GetPDBThread([node.data(role=self.SequenceRole), [node.index()]], parent=self)
+                    worker.logger.connect(self.statuslogger)
                     worker.finished.connect(self.pdbSearchDone)
                     worker.start()
                     found = True
@@ -364,6 +369,7 @@ class Slots:
     def pdbSearchDone(self, result):
         if result:
             self.mainLogger.info('Successfully collected PDB from SwissModel repository')
+            self.mainStatus.showMessage('Successfully collected PDB from SwissModel',msecs=5000)
             for match in result:
                 worker = utilities.DSSPThread(match, parent=self)
                 worker.finished.connect(self.ssDone)
@@ -377,6 +383,7 @@ class Slots:
     def ssDone(self, result):
         if result[2]:
             self.mainLogger.info("DSSP run completed successfully")
+            self.mainStatus.showMessage("DSSP run completed successfully", msecs=5000)
             #print(result[2])
             node = self.bioModel.itemFromIndex(result[2])
             if not node:
@@ -398,6 +405,7 @@ class Slots:
                     self.mainStatus.showMessage("Please open the sequence first!", msecs=3000)
         else:
               self.mainLogger.info("DSSP failed -- please check your sequence ID.")
+              self.mainStatus.showMessage("DSSP failed -- please check your sequence ID!",msecs=5000)
 
     def copyOut(self):
         if self.lastClickedTree == self.bioTree:
