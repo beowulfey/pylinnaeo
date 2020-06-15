@@ -1,28 +1,12 @@
 import logging
-from math import floor
 
-from PyQt5.QtCore import pyqtSignal, Qt, QUrl
+from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QFontMetricsF, QColor, QFont
-# from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, QMainWindow, QTextEdit, QFrame, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, QTextEdit, QFrame, QSizePolicy
 
 from linnaeo import __version__
 from linnaeo.classes import widgets, utilities, themes
 from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui, comments_ui
-
-
-class NGLviewer(QMainWindow):
-    def __init__(self, parent=None):
-        super(self.__class__, self).__init__(parent)
-        webview = QWebEngineView(self)
-        webview.load(QUrl('http://nglviewer.org/ngl/'))
-        self.setCentralWidget(webview)
-
-
-class CommentsPane(QWidget, comments_ui.Ui_Form):
-    def __init__(self):
-        super(self.__class__, self).__init__()
-        self.setupUi(self)
 
 
 class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
@@ -31,7 +15,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     Sequences in the alignment are threaded and prepared as HTML; the color is stored in the array in order to
     reduce the load on display. However, just drawing the display is computationally expensive (as is generating
     the ruler for it), so both are turned off during resizing.
-    # TODO: Currently, the shut off does not happen on MacOS because Qt on macs doesn't alert on window presses. Damn.
     # TODO: This does not maintain the alignment order -- trouble with the ClustalO API. Shant be helped?...
     """
     resized = pyqtSignal()
@@ -149,9 +132,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     color = self.theme[char]
                     if self.refseq is not None:
                         if char != list(self._seqs.values())[self.refseq][i]:
-                            #print("%s %s doesn't match reference %s, setting to white!" % (i, char,
-                            #                                                               list(self._seqs.values())[
-                            #                                                                   self.refseq][i]))
                             color = QColor(Qt.white)
                     if self.theme == themes.Comments().theme:
                         if i in self.comments.keys():
@@ -518,6 +498,12 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
             # print("Deactivating, but keep setting of %s " % self.lastStruct)
             self.checkStructure.setChecked(False)
             # print("3",self.params['dssp'])
+
+
+class CommentsPane(QWidget, comments_ui.Ui_Form):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.setupUi(self)
 
 
 class QuitDialog(QDialog, quit_ui.Ui_closeConfirm):

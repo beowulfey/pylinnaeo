@@ -1,17 +1,12 @@
-import traceback
-import copy
 import time
-from io import StringIO
+import traceback
 
-import Bio
 from Bio import SeqIO, AlignIO
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq, Seq
-from Bio.Blast import NCBIWWW, NCBIXML
-from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QTimer
-from PyQt5.QtGui import QStandardItem, QFontMetricsF, QFont
+from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir
+from PyQt5.QtGui import QStandardItem, QFontMetricsF
 from PyQt5.QtWidgets import QFileDialog, QApplication
-from bioservices import NCBIblast
 
 from linnaeo.classes import widgets, models, utilities
 from linnaeo.classes.displays import AboutDialog

@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
 
 # Bioscience components
-import copy
 import logging
 import os
-import time
 import sys
+import time
 
 import psutil
 # PyQt components
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
-from PyQt5.QtCore import Qt, QThreadPool, pyqtSignal
+from PyQt5.QtCore import Qt, QThreadPool
 from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, QSplitter, qApp, QWidget, QSizePolicy, \
-    QGridLayout
-#from nglview import NGLWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, qApp, QWidget, QSizePolicy
 
 import linnaeo
 from linnaeo.resources import linnaeo_rc
@@ -27,10 +24,10 @@ from linnaeo.ui import linnaeo_ui
 
 class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindow):
     """
-    Constructor for the Main Window of the Sherlock App
+    Constructor for the Main Window of the Linnaeo App
     Contains all the user interface functions, as well as underlying code for major features.
-    The bulk of the program is located here.
-    Please see classes.methods for additional methods for this class. 
+    The bulk of the program is located here. Please see classes.methods for additional methods for this class.
+    The other major functionality, drawing the alignments themselves, is found under the displays.AlignSubWindow class.
     """
     #sendParams = pyqtSignal(dict)
 
