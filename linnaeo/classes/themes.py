@@ -30,7 +30,7 @@ class AbstractTheme:
         self.initTheme()
 
     def initTheme(self):
-        """ My standard categorizing. Can be changed per theme. """
+        """ My standard categorizing. Can be changed per theme. Loosely based on type."""
         self.theme = {
             # Hydrophobic
             'I': self.phb, 'L': self.phb, 'M': self.phb,
@@ -61,6 +61,7 @@ class AbstractTheme:
 
 
 class Comments(AbstractTheme):
+    """ Coloration for comments is done in the SeqInit method directly. """
     pass
 
 class ColorSafe(AbstractTheme):
@@ -98,7 +99,7 @@ class Rainbow(AbstractTheme):
         self.initTheme()
 
     def initTheme(self):
-        """ My standard categorizing. Can be changed per theme. """
+        """ Categorized by property, changed around a bit compared to the default. """
         self.theme = {
             # Hydrophobic
             'I': self.green, 'L': self.green, 'M': self.green,
@@ -139,6 +140,30 @@ class Rainbow(AbstractTheme):
     cys = QColor('#c022ff')
     """
 
+
+class Hydropathy(AbstractTheme):
+    """ Blue to Red scale for hydrophobicity. Derived from Kyte-Doolittle.
+    Based on http://www.imgt.org/IMGTeducation/Aide-memoire/_UK/aminoacids/IMGTclasses.html"""
+
+    def __init__(self):
+        super().__init__()
+        self.theme = {}
+        self.initTheme()
+
+    def initTheme(self):
+        """ Categorized by property, changed around a bit compared to the default.
+        https://www.colorbox.io/#steps=20#hue_start=217#hue_end=359#hue_curve=easeInOutQuad#sat_start=84#sat_end=87#sat_curve=linear#sat_rate=67#lum_start=100#lum_end=85#lum_curve=easeInOutExpo#minor_steps_map=0"""
+        self.theme = {
+            # Hydrophobic
+            'I': QColor('#6FA6FF'), 'V': QColor('#6FA5FF'), 'L': QColor('#6FA4FF'), "F": QColor('#6F9EFF'),
+            'C': QColor('#6F94FF'), 'M': QColor('#6E86FE'), 'A': QColor('#6E74FE'), 'W': QColor('#7D6DFD'),
+            # Neutral
+            "G": QColor('#966CFC'), 'T': QColor('#B26BFA'), 'S': QColor('#CF69F6'),  "Y": QColor('#DB60E2'),
+            'P': QColor('#DE5EC9'), "H": QColor('#DC5DAF'),
+            # Hydrophilic
+            'N': QColor('#DA5C86'), "D": QColor('#DA5C78'), 'Q': QColor('#D95B6D'), "E": QColor('#D95B65'),
+            "K": QColor('#D95B5F'),  "R": QColor('#D95A5D'),
+        }
 
 class PaleByType(AbstractTheme):
     """ Paler version of Theme2. My favorite -- default colors."""

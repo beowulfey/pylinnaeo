@@ -354,7 +354,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         elif theme == 'Bold':
             match = themes.Bold().theme
         elif theme == 'Monochrome':
-            match = themes.Mono().theme
+            match = themes.Hydropathy().theme
         elif theme == 'ColorSafe':
             match = themes.ColorSafe().theme
         elif theme == 'Rainbow':
