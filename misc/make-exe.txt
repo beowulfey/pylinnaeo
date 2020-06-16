@@ -1,1 +1,0 @@
-pyinstaller -D --name=linnaeo --add-data='C:\Users\wolfe\anaconda3\envs\build\Library\bin\mkdssp.exe;mkdssp.exe' --additional-hooks-dir=.\install --icon='C:\Users\wolfe\devel\linnaeo\linnaeo\resources\icons\linnaeo_full.ico' --clean .\linnaeo\__init__.py
