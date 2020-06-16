@@ -25,6 +25,7 @@ class SeqR(SeqRecord.SeqRecord, ABC):
                  ):
         super(SeqR, self).__init__(seq, id, name, description,
                                    dbxrefs, features, annotations, letter_annotations)
+        del seq, id, name, description, dbxrefs, features, annotations, letter_annotations
 
     def convert(self, seqr):
         """ Converts a Bio.Seqr into my own SeqR. Skips the seq (should be already there)"""
@@ -35,6 +36,7 @@ class SeqR(SeqRecord.SeqRecord, ABC):
         self.features=seqr.features
         self.annotations=seqr.annotations
         self.letter_annotations=seqr.letter_annotations
+        del seqr
 
     def __lt__(self, other):
         """Define the less-than operand."""

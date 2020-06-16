@@ -37,9 +37,11 @@ def checkConservation(res, ref):
         #print("Searching %s, %s, in %s" % (res, ref, value))
         if res in value and ref in value:
         #    print('%s matches %s within %s' % (res, ref, value))
+            del value, res, ref, conserved
             return key
         else:
             continue
+    del key, value, conserved, res, ref
     return None
 
 
@@ -68,14 +70,18 @@ def redrawBasic(seqs, chars, lines, rulers=False, dssp=False):
                         label = str(seqs[i][end - 1 - y][1])
                         if label != "0":
                             break
+                    del y
                 html.append(" "*2 + label + "\n")
+                del label
             else:
                 html.append("\n")
 
         html.append("\n")
         n+=1
     html.append("</pre>")
-    return "".join(html)
+    final = "".join(html)
+    del html, seqs, chars, lines, rulers, dssp, i, line, start, end, n
+    return final
 
 
 def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
@@ -146,7 +152,9 @@ def redrawFancy(seqs, chars, lines, rulers, colors, dssp):
             html.append(" "*chars+"\n")
         n += 1
     html.append("</pre>")
-    return "".join(html)
+    final = "".join(html)
+    del seqs, chars, lines, rulers, colors, dssp, html, line, start, end, i,
+    return final
 
 
 def buildRuler(chars, start, end):
@@ -186,6 +194,7 @@ def buildRuler(chars, start, end):
                     #            print("Removed ",labels[-x])
                     rm.append(labels[-x])
             [labels.remove(x) for x in rm]
+            del rm
         labels.insert(0, start + 1)
         if end - (start + 1) >= len(str(start + 1)) + len(str(end)) + 2:
             labels.append(end)
@@ -201,9 +210,13 @@ def buildRuler(chars, start, end):
             #   print("Spacer is (%s-%s)-%s=%s " % (x, prevx, xlab, spacer))
             rulel.append("&nbsp;" * spacer)
             rulel.append(str(x)[:-1] + '<u>' + str(x)[-1:] + '</u>')
+            del spacer
+            del x, prevx, xlab,
         count = list(re.findall(r'(&nbsp;)|[0-9]',"".join(rulel)))
         rulel.append("&nbsp;"*(chars-len(count)))
         ruler = "".join(rulel)
+        del rulel, count, labels, interval
+    del chars, start, end,
     return ruler
 
 
@@ -231,6 +244,7 @@ def checkName(name, titles, layer=0):
             return finalname, titles
     if layer == 0:
         titles.append(finalname)
+    del layer, name
     return finalname, titles
 
 
@@ -263,10 +277,15 @@ def nodeSelector(tree, model):
                     copied.append(i)
                     seqr = subnode.data(role=Qt.UserRole + 2)[0]
                     seqs.append(seqr)
+                    del seqr
             if node.data(role=Qt.UserRole + 2) and index not in copied:
                 copied.append(index)
                 seqr = node.data(role=Qt.UserRole + 2)[0]
                 seqs.append(seqr)
+                del seqr
+            del node
+        del index
+    del tree, model, copied
     return indices, seqs
 
 
@@ -288,12 +307,17 @@ class SeqThread(QThread):
         self.colors = args[4]
         self.dssp = args[5]
         self.fancy = fancy
+        #self.seqLogger.debug("Sequence thread created")
 
     def run(self):
-        if self.fancy:
-            self.html = redrawFancy(self.seqs, self.chars, self.lines, self.rulers, self.colors, self.dssp)
-        else:
-            self.html = redrawBasic(self.seqs, self.chars, self.lines, self.rulers, self.dssp)
+        while not self.html:
+            if self.fancy:
+                self.html = redrawFancy(self.seqs, self.chars, self.lines, self.rulers, self.colors, self.dssp)
+            else:
+                self.html = redrawBasic(self.seqs, self.chars, self.lines, self.rulers, self.dssp)
+        #self.seqLogger.debug("Sequence thread finished")
+        self.finished.emit()
+
 
 
 class GetPDBThread(QThread):
@@ -463,6 +487,7 @@ class AlignThread(QThread):
         QThread.__init__(self, parent)
         self.kwargs = kwargs
         self.aligned = {}
+        del parent
         #self.clustalLogger.debug("Thread for ClustalO created")
 
     def run(self):
@@ -487,7 +512,7 @@ class ProcTimerThread(QThread):
     def __init__(self, parent=None):
         QThread.__init__(self, parent)
         self.processTimer = QTimer()
-        self.processTimer.setInterval(5000)
+        self.processTimer.setInterval(1000)
         self.processTimer.timeout.connect(self.timerDone)
         self.processTimer.start()
 

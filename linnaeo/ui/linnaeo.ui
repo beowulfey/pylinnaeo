@@ -185,6 +185,7 @@
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
    <addaction name="actionSave_Image"/>
+   <addaction name="actionMemory"/>
   </widget>
   <action name="actionAlign">
    <property name="text">
@@ -388,15 +389,12 @@
     <string>Open window settings pane</string>
    </property>
   </action>
-  <action name="actionDSSP">
+  <action name="actionMemory">
    <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Run DSSP</string>
-   </property>
-   <property name="toolTip">
-    <string>Get secondary structure for selected sequence. </string>
+    <string>Check Memory</string>
    </property>
   </action>
  </widget>

@@ -144,6 +144,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                                     color = QColor(Qt.white)
                             else:
                                 color = QColor(Qt.white)
+                            del compare
                     elif consv:
                         #print("Consv theme iS ON", i)
                         if self.consvColors and self.refseq is not None:
@@ -154,6 +155,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                                 color = self.theme[compare]
                             else:
                                 color = QColor(Qt.white)
+                            del compare
                     if comments:
                         if i in self.comments.keys():
                             color = QColor(Qt.yellow)
@@ -169,6 +171,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                             dssp = self.dssps[index][tcount]
                         except KeyError:
                             dssp = '-'
+                        del index
                     else:
                         dssp = None
                 else:
@@ -177,7 +180,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     dssp = "-"
                 local.append([char, tcount, dssp])
             self.splitSeqs.append(local)
+            del i, char, color, tcount, dssp
         self.alignPane.seqs = self.splitSeqs
+        del consv, comments, seq, name, local, count
 
     def nameArrange(self, lines):
         """ Generates the name panel; only fires if the number of lines changes to avoid needless computation"""
@@ -196,6 +201,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             names.append("\n")
         names.append("</pre>")
         self.namePane.setHtml("".join(names))
+        del names, line, lines, i
 
     def seqArrange(self, color=True, rulers=True, dssp=True):
         """
@@ -219,7 +225,6 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             if self.rulerPane.verticalScrollBar().isVisible():
                 self.rulerPane.resize(int(4 * charpx + 3 + (self.rulerPane.verticalScrollBar().size().width())),
                                       self.rulerPane.size().height())
-                sb = self.rulerPane.verticalScrollBar()
                 self.last = self.rulerPane.verticalScrollBar().sliderPosition() / (
                         self.rulerPane.verticalScrollBar().maximum() -
                         self.rulerPane.verticalScrollBar().minimum())
@@ -236,10 +241,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             worker = utilities.SeqThread(self.splitSeqs, char_count, lines, rulers, color, dssp, fancy=fancy,
                                          parent=self, )
             worker.start()
+            worker.finished.connect(worker.deleteLater)
+            worker.finished.connect(worker.quit)
             worker.wait()
             style = "<style>pre{font-family:%s; font-size:%spt;}</style>" % (
                 self.font().family(), self.font().pointSize())
             self.alignPane.setHtml(style + worker.html)
+            del worker
             # RULER CALCULATION --> SIDE PANEL.
             self.rulerPane.clear()
             rulerHtml = ["<pre style=\"font-family:%s; font-size:%spt; text-align: left;\">" %
@@ -264,6 +272,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     except IndexError:
                         label = ""
                     rulerHtml.append(label + "\n")
+                    del label
+                del i
+            del x, exline
+
             rulerHtml.append('</pre>')
             self.rulerPane.setHtml(style + "".join(rulerHtml))
             if self.rulerPane.verticalScrollBar().isVisible():
@@ -272,8 +284,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                         int(round(((self.rulerPane.verticalScrollBar().maximum() -
                                     self.rulerPane.verticalScrollBar().minimum()) *
                                    self.last))))
+            del charpx, width, char_count, lines, fancy, style, rulerHtml
         except ZeroDivisionError:
             self.alignLogger.info("Font returned zero char width. Please choose a different font")
+        del color, rulers, dssp
 
     # UTILITY FUNCTIONS
     def setTheme(self, theme):
@@ -281,17 +295,20 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.params['theme'] = theme
         self.seqInit()
         self.seqArrange()
+        del theme
 
     def toggleRuler(self, state):
         self.showRuler = state
         self.params['ruler'] = state
         self.nameArrange(self.lines)
         self.seqArrange()
+        del state
 
     def toggleColors(self, state):
         self.showColors = state
         self.params['colors'] = state
         self.seqArrange()
+        del state
 
     def toggleStructure(self, state):
         # print("In alignment", state)
@@ -299,6 +316,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.showDSSP = state
         self.nameArrange(self.lines)
         self.seqArrange()
+        del state
 
     def seqs(self):
         return self._seqs
@@ -306,6 +324,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
     def setSeqs(self, seqs):
         self._seqs = seqs
         self.seqArrange()
+        del seqs
 
     def updateName(self, old, new):
         self.alignLogger.debug("Received name change alert: %s to %s" % (old, new))
@@ -316,6 +335,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.seqInit()
             self.seqArrange()
             self.nameArrange(self.lines)
+        del old, new, seq
 
     def setFont(self, font):
         """
@@ -332,6 +352,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.seqInit()
             self.seqArrange()
             self.nameArrange(self.lines)
+        del font
 
     def setFontSize(self, size):
         """ Updates the symbol font size too -- make sure it matches. """
@@ -339,6 +360,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         font.setPointSize(size)
         self.ssFontWidth = QFontMetricsF(QFont("Default-Noto", size)).averageCharWidth()
         self.setFont(font)
+        del size, font
 
     def setParams(self, params):
         # print("UPDATING VALUES")
@@ -359,6 +381,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             if self.done:
                 self.seqInit()
                 self.seqArrange()
+        del params, newtheme
 
     def lookupTheme(self, theme):
         """ Converts the stored theme name into a class """
@@ -379,7 +402,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             match = themes.Comments().theme
         elif theme == 'Conservation':
             match = themes.Conservation().theme
+        del theme
         return match
+
 
     def showCommentWindow(self, target):
         # TODO: shows for ALL rows!
@@ -391,6 +416,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         #self.commentPane.lineEdit.setText(str(name) + " " + str(resi))
         # self.gridLayout.addWidget(self.commentButton,1,0)
         self.gridLayout.addWidget(self.commentPane, 1, 1)
+        del target, name, resi
 
     def addStructure(self, dssp, seq):
         """ Adds DSSP data to the SplitSeqs array. """
@@ -415,6 +441,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     pass
                     #print("Weird, got a duplicate at %s " % res[1])
             # print(self.splitSeqs[index])
+            del index, res
+        del dssp, seq, seqs, test,
 
     def setReference(self, name):
         if name in self.splitNames:
@@ -431,11 +459,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         else:
             pass
             #print("ERROR -- SEQUENCE NOT FOUND")
+        del name
 
     def setConsvColors(self, state):
         self.consvColors = state
         self.seqInit()
         self.seqArrange()
+        del state
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
@@ -461,6 +491,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
         self.spinFontSize.valueChanged.connect(self.changeFontSize)
         self.checkStructure.toggled.connect(self.structureToggle)
         self.checkConsv.toggled.connect(self.consvToggle)
+        del index
 
     def setParams(self, params):
         """ These are set by the preferences pane --> default for every new window """
@@ -475,6 +506,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
         self.comboTheme.setCurrentIndex(self.themeIndices[self.params['theme']])
         self.spinFontSize.setValue(self.params['fontsize'])
         self.comboFont.setCurrentFont(self.params['font'])
+        del params
         # print(self.params['font'].family())
 
     def consvToggle(self):
@@ -523,6 +555,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
             # print("Deactivating, but keep setting of %s " % self.lastStruct)
             self.checkStructure.setChecked(False)
             # print("3",self.params['dssp'])
+        del state
 
 
 class CommentsPane(QWidget, comments_ui.Ui_Form):

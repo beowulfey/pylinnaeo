@@ -37,7 +37,6 @@ def main():
     window.setWindowIcon(icon)
     window.show()
     appLogger.info("~~~~STARTUP COMPLETE!~~~~ Took %f seconds" % float(time.perf_counter()-start_time))
-
     sys.exit(app.exec_())
 
 

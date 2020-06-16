@@ -41,6 +41,7 @@ class MDISubWindow(QMdiSubWindow):
 
         icon = QIcon(":/icons/linnaeo_full.ico")
         self.setWindowIcon(icon)
+        del icon
         self.wid = wid
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self._widget = None
@@ -62,9 +63,10 @@ class MDISubWindow(QMdiSubWindow):
         # self.setSystemMenu(menu)
 
     def eventFilter(self, obj, event):
-        if event.type() == 14:
+        if event and event.type() == 14:
             self.resizing.emit()
         return super().eventFilter(obj, event)
+
 
     def drawSimple(self):
         if self._widget:
@@ -76,43 +78,24 @@ class MDISubWindow(QMdiSubWindow):
         self._widget.userIsResizing = False
         self._widget.seqArrange()
 
-    """def mouseMoveEvent(self, event):
-        #print(QCursor.pos())
-        return super().mouseMoveEvent(event)"""
-
-    """def event(self, event):
-        # EventFilter doesn't capture type 2 events on title bar of subwindow for some reason
-        # Is there a better way to do this???
-        #print(event, event.type())
-        if event.type() == 14:
-            print("SUBWINDOW RESIZE")
-        if event.type() == 2:
-            #linnaeo = self.parentWidget().parentWidget().parentWidget().parentWidget().parentWidget().parentWidget()
-            #print("REDRAWING FROM MDI")
-            self._widget.userIsResizing = True
-            #self._widget.seqArrangeNoColor()
-        elif event.type() == 3:
-            #print("DONE REDRAWING FROM MDI")
-            self._widget.userIsResizing = False
-            self._widget.resized.emit()
-            #self._widget.seqArrangeColor()
-        return super().event(event)"""
-
     def setWidget(self, widget):
         self._widget = widget
         super(MDISubWindow, self).setWidget(widget)
+        del widget
 
     def widget(self):
         return self._widget
 
     def addStructure(self, dssp, seq):
         self._widget.addStructure(dssp, seq)
+        del dssp, seq
 
     def show(self):
         self._widget.show()
         super(MDISubWindow, self).show()
 
     def closeEvent(self, event):
+        self.removeEventFilter(self)
         if self.mdiArea():
             self.mdiArea().removeSubWindow(self)
         self.close()
@@ -144,6 +127,7 @@ class MDIArea(QMdiArea):
             self.setTabs(False)
             for sub in self.subWindowList():
                 sub.showNormal()
+                del sub
             self.tileSubWindows()
 
     def setTabs(self, on):
@@ -155,6 +139,7 @@ class MDIArea(QMdiArea):
         else:
             self.tabbed = False
             self.setViewMode(self.SubWindowView)
+        del on
 
     def setupTabBar(self):
         # self.tabBar.setAutoHide(True)
@@ -184,6 +169,7 @@ class MDIArea(QMdiArea):
             self.activeSubWindow().showMaximized()
         window.show()
         self.setActiveSubWindow(window)
+        del window, flags
 
     def setActiveSubWindow(self, window):
         #self.refreshParams.emit(window)
@@ -198,10 +184,12 @@ class MDIArea(QMdiArea):
             else:
                 super(MDIArea, self).setActiveSubWindow(window)
                 self.activeSubWindow().showMaximized()
+            del titles
         else:
             super(MDIArea, self).setActiveSubWindow(window)
             self.activeSubWindow().showMaximized()
             window.widget().resized.emit()
+        del window
             # print("Unable to resize")
             # self.activeSubWindow().showMaximized()
 
@@ -209,7 +197,7 @@ class MDIArea(QMdiArea):
 class ItemModel(QStandardItemModel):
     nameChanging = pyqtSignal()
     dupeName = pyqtSignal()
-    nameChanged = pyqtSignal()
+    nameWasChanged = pyqtSignal(str)
 
     def __init__(self, windows, seqTree=False):
         super(ItemModel, self).__init__()
@@ -221,18 +209,21 @@ class ItemModel(QStandardItemModel):
         self.isSeqs = False
         if seqTree:
             self.isSeqs = True
+        del windows, seqTree
 
     def updateLastClicked(self, node):
         self.lastClickedNode = node
+        del node
 
     def updateNames(self, titles):
         self._titles = titles
+        del titles
 
     def updateWindows(self, windows):
         self._windows = windows
+        del windows
 
     def setData(self, index, value, role=Qt.UserRole+1):
-        oldvalue = None
         self.modelLogger.debug("Updating data for node")
         if self.isSeqs:
             self.modelLogger.debug("Sequence node; checking name!")
@@ -258,7 +249,8 @@ class ItemModel(QStandardItemModel):
         self.modelLogger.debug("Setting node text to "+str(value))
         self.itemFromIndex(index).setData(value)
         self.itemFromIndex(index).setText(value)
-        self.nameChanged.emit()
+        self.nameWasChanged.emit(value)
+        print("Emitted name change signal")
         try:
             sub = self._windows[self.itemFromIndex(index).data(role=Qt.UserRole+3)]
             sub.setWindowTitle(value)
@@ -304,10 +296,12 @@ class AlignPane(QTextEdit):
         self.setObjectName("alignPane")
         self.setCursorWidth(0)
         self.setToolTipDuration(100)
+        del sizePolicy
 
     def setChars(self, chars):
         self.chars = chars
         self.lastchars = len(self.seqs[0])-self.chars*(self.lines-1)
+        del chars
 
     def getSeqPos(self, pos, row_pos):
         seqsperline = (len(self.seqs) + int(self.parentWidget().parentWidget().showRuler) + \
@@ -339,6 +333,7 @@ class AlignPane(QTextEdit):
             true_pos = [[seqi, resid, tpos]] + others
         except IndexError:
             true_pos = None
+        del pos, row_pos, seqsperline, line, seqi, tline, stack, tpos, others
         return true_pos
 
     def makeTT(self, mpos, curs):
@@ -364,8 +359,10 @@ class AlignPane(QTextEdit):
                     string.insert(-1,"\n")
             string = "".join(string)
             QToolTip.showText(mpos, resn + " at " + string)
+            del string
         else:
             QToolTip.hideText()
+        del mpos, curs, resn, pos, row_pos, resids,
 
     def addAnnotation(self, curs):
         """ Locates the residue you double clicked"""
@@ -377,10 +374,12 @@ class AlignPane(QTextEdit):
                     'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y']:
             target = resids[0]
             self.commentAdded.emit(target)
+        del resn, pos, row_pos, resids, curs
 
     def mouseMoveEvent(self, event):
         if self.tracking:
             self.mousePressEvent(event)
+            del event
         else:
             super().mouseMoveEvent(event)
 
@@ -390,6 +389,7 @@ class AlignPane(QTextEdit):
         curs = self.textCursor()
         self.ttReq.emit(event.globalPos(), curs)
         self.tracking = True
+        del curs, event
 
     def mouseReleaseEvent(self, event):
         curs = self.textCursor()
@@ -397,10 +397,12 @@ class AlignPane(QTextEdit):
         self.setTextCursor(curs)
         self.tracking = False
         super().mouseReleaseEvent(event)
+        del curs
 
     def mouseDoubleClickEvent(self, event):
         self.setTextCursor(self.cursorForPosition(event.pos()))
         self.moveCursor(QTextCursor.NextCharacter, mode=QTextCursor.KeepAnchor)
         curs = self.textCursor()
         self.annoReq.emit(curs)
+        del curs
 
