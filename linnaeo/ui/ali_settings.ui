@@ -157,17 +157,22 @@
      </item>
      <item>
       <property name="text">
-       <string>Monochrome</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string>Grayscale</string>
       </property>
      </item>
      <item>
       <property name="text">
        <string>Rainbow</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Hydropathy</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Conservation</string>
       </property>
      </item>
     </widget>

@@ -111,6 +111,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.splitSeqs = []
         self.splitNames = []
         self.maxname = 0
+        consv = True if self.theme == themes.Conservation().theme else False
+        comments = True if self.theme == themes.Comments().theme else False
         for seq in self._seqs.values():
             if len(seq) > self.maxlen:
                 self.maxlen = len(seq)
@@ -126,25 +128,37 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             for i in range(self.maxlen):
                 char = seq[i]
                 if char not in ["-", " "]:
+                    color = None
                     count += 1
                     tcount = count
                     dssp = None
-                    color = self.theme[char]
-                    if self.refseq is not None:
-                        if self.theme == themes.Properties().theme:
-                            pass
-                        else:
+                    if not consv:
+                        print("Consv is off, skipping")
+                        color = self.theme[char]
+                        if self.consvColors and self.refseq is not None:
                             ref = list(self._seqs.values())[self.refseq][i]
                             compare = utilities.checkConservation(char, ref)
-                            #print("Comparison: %s vs %s gave %s " % (char, ref, compare))
-                            if compare is not None and compare > 10:
+                            if compare is not None:
+                                print(compare)
+                                if compare > 10:
+                                    color = QColor(Qt.white)
+                            else:
                                 color = QColor(Qt.white)
-                            if compare is None:
+                    elif consv:
+                        print("Consv theme iS ON", i)
+                        if self.consvColors and self.refseq is not None:
+                            ref = list(self._seqs.values())[self.refseq][i]
+                            compare = utilities.checkConservation(char, ref)
+                            if compare is not None and compare <= len(self.theme):
+                                print(compare)
+                                color = self.theme[compare]
+                            else:
                                 color = QColor(Qt.white)
-                    if self.theme == themes.Comments().theme:
+                    if comments:
                         if i in self.comments.keys():
-                            # print(self.comments[i])
                             color = QColor(Qt.yellow)
+                    if not color:
+                        color = QColor(Qt.white)
                     tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
                     char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (
                         color.name(), tcolor, char)
@@ -353,7 +367,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             match = themes.PaleByType().theme
         elif theme == 'Bold':
             match = themes.Bold().theme
-        elif theme == 'Monochrome':
+        elif theme == 'Hydropathy':
             match = themes.Hydropathy().theme
         elif theme == 'ColorSafe':
             match = themes.ColorSafe().theme
@@ -363,6 +377,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             match = themes.Grayscale().theme
         elif theme == 'Annotations':
             match = themes.Comments().theme
+        elif theme == 'Conservation':
+            match = themes.Conservation().theme
         return match
 
     def showCommentWindow(self, target):
@@ -409,13 +425,17 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                 self.seqArrange()
         elif name == "Select ref...":
             self.refseq = None
-
             if self.done:
                 self.seqInit()
                 self.seqArrange()
         else:
             pass
             #print("ERROR -- SEQUENCE NOT FOUND")
+
+    def setConsvColors(self, state):
+        self.consvColors = state
+        self.seqInit()
+        self.seqArrange()
 
 
 class OptionsPane(QWidget, ali_settings_ui.Ui_Form):

@@ -94,13 +94,21 @@ class Slots:
         if self._currentWindow:
             self._currentWindow.widget().toggleStructure(bool(state))
 
+    def toggleConsv(self, state):
+        """ Turn reference sequence on/off """
+        if self._currentWindow:
+            self._currentWindow.widget().setConsvColors(state)
+
     def selectReference(self, index):
         """ Simple forwarding of selected reference sequence for coloring of sequence. """
         self._currentWindow.widget().setReference(self.optionsPane.comboReference.itemText(index))
 
     def changeTheme(self):
         """ Simple forwarding of selected theme. """
+        if self.optionsPane.comboTheme.currentText() == "Conservation":
+            self.optionsPane.checkConsv.setChecked(True)
         if self._currentWindow:
+            self.optionsPane.comboReference.setCurrentIndex(1)
             self._currentWindow.widget().setTheme(self.optionsPane.comboTheme.currentText())
 
     def changeFont(self, font):

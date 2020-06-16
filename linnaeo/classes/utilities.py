@@ -24,15 +24,19 @@ def checkConservation(res, ref):
         # Original paper: https://pubmed.ncbi.nlm.nih.gov/14872534/
         # Direct conserved first --> exact category
         0: ['A','I','L','V','M'], 1: ['R', 'H', 'K'], 2: ['S', 'T'],
-        3: ['D', 'E'], 4: ['N','Q'], 5: ['C'], 6: ['G'], 7: ['P'], 8: ['W'],
-        9: ['Y'], 10: ['F'],
+        3: ['D', 'E'], 4: ['N','Q'], 5: ['C', 'C'], 6: ['G','G'], 7: ['P','P'], 8: ['W','W'],
+        9: ['Y','Y'], 10: ['F','F'],
         # Very similar; mostly compatible swaps
-        11: ['A', 'S'], 12: ['I', 'L', 'V', 'M', 'F'], 13: ['D', 'N'], 14: ['E', 'Q'],
-        15: ['F', 'W', 'Y'], 16: ['A', 'T'], 17: ['H', 'Q']
+        11: ['I', 'L', 'V', 'M', 'F',], 12: ['A', 'S'], 13: ['D', 'N'], 14: ['E', 'Q'],
+        15: ['F', 'W', 'Y'], 16: ['A', 'T'], 17: ['H', 'Q'],
+        # Less similar; sort of compatible swaps
+        18: ['R', 'E', 'Q'], 19: ['K','E','Q'], 20: ['C','S',], 21: ['T','I','L','V','M','F'],
+        22: ['H', 'Y'], 23: ['W','Q']
     }
     for key, value in conserved.items():
-        #print("VALUE: %s vs %s, %s" % (value, res, ref))
+        print("Searching %s, %s, in %s" % (res, ref, value))
         if res in value and ref in value:
+            print('%s matches %s within %s' % (res, ref, value))
             return key
         else:
             continue

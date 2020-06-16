@@ -229,6 +229,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.optionsPane.comboFont.currentFontChanged.connect(self.changeFont)
         self.optionsPane.spinFontSize.valueChanged.connect(self.changeFontSize)
         self.optionsPane.checkStructure.toggled.connect(self.toggleStructure)
+        self.optionsPane.checkConsv.toggled.connect(self.toggleConsv)
         self.optionsPane.comboReference.currentIndexChanged.connect(self.selectReference)
         #self.mdiArea.refreshParams.connect(self.refreshParams)
         #LinnaeoApp.instance().barClick.connect(self.drawSimple)

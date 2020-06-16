@@ -246,8 +246,32 @@ class Grayscale(AbstractTheme):
     pos = QColor(64, 64, 64)
     neg = QColor(32, 32, 32)"""
 
-class Properties(AbstractTheme):
-    pass
+
+class Conservation(AbstractTheme):
+
+    def initTheme(self):
+       # Since the dictionary for conservation gives a number back, I can just store it as an array.
+       """self.theme = [
+           # First conservation level: colors for each category (all singles are one category)
+           QColor('#41ff78'), QColor('#7841ff'), QColor('#41ffd7'), QColor('#41c8ff'), QColor('#4169ff'),
+           QColor('#d741ff'), QColor('#d741ff'), QColor('#d741ff'), QColor('#d741ff'), QColor('#d741ff'),
+           # Second conservation level: half-value variants of the above if applicable, or a middle color if applicable
+           QColor('#6FA6FF'), QColor('#6FA6FF'), QColor('#6FA6FF'), QColor('#6FA6FF'), QColor('#6FA6FF'),
+           QColor('#6FA6FF'), QColor('#6FA6FF')
+       ]"""
+       self.theme = [
+           # First conservation level: colors for each category (all singles are one category)
+           QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'),
+           QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'),
+           QColor('#ffc380'),
+           # Second conservation level: 1/3rd lower saturation variant of the above
+           QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'),
+           QColor('#97d3aa'), QColor('#97d3aa'),
+           # Third conservation level: 1/3rd lower saturation of the 2nd
+           QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'),
+           QColor('#96c3d6'),
+       ]
+
 
 class FirstTheme(AbstractTheme):
     """ My first attempt. Not recommended. Kept for historical purposes """
