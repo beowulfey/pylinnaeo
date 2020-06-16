@@ -47,6 +47,7 @@ class Slots:
                     if self.optionsPane.comboReference.itemText(x) == self._currentWindow.widget().splitNames[
                             self._currentWindow.widget().refseq]:
                         self.optionsPane.comboReference.setCurrentIndex(x)
+                    del x
             if not self.optionsPane.checkStructure.isEnabled():
                 if self._currentWindow.widget().dssps:
                     self.optionsPane.structureActivate(True)
