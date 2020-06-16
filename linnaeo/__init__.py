@@ -1,7 +1,9 @@
-__version__ = 'v0.2.0'
+__version__ = 'v0.2.1'
 import logging
 import sys
 import time
+
+from PyQt5.QtGui import QIcon
 
 from linnaeo.main import LinnaeoApp, Linnaeo
 
@@ -16,6 +18,8 @@ def main():
     #appLogger.addHandler(handler)
 
     app = LinnaeoApp(sys.argv)
+    app.setApplicationName("Linnaeo")
+    app.setApplicationVersion(__version__)
     #console = PythonConsole()
     #console.show()
     #console.eval_in_thread()
@@ -29,6 +33,8 @@ def main():
     window = Linnaeo()
     app._window = window
     window.setWindowTitle("Linnaeo")
+    icon = QIcon(":/icons/linnaeo_full.ico")
+    window.setWindowIcon(icon)
     window.show()
     appLogger.info("~~~~STARTUP COMPLETE!~~~~ Took %f seconds" % float(time.perf_counter()-start_time))
 

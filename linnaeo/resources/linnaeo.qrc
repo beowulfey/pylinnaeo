@@ -3,5 +3,6 @@
     <file>qss/linnaeo.qss</file>
     <file>fonts/Default-Noto.ttf</file>
     <file>fonts/LiberationMono.ttf</file>
+    <file>icons/linnaeo_full.ico</file>
   </qresource>
 </RCC>

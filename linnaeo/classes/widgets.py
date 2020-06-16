@@ -4,7 +4,7 @@ import sys
 from math import floor
 
 from PyQt5.QtCore import Qt, pyqtSignal, QSize, QPoint, QTimer
-from PyQt5.QtGui import QStandardItemModel, QTextCursor
+from PyQt5.QtGui import QStandardItemModel, QTextCursor, QIcon
 from PyQt5.QtWidgets import QMdiSubWindow, QMdiArea, QTabBar, QTreeView, QSizePolicy, QAbstractItemView, \
     QTextEdit, QAbstractScrollArea, QToolTip
 
@@ -38,6 +38,9 @@ class MDISubWindow(QMdiSubWindow):
 
     def __init__(self, wid):
         super(MDISubWindow, self).__init__()
+
+        icon = QIcon(":/icons/linnaeo_full.ico")
+        self.setWindowIcon(icon)
         self.wid = wid
         self.setAttribute(Qt.WA_DeleteOnClose, False)
         self._widget = None

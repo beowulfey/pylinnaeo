@@ -15,7 +15,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="linnaeo",
-    version="0.2.0",
+    version="0.2.1",
     author="Aaron Wolfe",
     author_email="wolfe.aarond@gmail.com",
     description="A tool for creating and categorizing protein alignments",
