@@ -34,9 +34,9 @@ def checkConservation(res, ref):
         22: ['H', 'Y'], 23: ['W','Q']
     }
     for key, value in conserved.items():
-        print("Searching %s, %s, in %s" % (res, ref, value))
+        #print("Searching %s, %s, in %s" % (res, ref, value))
         if res in value and ref in value:
-            print('%s matches %s within %s' % (res, ref, value))
+        #    print('%s matches %s within %s' % (res, ref, value))
             return key
         else:
             continue

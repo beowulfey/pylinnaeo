@@ -133,24 +133,24 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     tcount = count
                     dssp = None
                     if not consv:
-                        print("Consv is off, skipping")
+                        #print("Consv is off, skipping")
                         color = self.theme[char]
                         if self.consvColors and self.refseq is not None:
                             ref = list(self._seqs.values())[self.refseq][i]
                             compare = utilities.checkConservation(char, ref)
                             if compare is not None:
-                                print(compare)
+                         #       print(compare)
                                 if compare > 10:
                                     color = QColor(Qt.white)
                             else:
                                 color = QColor(Qt.white)
                     elif consv:
-                        print("Consv theme iS ON", i)
+                        #print("Consv theme iS ON", i)
                         if self.consvColors and self.refseq is not None:
                             ref = list(self._seqs.values())[self.refseq][i]
                             compare = utilities.checkConservation(char, ref)
                             if compare is not None and compare <= len(self.theme):
-                                print(compare)
+                         #       print(compare)
                                 color = self.theme[compare]
                             else:
                                 color = QColor(Qt.white)
