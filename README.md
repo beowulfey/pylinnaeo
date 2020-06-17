@@ -131,7 +131,7 @@ python setup.py build install
 On Windows, I have a pre-compiled clustalo wheel file that seems to usually work. Please let me know if it doesn't. 
 
 
-##### How do I use it?
+#### How do I use it?
 When you navigate the various security parameters for opening binaries from tiny open source developers (it's legit, but I don't know how to sign my code yet, sorry) you'll be greeted with the main window. Try either opening up some download sequence files or other alignments you have made. You can also copy a fasta-formatted sequence and paste it directly into the program. 
 
 Sequences and alignments can be renamed or organized in folders. I recommend getting your sequences from [UniProt](https://www.uniprot.org) as I've integrated it into the DSSP search function (it uses the sequence ID). 
@@ -147,7 +147,7 @@ There is also an options panel that allows for choosing a font, theme, increase 
 Enjoy, and hope it works for you, the intrepid reader! I appreciate your feedback! 
 
 
-##### Special thanks
+#### Special thanks
 
 Repositories I am eternally grateful for -- they helped me get this onto windows -- and need to cite:
 
