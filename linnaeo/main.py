@@ -312,8 +312,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # combo is an array of SeqRecords, sorted, to prevent creating duplicate alignments.
         self.localtime = time.perf_counter()
 
-        self.mainLogger.debug("Window for sequence or alignment requested")
-
         items = {}
         combo = []
         # Collect the selected sequence(s)
