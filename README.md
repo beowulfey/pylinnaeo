@@ -59,13 +59,28 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 #### How do I get set up? ####
 
 ## [Downloads](https://drive.google.com/drive/folders/1uk4Vd8ioxuDsuYsToDWuR-IZZBSoDJhy?usp=sharing) ##
-I've attempted to build portable binaries for all three platforms. Hopefully they work, but I'm still learning this part. 
+I've attempted to build portable binaries for all Mac and Windows. Hopefully they work, but I'm still learning this part. 
 
 Download the correct platform, unzip, and run the linnaeo(.exe,.app) binary. Note that the executable HAS to be in the same directory as the other libraries -- it won't work otherwise! Symlinks don't work on linux (but shortcuts on Windows do work, so you can add it to your start menu). 
 
 If you want to try building it yourself, or they don't work, here are some instructions:
 
+###### Linux
+If you're on linux it's a good bet you've done something like this before! Here's the basic process:
+* Create a new virtualenv 
+* Clone the github into a folder and start up your virtualenv
+* Install everything required to run and fire it up! 
+
+Try my prebuilt ClustalO for python wheel, but if it doesn't work you'll have to go through the steps to compile ClustalO and the wrapper yourself (see the Mac section for tips). 
+```
+pip install -r requirements.txt
+pip install install/clustalo-0.1.2-cp38-cp38-linux_x86_64.whl
+python setup.py build install
+python -c 'import linnaeo;linnaeo.main()
+```
+
 ###### MAC
+Let's say you want to try and build it from source... maybe the latest devel version or something. Here's how.
 Install homebrew if you don't have it... it will make your life significantly easier. 
 Then follow these steps:
 ```
@@ -95,9 +110,6 @@ python3 -c 'import linnaeo; linnaeo.main()
 
 Note that if you want to use the DSSP feature, you'll also have to build and install a DSSP binary to your PATH! Unfortunately I don't think DSSP is included in Homebrew anymore. However, the binaries I uploaded should have a working binary and don't need anything externally. 
 
-###### Linux
-Instructions are similar. You can try using the prebuilt wheel I have in the INSTALL folder, but they seem to have issues with compilation (the Python 3.8 version works better, so try using a venv with Py3.8). I haven't debugged this but it stopped working after I updated to Ubuntu 20.04. You can try yourself with your own compiled version of clustalo -- I'll try and update this soon with more information.
-
 ###### Windows
 Install Anaconda3 and create a new environment:
 
@@ -107,6 +119,8 @@ conda install -c speleo3 dssp
 cd C:\Users\<You>\devel\ 	# or where ever you want it to live
 git clone https://github.com/beowulfey/linnaeo.git
 cd linnaeo
+pip install install/clustalo-0.1.2-cp37-cp37m-win_amd64.whl
+pip install -r requirements.txt
 python setup.py build install
 ```
 On Windows, I have a pre-compiled clustalo wheel file that seems to usually work. Please let me know if it doesn't. 
@@ -117,3 +131,7 @@ Repositories I am eternally grateful for -- they helped me get this onto windows
 * [ARGTABLE2](https://github.com/jonathanmarvens/argtable2) -- for building Clustal Omega on Windows
 * [Clustal Omega, adapted to use CMake (so, so grateful) from GSL Biotech](https://github.com/GSLBiotech/clustal-omega/tree/master/src)
 
+Other core parts of the software that are awesome too:
+* Biopython
+* Bioservices
+* and of course, PyQt5

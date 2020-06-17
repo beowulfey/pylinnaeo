@@ -37,10 +37,10 @@ def main():
     window.setWindowIcon(icon)
     window.show()
     #del icon
-    appLogger.info("++++++++++++++++++++++++++++++++++++++++++++++++++")
-    appLogger.info("\t\t\t\tSTARTUP COMPLETE!")
+    appLogger.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    appLogger.info("\t\t          STARTUP COMPLETE!")
     appLogger.info(f"\t\tLoaded linnaeo-%s in {float(time.perf_counter()-start_time):.3f} seconds" % __version__)
-    appLogger.info("++++++++++++++++++++++++++++++++++++++++++++++++++")
+    appLogger.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     sys.exit(app.exec_())
 
 
