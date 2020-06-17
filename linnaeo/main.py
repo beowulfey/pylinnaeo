@@ -92,8 +92,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.guiFinalize()
         self.mainLogger.debug("Finalized gui, took %f seconds" % float(time.perf_counter() - self.start))
         self.connectSlots()
-        self.mainLogger.debug("Slots connected after %f seconds" % float(time.perf_counter() - self.start))
-        self.mainLogger.debug("Setup took %f seconds" % float(time.perf_counter() - self.start))
+        #self.mainLogger.debug("Slots connected after %f seconds" % float(time.perf_counter() - self.start))
+        #self.mainLogger.debug("Setup took %f seconds" % float(time.perf_counter() - self.start))
         self.setMouseTracking(True)
         del trees, data
 
@@ -105,7 +105,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.windex = 0  # Acts as identifier for tracking alignments (max 2.1 billion)
         self.sequences = {}  # Stored as {WindowID:[SeqRecord(s)] }
         self.titles = []  # maintains a list of sequence titles to confirm uniqueness
-        self.mainLogger.debug("guiSet took took %f seconds" % float(time.perf_counter() - self.start))
+        #self.mainLogger.debug("guiSet took took %f seconds" % float(time.perf_counter() - self.start))
 
         # Load default options for windows (from parameters file if saved)
         # if PARAMETERS FILE:
@@ -154,11 +154,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def guiFinalize(self):
         # Tree setup
-        self.mainLogger.debug("Up to selectionMode took %f seconds" % float(time.perf_counter() - self.start))
+        #self.mainLogger.debug("Up to selectionMode took %f seconds" % float(time.perf_counter() - self.start))
         self.bioTree.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.mainLogger.debug("Up to adding bioTree took %f seconds" % float(time.perf_counter() - self.start))
+        #self.mainLogger.debug("Up to adding bioTree took %f seconds" % float(time.perf_counter() - self.start))
         self.splitter_2.addWidget(self.bioTree)
-        self.mainLogger.debug("Up to projectTree took %f seconds" % float(time.perf_counter() - self.start))
+        #self.mainLogger.debug("Up to projectTree took %f seconds" % float(time.perf_counter() - self.start))
         self.splitter_2.addWidget(self.projectTree)
         self.mainLogger.debug("Adding all GUI objects took %f seconds" % float(time.perf_counter() - self.start))
 
@@ -170,7 +170,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Status bar setup
         self.updateUsage()
         self.statusBar().addPermanentWidget(self.memLabel)
-        self.mainLogger.debug("After StatusbarUpdate")
+        #self.mainLogger.debug("After StatusbarUpdate")
 
         # Load
         # self.DEBUG()  # TODO: DELETE THIS NEPHEW
@@ -242,6 +242,21 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.mdiArea.subWindowActivated.connect(self.refreshParams)
 
         self.optionsPane.buttonStructure.clicked.connect(self.get_UniprotId)
+
+    def disconnectSlots(self):
+        slots = [self.actionNew, self.actionOpen, self.actionImportSeq, self.actionImportAlign, self.actionExportSeq,
+                 self.actionExportAlign, self.actionSave, self.actionQuit, self.actionCopy, self.actionPaste,
+                 self.actionAlign, self.actionNewFolder, self.actionDelete, self.actionTile, self.actionCascade,
+                 self.actionClose, self.actionClose_all, self.actionToggle_Tabs, self.actionAbout,
+                 self.bioTree, self.bioModel, self.projectTree, self.processTimer, self.actionSave_Image,
+                 self.actionOptions, self.mdiArea, #self.optionsPane.checkRuler, self.optionsPane.checkColors,
+                 #self.optionsPane.comboTheme, self.optionsPane.comboFont, self.optionsPane.spinFontSize,
+                 #self.optionsPane.checkConsv, self.optionsPane.comboReference,
+                 self.optionsPane.buttonStructure, #self.optionsPane.checkStructure
+                 ]
+        for signal in slots:
+            signal.disconnect()
+        del slots
 
         #self.actionMemory.triggered.connect(self.memoryPrint)
 
@@ -380,7 +395,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         a sequence node, or multiple sequence nodes, if those are not already in the form of a window.
         After generation, stores the window in the list of all windows by its window ID.
         """
-        print("MAKING WINDOW")
         sub = widgets.MDISubWindow(wid)
         widget = AlignSubWindow(ali, self.optionsPane.params)
         sub.setWidget(widget)
@@ -433,7 +447,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         """
-        print("OPENING WINDOW")
         self.localtime = time.perf_counter()
         found = False
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
@@ -449,6 +462,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                         seq = node.data(self.SequenceRole)[0]
                         sub.widget().addStructure(node.data(self.StructureRole), seq)
                         found = True
+                        del seq
         del found, node
         sub.widget().setParams(self.optionsPane.params)
         if sub.mdiArea() != self.mdiArea:
@@ -457,7 +471,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             # print(sub.widget().params)
             # self.sendParams.emit(sub.widget().params.copy())
             self.mdiArea.addSubWindow(sub)
-
+            #print("SUBWINDOWS: %s" % len(self.mdiArea.subWindowList()))
         else:
             sub.show()
             self.mdiArea.setActiveSubWindow(sub)
@@ -580,7 +594,9 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             #newWindow.show()
             self.mdiArea.closeAllSubWindows()
             self.start = time.perf_counter()
+            self.disconnectSlots()
             self.guiSet()
+            self.connectSlots()
             #self.destroy()
             del result
         else:
@@ -607,17 +623,12 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             newPModel = widgets.ItemModel(windows)
             self.restore_tree(newBModel.invisibleRootItem(), fstream)
             self.restore_tree(newPModel.invisibleRootItem(), fstream)
-            #self.deleteLater()
-            #newWindow = Linnaeo(trees=[newBModel, newPModel], data=[sequences, titles, windex])
             self.mainStatus.showMessage("Rebuild complete!")
-            #newWindow.setWindowTitle("Linnaeo")
-            #icon = QIcon(":/icons/linnaeo_full.ico")
-            #newWindow.setWindowIcon(icon)
-            #qApp._window = newWindow
-            #newWindow.show()
             self.mdiArea.closeAllSubWindows()
             self.start = time.perf_counter()
+            self.disconnectSlots()
             self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
+            self.connectSlots()
             del sel, filename, file, fstream, sequences, titles, windex, windows, newBModel, newPModel
             #self.destroy()
         else:

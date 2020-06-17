@@ -363,7 +363,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         del size, font
 
     def setParams(self, params):
-        # print("UPDATING VALUES")
+        #print("UPDATING VALUES")
         self.params = params.copy()
         # print(self.params)
         self.showRuler = self.params['ruler']
@@ -495,7 +495,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
 
     def setParams(self, params):
         """ These are set by the preferences pane --> default for every new window """
-        # print("SETTING PARAMS")
+        #print("SETTING PARAMS")
         self.params = params.copy()
         # print(params["font"].family(),
         #     self.params["font"].family())  # 'rulers', 'colors', 'fontsize', 'theme', 'font', 'byconsv'
@@ -520,7 +520,7 @@ class OptionsPane(QWidget, ali_settings_ui.Ui_Form):
         self.params['colors'] = self.checkColors.isChecked()
 
     def structureToggle(self):
-        # print("Toggled structure")
+        #print("Toggled structure")
         self.params['dssp'] = self.checkStructure.isChecked()
         """print("Toggled structure")
         if self.checkStructure.isEnabled():

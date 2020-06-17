@@ -17,9 +17,6 @@ from bioservices import UniProt
 Additional classes and functions that are used within Linnaeo, but are not responsible for viewing data.
 """
 
-def output_function(o):
-    return str(type(o))
-
 def checkConservation(res, ref):
     """ Reads in a residue and checks whether it falls within a conserved category relative to the reference. """
     conserved = {
@@ -262,8 +259,10 @@ def iterTreeView(root):
             yield child
             if child.hasChildren():
                 yield from recurse(child)
+        del row
     if root is not None:
         yield from recurse(root)
+    del root
 
 
 def nodeSelector(tree, model):
@@ -310,6 +309,7 @@ class SeqThread(QThread):
         self.colors = args[4]
         self.dssp = args[5]
         self.fancy = fancy
+        del args, fancy, parent
         #self.seqLogger.debug("Sequence thread created")
 
     def run(self):
@@ -337,6 +337,7 @@ class GetPDBThread(QThread):
         self.nodes = None if not input[1] else input[1]
         self.u = UniProt(verbose=False)
         self.PDBLogger = logging.getLogger("PDBSearch")
+        del input, parent
 
     def run(self):
         returned = []
@@ -454,6 +455,7 @@ class DSSPThread(QThread):
         self.node = self.args[0][2]
         self.offset = self.args[0][3]
         self.result = {}
+        del args, parent
 
     def run(self):
         tmp = QTemporaryFile()
@@ -471,6 +473,7 @@ class DSSPThread(QThread):
                 # I THINK I'M DOING THIS PART WRONG
                     result[dssp[key][0]+self.offset] = dssp[key][2]
         self.finished.emit([result, self.seq, self.node])
+        del tmp, result
 
 
 class AlignThread(QThread):
@@ -490,7 +493,7 @@ class AlignThread(QThread):
         QThread.__init__(self, parent)
         self.kwargs = kwargs
         self.aligned = {}
-        del parent
+        del parent, args, kwargs
         #self.clustalLogger.debug("Thread for ClustalO created")
 
     def run(self):
@@ -503,6 +506,7 @@ class AlignThread(QThread):
         else:
             self.aligned = result
             self.clustalLogger.debug("Thread returned alignment successfully")
+            del result
 
 
 class ProcTimerThread(QThread):
@@ -518,6 +522,7 @@ class ProcTimerThread(QThread):
         self.processTimer.setInterval(1000)
         self.processTimer.timeout.connect(self.timerDone)
         self.processTimer.start()
+        del parent
 
     def timerDone(self):
         self.timeout.emit()

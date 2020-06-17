@@ -39,7 +39,7 @@ class MDISubWindow(QMdiSubWindow):
     def __init__(self, wid):
         super(MDISubWindow, self).__init__()
 
-        icon = QIcon(":/icons/linnaeo_full.ico")
+        icon = QIcon(":/icons/linnaeo.ico")
         self.setWindowIcon(icon)
         del icon
         self.wid = wid
@@ -95,7 +95,7 @@ class MDISubWindow(QMdiSubWindow):
         super(MDISubWindow, self).show()
 
     def closeEvent(self, event):
-        print("Closing subwindow!")
+        #print("Closing subwindow!")
         self.removeEventFilter(self)
         if self.mdiArea() and self.mdiArea().tabbed:
             self.mdiArea().removeSubWindow(self)
@@ -103,11 +103,12 @@ class MDISubWindow(QMdiSubWindow):
         return super(MDISubWindow, self).closeEvent(event)
 
     def close(self):
-        print("subwindow closed")
+        #print("subwindow closed")
+        #self.deleteLater()
         super(MDISubWindow, self).close()
 
     def delete(self):
-        print("subwindow deleted")
+        #print("subwindow deleted")
         self.setAttribute(Qt.WA_DeleteOnClose, True)
         self.close()
         self.destroy()

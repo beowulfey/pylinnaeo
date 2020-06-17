@@ -185,7 +185,6 @@
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
    <addaction name="actionSave_Image"/>
-   <addaction name="actionMemory"/>
   </widget>
   <action name="actionAlign">
    <property name="text">

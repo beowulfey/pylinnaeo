@@ -166,7 +166,6 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionDelete)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionSave_Image)
-        self.toolBar.addAction(self.actionMemory)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
