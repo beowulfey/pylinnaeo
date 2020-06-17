@@ -95,14 +95,22 @@ class MDISubWindow(QMdiSubWindow):
         super(MDISubWindow, self).show()
 
     def closeEvent(self, event):
+        print("Closing subwindow!")
         self.removeEventFilter(self)
-        if self.mdiArea():
-            self.mdiArea().removeSubWindow(self)
+        #if self.mdiArea():
+        #    self.mdiArea().removeSubWindow(self)
         self.close()
         return super(MDISubWindow, self).closeEvent(event)
 
     def close(self):
+        print("subwindow closed")
         super(MDISubWindow, self).close()
+
+    def delete(self):
+        print("subwindow deleted")
+        self.setAttribute(Qt.WA_DeleteOnClose, True)
+        self.close()
+        self.destroy()
 
 class MDIArea(QMdiArea):
     """
@@ -170,6 +178,10 @@ class MDIArea(QMdiArea):
         window.show()
         self.setActiveSubWindow(window)
         del window, flags
+
+    def closeAllSubWindows(self):
+        for sub in self.subWindowList():
+            sub.delete()
 
     def setActiveSubWindow(self, window):
         #self.refreshParams.emit(window)

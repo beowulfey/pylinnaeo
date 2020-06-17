@@ -270,6 +270,7 @@ class Slots:
                 with open(filename, 'r'):
                     seq = SeqIO.read(filename, stype)
                     print(seq)
+                    self.mainStatus.showMessage("Loading sequence: %s" % seq.id, msecs=3000)
                     seqr = models.SeqR(seq.seq, name=seq.name, id=seq.id, description=seq.description)
                     if [seqr.seq] not in self.sequences.values():
                         self.seqInit(seqr)
@@ -317,6 +318,7 @@ class Slots:
                     items[seqr_clean.name] = str(seqr.seq)
                     combo.append(seqr_clean)
                     if seqr_clean not in self.sequences.values():
+                        self.mainStatus.showMessage("Loading sequence: %s" % seqr_clean, msecs=3000)
                         num = "" if count == 0 else " " + str(count + 1)
                         self.seqInit(seqr_clean, folder='Import%s' % num)
                 combo.sort()
@@ -576,7 +578,7 @@ class Slots:
                 sub = self.windows[wid]
                 if sub:
                     self.mainLogger.debug("Deleting node from tree: " + str(sub.windowTitle()))
-                    sub.close()
+                    sub.delete()
                     self.windows.pop(wid)
                     self.sequences.pop(wid)
                     self.pruneNames()
@@ -592,7 +594,7 @@ class Slots:
             self.lastClickedTree.model().removeRow(index.row(), index.parent())
             if self.mdiArea.tabbed:
                 self.mdiArea.activeSubWindow().showMaximized()
-        del index, node, wid
+            del index, node, wid
 
     def tileWindows(self):
         if self.mdiArea.tabbed:

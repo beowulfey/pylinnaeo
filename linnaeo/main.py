@@ -5,7 +5,9 @@ import logging
 import os
 import sys
 import time
+#import random
 
+#import objgraph
 import psutil
 # PyQt components
 from Bio.Align import MultipleSeqAlignment
@@ -16,7 +18,7 @@ from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, qApp, QWidget, QSizePolicy, \
     QFileDialog
 
-from pympler import tracker
+from pympler import tracker, refbrowser  # summary, muppy
 
 import linnaeo
 from linnaeo.resources import linnaeo_rc
@@ -32,12 +34,13 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     The bulk of the program is located here. Please see classes.methods for additional methods for this class.
     The other major functionality, drawing the alignments themselves, is found under the displays.AlignSubWindow class.
     """
-    #sendParams = pyqtSignal(dict)
+
+    # sendParams = pyqtSignal(dict)
 
     def __init__(self, trees=None, data=None):
         super(self.__class__, self).__init__()
         self.start = time.perf_counter()
-        #self.tr = tracker.SummaryTracker()
+        #self.sum = summary.summarize(muppy.get_objects())
 
         # Initialize UI
         self.setAttribute(Qt.WA_QuitOnClose)
@@ -75,7 +78,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.mdiArea = widgets.MDIArea(self)
         self.optionsPane = displays.OptionsPane(self)
         self.gridLayout_2.addWidget(self.mdiArea)
-        self.gridLayout_2.addWidget(self.optionsPane,0,2)
+        self.gridLayout_2.addWidget(self.optionsPane, 0, 2)
         self.optionsPane.hide()
 
         # Tree stuff
@@ -107,14 +110,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Load default options for windows (from parameters file if saved)
         # if PARAMETERS FILE:
         #   params = FROMFILE
-        #print(qApp.instance().defFont.family())
+        # print(qApp.instance().defFont.family())
         self.default_params = {'ruler': True, 'colors': True, 'fontsize': 10,
-                       'theme': 'Default', 'font': qApp.instance().defFont,
-                       'byconsv': False, 'tabbed': False,
-                       'darkmode': False, 'dssp': False,
-                       }
+                               'theme': 'Default', 'font': qApp.instance().defFont,
+                               'byconsv': False, 'tabbed': False,
+                               'darkmode': False, 'dssp': False,
+                               }
         self.params = self.default_params.copy()
-        #print(self.params['font'].family())
+        # print(self.params['font'].family())
         self.optionsPane.setParams(self.params)
 
         # This is fired upon loading a saved workspace.
@@ -146,7 +149,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             self.bioTree.setExpanded(node.index(), True)
         for node in utilities.iterTreeView(self.projectModel.invisibleRootItem()):
             self.projectTree.setExpanded(node.index(), True)
-        #self.installEventFilter(self)
+        # self.installEventFilter(self)
         del trees, data, node
 
     def guiFinalize(self):
@@ -170,12 +173,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.mainLogger.debug("After StatusbarUpdate")
 
         # Load
-        #self.DEBUG()  # TODO: DELETE THIS NEPHEW
+        # self.DEBUG()  # TODO: DELETE THIS NEPHEW
 
-        #self.pdbWindow = displays.NGLviewer(self)
+        # self.pdbWindow = displays.NGLviewer(self)
 
-
-        #self.pdbWindow.show()
+        # self.pdbWindow.show()
         del spacer
 
     def connectSlots(self):
@@ -214,8 +216,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.bioTree.doubleClicked.connect(self.seqDbClick)
         self.bioModel.dupeName.connect(self.dupeNameMsg)
         self.projectTree.doubleClicked.connect(self.alignmentDbClick)
-        #self.sendParams.connect(self.optionsPane.setParams)  # This is to keep the pane in check with an opening window
-        #self.optionsPane.updateParam.connect(self.nodeUpdate)  # This is to make sure the node data is up to date
+        # self.sendParams.connect(self.optionsPane.setParams)  # This is to keep the pane in check with an opening window
+        # self.optionsPane.updateParam.connect(self.nodeUpdate)  # This is to make sure the node data is up to date
 
         # Utility slots
         self.bioTree.generalClick.connect(self.deselectProject)
@@ -241,8 +243,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
         self.optionsPane.buttonStructure.clicked.connect(self.get_UniprotId)
 
-        #self.actionMemory.triggered.connect(self.memoryPrint)
-
+        self.actionMemory.triggered.connect(self.memoryPrint)
 
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # UTILITY METHODS
@@ -275,7 +276,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             for n in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
                 if n.text() == folder:
                     n.appendRow(node)
-                    found=True
+                    found = True
             if not found:
                 nfolder = QStandardItem(str(folder))
                 nfolder.appendRow(node)
@@ -307,7 +308,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 items[seqr.name] = str(seqr.seq)
                 combo.append(seqr)
         else:
-            self.mainStatus.showMessage("Please select sequences",msecs=3000)
+            self.mainStatus.showMessage("Please select sequences", msecs=3000)
         combo.sort()
         aligned = self.callAlign(items)
         if items:
@@ -342,7 +343,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 del aligned, wid, sub
         del combo, items
 
-
     def callAlign(self, seqarray):
         """
         Generates a sequence alignment using Clustal Omega in a separate thread. Currently returns with the same
@@ -371,6 +371,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         if item.data(role=self.WindowRole):
             sub = self.windows[item.data(role=self.WindowRole)]
             self.openWindow(sub)
+            del sub
         del item
 
     def makeNewWindow(self, wid, ali, nonode=False):
@@ -379,6 +380,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         a sequence node, or multiple sequence nodes, if those are not already in the form of a window.
         After generation, stores the window in the list of all windows by its window ID.
         """
+        print("MAKING WINDOW")
         sub = widgets.MDISubWindow(wid)
         widget = AlignSubWindow(ali, self.optionsPane.params)
         sub.setWidget(widget)
@@ -390,14 +392,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 seqrs = []
                 for key, value in ali.items():
                     for stored_seq in self.sequences.values():
-                        if str(value).replace('-',"") == str(stored_seq[0].seq):
-                            #print("USING ORIGINAL ID", stored_seq[0].id)
+                        if str(value).replace('-', "") == str(stored_seq[0].seq):
+                            # print("USING ORIGINAL ID", stored_seq[0].id)
                             sid = stored_seq[0].id
                             break
                         else:
-                            #print("USING NAME", key)
+                            # print("USING NAME", key)
                             sid = key
-                    #print("Adding sequence to alignment: ", key, sid)
+                    # print("Adding sequence to alignment: ", key, sid)
                     del stored_seq
                     seqr = models.SeqR(Seq(value, generic_protein), name=key, id=sid)
                     seqrs.append(seqr)
@@ -406,7 +408,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                 node.setData(sub.windowTitle())
                 node.setData(aliR, self.SequenceRole)
                 node.setData(wid, self.WindowRole)
-                #node.setData(self.params.copy(), role=self.AlignDisplayRole)
+                # node.setData(self.params.copy(), role=self.AlignDisplayRole)
                 self.projectRoot.appendRow(node)
                 self.projectTree.setExpanded(node.parent().index(), True)
                 self.windows[wid] = sub
@@ -431,6 +433,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         Checks to see if a window is open already.
         If it is not, reopens the window. If it is, gives focus.
         """
+        print("OPENING WINDOW")
         self.localtime = time.perf_counter()
         found = False
         for node in utilities.iterTreeView(self.bioModel.invisibleRootItem()):
@@ -451,8 +454,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         if sub.mdiArea() != self.mdiArea:
             self.mainLogger.debug("Adding window to MDI Area; creation took %f seconds" %
                                   float(time.perf_counter() - self.localtime))
-            #print(sub.widget().params)
-            #self.sendParams.emit(sub.widget().params.copy())
+            # print(sub.widget().params)
+            # self.sendParams.emit(sub.widget().params.copy())
             self.mdiArea.addSubWindow(sub)
 
         else:
@@ -478,8 +481,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def quit(self):
         # TODO: Make this consistent and more reliable.
-        #confirm = self.maybeClose()
-        #if confirm is not None:
+        # confirm = self.maybeClose()
+        # if confirm is not None:
         #    self.close()
         self.close()
 
@@ -540,31 +543,47 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def updateUsage(self):
         """ Simple method that updates the status bar process usage statistics on timer countdown """
-        #self.tr.print_diff()
+        # self.tr.print_diff()
         mem = self.mainProcess.memory_full_info().uss / 1000000
         cpu = self.mainProcess.cpu_percent()
         self.memLabel.setText("CPU: " + str(cpu) + " % | RAM: " + str(round(mem, 2)) + " MB")
 
-    #def memoryPrint(self):
-        #self.tr.print_diff()
+
+    def memoryPrint(self):
+        print("MEMORY OUTPUT")
+        cb = refbrowser.ConsoleBrowser(self._currentWindow.widget(), maxdepth=5, str_func=utilities.output_function)
+        cb.print_tree()
+        del cb
+        #sum2 = summary.summarize(muppy.get_objects())
+        #diff = summary.get_diff(self.sum, sum2)
+        #summary.print_(diff)
+        #self.sum = sum2
+
+        #objgraph.show_growth()
+        #objgraph.show_chain(
+        #    objgraph.find_backref_chain(
+        #        random.choice(objgraph.by_type(dict)),
+        #        objgraph.is_proper_module), )
 
     def newWorkspace(self):
         """ Open a new workspace; ask first if you want to save what you are working on. """
         result = self.maybeClose()
         if result is not None:
             self.mainLogger.info("CLEARING WORKSPACE")
-            self.deleteLater()
-            newWindow = Linnaeo()
-            newWindow.setWindowTitle("Linnaeo")
-            icon = QIcon(":/icons/linnaeo_full.ico")
-            newWindow.setWindowIcon(icon)
-            qApp._window = newWindow
-            newWindow.show()
-            self.close()
-            #self.mdiArea.closeAllSubWindows()
-            #self.start = time.perf_counter()
-            #self.guiSet()
-        del result
+            #self.deleteLater()
+            #newWindow = Linnaeo()
+            #newWindow.setWindowTitle("Linnaeo")
+            #icon = QIcon(":/icons/linnaeo_full.ico")
+            #newWindow.setWindowIcon(icon)
+            #qApp._window = newWindow
+            #newWindow.show()
+            self.mdiArea.closeAllSubWindows()
+            self.start = time.perf_counter()
+            self.guiSet()
+            #self.destroy()
+            del result
+        else:
+            del result
 
     def openWorkspace(self):
         """ Function for opening a saved workspace. Goes through and reloads in reverse of how it is saved. """
@@ -587,17 +606,21 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             newPModel = widgets.ItemModel(windows)
             self.restore_tree(newBModel.invisibleRootItem(), fstream)
             self.restore_tree(newPModel.invisibleRootItem(), fstream)
-            self.deleteLater()
-            newWindow = Linnaeo(trees=[newBModel, newPModel], data=[sequences, titles, windex])
+            #self.deleteLater()
+            #newWindow = Linnaeo(trees=[newBModel, newPModel], data=[sequences, titles, windex])
             self.mainStatus.showMessage("Rebuild complete!")
-            newWindow.setWindowTitle("Linnaeo")
-            icon = QIcon(":/icons/linnaeo_full.ico")
-            newWindow.setWindowIcon(icon)
-            qApp._window = newWindow
-            newWindow.show()
-            self.close()
-            del filename, file, fstream, sequences, titles, windex, windows, newBModel, newPModel
-        del sel
+            #newWindow.setWindowTitle("Linnaeo")
+            #icon = QIcon(":/icons/linnaeo_full.ico")
+            #newWindow.setWindowIcon(icon)
+            #qApp._window = newWindow
+            #newWindow.show()
+            self.mdiArea.closeAllSubWindows()
+            self.start = time.perf_counter()
+            self.guiSet(trees=[newBModel, newPModel], data=[sequences, titles, windex])
+            del sel, filename, file, fstream, sequences, titles, windex, windows, newBModel, newPModel
+            #self.destroy()
+        else:
+            del sel
 
 
 class LinnaeoApp(QApplication):
@@ -611,4 +634,4 @@ class LinnaeoApp(QApplication):
 
         # For some reason, Noto does not work on Mac or Windows. But does for SS display???
         self.defFont = QFont(self.fonts.applicationFontFamilies(self.defFontId2)[0], 10) \
-            if sys.platform in ['win32','macos'] else QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
+            if sys.platform in ['win32', 'macos'] else QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)

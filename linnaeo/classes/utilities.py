@@ -17,6 +17,9 @@ from bioservices import UniProt
 Additional classes and functions that are used within Linnaeo, but are not responsible for viewing data.
 """
 
+def output_function(o):
+    return str(type(o))
+
 def checkConservation(res, ref):
     """ Reads in a residue and checks whether it falls within a conserved category relative to the reference. """
     conserved = {
