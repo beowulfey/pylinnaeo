@@ -58,7 +58,7 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 
 #### How do I get set up? ####
 
-## [Downloads](https://drive.google.com/drive/folders/1uk4Vd8ioxuDsuYsToDWuR-IZZBSoDJhy?usp=sharing) ##
+## [Click here for binary downloads](https://github.com/beowulfey/linnaeo/releases) ##
 I've attempted to build portable binaries for all Mac and Windows. Hopefully they work, but I'm still learning this part. 
 
 Download the correct platform, unzip, and run the linnaeo(.exe,.app) binary. Note that the executable HAS to be in the same directory as the other libraries -- it won't work otherwise! Symlinks don't work on linux (but shortcuts on Windows do work, so you can add it to your start menu). 
