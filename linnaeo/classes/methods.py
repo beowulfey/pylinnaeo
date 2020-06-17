@@ -318,7 +318,7 @@ class Slots:
                     items[seqr_clean.name] = str(seqr.seq)
                     combo.append(seqr_clean)
                     if seqr_clean not in self.sequences.values():
-                        self.mainStatus.showMessage("Loading sequence: %s" % seqr_clean, msecs=3000)
+                        self.mainStatus.showMessage("Loading sequence: %s" % seqr_clean.id)
                         num = "" if count == 0 else " " + str(count + 1)
                         self.seqInit(seqr_clean, folder='Import%s' % num)
                 combo.sort()
