@@ -1,6 +1,8 @@
 ## [Click here for binary downloads](https://github.com/beowulfey/linnaeo/releases) ##
 (Only the latest release has binaries here at the moment)
 
+After downloading, there are some tips on using it located [further down](https://github.com/beowulfey/linnaeo#How-do-I-use-it)
+
 Quick note -- this program is still being actively developed! It's not quite feature complete, although it's close! If you like it but find something is missing or broken, please leave a note in the issues tab (or wait a few days -- I'm adding stuff pretty regularly at the moment)
 
 Thanks! --beowulfey
@@ -61,7 +63,7 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 
 #### How do I get set up? ####
 
-## [See releases here](https://github.com/beowulfey/linnaeo/releases) ##
+##### [See releases here](https://github.com/beowulfey/linnaeo/releases) #####
 I've attempted to build portable binaries for all Mac and Windows. Hopefully they work, but I'm still learning this part. 
 
 Download the correct platform, unzip, and run the linnaeo(.exe,.app) binary. Note that the executable HAS to be in the same directory as the other libraries -- it won't work otherwise! Symlinks don't work on linux (but shortcuts on Windows do work, so you can add it to your start menu). 
@@ -129,6 +131,24 @@ python setup.py build install
 On Windows, I have a pre-compiled clustalo wheel file that seems to usually work. Please let me know if it doesn't. 
 
 
+##### How do I use it?
+When you navigate the various security parameters for opening binaries from tiny open source developers (it's legit, but I don't know how to sign my code yet, sorry) you'll be greeted with the main window. Try either opening up some download sequence files or other alignments you have made. You can also copy a fasta-formatted sequence and paste it directly into the program. 
+
+Sequences and alignments can be renamed or organized in folders. I recommend getting your sequences from [UniProt](https://www.uniprot.org) as I've integrated it into the DSSP search function (it uses the sequence ID). 
+
+Renaming a sequence won't change the underlying ID, so feel free to call it whatever you like! You can access the ID by copying out a sequence or exporting it. 
+
+Exporting an alignment uses the displayed names though. 
+
+Highlight a few sequences (hold ctrl) and either double click or hit the align button to create a new alignment. 
+
+There is also an options panel that allows for choosing a font, theme, increase the font size, etc. 
+
+Enjoy, and hope it works for you, the intrepid reader! I appreciate your feedback! 
+
+
+##### Special thanks
+
 Repositories I am eternally grateful for -- they helped me get this onto windows -- and need to cite:
 
 * [ARGTABLE2](https://github.com/jonathanmarvens/argtable2) -- for building Clustal Omega on Windows
@@ -138,3 +158,5 @@ Other core parts of the software that are awesome too:
 * Biopython
 * Bioservices
 * and of course, PyQt5
+
+And most importantly, all the folks who are helping me test this out!
