@@ -132,7 +132,7 @@ On Windows, I have a pre-compiled clustalo wheel file that seems to usually work
 
 
 #### How do I use it?
-When you navigate the various security parameters for opening binaries from tiny open source developers (it's legit, but I don't know how to sign my code yet, sorry) you'll be greeted with the main window. Try either opening up some download sequence files or other alignments you have made. You can also copy a fasta-formatted sequence and paste it directly into the program. 
+When you navigate the various security parameters for opening binaries from tiny open source developers (it's legit, but I don't know how to sign my code yet, sorry) you'll be greeted with the main window. Try opening up some previously-downloaded sequence files or other alignments you have made (only clustal format--.clustal or .aln--or fasta files though, sorry). You can also copy a fasta-formatted sequence and paste it directly into the program. 
 
 Sequences and alignments can be renamed or organized in folders. I recommend getting your sequences from [UniProt](https://www.uniprot.org) as I've integrated it into the DSSP search function (it uses the sequence ID). 
 
