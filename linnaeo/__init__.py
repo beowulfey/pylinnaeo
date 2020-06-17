@@ -1,4 +1,4 @@
-__version__ = 'v0.2.1'
+__version__ = 'v0.2.2'
 import logging
 import sys
 import time
@@ -33,10 +33,11 @@ def main():
     window = Linnaeo()
     app._window = window
     window.setWindowTitle("Linnaeo")
-    icon = QIcon(":/icons/linnaeo_full.ico")
+    icon = QIcon(":/icons/linnaeo.ico")
     window.setWindowIcon(icon)
     window.show()
-    appLogger.info("~~~~STARTUP COMPLETE!~~~~ Took %f seconds" % float(time.perf_counter()-start_time))
+    #del icon
+    appLogger.info("STARTUP COMPLETE! Loaded Linnaeo-%s in %f seconds" % (__version__, float(time.perf_counter()-start_time)))
     sys.exit(app.exec_())
 
 

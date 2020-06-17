@@ -1,5 +1,6 @@
 import setuptools
 import sys
+from linnaeo import __version__
 
 reqs = ['pyqt5>=5.9','psutil','biopython','clustalo','bioservices',]
 deps = []
@@ -15,7 +16,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="linnaeo",
-    version="0.2.1",
+    version=__version__,
     author="Aaron Wolfe",
     author_email="wolfe.aarond@gmail.com",
     description="A tool for creating and categorizing protein alignments",

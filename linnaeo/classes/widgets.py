@@ -97,8 +97,8 @@ class MDISubWindow(QMdiSubWindow):
     def closeEvent(self, event):
         print("Closing subwindow!")
         self.removeEventFilter(self)
-        #if self.mdiArea():
-        #    self.mdiArea().removeSubWindow(self)
+        if self.mdiArea() and self.mdiArea().tabbed:
+            self.mdiArea().removeSubWindow(self)
         self.close()
         return super(MDISubWindow, self).closeEvent(event)
 

@@ -18,7 +18,7 @@ from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, qApp, QWidget, QSizePolicy, \
     QFileDialog
 
-from pympler import tracker, refbrowser  # summary, muppy
+#from pympler import tracker, refbrowser  # summary, muppy
 
 import linnaeo
 from linnaeo.resources import linnaeo_rc
@@ -243,7 +243,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
         self.optionsPane.buttonStructure.clicked.connect(self.get_UniprotId)
 
-        self.actionMemory.triggered.connect(self.memoryPrint)
+        #self.actionMemory.triggered.connect(self.memoryPrint)
 
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # UTILITY METHODS
@@ -549,11 +549,12 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.memLabel.setText("CPU: " + str(cpu) + " % | RAM: " + str(round(mem, 2)) + " MB")
 
 
-    def memoryPrint(self):
-        print("MEMORY OUTPUT")
-        cb = refbrowser.ConsoleBrowser(self._currentWindow.widget(), maxdepth=5, str_func=utilities.output_function)
-        cb.print_tree()
-        del cb
+    #def memoryPrint(self):
+     #   print("MEMORY OUTPUT")
+      #  #cb = refbrowser.ConsoleBrowser(self._currentWindow.widget(), maxdepth=5, str_func=utilities.output_function)
+       # self.tr = tracker.SummaryTracker()
+        #self.tr.print_diff()
+        #cb.print_tree()
         #sum2 = summary.summarize(muppy.get_objects())
         #diff = summary.get_diff(self.sum, sum2)
         #summary.print_(diff)

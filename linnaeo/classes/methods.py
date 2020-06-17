@@ -592,7 +592,7 @@ class Slots:
             except ValueError:
                 pass
             self.lastClickedTree.model().removeRow(index.row(), index.parent())
-            if self.mdiArea.tabbed:
+            if self.mdiArea.tabbed and self._currentWindow:
                 self.mdiArea.activeSubWindow().showMaximized()
             del index, node, wid
 
