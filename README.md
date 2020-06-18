@@ -66,15 +66,13 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 ##### [See releases here](https://github.com/beowulfey/linnaeo/releases) #####
 I've attempted to build portable binaries for all Mac and Windows. Hopefully they work, but I'm still learning this part. 
 
-Download the correct platform, unzip, and run the linnaeo(.exe,.app) binary. Note that the executable HAS to be in the same directory as the other libraries -- it won't work otherwise! Symlinks don't work on linux (but shortcuts on Windows do work, so you can add it to your start menu). 
-
 If you want to try building it yourself, or they don't work, here are some instructions:
 
 ###### Linux
-If you're on linux it's a good bet you've done something like this before! Here's the basic process:
+If you're on linux it's a good bet you've done something like this before. Here's the basic process:
 * Create a new virtualenv 
 * Clone the github into a folder and start up your virtualenv
-* Install everything required to run and fire it up! 
+* Install everything required to run and fire it up.
 
 Try my prebuilt ClustalO for python wheel, but if it doesn't work you'll have to go through the steps to compile ClustalO and the wrapper yourself (see the Mac section for tips). 
 ```
@@ -113,7 +111,7 @@ python3 setup.py build install
 python3 -c 'import linnaeo; linnaeo.main()
 ```
 
-Note that if you want to use the DSSP feature, you'll also have to build and install a DSSP binary to your PATH! Unfortunately I don't think DSSP is included in Homebrew anymore. However, the binaries I uploaded should have a working binary and don't need anything externally. 
+Note that if you want to use the DSSP feature, you'll also have to build and install a DSSP binary to your PATH. Unfortunately I don't think DSSP is included in Homebrew anymore. However, the binaries I uploaded should have a working binary and don't need anything externally. 
 
 ###### Windows
 Install Anaconda3 and create a new environment:
