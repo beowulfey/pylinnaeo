@@ -130,19 +130,17 @@ On Windows, I have a pre-compiled clustalo wheel file that seems to usually work
 
 
 #### How do I use it?
-When you navigate the various security parameters for opening binaries from tiny open source developers (it's legit, but I don't know how to sign my code yet, sorry) you'll be greeted with the main window. Try opening up some previously-downloaded sequence files or other alignments you have made (only clustal format--.clustal or .aln--or fasta files though, sorry). You can also copy a fasta-formatted sequence and paste it directly into the program. 
+Once opened you'll be greeted with the main window. Try opening up some previously-downloaded sequence files or other alignments you have made (only clustal format--.clustal or .aln--or fasta files though, sorry). You can also copy a fasta-formatted sequence and paste it directly into the program. 
 
 Sequences and alignments can be renamed or organized in folders. I recommend getting your sequences from [UniProt](https://www.uniprot.org) as I've integrated it into the DSSP search function (it uses the sequence ID). 
 
-Renaming a sequence won't change the underlying ID, so feel free to call it whatever you like! You can access the ID by copying out a sequence or exporting it. 
-
-Exporting an alignment uses the displayed names though. 
+Renaming a sequence won't change the underlying ID, so feel free to call it whatever you like! You can access the ID by copying out a sequence or exporting it. Exporting an alignment uses the displayed names instead. 
 
 Highlight a few sequences (hold ctrl) and either double click or hit the align button to create a new alignment. 
 
 There is also an options panel that allows for choosing a font, theme, increase the font size, etc. 
 
-Enjoy, and hope it works for you, the intrepid reader! I appreciate your feedback! 
+Enjoy, and hope it works for you, the intrepid early tester! I appreciate your feedback! 
 
 
 #### Special thanks
