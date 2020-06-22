@@ -92,8 +92,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # self.alignPane.setLineWidth(0)
         # self.rulerPane.setLineWidth(0)
         bgcolor = self.palette().color(self.backgroundRole())
-        print(bgcolor.name())
-        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px;}")
+        self.alignPane.setStyleSheet("QTextEdit {padding-left:15px; padding-right:0px;background-color:white}")
         self.namePane.setStyleSheet("QTextEdit {padding-top:1px;background-color:%s;}" % bgcolor.name())
         self.rulerPane.setStyleSheet("QTextEdit {padding-top:1px;padding-left:0px;padding-right:0px;\
             background-color:%s;}" % bgcolor.name())

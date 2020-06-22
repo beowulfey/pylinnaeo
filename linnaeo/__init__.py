@@ -14,7 +14,7 @@ conout = None
 
 
 def main():
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+    logging.basicConfig(level=logging.DEBUG, stream=sys.stderr)
     appLogger = logging.getLogger("INIT")
     #handler = logging.StreamHandler(sys.stderr)
     #appLogger.addHandler(handler)
@@ -44,6 +44,8 @@ def main():
         app.setPalette(dark_palette)
         app.setStyleSheet("QToolTip { font-family: Default-Noto; color: #000000; background-color: #efefef; border: 1px solid white; }")
 
+    else:
+        app.setStyleSheet("QToolTip { font-family: Default-Noto; }")
     appLogger.debug("Creating Window")
 
     window = Linnaeo()
