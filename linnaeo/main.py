@@ -41,7 +41,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
     def __init__(self, trees=None, data=None):
         super(self.__class__, self).__init__()
         self.start = time.perf_counter()
-        #self.sum = summary.summarize(muppy.get_objects())
 
         # Initialize UI
         self.setAttribute(Qt.WA_QuitOnClose)
@@ -49,7 +48,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
 
         if sys.platform == 'darwin':
-            # TODO: Make this a setting to show45
+            # TODO: Make this a setting to show
             self.console = QTextEdit()
             self.gridLayout.addWidget(self.console, 1, 0)
             # self.stdout = OutputWrapper(self, True)
@@ -409,6 +408,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         item = self.projectModel.itemFromIndex(self.projectTree.selectedIndexes()[0])
         if item.data(role=self.WindowRole):
             sub = self.windows[item.data(role=self.WindowRole)]
+            sub.setWindowTitle(item.data())
             self.openWindow(sub)
             del sub
         del item
