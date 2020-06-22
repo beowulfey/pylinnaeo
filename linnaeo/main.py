@@ -14,7 +14,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from PyQt5.QtCore import Qt, QThreadPool, QFile, QIODevice, QDataStream, QDir
-from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon, QTextCursor, QColor
+from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon, QTextCursor, QColor, QFontMetrics
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, qApp, QWidget, QSizePolicy, \
     QFileDialog, QTextEdit
 
@@ -44,12 +44,20 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
         # Initialize UI
         self.setAttribute(Qt.WA_QuitOnClose)
-        self.setupUi(self)  # Built by PyUic5 from my main window UI file
+        self.setupUi(self)
 
-
-        if sys.platform == 'darwin':
+        if sys.platform in ['darwin']:#, 'linux']:
+            # MacOS uses a windowed format for the .apps -- this is nice and portable, but
+            # lacks the terminal for information. So I'm integrating the terminal output into
+            # a QTextEdit at the bottom of the screen.
             # TODO: Make this a setting to show
             self.console = QTextEdit()
+            fmF = QFontMetrics(self.console.document().defaultFont())
+            ht = fmF.height()
+            self.console.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            self.console.setMaximumHeight(ht*4)
+            del fmF, ht
+            self.console.setTextInteractionFlags(Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse)
             self.gridLayout.addWidget(self.console, 1, 0)
             # self.stdout = OutputWrapper(self, True)
             # self.stdout.outputWritten.connect(self.handleOutput)
@@ -115,6 +123,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
             newcolor, text)
         self.console.moveCursor(QTextCursor.End)
         self.console.insertHtml(text)
+        self.console.moveCursor(QTextCursor.PreviousCharacter)
+        del color, newcolor, text
 
     def guiSet(self, trees=None, data=None):
         """ Initialize GUI with default parameters. """
