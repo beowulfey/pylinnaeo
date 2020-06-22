@@ -669,20 +669,4 @@ class Debug:
             print("Seq: ", child.data(role=Qt.UserRole + 2))
             print("Window Index: ", child.data(role=Qt.UserRole + 3))
 
-        """
-        # SAVED THIS FOR LATER!
-        # Read in config (linux)
-        config = configparser.ConfigParser()
-        try:
-            config.read(str(Path.home())+"/.linnaeo/config.ini")
-            # Open last used workspace automatically.
-            if config['RECENTS']['LAST'] != "":
-                last = config['RECENTS']['LAST']
-                f = QFile(last)
-                f.open(QIODevice.ReadOnly)
-                model = workspace.WorkspaceModel()
-                f.close()
-                self.workspaceTree.setModel(model)
-        except:
-            print("No config file found!")
-            """
+

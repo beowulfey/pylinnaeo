@@ -10,7 +10,7 @@ import clustalo
 import numpy
 from Bio import PDB
 from Bio.PDB import DSSP, PDBIO
-from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryFile
+from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryFile, QObject
 from bioservices import UniProt
 
 """
@@ -528,4 +528,32 @@ class ProcTimerThread(QThread):
         self.timeout.emit()
 
 
+class OutputWrapper(QObject):
+    outputWritten = pyqtSignal(object, object)
+
+    def __init__(self, parent, stdout=True):
+        QObject.__init__(self, parent)
+        if stdout:
+            self._stream = sys.stdout
+            sys.stdout = self
+        else:
+            self._stream = sys.stderr
+            sys.stderr = self
+        self._stdout = stdout
+
+    def write(self, text):
+        self._stream.write(text)
+        self.outputWritten.emit(text, self._stdout)
+
+    def __getattr__(self, name):
+        return getattr(self._stream, name)
+
+    def __del__(self):
+        try:
+            if self._stdout:
+                sys.stdout = self._stream
+            else:
+                sys.stderr = self._stream
+        except AttributeError:
+            pass
 

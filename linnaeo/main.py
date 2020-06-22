@@ -14,13 +14,14 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from PyQt5.QtCore import Qt, QThreadPool, QFile, QIODevice, QDataStream, QDir
-from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon
+from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon, QTextCursor, QColor
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, qApp, QWidget, QSizePolicy, \
-    QFileDialog
+    QFileDialog, QTextEdit
 
 #from pympler import tracker, refbrowser  # summary, muppy
 
 import linnaeo
+from linnaeo.classes.utilities import OutputWrapper
 from linnaeo.resources import linnaeo_rc
 from linnaeo.classes import widgets, utilities, methods, models, displays
 from linnaeo.classes.displays import QuitDialog, AlignSubWindow
@@ -45,6 +46,16 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # Initialize UI
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)  # Built by PyUic5 from my main window UI file
+
+
+        if sys.platform == 'darwin':
+            self.console = QTextEdit()
+            self.gridLayout.addWidget(self.console, 1, 0)
+            # self.stdout = OutputWrapper(self, True)
+            # self.stdout.outputWritten.connect(self.handleOutput)
+            self.stderr = OutputWrapper(self, False)
+            self.stderr.outputWritten.connect(self.handleOutput)
+            logging.basicConfig(force=True, stream=self.stderr)
 
         # System instants; status bar and threads
         self.memLabel = QLabel()
@@ -96,6 +107,14 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         #self.mainLogger.debug("Setup took %f seconds" % float(time.perf_counter() - self.start))
         self.setMouseTracking(True)
         del trees, data
+
+    def handleOutput(self, text, stdout):
+        color = self.console.textColor()
+        newcolor = color.name() if stdout else QColor(Qt.darkRed).name()
+        text = '<span style=\"white-space: pre-wrap; color: %s\">%s</span>' % (
+            newcolor, text)
+        self.console.moveCursor(QTextCursor.End)
+        self.console.insertHtml(text)
 
     def guiSet(self, trees=None, data=None):
         """ Initialize GUI with default parameters. """
@@ -173,7 +192,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         #self.mainLogger.debug("After StatusbarUpdate")
 
         # Load
-        # self.DEBUG()  # TODO: DELETE THIS NEPHEW
+        self.DEBUG()  # TODO: DELETE THIS NEPHEW
 
         # self.pdbWindow = displays.NGLviewer(self)
 
@@ -638,10 +657,31 @@ class LinnaeoApp(QApplication):
 
     def __init__(self, *args):
         super().__init__(*args)
+        """
+        # SAVED THIS FOR LATER!
+        # Read in config (linux)
+        config = configparser.ConfigParser()
+        try:
+            config.read(str(Path.home())+"/.linnaeo/config.ini")
+            # Open last used workspace automatically.
+            if config['RECENTS']['LAST'] != "":
+                last = config['RECENTS']['LAST']
+                f = QFile(last)
+                f.open(QIODevice.ReadOnly)
+                model = workspace.WorkspaceModel()
+                f.close()
+                self.workspaceTree.setModel(model)
+        except:
+            print("No config file found!")
+            """
+        self.mode = "Light"
         self.fonts = QFontDatabase()
         self.defFontId = self.fonts.addApplicationFont(':/fonts/Default-Noto.ttf')
         self.defFontId2 = self.fonts.addApplicationFont(':/fonts/LiberationMono.ttf')
 
         # For some reason, Noto does not work on Mac or Windows. But does for SS display???
         self.defFont = QFont(self.fonts.applicationFontFamilies(self.defFontId2)[0], 10) \
-            if sys.platform in ['win32', 'macos'] else QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
+            if sys.platform in ['win32', 'darwin'] else QFont(self.fonts.applicationFontFamilies(self.defFontId)[0], 10)
+
+    def setMode(self, mode):
+        self.mode = mode

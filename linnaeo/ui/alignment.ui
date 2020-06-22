@@ -76,43 +76,6 @@
           <height>0</height>
          </size>
         </property>
-        <property name="palette">
-         <palette>
-          <active>
-           <colorrole role="Base">
-            <brush brushstyle="SolidPattern">
-             <color alpha="255">
-              <red>238</red>
-              <green>238</green>
-              <blue>236</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </active>
-          <inactive>
-           <colorrole role="Base">
-            <brush brushstyle="SolidPattern">
-             <color alpha="255">
-              <red>238</red>
-              <green>238</green>
-              <blue>236</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </inactive>
-          <disabled>
-           <colorrole role="Base">
-            <brush brushstyle="SolidPattern">
-             <color alpha="255">
-              <red>239</red>
-              <green>239</green>
-              <blue>239</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </disabled>
-         </palette>
-        </property>
         <property name="font">
          <font>
           <family>Liberation Mono</family>
