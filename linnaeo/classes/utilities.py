@@ -464,16 +464,20 @@ class DSSPThread(QThread):
             io = PDBIO()
             io.set_structure(self.struct)
             io.save(tmp.fileName())
-            dssp = DSSP(self.struct[0], tmp.fileName(), dssp='mkdssp')
-            prevChain = next(iter(dssp.keys()))[0]
-            for key in dssp.keys():
-                #print(key[0])
-                if key[0] ==prevChain:
-                    #print(key)
-                # I THINK I'M DOING THIS PART WRONG
-                    result[dssp[key][0]+self.offset] = dssp[key][2]
-        self.finished.emit([result, self.seq, self.node])
-        del tmp, result
+            try:
+                dssp = DSSP(self.struct[0], tmp.fileName(), dssp='mkdssp')
+                prevChain = next(iter(dssp.keys()))[0]
+                for key in dssp.keys():
+                    #print(key[0])
+                    if key[0] ==prevChain:
+                        #print(key)
+                    # I THINK I'M DOING THIS PART WRONG
+                        result[dssp[key][0]+self.offset] = dssp[key][2]
+                self.finished.emit([result, self.seq, self.node])
+            except:
+                traceback.print_exc()
+                print("SORRY, DSSP WAS NOT FOUND")
+            del tmp, result
 
 
 class AlignThread(QThread):

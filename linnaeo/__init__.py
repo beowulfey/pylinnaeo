@@ -1,4 +1,4 @@
-__version__ = 'v0.2.2'
+__version__ = 'v0.2.3'
 import logging
 import sys
 import time
@@ -23,7 +23,7 @@ def main():
     app.setApplicationName("Linnaeo")
     app.setApplicationVersion(__version__)
 
-    app.setStyle("Fusion")
+    #app.setStyle("Fusion")
     #app.setMode("dark")
 
     if app.mode == "dark":
