@@ -366,7 +366,7 @@ class AlignPane(QTextEdit):
                     resi = "N/A"
                 text = str(resi)+" of "+name
                 if i > 0:
-                    text = "--->" + text
+                    text = " --->" + text
                 string.append(text)
                 if 0 < i < len(resids):
                     string.insert(-1,"\n")

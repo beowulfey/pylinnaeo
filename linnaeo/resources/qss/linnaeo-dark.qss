@@ -1,6 +1,3 @@
-/* PYMOL 2.0 DARKSTYLE */
-
-
 /* Main window */
 QMenu
 {
@@ -39,7 +36,7 @@ QLabel
 QTextEdit
 {
     border:         1px solid #494949;
-    background:     #222222;
+    background:     #343434;
     color:          #E8E8E8;
 }
 

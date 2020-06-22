@@ -2,7 +2,7 @@ import logging
 
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QFontMetricsF, QColor, QFont
-from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, QTextEdit, QFrame, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, QTextEdit, QFrame, QSizePolicy, qApp
 
 from linnaeo import __version__
 from linnaeo.classes import widgets, utilities, themes
@@ -91,14 +91,15 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         # self.namePane.setLineWidth(0)
         # self.alignPane.setLineWidth(0)
         # self.rulerPane.setLineWidth(0)
-        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px; background-color: \
-                                             rgb(255,255,255)}")
-        self.namePane.setStyleSheet("QTextEdit {padding-top:1px;background-color:\
-                                                rgb(238, 238, 239)}")
-        self.rulerPane.setStyleSheet("QTextEdit {padding-top:1px;padding-left:0px; padding-right:0px; background-color:\
-                                                rgb(238, 238, 239)}")
+        bgcolor = self.palette().color(self.backgroundRole())
+        print(bgcolor.name())
+        self.alignPane.setStyleSheet("QTextEdit {padding-left:20px; padding-right:0px;}")
+        self.namePane.setStyleSheet("QTextEdit {padding-top:1px;background-color:%s;}" % bgcolor.name())
+        self.rulerPane.setStyleSheet("QTextEdit {padding-top:1px;padding-left:0px;padding-right:0px;\
+            background-color:%s;}" % bgcolor.name())
         self.gridLayout_2.addWidget(self.alignPane, 0, 1)
         self.gridLayout_2.addWidget(self.rulerPane, 0, 2)
+        del bgcolor
 
     def seqInit(self):
         """
@@ -161,7 +162,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                             color = QColor(Qt.yellow)
                     if not color:
                         color = QColor(Qt.white)
-                    tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
+                    tcolor = self.palette().color(self.alignPane.backgroundRole()) if \
+                        color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
                     char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (
                         color.name(), tcolor, char)
                     if self.dssps:
