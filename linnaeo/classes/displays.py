@@ -39,7 +39,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.splitSeqs = []
         self.userIsResizing = False
         self.refseq = None
-        self.last = None
+        self.last = 0
         self.maxlen = 0
         self.maxname = 0
         self.lines = 0
@@ -55,10 +55,10 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.setupCustomUi()
 
         # Connect all slots and start
-        self.rulerPane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
+        #self.rulerPane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.rulerPane.verticalScrollBar().setValue)
         self.alignPane.verticalScrollBar().valueChanged.connect(self.namePane.verticalScrollBar().setValue)
-        self.namePane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
+        #self.namePane.verticalScrollBar().valueChanged.connect(self.alignPane.verticalScrollBar().setValue)
         self.nameChange.connect(self.updateName)
         self.lineChange.connect(self.nameArrange)
         #self.alignPane.commentAdded.connect(self.showCommentWindow)
@@ -98,7 +98,17 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             background-color:%s;}" % bgcolor.name())
         self.gridLayout_2.addWidget(self.alignPane, 0, 1)
         self.gridLayout_2.addWidget(self.rulerPane, 0, 2)
+        self.namePane.viewport().installEventFilter(self)
+        self.rulerPane.viewport().installEventFilter(self)
         del bgcolor
+
+    def eventFilter(self, obj, event):
+        #print(event.type())
+        if event.type() == 31:
+            qApp.sendEvent(self.alignPane.viewport(), event)
+            return True
+        else:
+            return False
 
     def seqInit(self):
         """
@@ -187,22 +197,23 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     def nameArrange(self, lines):
         """ Generates the name panel; only fires if the number of lines changes to avoid needless computation"""
-        self.namePane.clear()
-        self.namePane.setMinimumWidth((self.maxname * self.fmF.averageCharWidth()) + 5)
+        if lines:
+            self.namePane.clear()
+            self.namePane.setMinimumWidth((self.maxname * self.fmF.averageCharWidth()) + 5)
 
-        names = ["<pre style=\"font-family:%s; font-size:%spt; text-align: right;\">\n" % (self.font().family(),
-                                                                                           self.font().pointSize())]
-        for line in range(lines):
-            if self.showRuler:
+            names = ["<pre style=\"font-family:%s; font-size:%spt; text-align: right;\">\n" % (self.font().family(),
+                                                                                               self.font().pointSize())]
+            for line in range(lines):
+                if self.showRuler:
+                    names.append("\n")
+                if self.showDSSP:
+                    names.append("\n")
+                for i in range(len(self.splitNames)):
+                    names.append(self.splitNames[i] + "\n")
                 names.append("\n")
-            if self.showDSSP:
-                names.append("\n")
-            for i in range(len(self.splitNames)):
-                names.append(self.splitNames[i] + "\n")
-            names.append("\n")
-        names.append("</pre>")
-        self.namePane.setHtml("".join(names))
-        del names, line, lines, i
+            names.append("</pre>")
+            self.namePane.setHtml("".join(names))
+            del names, line, lines, i
 
     def seqArrange(self, color=True, rulers=True, dssp=True):
         """
@@ -211,7 +222,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         call this function with color off, and the ruler is turned off automatically.
         """
         try:
-            self.last = None
+            #self.last = None
             if not self.showColors:
                 color = False
             if not self.showRuler:
@@ -279,12 +290,14 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
             rulerHtml.append('</pre>')
             self.rulerPane.setHtml(style + "".join(rulerHtml))
+            prev = self.rulerPane.verticalScrollBar().sliderPosition()
             if self.rulerPane.verticalScrollBar().isVisible():
                 if self.last:
-                    self.rulerPane.verticalScrollBar().setSliderPosition(
-                        int(round(((self.rulerPane.verticalScrollBar().maximum() -
+                    self.last = int(round(((self.rulerPane.verticalScrollBar().maximum() -
                                     self.rulerPane.verticalScrollBar().minimum()) *
-                                   self.last))))
+                                    self.last)))
+                    self.rulerPane.verticalScrollBar().setSliderPosition(self.last)
+            del prev
             del charpx, width, char_count, lines, fancy, style, rulerHtml
         except ZeroDivisionError:
             self.alignLogger.info("Font returned zero char width. Please choose a different font")
@@ -334,8 +347,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self._seqs.pop(old)
         if self.done:
             self.seqInit()
-            self.seqArrange()
             self.nameArrange(self.lines)
+            self.seqArrange()
         del old, new, seq
 
     def setFont(self, font):
@@ -351,8 +364,8 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         self.fmF = QFontMetricsF(self.font())
         if self.done:
             self.seqInit()
-            self.seqArrange()
             self.nameArrange(self.lines)
+            self.seqArrange()
         del font
 
     def setFontSize(self, size):
