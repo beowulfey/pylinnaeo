@@ -477,6 +477,7 @@ class DSSPThread(QThread):
             except:
                 traceback.print_exc()
                 print("SORRY, DSSP WAS NOT FOUND")
+                self.finished.emit([None, None, None])
             del tmp, result
 
 
