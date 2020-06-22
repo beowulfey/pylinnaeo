@@ -49,6 +49,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
 
         if sys.platform == 'darwin':
+            # TODO: Make this a setting to show45
             self.console = QTextEdit()
             self.gridLayout.addWidget(self.console, 1, 0)
             # self.stdout = OutputWrapper(self, True)
