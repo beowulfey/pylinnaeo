@@ -470,8 +470,8 @@ class Slots:
                     self.mainStatus.showMessage("Please open the sequence first!", msecs=3000)
             del node
         else:
-              self.mainLogger.info("DSSP failed -- please check your sequence ID.")
-              self.mainStatus.showMessage("DSSP failed -- please check your sequence ID!",msecs=5000)
+              self.mainLogger.info("DSSP failed -- please check your sequence ID and that DSSP is available")
+              self.mainStatus.showMessage("DSSP failed -- please check your sequence ID and that DSSP is available",msecs=5000)
         del result
 
     def copyOut(self):

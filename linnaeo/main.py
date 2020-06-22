@@ -135,7 +135,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                                'byconsv': False, 'tabbed': False,
                                'darkmode': False, 'dssp': False,
                                }
+        
         self.params = self.default_params.copy()
+        
+        if sys.platform in ['win32', 'darwin']:
+            self.params['fontsize'] = 12
         # print(self.params['font'].family())
         self.optionsPane.setParams(self.params)
 
