@@ -259,7 +259,7 @@ def iterTreeView(root):
             yield child
             if child.hasChildren():
                 yield from recurse(child)
-        del row
+            del row
     if root is not None:
         yield from recurse(root)
     del root
