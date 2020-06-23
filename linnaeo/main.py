@@ -47,7 +47,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)
 
-        if sys.platform in ['darwin']:#, 'linux']:
+        if sys.platform in ['darwin', 'linux']:
             # MacOS uses a windowed format for the .apps -- this is nice and portable, but
             # lacks the terminal for information. So I'm integrating the terminal output into
             # a QTextEdit at the bottom of the screen.
@@ -101,10 +101,12 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.gridLayout_2.addWidget(self.optionsPane, 0, 2)
         self.optionsPane.hide()
         self.colorPane = QTextEdit()
-        self.colorPane.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        self.colorPane.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.colorPane.setTextInteractionFlags(Qt.NoTextInteraction)
         bgcolor = self.palette().color(self.backgroundRole())
-        self.colorPane.setStyleSheet("QTextEdit {border:0; background-color:%s;}" % bgcolor.name())
+        self.colorPane.setStyleSheet("QTextEdit { border:0;background-color:%s;}" % bgcolor.name())
         del bgcolor
+        #
 
         # Tree stuff
         self.bioTree = widgets.TreeView()

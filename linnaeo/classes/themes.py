@@ -26,14 +26,6 @@ class AbstractTheme:
     cys = QColor(Qt.white)
 
     def __init__(self):
-        self.theme = {}
-        self.initTheme()
-        self.descr = {
-            'W': 'Aromatic', 'D': 'Negative', 'R': 'Positive', 'S': 'Polar', 'I': 'Hydrophobic'
-        }
-        self.example = ['W', 'I', 'S', 'R', 'D']
-
-    def initTheme(self):
         """ My standard categorizing. Can be changed per theme. Loosely based on type."""
         self.theme = {
             # Hydrophobic
@@ -53,19 +45,55 @@ class AbstractTheme:
             "C": self.cys,
         }
 
+        self.descr = {
+            'W': 'Aromatic', 'D': 'Negative', 'R': 'Positive', 'S': 'Polar',
+            'I': 'Hydrophobic', 'P': 'Proline',
+            'C': 'Cysteine', 'A': 'Alanine', 'G': 'Glycine'
+        }
+
+        self.example = ['I', 'W', 'S', 'C', 'P', 'R', 'D', 'A', 'G']
+
     def getDesc(self):
-        string = []
+        string = ["<pre style=\"text-align:right;\">"]
         for ex in self.example:
             color = self.theme[ex]
             char = self.descr[ex]
-            tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
-            char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (color.name(), tcolor, char)
+            if color:
+                tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
+                char = '<span style=\"font-family:inherited; background-color: %s; color: %s\">%s</span>' % (color.name(), tcolor, char)
+            else:
+                tcolor = '#000000'
+                char = '<span style=\"font-family:inherited; color: %s\">%s</span>' % (tcolor, char)
             string.append("\n"+char)
+        string.append("</pre>")
         return "".join(string)
 
-class Comments(AbstractTheme):
-    """ Coloration for comments is done in the SeqInit method directly. """
-    pass
+
+class PaleByType(AbstractTheme):
+    """ Paler version of Theme2 (Bold). My favorite -- default colors."""
+    phb = QColor('#97A4E8')
+    pol = QColor('#BEF1AC')
+    pos = QColor('#DB8A8B')
+    neg = QColor('#E190E2')
+    aro = QColor('#A0EDD8')
+    ala = QColor('#F7EDEC')
+    gly = QColor('#EFEFEF')
+    pro = QColor('#F6DECC')
+    cys = QColor('#F4F2BA')
+
+
+class Bold(AbstractTheme):
+    """ Based on that colorbox.io website, loosely clustalX ish """
+    phb = QColor('#6C7EDF')
+    pol = QColor('#A5F28B')
+    pos = QColor('#C4585A')
+    neg = QColor('#D161D2')
+    aro = QColor('#79EACA')
+    ala = QColor('#FEEFEE')
+    gly = QColor('#EFEFEF')
+    pro = QColor('#FBD7BC')
+    cys = QColor('#F7F5A1')
+
 
 class ColorSafe(AbstractTheme):
     """ Colorblind-friendly. See it here https://bit.ly/2U7cSr4 """
@@ -75,11 +103,14 @@ class ColorSafe(AbstractTheme):
     neg = QColor('#FBBD77')  # orange 3
     aro = QColor('#5F9ED1')  # blue 2
     ala = QColor('#0167AB')  # blue 3
-    gly = QColor('#EAE9E9')  # gray 1
+    gly = QColor('#EFEFEF')  # gray 1
     pro = QColor('#CFCFCF')  # gray 2
     cys = QColor('#898989')  # gray 3
 
-
+    def __init__(self):
+        super().__init__()
+        # Rearrange order to look aesthetically pleasing.
+        self.example = ['I', 'W', 'A', 'D', 'R', 'S', 'C', 'P', 'G']
 
 
 class Rainbow(AbstractTheme):
@@ -90,16 +121,18 @@ class Rainbow(AbstractTheme):
     orange = QColor('#ffbf22')
     red = QColor('#ff5122')
     mblu = QColor('#22cfff')
-    blue = QColor('#2261ff')
+    blue = QColor('#22ffc0')
     green = QColor('#d0ff22')
     cys = QColor('#c022ff')
     white = QColor('#FFFFFF')
     ala = QColor('#EAE9E9')
+    yellow = QColor('#62ff22')
 
     def __init__(self):
         super().__init__()
         self.theme = {}
         self.initTheme()
+        self.example = ['I', 'W', 'A', 'D', 'R', 'S', 'C', 'P', 'G']
 
     def initTheme(self):
         """ Categorized by property, changed around a bit compared to the default. """
@@ -117,7 +150,7 @@ class Rainbow(AbstractTheme):
             # Aromatic
             "W": self.blue, "F": self.blue, "Y": self.blue,
             # Misc
-            "A": self.ala, "G": QColor('#EAE9E9'), 'P': self.orange,
+            "A": self.ala, "G": QColor('#EAE9E9'), 'P': self.yellow,
             "C": self.cys,
         }
 
@@ -150,10 +183,6 @@ class Hydropathy(AbstractTheme):
 
     def __init__(self):
         super().__init__()
-        self.theme = {}
-        self.initTheme()
-
-    def initTheme(self):
         """ Categorized by property, changed around a bit compared to the default.
         https://www.colorbox.io/#steps=20#hue_start=217#hue_end=359#hue_curve=easeInOutQuad#sat_start=84#sat_end=87#sat_curve=linear#sat_rate=67#lum_start=100#lum_end=85#lum_curve=easeInOutExpo#minor_steps_map=0"""
         self.theme = {
@@ -166,32 +195,12 @@ class Hydropathy(AbstractTheme):
             # Hydrophilic
             'N': QColor('#DA5C86'), "D": QColor('#DA5C78'), 'Q': QColor('#D95B6D'), "E": QColor('#D95B65'),
             "K": QColor('#D95B5F'),  "R": QColor('#D95A5D'),
+            'Z': None
         }
 
-class PaleByType(AbstractTheme):
-    """ Paler version of Theme2. My favorite -- default colors."""
-    phb = QColor('#97A4E8')
-    pol = QColor('#BEF1AC')
-    pos = QColor('#DB8A8B')
-    neg = QColor('#E190E2')
-    aro = QColor('#A0EDD8')
-    ala = QColor('#F7EDEC')
-    gly = QColor('#E8E8E8')  #'#EAE9E9'
-    pro = QColor('#F6DECC')
-    cys = QColor('#F4F2BA')
+        self.descr = {'Z':'Linear gradient:', 'F': 'Hydrophobic', 'P': 'Amphipathic', 'R':'Hydrophilic'}
+        self.example = ['Z', 'F', 'P', 'R']
 
-
-class Bold(AbstractTheme):
-    """ Based on that colorbox.io, loosely clustalX ish """
-    phb = QColor('#6C7EDF')
-    pol = QColor('#A5F28B')
-    pos = QColor('#C4585A')
-    neg = QColor('#D161D2')
-    aro = QColor('#79EACA')
-    ala = QColor('#FEEFEE')
-    gly = QColor('#EAE9E9')
-    pro = QColor('#FBD7BC')
-    cys = QColor('#F7F5A1')
 
 
     """
@@ -205,6 +214,7 @@ class Bold(AbstractTheme):
     pro = QColor(251, 215, 188)  # light orange #FBD7BC
     """
 
+
 class Mono(AbstractTheme):
     """ Crappy blue to red mono theme. Total junk"""
     phb = QColor(174, 98, 204)
@@ -215,6 +225,7 @@ class Mono(AbstractTheme):
     cys = QColor(161, 195, 248)
     neg = QColor(210, 234, 254)
     pol = QColor(183, 217, 252)
+
 
 class Grayscale(AbstractTheme):
     phb = QColor('#D6D6D6')  # blue 1
@@ -252,29 +263,45 @@ class Grayscale(AbstractTheme):
 
 class Conservation(AbstractTheme):
 
-    def initTheme(self):
-       # Since the dictionary for conservation gives a number back, I can just store it as an array.
-       """self.theme = [
-           # First conservation level: colors for each category (all singles are one category)
-           QColor('#41ff78'), QColor('#7841ff'), QColor('#41ffd7'), QColor('#41c8ff'), QColor('#4169ff'),
-           QColor('#d741ff'), QColor('#d741ff'), QColor('#d741ff'), QColor('#d741ff'), QColor('#d741ff'),
-           # Second conservation level: half-value variants of the above if applicable, or a middle color if applicable
-           QColor('#6FA6FF'), QColor('#6FA6FF'), QColor('#6FA6FF'), QColor('#6FA6FF'), QColor('#6FA6FF'),
-           QColor('#6FA6FF'), QColor('#6FA6FF')
-       ]"""
-       self.theme = [
-           # First conservation level: colors for each category (all singles are one category)
-           QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'),
-           QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'),
-           QColor('#ffc380'),
-           # Second conservation level: 1/3rd lower saturation variant of the above
-           QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'),
-           QColor('#97d3aa'), QColor('#97d3aa'),
-           # Third conservation level: 1/3rd lower saturation of the 2nd
-           QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'),
-           QColor('#96c3d6'),
-       ]
+    def __init__(self):
+        super().__init__()
+        # Since the dictionary for conservation gives a number back, I can just store it as an array.
+        # This represents all 20 amino acids. See utilities/checkConservation for the order.
+        self.theme = [
+            # First conservation level: colors for each category (all singles are one category)
+            QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'),
+            QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'), QColor('#ffc380'),
+            QColor('#ffc380'),
+            # Second conservation level: 1/3rd lower saturation variant of the above
+            QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'), QColor('#97d3aa'),
+            QColor('#97d3aa'), QColor('#97d3aa'),
+            # Third conservation level: 1/3rd lower saturation of the 2nd
+            QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'), QColor('#96c3d6'),
+            QColor('#96c3d6'),
+           ]
+        self.descr = ['Same property', 'Compatible', 'Dissimilar', 'Not conserved']
+        self.colors = [QColor('#ffc380'), QColor('#97d3aa'), QColor('#96c3d6'), None]
 
+    def getDesc(self):
+        string = ["<pre style=\"text-align:right;\">"]
+        for i in range(len(self.descr)):
+            color = self.colors[i]
+            char = self.descr[i]
+            if color:
+                tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
+                char = '<span style=\"font-family:inherited; background-color: %s; color: %s\">%s</span>' % (color.name(), tcolor, char)
+            else:
+                tcolor = '#000000'
+                char = '<span style=\"font-family:inherited; color: %s\">%s</span>' % (tcolor, char)
+            string.append("\n" + char)
+        string.append("</pre>")
+        return "".join(string)
+
+
+
+class Comments(AbstractTheme):
+    """ Coloration for comments is done in the SeqInit method directly. """
+    pass
 
 class FirstTheme(AbstractTheme):
     """ My first attempt. Not recommended. Kept for historical purposes """

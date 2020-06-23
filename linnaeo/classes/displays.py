@@ -144,8 +144,9 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                     tcount = count
                     dssp = None
                     if not consv:
-                        #print("Consv is off, skipping")
+                        #print("Consv theme is off, skipping alt colors")
                         color = self.theme[char]
+                        #print("DEFAULTING %s to %s" % (char, color.name()))
                         if self.consvColors and self.refseq is not None:
                             ref = list(self._seqs.values())[self.refseq][i]
                             compare = utilities.checkConservation(char, ref)
@@ -172,10 +173,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
                             color = QColor(Qt.yellow)
                     if not color:
                         color = QColor(Qt.white)
-                    tcolor = self.palette().color(self.alignPane.backgroundRole()) if \
+                    #print(color.name())
+                    tcolor = str(self.palette().color(self.alignPane.backgroundRole()).name()) if \
                         color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
+                    #print("tColor is %s" % tcolor)
                     char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (
                         color.name(), tcolor, char)
+                    #print('char is now %s' % char)
                     if self.dssps:
                         index = list(self._seqs.values()).index(seq)
                         try:
@@ -443,7 +447,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             if self.done:
                 self.seqInit()
                 self.seqArrange()
-        elif name == "Select ref...":
+        elif name == "Select seq...":
             self.refseq = None
             if self.done:
                 self.seqInit()
