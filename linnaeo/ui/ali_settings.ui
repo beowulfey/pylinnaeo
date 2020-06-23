@@ -167,6 +167,16 @@
      </item>
      <item>
       <property name="text">
+       <string>Conservation</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Hydropathy</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>ColorSafe</string>
       </property>
      </item>
@@ -178,16 +188,6 @@
      <item>
       <property name="text">
        <string>Rainbow</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Hydropathy</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Conservation</string>
       </property>
      </item>
     </widget>

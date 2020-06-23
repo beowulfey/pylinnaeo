@@ -16,7 +16,7 @@ from Bio.Seq import Seq
 from PyQt5.QtCore import Qt, QThreadPool, QFile, QIODevice, QDataStream, QDir
 from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon, QTextCursor, QColor, QFontMetrics, QPalette
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, qApp, QWidget, QSizePolicy, \
-    QFileDialog, QTextEdit
+    QFileDialog, QTextEdit, QTextBrowser
 
 #from pympler import tracker, refbrowser  # summary, muppy
 
@@ -47,7 +47,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.setAttribute(Qt.WA_QuitOnClose)
         self.setupUi(self)
 
-        if sys.platform in ['darwin', 'linux']:
+        if sys.platform in ['darwin']:#, 'linux']:
             # MacOS uses a windowed format for the .apps -- this is nice and portable, but
             # lacks the terminal for information. So I'm integrating the terminal output into
             # a QTextEdit at the bottom of the screen.
@@ -100,9 +100,10 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.gridLayout_2.addWidget(self.mdiArea)
         self.gridLayout_2.addWidget(self.optionsPane, 0, 2)
         self.optionsPane.hide()
-        self.colorPane = QTextEdit()
+        self.colorPane = QTextBrowser()
+        self.colorPane.setOpenExternalLinks(True)
         self.colorPane.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.colorPane.setTextInteractionFlags(Qt.NoTextInteraction)
+        self.colorPane.setTextInteractionFlags(Qt.LinksAccessibleByMouse)#Qt.NoTextInteraction)
         bgcolor = self.palette().color(self.backgroundRole())
         self.colorPane.setStyleSheet("QTextEdit { border:0;background-color:%s;}" % bgcolor.name())
         del bgcolor
