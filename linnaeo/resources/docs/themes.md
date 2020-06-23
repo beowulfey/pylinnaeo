@@ -7,13 +7,27 @@ Linnaeo provides a variety of different themes for displaying amino acid propert
 
 The default theme was partially inspired by Clustal X categories but with colors that were intended to be as easily readable as possible. Although not necessarily the best for quickly seeing unusual residues or differences, it may perhaps be the easiest on the eyes. 
 
-Colors and categories used: 
-<span style="font-family:initial; background-color: #97a4e8; color: #000000">Hydrophobic</span>, 
-<span style="font-family:initial; background-color: #a0edd8; color: #000000">Aromatic</span>, 
-<span style="font-family:initial; background-color: #bef1ac; color: #000000">Polar</span>, 
-<span style="font-family:initial; background-color: #f4f2ba; color: #000000">Cysteine</span>, 
-<span style="font-family:initial; background-color: #f6decc; color: #000000">Proline</span>, 
-<span style="font-family:initial; background-color: #db8a8b; color: #000000">Positive</span>, 
-<span style="font-family:initial; background-color: #e190e2; color: #000000">Negative</span>, 
-<span style="font-family:initial; background-color: #f7edec; color: #000000">Alanine</span>, 
-<span style="font-family:initial; background-color: #efefef; color: #000000">Glycine</span>
+Broadly speaking, residues fall under these core categories:
+
+###### Hydrophobic
+* Leucine (L)
+* Isoleucine (I)
+* Valine (V)
+* Methionine (M)
+
+###### Aromatic
+* Tryptophan (W)
+* Tyrosine (Y)
+* Phenylalanine (F) 
+
+Colors used for the default theme: 
+<span style="font-family:sans-serif; background-color: #97a4e8; color: #000000">Hydrophobic</span>, 
+<span style="font-family:sans-serif; background-color: #a0edd8; color: #000000">Aromatic</span>, 
+<span style="font-family:sans-serif; background-color: #bef1ac; color: #000000">Polar</span>, 
+<span style="font-family:sans-serif; background-color: #f4f2ba; color: #000000">Cysteine</span>, 
+<span style="font-family:sans-serif; background-color: #f6decc; color: #000000">Proline</span>, 
+<span style="font-family:sans-serif; background-color: #db8a8b; color: #000000">Positive</span>, 
+<span style="font-family:sans-serif; background-color: #e190e2; color: #000000">Negative</span>, 
+<span style="font-family:sans-serif; background-color: #f7edec; color: #000000">Alanine</span>, 
+<span style="font-family:sans-serif; background-color: #efefef; color: #000000">Glycine</span>
+
