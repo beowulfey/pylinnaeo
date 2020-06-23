@@ -14,7 +14,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from PyQt5.QtCore import Qt, QThreadPool, QFile, QIODevice, QDataStream, QDir
-from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon, QTextCursor, QColor, QFontMetrics
+from PyQt5.QtGui import QStandardItem, QFontDatabase, QFont, QIcon, QTextCursor, QColor, QFontMetrics, QPalette
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QAbstractItemView, qApp, QWidget, QSizePolicy, \
     QFileDialog, QTextEdit
 
@@ -40,6 +40,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
 
     def __init__(self, trees=None, data=None):
         super(self.__class__, self).__init__()
+        self.geometry().size().setWidth(1200)
         self.start = time.perf_counter()
 
         # Initialize UI
@@ -99,6 +100,11 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.gridLayout_2.addWidget(self.mdiArea)
         self.gridLayout_2.addWidget(self.optionsPane, 0, 2)
         self.optionsPane.hide()
+        self.colorPane = QTextEdit()
+        self.colorPane.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        bgcolor = self.palette().color(self.backgroundRole())
+        self.colorPane.setStyleSheet("QTextEdit {border:0; background-color:%s;}" % bgcolor.name())
+        del bgcolor
 
         # Tree stuff
         self.bioTree = widgets.TreeView()
@@ -195,6 +201,8 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.splitter_2.addWidget(self.projectTree)
         self.mainLogger.debug("Adding all GUI objects took %f seconds" % float(time.perf_counter() - self.start))
 
+        self.changeTheme()
+
         # Tool bar setup
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
@@ -275,6 +283,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.mdiArea.subWindowActivated.connect(self.refreshParams)
 
         self.optionsPane.buttonStructure.clicked.connect(self.get_UniprotId)
+        self.optionsPane.checkColorDesc.toggled.connect(self.showColorDesc)
 
     def disconnectSlots(self):
         slots = [self.actionNew, self.actionOpen, self.actionImportSeq, self.actionImportAlign, self.actionExportSeq,

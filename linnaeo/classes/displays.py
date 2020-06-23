@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, QTe
 
 from linnaeo import __version__
 from linnaeo.classes import widgets, utilities, themes
+from linnaeo.classes.utilities import lookupTheme
 from linnaeo.ui import alignment_ui, quit_ui, about_ui, ali_settings_ui, comments_ui
 
 
@@ -64,7 +65,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
         #self.alignPane.commentAdded.connect(self.showCommentWindow)
 
         # Initialize settings
-        self.theme = self.lookupTheme('Default')
+        self.theme = lookupTheme('Default').theme
         self.params = {}
         self.setParams(params)
         self.ssFontWidth = QFontMetricsF(QFont("Default-Noto", self.params['fontsize'])).averageCharWidth()
@@ -305,7 +306,7 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
 
     # UTILITY FUNCTIONS
     def setTheme(self, theme):
-        self.theme = self.lookupTheme(theme)
+        self.theme = lookupTheme(theme).theme
         self.params['theme'] = theme
         self.seqInit()
         self.seqArrange()
@@ -389,36 +390,13 @@ class AlignSubWindow(QWidget, alignment_ui.Ui_aliWindow):
             self.setFontSize(self.params['fontsize'])
         if self.font() != self.params['font']:
             self.setFont(self.params['font'])
-        newtheme = self.lookupTheme(self.params['theme'])
+        newtheme = lookupTheme(self.params['theme']).theme
         if self.theme != newtheme:
             self.theme = newtheme
             if self.done:
                 self.seqInit()
                 self.seqArrange()
         del params, newtheme
-
-    def lookupTheme(self, theme):
-        """ Converts the stored theme name into a class """
-        match = themes.PaleByType().theme
-        if theme == 'Default':
-            match = themes.PaleByType().theme
-        elif theme == 'Bold':
-            match = themes.Bold().theme
-        elif theme == 'Hydropathy':
-            match = themes.Hydropathy().theme
-        elif theme == 'ColorSafe':
-            match = themes.ColorSafe().theme
-        elif theme == 'Rainbow':
-            match = themes.Rainbow().theme
-        elif theme == 'Grayscale':
-            match = themes.Grayscale().theme
-        elif theme == 'Annotations':
-            match = themes.Comments().theme
-        elif theme == 'Conservation':
-            match = themes.Conservation().theme
-        del theme
-        return match
-
 
     def showCommentWindow(self, target):
         # TODO: shows for ALL rows!
