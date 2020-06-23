@@ -26,7 +26,7 @@ Residues are organized into the following categories, based on property:
 |---|---|---|---|---|---|
 |Leucine (L)|Tryptophan (W)|Serine (S)|Arginine (R)|Aspartate (D)|Cysteine (C)|
 |Isoleucine (I)|Tyrosine (Y)|Threonine (T)|Lysine (K)|Glutamate (E)|Proline (P)
-|Valine (V)|Phenylalanine (F)| Aspargine (N)|||Alanine (A)|
+|Valine (V)|Phenylalanine (F)| Aspargine (N)|Histidine (H)||Alanine (A)|
 |Methionine (M)||Glutamine (Q)|||Glycine (G)|
 
 This same organization is used by the following color schemes: 
