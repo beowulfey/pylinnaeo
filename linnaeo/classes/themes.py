@@ -195,10 +195,10 @@ class Hydropathy(AbstractTheme):
             # Hydrophilic
             'N': QColor('#DA5C86'), "D": QColor('#DA5C78'), 'Q': QColor('#D95B6D'), "E": QColor('#D95B65'),
             "K": QColor('#D95B5F'),  "R": QColor('#D95A5D'),
-            'Z': None
+            'Z': None,
         }
 
-        self.descr = {'Z':'Linear gradient:', 'F': 'Hydrophobic', 'P': 'Amphipathic', 'R':'Hydrophilic'}
+        self.descr = {'Z':'<a href=\'https://bit.ly/2V8VF11\'>Linear gradient:</a>', 'F': 'Hydrophobic', 'P': 'Amphipathic', 'R':'Hydrophilic'}
         self.example = ['Z', 'F', 'P', 'R']
 
 
