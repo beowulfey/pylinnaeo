@@ -118,6 +118,7 @@ class Slots:
         """ Simple forwarding of selected theme. """
         self.colorPane.clear()
         desc = lookupTheme(self.optionsPane.comboTheme.currentText()).getDesc()
+        print(desc)
         self.colorPane.insertHtml(desc)
         font = self.colorPane.document().defaultFont()
         fmF = QFontMetricsF(font)
@@ -165,14 +166,8 @@ class Slots:
             del window
 
     def showColorDesc(self, state):
-        """if state:
-            self.gridLayout_2.addWidget(self.colorPane, 1, 0)
-            self.colorPane.show()
-        else:
-            self.gridLayout_2.removeWidget(self.colorPane)
-            self.colorPane.hide()"""
         if state:
-            self.optionsPane.verticalLayout.insertWidget(12,self.colorPane)
+            self.optionsPane.verticalLayout.insertWidget(12, self.colorPane)
             self.colorPane.show()
         else:
             self.optionsPane.verticalLayout.removeWidget(self.colorPane)
