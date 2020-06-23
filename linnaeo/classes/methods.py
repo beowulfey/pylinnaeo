@@ -118,13 +118,12 @@ class Slots:
         """ Simple forwarding of selected theme. """
         self.colorPane.clear()
         desc = lookupTheme(self.optionsPane.comboTheme.currentText()).getDesc()
-        print(desc)
         self.colorPane.insertHtml(desc)
         font = self.colorPane.document().defaultFont()
         fmF = QFontMetricsF(font)
         text = self.colorPane.document().toPlainText()
         textSize = fmF.size(0, text)
-        hgt = textSize.height()+4
+        hgt = textSize.height()+10
         self.colorPane.setFixedHeight(hgt)
         del desc, font, fmF, text, textSize, hgt
         if self.optionsPane.comboTheme.currentText() == "Conservation":
