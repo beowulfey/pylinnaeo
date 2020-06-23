@@ -217,7 +217,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         #self.mainLogger.debug("After StatusbarUpdate")
 
         # Load
-        self.DEBUG()  # TODO: DELETE THIS NEPHEW
+        #self.DEBUG()  # TODO: DELETE THIS NEPHEW
 
         # self.pdbWindow = displays.NGLviewer(self)
 
