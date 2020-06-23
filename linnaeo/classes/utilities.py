@@ -354,7 +354,7 @@ class GetPDBThread(QThread):
     """
     finished = pyqtSignal(list)
     logger = pyqtSignal(str)
-    
+
     def __init__(self, input, parent=None):
         QThread.__init__(self, parent)
         self.seqs = input[0]
@@ -367,25 +367,41 @@ class GetPDBThread(QThread):
         returned = []
         # TODO: Should pop up modal if not confident in the structure results!
         index = None
+        pid = None
+        struct = None
+        structseq = None
+        uniID = None
+        alignoff = 0
+        result = None
+        ids = []
+        coordinates = None
+        line = None
+        i = 0
+        x = None
+        data = None
+        structs = None
+        struct0 = None
+        offset = 0
+        start = None
+        end = None
+        parser = None
+        tmp = None
+        url = None
+        myfile = None
+
         for seq in self.seqs:
             if self.nodes:
                 index = self.nodes[self.seqs.index(seq)]
             pid = seq.id
-            struct = None
-            structseq = None
             self.PDBLogger.info("Searching with ID %s" % pid)
             self.logger.emit("Searching with ID %s" % pid)
             uniID = self.u.search(pid, columns="id, genes, organism, protein names")
-            alignoff = 0
             if uniID:
                 self.PDBLogger.info('Results!\n\n%s' % uniID)
                 self.logger.emit('Results collected for search: %s' % uniID)
                 result = uniID.split("\n")
-                ids = []
                 for line in result[1:]:
                     ids.append(line.split("\t"))
-                coordinates = None
-                i = 0
                 while coordinates == None:
                     self.PDBLogger.info('Attempting search with %s from %s' %  (ids[i][1], ids[i][2]) )
                     self.logger.emit('Attempting search with %s from %s' %  (ids[i][1], ids[i][2]) )
@@ -437,7 +453,6 @@ class GetPDBThread(QThread):
                         break
 
                 if coordinates:
-                    offset = 0
                     start = structseq[:7]
                     #print(start)
                     for x in range(len(seq)):
@@ -465,6 +480,7 @@ class GetPDBThread(QThread):
                 self.PDBLogger.info("NO STRUCTURE FOUND")
                 self.logger.emit("No structure found, sorry!")
             self.finished.emit(returned)
+            del returned, index, uniID, result, ids, line, coordinates, i, x, url, start, offset, tmp, parser, seq, struct, structseq, alignoff
 
 
 class DSSPThread(QThread):
@@ -484,6 +500,10 @@ class DSSPThread(QThread):
     def run(self):
         tmp = QTemporaryFile()
         result = {}
+        io = None
+        dssp = None
+        prevChain = None
+        key = None
         if tmp.open():
             io = PDBIO()
             io.set_structure(self.struct)
@@ -502,7 +522,7 @@ class DSSPThread(QThread):
                 traceback.print_exc()
                 print("SORRY, DSSP WAS NOT FOUND")
                 self.finished.emit([None, None, None])
-            del tmp, result
+        del  tmp, result, io, dssp, prevChain, key
 
 
 class AlignThread(QThread):
@@ -585,4 +605,3 @@ class OutputWrapper(QObject):
                 sys.stderr = self._stream
         except AttributeError:
             pass
-
