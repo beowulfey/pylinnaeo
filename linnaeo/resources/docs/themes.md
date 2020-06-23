@@ -9,39 +9,39 @@ The default theme was partially inspired by Clustal X categories but with colors
 
 Broadly speaking, residues fall under these core categories:
 
-**Hydrophobic:**
+Hydrophobic:
 * Leucine (L)
 * Isoleucine (I)
 * Valine (V)
 * Methionine (M)
 
-**Aromatic:**
+Aromatic:
 * Tryptophan (W)
 * Tyrosine (Y)
 * Phenylalanine (F) 
 
-**Polar:**
+Polar:
 * Serine (S)
 * Threonine (T)
 * Aspargine (N)
 * Glutamine (Q)
 
-**Positive charged:**
+Positive charged:
 * Arginine (R)
 * Lysine (K)
 
-**Negative charged:**
+Negative charged:
 * Aspartate (D)
 * Glutamate (E)
 
-**Miscellaneous:**
+Miscellaneous:
 * Cysteine (C)
 * Proline (P)
 * Alanine (A)
 * Glycine (G)
 
 Colors used for the default theme: 
-<span style= background-color: #97a4e8; color: #000000">Hydrophobic</span>, 
+<span style="background-color: #97a4e8; color: #000000">Hydrophobic</span>, 
 <span style="background-color: #a0edd8; color: #000000">Aromatic</span>, 
 <span style="background-color: #bef1ac; color: #000000">Polar</span>, 
 <span style="background-color: #f4f2ba; color: #000000">Cysteine</span>, 
