@@ -96,7 +96,7 @@ class Ui_Form(object):
         self.horizontalLayout_2.addWidget(self.comboReference)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.checkColorDesc = QtWidgets.QCheckBox(Form)
-        self.checkColorDesc.setEnabled(False)
+        self.checkColorDesc.setEnabled(True)
         self.checkColorDesc.setObjectName("checkColorDesc")
         self.verticalLayout.addWidget(self.checkColorDesc)
         self.label = QtWidgets.QLabel(Form)

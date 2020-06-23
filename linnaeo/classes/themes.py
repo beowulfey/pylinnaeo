@@ -28,6 +28,10 @@ class AbstractTheme:
     def __init__(self):
         self.theme = {}
         self.initTheme()
+        self.descr = {
+            'W': 'Aromatic', 'D': 'Negative', 'R': 'Positive', 'S': 'Polar', 'I': 'Hydrophobic'
+        }
+        self.example = ['W', 'I', 'S', 'R', 'D']
 
     def initTheme(self):
         """ My standard categorizing. Can be changed per theme. Loosely based on type."""
@@ -49,16 +53,15 @@ class AbstractTheme:
             "C": self.cys,
         }
 
-    """def getDescr(self):
-        descrdict = {
-            'W':'Aromatic', 'D':'Negative', 'R':'Positive', 'S':'Polar','I':'Hydrophobic'
-        }
-        tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
-        char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (color.name(), tcolor, char)
-        test1 = ['I','S','R',]
-        for 
-        string = 'Color categories:\n"""
-
+    def getDesc(self):
+        string = []
+        for ex in self.example:
+            color = self.theme[ex]
+            char = self.descr[ex]
+            tcolor = '#FFFFFF' if color.getHsl()[2] / 255 * 100 <= 50 else '#000000'
+            char = '<span style=\"background-color: %s; color: %s\">%s</span>' % (color.name(), tcolor, char)
+            string.append("\n"+char)
+        return "".join(string)
 
 class Comments(AbstractTheme):
     """ Coloration for comments is done in the SeqInit method directly. """

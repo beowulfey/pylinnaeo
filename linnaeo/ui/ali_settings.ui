@@ -231,7 +231,7 @@
    <item>
     <widget class="QCheckBox" name="checkColorDesc">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="toolTip">
       <string>Display color explanation</string>

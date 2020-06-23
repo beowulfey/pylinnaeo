@@ -12,6 +12,7 @@ from Bio import PDB
 from Bio.PDB import DSSP, PDBIO
 from PyQt5.QtCore import pyqtSignal, QThread, QTimer, Qt, QTemporaryFile, QObject
 from bioservices import UniProt
+from linnaeo.classes import themes
 
 """
 Additional classes and functions that are used within Linnaeo, but are not responsible for viewing data.
@@ -289,6 +290,29 @@ def nodeSelector(tree, model):
         del index
     del tree, model, copied
     return indices, seqs
+
+
+def lookupTheme(theme):
+    """ Converts the stored theme name into a class """
+    match = themes.PaleByType()
+    if theme == 'Default':
+        match = themes.PaleByType()
+    elif theme == 'Bold':
+        match = themes.Bold()
+    elif theme == 'Hydropathy':
+        match = themes.Hydropathy()
+    elif theme == 'ColorSafe':
+        match = themes.ColorSafe()
+    elif theme == 'Rainbow':
+        match = themes.Rainbow()
+    elif theme == 'Grayscale':
+        match = themes.Grayscale()
+    elif theme == 'Annotations':
+        match = themes.Comments()
+    elif theme == 'Conservation':
+        match = themes.Conservation()
+    del theme
+    return match
 
 
 class SeqThread(QThread):

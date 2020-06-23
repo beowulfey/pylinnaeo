@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QFileDialog, QApplication, qApp
 
 from linnaeo.classes import widgets, models, utilities
 from linnaeo.classes.displays import AboutDialog
+from linnaeo.classes.utilities import lookupTheme
 
 
 class Slots:
@@ -115,11 +116,15 @@ class Slots:
 
     def changeTheme(self):
         """ Simple forwarding of selected theme. """
+        self.colorPane.clear()
+        desc = lookupTheme(self.optionsPane.comboTheme.currentText()).getDesc()
+        self.colorPane.insertHtml(desc)
         if self.optionsPane.comboTheme.currentText() == "Conservation":
             self.optionsPane.checkConsv.setChecked(True)
         if self._currentWindow:
             self.optionsPane.comboReference.setCurrentIndex(1)
             self._currentWindow.widget().setTheme(self.optionsPane.comboTheme.currentText())
+
 
     def changeFont(self, font):
         """
@@ -151,6 +156,20 @@ class Slots:
         if window:
             window.widget().setParams(self.optionsPane.params)
             del window
+
+    def showColorDesc(self, state):
+        """if state:
+            self.gridLayout_2.addWidget(self.colorPane, 1, 0)
+            self.colorPane.show()
+        else:
+            self.gridLayout_2.removeWidget(self.colorPane)
+            self.colorPane.hide()"""
+        if state:
+            self.optionsPane.verticalLayout.insertWidget(15,self.colorPane)
+            self.colorPane.show()
+        else:
+            self.optionsPane.verticalLayout.removeWidget(self.colorPane)
+            self.colorPane.hide()
 
 
     def restore_tree(self, parent, datastream, num_childs=None):
