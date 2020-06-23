@@ -8,8 +8,6 @@ This document is designed to provide a deeper explanation for the meaning behind
 
 The default theme was partially inspired by Clustal X categories but with colors that were intended to be as easily readable as possible. Although not necessarily the best for quickly seeing unusual residues or differences, it may perhaps be the easiest on the eyes. 
 
-Broadly speaking, residues fall under these core categories:
-
 Colors used for the default theme: 
 
 <span style="background-color: #97a4e8; color: #000000">Hydrophobic</span>, 
