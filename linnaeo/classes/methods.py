@@ -4,7 +4,7 @@ import traceback
 from Bio import SeqIO, AlignIO
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq, Seq
-from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir
+from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QUrl
 from PyQt5.QtGui import QStandardItem, QFontMetricsF, QIcon, QDesktopServices
 from PyQt5.QtWidgets import QFileDialog, QApplication, qApp
 
@@ -179,7 +179,7 @@ class Slots:
             self.colorPane.hide()
 
     def openThemeHelp(self):
-        QDesktopServices.openUrl(None)
+        QDesktopServices.openUrl(QUrl('https://beowulfey.github.io/linnaeo/linnaeo/resources/docs/themes'))
 
     def restore_tree(self, parent, datastream, num_childs=None):
         """ Function that acts during opening a workspace. Rebuilds a tree by iterating through it. """
