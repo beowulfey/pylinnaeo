@@ -131,6 +131,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionOnThemes"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
@@ -394,6 +395,14 @@
    </property>
    <property name="text">
     <string>Check Memory</string>
+   </property>
+  </action>
+  <action name="actionOnThemes">
+   <property name="text">
+    <string>On Themes</string>
+   </property>
+   <property name="toolTip">
+    <string>Additional information on themes</string>
    </property>
   </action>
  </widget>
