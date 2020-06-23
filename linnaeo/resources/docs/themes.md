@@ -41,13 +41,13 @@ Broadly speaking, residues fall under these core categories:
 * Glycine (G)
 
 Colors used for the default theme: 
-<span style="font-family:sans-serif; background-color: #97a4e8; color: #000000">Hydrophobic</span>, 
-<span style="font-family:sans-serif; background-color: #a0edd8; color: #000000">Aromatic</span>, 
-<span style="font-family:sans-serif; background-color: #bef1ac; color: #000000">Polar</span>, 
-<span style="font-family:sans-serif; background-color: #f4f2ba; color: #000000">Cysteine</span>, 
-<span style="font-family:sans-serif; background-color: #f6decc; color: #000000">Proline</span>, 
-<span style="font-family:sans-serif; background-color: #db8a8b; color: #000000">Positive</span>, 
-<span style="font-family:sans-serif; background-color: #e190e2; color: #000000">Negative</span>, 
-<span style="font-family:sans-serif; background-color: #f7edec; color: #000000">Alanine</span>, 
-<span style="font-family:sans-serif; background-color: #efefef; color: #000000">Glycine</span>
+<span style= background-color: #97a4e8; color: #000000">Hydrophobic</span>, 
+<span style="background-color: #a0edd8; color: #000000">Aromatic</span>, 
+<span style="background-color: #bef1ac; color: #000000">Polar</span>, 
+<span style="background-color: #f4f2ba; color: #000000">Cysteine</span>, 
+<span style="background-color: #f6decc; color: #000000">Proline</span>, 
+<span style="background-color: #db8a8b; color: #000000">Positive</span>, 
+<span style="background-color: #e190e2; color: #000000">Negative</span>, 
+<span style="background-color: #f7edec; color: #000000">Alanine</span>, 
+<span style="background-color: #efefef; color: #000000">Glycine</span>
 
