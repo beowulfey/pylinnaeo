@@ -5,7 +5,7 @@ from Bio import SeqIO, AlignIO
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq, Seq
 from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir
-from PyQt5.QtGui import QStandardItem, QFontMetricsF, QIcon
+from PyQt5.QtGui import QStandardItem, QFontMetricsF, QIcon, QDesktopServices
 from PyQt5.QtWidgets import QFileDialog, QApplication, qApp
 
 from linnaeo.classes import widgets, models, utilities
@@ -178,6 +178,8 @@ class Slots:
             self.optionsPane.verticalLayout.removeWidget(self.colorPane)
             self.colorPane.hide()
 
+    def openThemeHelp(self):
+        QDesktopServices.openUrl(None)
 
     def restore_tree(self, parent, datastream, num_childs=None):
         """ Function that acts during opening a workspace. Rebuilds a tree by iterating through it. """

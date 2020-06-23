@@ -198,7 +198,9 @@ class Hydropathy(AbstractTheme):
             'Z': None,
         }
 
-        self.descr = {'Z':'<a href=\'https://bit.ly/2V8VF11\'>Linear gradient:</a>', 'F': 'Hydrophobic', 'P': 'Amphipathic', 'R':'Hydrophilic'}
+        #self.descr = {'Z':'<a href=\'https://bit.ly/2V8VF11\'>Linear gradient:</a>', 'F': 'Hydrophobic', 'P': 'Amphipathic', 'R':'Hydrophilic'}
+        self.descr = {'Z': 'Linear gradient:', 'F': 'Hydrophobic',
+                      'P': 'Amphipathic', 'R': 'Hydrophilic'}
         self.example = ['Z', 'F', 'P', 'R']
 
 

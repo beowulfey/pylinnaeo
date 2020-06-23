@@ -254,6 +254,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         self.actionClose_all.triggered.connect(self.closeAllTabs)
 
         # HELP
+        self.actionOnThemes.triggered.connect(self.openThemeHelp)
         self.actionAbout.triggered.connect(self.showAbout)
 
         # Data awareness connections
