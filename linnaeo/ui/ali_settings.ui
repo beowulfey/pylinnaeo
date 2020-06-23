@@ -20,6 +20,21 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
+    <number>3</number>
+   </property>
    <item>
     <widget class="QLabel" name="label_3">
      <property name="font">
@@ -186,7 +201,7 @@
       <string>Color only conserved residues</string>
      </property>
      <property name="text">
-      <string>By conservation</string>
+      <string>Use reference</string>
      </property>
     </widget>
    </item>
@@ -217,11 +232,11 @@
         <string>Choose color theme for alignment</string>
        </property>
        <property name="currentText">
-        <string>Select ref...</string>
+        <string>Select seq...</string>
        </property>
        <item>
         <property name="text">
-         <string>Select ref...</string>
+         <string>Select seq...</string>
         </property>
        </item>
       </widget>
@@ -237,7 +252,7 @@
       <string>Display color explanation</string>
      </property>
      <property name="text">
-      <string>Color meanings</string>
+      <string>Color descriptions</string>
      </property>
     </widget>
    </item>

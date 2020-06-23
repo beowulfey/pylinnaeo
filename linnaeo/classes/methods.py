@@ -36,7 +36,7 @@ class Slots:
         if self._currentWindow:
             refseq = self._currentWindow.widget().refseq
             self.optionsPane.comboReference.clear()
-            self.optionsPane.comboReference.addItem("Select ref...")
+            self.optionsPane.comboReference.addItem("Select seq...")
             self.optionsPane.comboReference.setCurrentIndex(0)
             self._currentWindow.widget().refseq = refseq
             del refseq
@@ -119,6 +119,13 @@ class Slots:
         self.colorPane.clear()
         desc = lookupTheme(self.optionsPane.comboTheme.currentText()).getDesc()
         self.colorPane.insertHtml(desc)
+        font = self.colorPane.document().defaultFont()
+        fmF = QFontMetricsF(font)
+        text = self.colorPane.document().toPlainText()
+        textSize = fmF.size(0, text)
+        hgt = textSize.height()+4
+        self.colorPane.setFixedHeight(hgt)
+        del desc, font, fmF, text, textSize, hgt
         if self.optionsPane.comboTheme.currentText() == "Conservation":
             self.optionsPane.checkConsv.setChecked(True)
         if self._currentWindow:
@@ -165,7 +172,7 @@ class Slots:
             self.gridLayout_2.removeWidget(self.colorPane)
             self.colorPane.hide()"""
         if state:
-            self.optionsPane.verticalLayout.insertWidget(15,self.colorPane)
+            self.optionsPane.verticalLayout.insertWidget(12,self.colorPane)
             self.colorPane.show()
         else:
             self.optionsPane.verticalLayout.removeWidget(self.colorPane)
