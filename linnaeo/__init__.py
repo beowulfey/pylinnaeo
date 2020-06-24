@@ -1,8 +1,6 @@
-<<<<<<< HEAD
-__version__ = 'v0.2.3'
-=======
-__version__ = 'v0.3.2'
->>>>>>> master
+
+__version__ = 'v0.4.0'
+
 import logging
 import sys
 import time
