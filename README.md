@@ -62,6 +62,7 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 * Residue annotations for marking comments and observations. 
 
 #### How do I get set up? ####
+>>>> NOTE: The latest version (v0.4.0-pre) is based on the DEVEL branch, and uses a custom clustalo/clustalo-py toolset. This is so I can return the alignment order from clustalo (instead of just outputting the input order!) but makes it tougher to standardize! Please be aware that to run the devel branch you'll need to clone and build my custom clustal-omega and clustalo-python repositories (available here too) to get that to work! <<<<
 
 ##### [See releases here](https://github.com/beowulfey/linnaeo/releases) #####
 I've attempted to build portable binaries for all Mac and Windows. Hopefully they work, but I'm still learning this part. 
@@ -139,6 +140,8 @@ Renaming a sequence won't change the underlying ID, so feel free to call it what
 Highlight a few sequences (hold ctrl) and either double click or hit the align button to create a new alignment. 
 
 There is also an options panel that allows for choosing a font, theme, increase the font size, etc. 
+
+Finally, try holding the mouse button down on a residue within the alignment window--you'll see the residue ID (and equivalent ids for the aligned sequences) in a tooltip popup!
 
 Enjoy, and hope it works for you, the intrepid early tester! I appreciate your feedback! 
 
