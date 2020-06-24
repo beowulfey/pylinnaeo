@@ -411,7 +411,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # TODO: Do pairwise here if only 2!
         if len(list(seqarray.values())) > 1:
             # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
-            worker = utilities.AlignThread(self, seqarray, seqtype=3, output_order=1, num_threads=self.threadpool.maxThreadCount())
+            worker = utilities.AlignThread(self, seqarray, seqtype=3, num_threads=self.threadpool.maxThreadCount())
             worker.start()
             worker.finished.connect(worker.deleteLater)
             worker.finished.connect(worker.quit)
