@@ -605,12 +605,3 @@ class OutputWrapper(QObject):
                 sys.stderr = self._stream
         except AttributeError:
             pass
-
-    def __del__(self):
-        try:
-            if self._stdout:
-                sys.stdout = self._stream
-            else:
-                sys.stderr = self._stream
-        except AttributeError:
-            pass
