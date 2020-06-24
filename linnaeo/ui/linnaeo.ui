@@ -399,7 +399,7 @@
   </action>
   <action name="actionOnThemes">
    <property name="text">
-    <string>On Themes</string>
+    <string>On themes...</string>
    </property>
    <property name="toolTip">
     <string>Additional information on themes</string>

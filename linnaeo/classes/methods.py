@@ -4,7 +4,7 @@ import traceback
 from Bio import SeqIO, AlignIO
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq, Seq
-from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir
+from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QUrl
 from PyQt5.QtGui import QStandardItem, QFontMetricsF, QIcon, QDesktopServices
 from PyQt5.QtWidgets import QFileDialog, QApplication, qApp
 
@@ -123,7 +123,7 @@ class Slots:
         fmF = QFontMetricsF(font)
         text = self.colorPane.document().toPlainText()
         textSize = fmF.size(0, text)
-        hgt = textSize.height()+4
+        hgt = textSize.height()+10
         self.colorPane.setFixedHeight(hgt)
         del desc, font, fmF, text, textSize, hgt
         if self.optionsPane.comboTheme.currentText() == "Conservation":
@@ -165,21 +165,15 @@ class Slots:
             del window
 
     def showColorDesc(self, state):
-        """if state:
-            self.gridLayout_2.addWidget(self.colorPane, 1, 0)
-            self.colorPane.show()
-        else:
-            self.gridLayout_2.removeWidget(self.colorPane)
-            self.colorPane.hide()"""
         if state:
-            self.optionsPane.verticalLayout.insertWidget(12,self.colorPane)
+            self.optionsPane.verticalLayout.insertWidget(12, self.colorPane)
             self.colorPane.show()
         else:
             self.optionsPane.verticalLayout.removeWidget(self.colorPane)
             self.colorPane.hide()
 
     def openThemeHelp(self):
-        QDesktopServices.openUrl(None)
+        QDesktopServices.openUrl(QUrl('https://beowulfey.github.io/linnaeo/linnaeo/resources/docs/themes'))
 
     def restore_tree(self, parent, datastream, num_childs=None):
         """ Function that acts during opening a workspace. Rebuilds a tree by iterating through it. """
@@ -220,7 +214,7 @@ class Slots:
                 seqr = node.data(role=self.SequenceRole)
                 for seq in seqr:
                     seqs[seq.name] = str(seq.seq)
-                worker = utilities.AlignThread(self, seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
+                worker = utilities.AlignThread(self, seqs, seqtype=3, output_order=1, num_threads=self.threadpool.maxThreadCount())
                 worker.start()
                 worker.finished.connect(worker.deleteLater)
                 worker.finished.connect(worker.quit)
@@ -696,5 +690,3 @@ class Debug:
             print("Name: ", child.data(role=Qt.UserRole + 1))
             print("Seq: ", child.data(role=Qt.UserRole + 2))
             print("Window Index: ", child.data(role=Qt.UserRole + 3))
-
-

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 __version__ = 'v0.2.3'
+=======
+__version__ = 'v0.3.2'
+>>>>>>> master
 import logging
 import sys
 import time
@@ -64,4 +68,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

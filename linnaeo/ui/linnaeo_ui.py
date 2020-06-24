@@ -233,5 +233,5 @@ class Ui_MainWindow(object):
         self.actionOptions.setText(_translate("MainWindow", "Options Pane"))
         self.actionOptions.setToolTip(_translate("MainWindow", "Open window settings pane"))
         self.actionMemory.setText(_translate("MainWindow", "Check Memory"))
-        self.actionOnThemes.setText(_translate("MainWindow", "On Themes"))
+        self.actionOnThemes.setText(_translate("MainWindow", "On themes..."))
         self.actionOnThemes.setToolTip(_translate("MainWindow", "Additional information on themes"))

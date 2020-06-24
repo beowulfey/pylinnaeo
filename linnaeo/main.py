@@ -154,10 +154,10 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                                'byconsv': False, 'tabbed': False,
                                'darkmode': False, 'dssp': False,
                                }
-        
+
         self.params = self.default_params.copy()
-        
-        if sys.platform in ['win32', 'darwin']:
+
+        if sys.platform in ['darwin']:
             self.params['fontsize'] = 12
         # print(self.params['font'].family())
         self.optionsPane.setParams(self.params)
@@ -217,7 +217,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         #self.mainLogger.debug("After StatusbarUpdate")
 
         # Load
-        self.DEBUG()  # TODO: DELETE THIS NEPHEW
+        #self.DEBUG()  # TODO: DELETE THIS NEPHEW
 
         # self.pdbWindow = displays.NGLviewer(self)
 
@@ -358,8 +358,6 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # combo is an array of SeqRecords, sorted, to prevent creating duplicate alignments.
         self.localtime = time.perf_counter()
 
-        self.mainLogger.debug("Window for sequence or alignment requested")
-
         items = {}
         combo = []
         # Collect the selected sequence(s)
@@ -413,7 +411,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
         # TODO: Do pairwise here if only 2!
         if len(list(seqarray.values())) > 1:
             # Sort the sequences to prevent duplicates and generate the alignment in a new thread.
-            worker = utilities.AlignThread(self, seqarray, seqtype=3, num_threads=self.threadpool.maxThreadCount())
+            worker = utilities.AlignThread(self, seqarray, seqtype=3, output_order=1, num_threads=self.threadpool.maxThreadCount())
             worker.start()
             worker.finished.connect(worker.deleteLater)
             worker.finished.connect(worker.quit)

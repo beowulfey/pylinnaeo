@@ -1,3 +1,8 @@
+## [Click here for binary downloads](https://github.com/beowulfey/linnaeo/releases) ##
+(Only the latest release has binaries here at the moment)
+
+After downloading, there are some tips on using it located [further down](https://github.com/beowulfey/linnaeo#How-do-I-use-it)
+
 Quick note -- this program is still being actively developed! It's not quite feature complete, although it's close! If you like it but find something is missing or broken, please leave a note in the issues tab (or wait a few days -- I'm adding stuff pretty regularly at the moment)
 
 Thanks! --beowulfey
@@ -58,18 +63,16 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 
 #### How do I get set up? ####
 
-## [Click here for binary downloads](https://github.com/beowulfey/linnaeo/releases) ##
+##### [See releases here](https://github.com/beowulfey/linnaeo/releases) #####
 I've attempted to build portable binaries for all Mac and Windows. Hopefully they work, but I'm still learning this part. 
-
-Download the correct platform, unzip, and run the linnaeo(.exe,.app) binary. Note that the executable HAS to be in the same directory as the other libraries -- it won't work otherwise! Symlinks don't work on linux (but shortcuts on Windows do work, so you can add it to your start menu). 
 
 If you want to try building it yourself, or they don't work, here are some instructions:
 
 ###### Linux
-If you're on linux it's a good bet you've done something like this before! Here's the basic process:
+If you're on linux it's a good bet you've done something like this before. Here's the basic process:
 * Create a new virtualenv 
 * Clone the github into a folder and start up your virtualenv
-* Install everything required to run and fire it up! 
+* Install everything required to run and fire it up.
 
 Try my prebuilt ClustalO for python wheel, but if it doesn't work you'll have to go through the steps to compile ClustalO and the wrapper yourself (see the Mac section for tips). 
 ```
@@ -108,7 +111,7 @@ python3 setup.py build install
 python3 -c 'import linnaeo; linnaeo.main()
 ```
 
-Note that if you want to use the DSSP feature, you'll also have to build and install a DSSP binary to your PATH! Unfortunately I don't think DSSP is included in Homebrew anymore. However, the binaries I uploaded should have a working binary and don't need anything externally. 
+Note that if you want to use the DSSP feature, you'll also have to build and install a DSSP binary to your PATH. Unfortunately I don't think DSSP is included in Homebrew anymore. However, the binaries I uploaded should have a working binary and don't need anything externally. 
 
 ###### Windows
 Install Anaconda3 and create a new environment:
@@ -126,6 +129,22 @@ python setup.py build install
 On Windows, I have a pre-compiled clustalo wheel file that seems to usually work. Please let me know if it doesn't. 
 
 
+#### How do I use it?
+Once opened you'll be greeted with the main window. Try opening up some previously-downloaded sequence files or other alignments you have made (only clustal format--.clustal or .aln--or fasta files though, sorry). You can also copy a fasta-formatted sequence and paste it directly into the program. 
+
+Sequences and alignments can be renamed or organized in folders. I recommend getting your sequences from [UniProt](https://www.uniprot.org) as I've integrated it into the DSSP search function (it uses the sequence ID). 
+
+Renaming a sequence won't change the underlying ID, so feel free to call it whatever you like! You can access the ID by copying out a sequence or exporting it. Exporting an alignment uses the displayed names instead. 
+
+Highlight a few sequences (hold ctrl) and either double click or hit the align button to create a new alignment. 
+
+There is also an options panel that allows for choosing a font, theme, increase the font size, etc. 
+
+Enjoy, and hope it works for you, the intrepid early tester! I appreciate your feedback! 
+
+
+#### Special thanks
+
 Repositories I am eternally grateful for -- they helped me get this onto windows -- and need to cite:
 
 * [ARGTABLE2](https://github.com/jonathanmarvens/argtable2) -- for building Clustal Omega on Windows
@@ -135,3 +154,5 @@ Other core parts of the software that are awesome too:
 * Biopython
 * Bioservices
 * and of course, PyQt5
+
+And most importantly, all the folks who are helping me test this out!
