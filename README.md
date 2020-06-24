@@ -32,6 +32,15 @@ Here is a screenshot as of Jun 14, 2020:
 
 
 #### What's the latest? 
+New for v0.4.0 (devel branch only):
+* ClustalO now returns the alignment order, rather than as the input order. This required a custom Clustal-Omega and Clustalo-Python extension, so it is not a part of master right now. 
+
+New for v0.3.2: 
+* Added a mini-terminal for MacOS, since it runs windowed and without a terminal as a .app
+* greatly improved memory usages (so many dels!)
+* Changed over to an installer for Windows
+* added an icon and cleaned it up
+
 New additions for v0.2.0:
 * Can now load multiple sequences and alignments at once. 
 * Secondary structure search and display thanks to DSSP
@@ -54,11 +63,9 @@ Previous additions for v0.1.6:
 There is a lot I still want to do! Check out the "Issues" tab for stuff I know is broken. A quick list of features I want to add:
 
 * Currently only supports the Clustal Omega algorithm, and calls it even for just two sequences
-* Alignment order is not captured from ClustalO --> it just returns the input order, which is deceiving and confusing if you are used to the ClustalO website behavior
 * I want to add better drag-and-drop functionality, such as dragging a new sequence onto an alignment window, deleting sequences from an alignment, or rerranging the order (the former 2 would be non-destructive)
-* I want to add more color themes
+* I want to improve the color themes
 * I want to make a dark theme for the app itself
-* I want to incorporate a PDB viewer (long shot -- most likely difficult)
 * Residue annotations for marking comments and observations. 
 
 #### How do I get set up? ####
