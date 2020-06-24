@@ -214,7 +214,7 @@ class Slots:
                 seqr = node.data(role=self.SequenceRole)
                 for seq in seqr:
                     seqs[seq.name] = str(seq.seq)
-                worker = utilities.AlignThread(self, seqs, seqtype=3, output_order=1, num_threads=self.threadpool.maxThreadCount())
+                worker = utilities.AlignThread(self, seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
                 worker.start()
                 worker.finished.connect(worker.deleteLater)
                 worker.finished.connect(worker.quit)
@@ -690,3 +690,5 @@ class Debug:
             print("Name: ", child.data(role=Qt.UserRole + 1))
             print("Seq: ", child.data(role=Qt.UserRole + 2))
             print("Window Index: ", child.data(role=Qt.UserRole + 3))
+
+

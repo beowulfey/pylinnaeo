@@ -1,6 +1,4 @@
-
-__version__ = 'v0.4.0'
-
+__version__ = 'v0.3.2'
 import logging
 import sys
 import time
