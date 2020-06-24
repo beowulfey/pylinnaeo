@@ -1,4 +1,5 @@
 # Mine, added
+*.exe
 .DS_Store
 testing
 .idea
