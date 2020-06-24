@@ -62,7 +62,7 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 * Residue annotations for marking comments and observations. 
 
 #### How do I get set up? ####
->>>> NOTE: The latest version (v0.4.0-pre) is based on the DEVEL branch, and uses a custom clustalo/clustalo-py toolset. This is so I can return the alignment order from clustalo (instead of just outputting the input order!) but makes it tougher to standardize! Please be aware that to run the devel branch you'll need to clone and build my custom clustal-omega and clustalo-python repositories (available here too) to get that to work! <<<<
+> NOTE: The latest version (v0.4.0-pre) is based on the DEVEL branch, and uses a custom clustalo/clustalo-py toolset. This is so I can return the alignment order from clustalo (instead of just outputting the input order!) but makes it tougher to standardize! Please be aware that to run the devel branch you'll need to clone and build my custom clustal-omega and clustalo-python repositories (available here too) to get that to work! 
 
 ##### [See releases here](https://github.com/beowulfey/linnaeo/releases) #####
 I've attempted to build portable binaries for all Mac and Windows. Hopefully they work, but I'm still learning this part. 
