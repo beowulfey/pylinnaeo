@@ -2,14 +2,14 @@ import setuptools
 import sys
 from linnaeo import __version__
 
-reqs = ['pyqt5>=5.9','psutil','biopython','clustalo','bioservices',]
+reqs = ['pyqt5>=5.9','psutil','biopython','clustalo==0.1.3','bioservices',]
 deps = []
 if sys.platform == 'darwin':
-    deps.append('install/clustalo-0.1.2-cp37-cp37m-macosx_10_14_x86_64.whl')
+    deps.append('install/clustalo-0.1.3-cp37-cp37m-macosx_10_14_x86_64.whl')
 elif sys.platform == 'linux':
-    deps.append('install/clustalo-0.1.2-cp38-cp38-linux_x86_64.whl')
+    deps.append('install/clustalo-0.1.3-cp38-cp38-linux_x86_64.whl')
 elif sys.platform == 'win32':
-    deps.append('install/clustalo-0.1.2-cp37-cp37m-win_amd64.whl')
+    deps.append('install/clustalo-0.1.3-cp37-cp37m-win_amd64.whl')
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
