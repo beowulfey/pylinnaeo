@@ -28,7 +28,13 @@ That's a basic idea. Most likely those criteria will change.
 
 Here is a screenshot as of Jun 14, 2020:
 
-![screenshot](linnaeo/resources/images/tt-example.png "Title")
+![screenshot](linnaeo/resources/images/tt-example.png "Linux, showing the default theme")
+
+Here's another from the Windows version, showing the "Conservation" theme:
+
+![screenshot](linnaeo/resources/images/windows_screenshot.png "Windows, showing the conservation theme")
+
+An explanation of the themes I've designed (thus far) is [available here](https://beowulfey.github.io/linnaeo/linnaeo/resources/docs/themes).
 
 
 #### What's the latest? 
