@@ -12,7 +12,7 @@
 
   ;Name and file
   Name "Linnaeo"
-  OutFile "Linnaeo-v0.3.2_installer.exe"
+  OutFile "Linnaeo-v0.4.0_Win64-installer.exe"
   Unicode True
 
   ;Default installation folder
