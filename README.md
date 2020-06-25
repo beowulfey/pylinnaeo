@@ -30,7 +30,7 @@ Here is a screenshot as of Jun 14, 2020:
 
 ![screenshot](linnaeo/resources/images/tt-example.png "Linux, showing the default theme")
 
-Here's another more recent screenshot from the Windows version, showing the "Conservation" theme:
+Here's another more recent screenshot from the Windows version, showing the "Conservation" theme and the tooltip feature for seeing different sequence residue numbers of the different aligned sequences:
 
 ![screenshot](linnaeo/resources/images/windows_screenshot.png "Windows, showing the conservation theme")
 
