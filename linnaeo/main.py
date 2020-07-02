@@ -154,9 +154,9 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                                'byconsv': False, 'tabbed': False,
                                'darkmode': False, 'dssp': False,
                                }
-        
+
         self.params = self.default_params.copy()
-        
+
         if sys.platform in ['darwin']:
             self.params['fontsize'] = 12
         # print(self.params['font'].family())
@@ -460,6 +460,7 @@ class Linnaeo(QMainWindow, methods.Slots, methods.Debug, linnaeo_ui.Ui_MainWindo
                             sid = key
                     # print("Adding sequence to alignment: ", key, sid)
                     del stored_seq
+                    # TODO: THIS WILL NEED FIX FOR DNA
                     seqr = models.SeqR(Seq(value, generic_protein), name=key, id=sid)
                     seqrs.append(seqr)
                 aliR = MultipleSeqAlignment(seqrs)

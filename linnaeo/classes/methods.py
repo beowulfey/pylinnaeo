@@ -2,6 +2,7 @@ import time
 import traceback
 
 from Bio import SeqIO, AlignIO
+from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import generic_protein
 from Bio.Seq import MutableSeq, Seq
 from PyQt5.QtCore import QFile, QIODevice, QDataStream, Qt, QDir, QUrl
@@ -210,17 +211,24 @@ class Slots:
                 self.mainLogger.info("Loading alignment: "+node.data())
                 self.mainStatus.showMessage("Loading alignment: %s" % node.data(), msecs=3000)
                 seqs = {}
+                newseqrs = []
                 wid = node.data(role=self.WindowRole)
                 seqr = node.data(role=self.SequenceRole)
                 for seq in seqr:
-                    seqs[seq.name] = str(seq.seq)
+                    seqs[seq.name] = str(seq.seq).replace('-', '')
+                    del seq
                 worker = utilities.AlignThread(self, seqs, seqtype=3, num_threads=self.threadpool.maxThreadCount())
                 worker.start()
                 worker.finished.connect(worker.deleteLater)
                 worker.finished.connect(worker.quit)
                 worker.wait()
                 ali = worker.aligned
-                del worker
+                for key,value in ali.items():
+                    newseqr = models.SeqR(Seq(value, generic_protein), name=key, id=key)
+                    newseqrs.append(newseqr)
+                    del newseqr, key, value
+                node.setData(MultipleSeqAlignment(newseqrs), self.SequenceRole)
+                del worker, seqs, seqr, newseqrs
                 self.makeNewWindow(wid, ali, nonode=True)
         self.bioModel.updateWindows(self.windows)
         self.projectModel.updateWindows(self.windows)
@@ -690,5 +698,3 @@ class Debug:
             print("Name: ", child.data(role=Qt.UserRole + 1))
             print("Seq: ", child.data(role=Qt.UserRole + 2))
             print("Window Index: ", child.data(role=Qt.UserRole + 3))
-
-
