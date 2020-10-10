@@ -3,7 +3,7 @@
 
 After downloading, there are some tips on using it located [further down](https://github.com/beowulfey/linnaeo#How-do-I-use-it)
 
-Quick note -- this program is still being actively developed! It's not quite feature complete, although it's close! If you like it but find something is missing or broken, please leave a note in the issues tab (or wait a few days -- I'm adding stuff pretty regularly at the moment)
+Quick note -- this program is still being actively developed. Although progress has slowed with the reopening of the world, I am going to keep trying to improve on it. It's not quite feature complete but it works pretty well for what I originally intended to make; I will admit it's not very stable though. If you like it but find something is missing or broken, please leave a note in the issues tab. 
 
 Thanks! --beowulfey
 
