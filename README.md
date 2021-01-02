@@ -2,10 +2,10 @@
 The python version is horribly buggy, so I've been tackling a complete rebuild. You can find the [new version here](https://github.com/beowulfey/linnaeo).
 
 
-## [Click here for binary downloads](https://github.com/beowulfey/linnaeo/releases) ##
+## [Click here for binary downloads](https://github.com/beowulfey/pylinnaeo/releases) ##
 (Only the latest release has binaries here at the moment)
 
-After downloading, there are some tips on using it located [further down](https://github.com/beowulfey/linnaeo#How-do-I-use-it)
+After downloading, there are some tips on using it located [further down](https://github.com/beowulfey/pylinnaeo#How-do-I-use-it)
 
 Quick note -- this program is still being actively developed. Although progress has slowed with the reopening of the world, I am going to keep trying to improve on it. It's not quite feature complete but it works pretty well for what I originally intended to make; I will admit it's not very stable though. If you like it but find something is missing or broken, please leave a note in the issues tab. 
 
@@ -81,7 +81,7 @@ There is a lot I still want to do! Check out the "Issues" tab for stuff I know i
 #### How do I get set up? ####
 > NOTE: The latest version (v0.4.0-pre) is based on the DEVEL branch, and uses a modified clustalo-python extension. This is so I can return the alignment order from clustalo (instead of just outputting the input order!) but makes it tougher to standardize. Please be aware that to run the devel branch you'll need to clone and build my clustalo-python repository (available here too) to get that to work! 
 
-##### [See releases here](https://github.com/beowulfey/linnaeo/releases) #####
+##### [See releases here](https://github.com/beowulfey/pylinnaeo/releases) #####
 I've attempted to build portable binaries for all Mac and Windows. Hopefully they work, but I'm still learning this part. 
 
 If you want to try building it yourself, or they don't work, here are some instructions:
