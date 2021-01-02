@@ -1,3 +1,7 @@
+# NOTE -- THIS IS DEPRECATED AND BEING REWRITTEN IN C++
+The python version is horribly buggy, so I've been tackling a complete rebuild. You can find the [new version here](https://github.com/beowulfey/linnaeo).
+
+
 ## [Click here for binary downloads](https://github.com/beowulfey/linnaeo/releases) ##
 (Only the latest release has binaries here at the moment)
 
